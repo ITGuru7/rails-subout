@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  posting_company_id: 1
+  bidding_company_id: 1
+  amount: 9.99
+  active: false
+
+two:
+  posting_company_id: 1
+  bidding_company_id: 1
+  amount: 9.99
+  active: false
