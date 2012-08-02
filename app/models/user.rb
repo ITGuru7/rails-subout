@@ -3,7 +3,7 @@ class User
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable, :token_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
   ## Database authenticatable
@@ -36,5 +36,9 @@ class User
   # field :locked_at,       :type => Time
 
   ## Token authenticatable
-  # field :authentication_token, :type => String
+  field :authentication_token, :type => String
+
+  def self.find_by_email(email)
+    where(:email => email).first
+  end
 end

@@ -1,4 +1,5 @@
 Subout::Application.routes.draw do
+
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
@@ -14,8 +15,9 @@ Subout::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+  resources :companies, :bids, :contacts, :employees, :favorites, :locations, :opportunities, :opportunity_types, :profiles, :regions, :region_types, :users
+  resources :tokens,:only => [:create, :destroy]
+  
 
   # Sample resource route with options:
   #   resources :products do

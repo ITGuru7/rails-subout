@@ -7,7 +7,7 @@ gem 'rails', '3.2.3'
 
 gem "mongoid", "~> 3.0.0.rc"
 gem 'rails_admin'
-
+gem 'haml-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.

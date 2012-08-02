@@ -11,6 +11,6 @@ class Opportunity
   field :bidding_ends, type: Time
   field :bidding_done, type: Boolean
   field :buy_it_now, type: Boolean
-  field :buy_it_now_price, type: Decimal
+  field :buy_it_now_price, type: BigDecimal 
   field :winning_bid_id, type: Integer
 end
