@@ -1,16 +1,7 @@
-development:
-  sessions:
-    default:
-      database: subout_development
-      hosts:
-        - localhost:27017
-      options:
-        consistency: :strong
-  options:
 production:
   sessions:
     default:
-      database: subout_production
+      uri: <%= ENV['MONGOHQ_URL'] %>
     options:
       skip_version_check: true
       safe: true
