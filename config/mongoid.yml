@@ -11,7 +11,6 @@ production:
   sessions:
     default:
       database: subout_production
-      uri: <%= ENV['MONGOHQ_URL'] %>
     options:
       skip_version_check: true
       safe: true
