@@ -19,4 +19,5 @@ class Opportunity
   has_one :winning_bid, :class_name => "Bid", :foreign_key => "winning_bid_id"
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
-en
+end
+
