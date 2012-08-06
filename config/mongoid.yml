@@ -1,13 +1,10 @@
-<% if ENV['MONGOHQ_URL'] %>
-  <% uri = URI.parse(ENV['MONGOHQ_URL']) %>
 production:
   <<: *defaults
   sessions:
     default:
       <<: *default_session
-      database: <%= uri.path.sub('/','') %>
-      username: <%= uri.user %>
-      password: <%= uri.password %>
+      database: subout
+      username: heroku
+      password: sub0utd3v
       hosts:
-        - <%= uri.host %>:<%= uri.port %>
-<% end %>
+        - alex.mongohq.com:10029
