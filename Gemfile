@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.3'
-ruby '1.9.3'
-
 
 gem "mongoid", "~> 3.0.0.rc"
 gem 'rails_admin'
