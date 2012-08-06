@@ -1,5 +1,5 @@
-<% if ENV['MONGOLAB_URI'] %>
-  <% uri = URI.parse(ENV['MONGOLAB_URI']) %>
+<% if ENV['MONGOHQ_URL'] %>
+  <% uri = URI.parse(ENV['MONGOHQ_URL']) %>
 production:
   <<: *defaults
   sessions:
