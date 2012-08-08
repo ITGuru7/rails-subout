@@ -8,7 +8,7 @@ class OpportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @opportunities }
+      format.json { render json: @opportunities, :callback => params[:callback] }
     end
   end
 
@@ -19,7 +19,7 @@ class OpportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @opportunity }
+      format.json { render json: @opportunity, :callback => params[:callback] }
     end
   end
 
@@ -30,7 +30,7 @@ class OpportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @opportunity }
+      format.json { render json: @opportunity, :callback => params[:callback] }
     end
   end
 

@@ -6,7 +6,7 @@ class BidsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @bids }
+      format.json { render json: @bids, :callback => params[:callback] }
     end
   end
 
@@ -17,7 +17,7 @@ class BidsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @bid }
+      format.json { render json: @bid, :callback => params[:callback] }
     end
   end
 
@@ -28,7 +28,7 @@ class BidsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @bid }
+      format.json { render json: @bid, :callback => params[:callback] }
     end
   end
 

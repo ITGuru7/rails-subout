@@ -6,7 +6,7 @@ class EmployeesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @employees }
+      format.json { render json: @employees, :callback => params[:callback] }
     end
   end
 
@@ -17,7 +17,7 @@ class EmployeesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @employee }
+      format.json { render json: @employee, :callback => params[:callback] }
     end
   end
 
@@ -28,7 +28,7 @@ class EmployeesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @employee }
+      format.json { render json: @employee, :callback => params[:callback] }
     end
   end
 

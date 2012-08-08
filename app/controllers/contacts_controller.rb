@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @contacts }
+      format.json { render json: @contacts, :callback => params[:callback] }
     end
   end
 
@@ -17,7 +17,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @contact }
+      format.json { render json: @contact, :callback => params[:callback] }
     end
   end
 
@@ -28,7 +28,7 @@ class ContactsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @contact }
+      format.json { render json: @contact, :callback => params[:callback] }
     end
   end
 
