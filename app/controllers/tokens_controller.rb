@@ -27,9 +27,9 @@ class TokensController < ApplicationController
 
     if not @user.valid_password?(password)
       logger.info("User #{email} failed signin, password \"#{password}\" is invalid")
-      render :status=>401, :json=>{:message=>"Invalid email or password."}
+      render :status=>401, :json=>{:message=>"Invalid email or password."}, :callback => params[:callback]
     else
-      render :status=>200, :json=>{:auth_token=>@user.authentication_token}
+      render :status=>200, :json=>{:auth_token=>@user.authentication_token}, :callback => params[:callback]
     end
   end
 end
