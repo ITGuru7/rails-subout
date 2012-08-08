@@ -1,5 +1,9 @@
 Subout::Application.routes.draw do
 
+
+  # Most specic routes first
+  match 'api_login' => 'tokens#create'
+
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
@@ -16,7 +20,7 @@ Subout::Application.routes.draw do
   # This route can be invoked with purchase_url(:id => product.id)
 
   resources :companies, :bids, :contacts, :employees, :favorites, :locations, :opportunities, :opportunity_types, :profiles, :regions, :region_types, :users
-  resources :tokens,:only => [:create, :destroy]
+  
   
 
   # Sample resource route with options:
