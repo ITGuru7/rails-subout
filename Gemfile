@@ -19,7 +19,11 @@ group :assets do
 end
 
 gem 'jquery-rails'
-
+gem 'pubnub'
+gem 'configuration'
+gem 'uuid'
+gem 'delayed_job_mongoid'
+gem 'thin'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

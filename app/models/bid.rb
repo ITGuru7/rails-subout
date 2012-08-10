@@ -4,4 +4,7 @@ class Bid
   field :bidding_company_id, type: Integer
   field :amount, type: BigDecimal
   field :active, type: Boolean
+
+  belongs_to :opportunity
+  
 end

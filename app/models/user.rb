@@ -38,6 +38,11 @@ class User
   ## Token authenticatable
   field :authentication_token, :type => String
 
+  ## Belongs to companies
+  field :company_id, :type => String
+
+  belongs_to :company, :class_name => "Company", :foreign_key => "company_id"
+  
   def self.find_by_email(email)
     where(:email => email).first
   end

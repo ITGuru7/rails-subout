@@ -82,4 +82,15 @@ class CompaniesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def events
+    @company = Company.find(params[:id])
+    @events = @company.recent_events
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @events, :callback => params[:callback] }
+    end
+  end
+
 end
