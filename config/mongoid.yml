@@ -9,8 +9,4 @@ development:
 production:
   sessions:
     default:
-      database: subout
-      username: heroku
-      password: sub0utd3v
-      hosts: 
-        - alex.mongohq.com:10029
+      uri: <%= ENV['MONGOHQ_URL'] %>
