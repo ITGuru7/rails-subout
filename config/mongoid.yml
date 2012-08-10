@@ -1,7 +1,18 @@
-production:   
+development:
   sessions:
     default:
-      uri: <%= ENV['MONGOHQ_URL'] %>
       options:
-        skip_version_check: true
-        safe: true
+      database: subout
+      username: heroku
+      password: sub0utd3v
+      hosts: 
+        - alex.mongohq.com:10029
+production:
+  sessions:
+    default:
+      options:
+        database: subout
+        username: heroku
+        password: sub0utd3v
+        hosts: 
+          - alex.mongohq.com:10029
