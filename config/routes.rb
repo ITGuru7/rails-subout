@@ -19,7 +19,10 @@ Subout::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  resources :companies, :bids, :contacts, :employees, :favorites, :locations, :opportunities, :opportunity_types, :profiles, :regions, :region_types, :users
+  resources :companies, :bids, :contacts, :employees, 
+            :favorites, :locations, :opportunities, :opportunity_types, 
+            :profiles, :regions, :region_types, :users,
+            :events
   
   
 
