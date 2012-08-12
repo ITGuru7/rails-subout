@@ -13,10 +13,8 @@ development:
     # Defines the default session. (required)
     default:
       database: subout
-      username: heroku
-      password: sub0utd3v
       hosts:
-        - alex.mongohq.com:10029
+        - localhost:27017
       options:
         # Change whether the session persists in safe mode by default.
         # (default: false)
