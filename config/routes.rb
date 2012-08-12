@@ -1,6 +1,8 @@
 Subout::Application.routes.draw do
 
 
+  resources :events
+
   # Most specic routes first
   match 'api_login' => 'tokens#create'
 
