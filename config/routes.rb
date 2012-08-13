@@ -4,7 +4,6 @@ Subout::Application.routes.draw do
   resources :events
 
   # Most specic routes first
-  match 'api_login' => 'tokens#create'
 
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
@@ -27,6 +26,9 @@ Subout::Application.routes.draw do
             :events
 
   match 'companies/events/:id' => 'companies#events'
+  match 'companies/opportunities/:id' => 'companies#opportunities'
+  match 'opportunities/bids/:id' => 'opportunities#bids'
+  match 'api_login' => 'tokens#create'
 
   # Sample resource route with options:
   #   resources :products do

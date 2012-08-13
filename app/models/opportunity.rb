@@ -16,13 +16,16 @@ class Opportunity
 
   belongs_to :company, :class_name => "Company"
   has_one :opportunity_type, :class_name => "OpportunityType", :foreign_key => "opportunity_type_id"
-  has_one :winning_bid, :class_name => "Bid", :foreign_key => "winning_bid_id"
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
+  has_many :bids
 
   validates_presence_of :company_id
   validates_presence_of :name
   validates_presence_of :description
-  
+  validates_presence_of :start_date, :on => :create, :message => "can't be blank"
+  validates_presence_of :end_date, :on => :create, :message => "can't be blank"
+  validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
+
 end
 

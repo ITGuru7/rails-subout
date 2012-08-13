@@ -5,11 +5,13 @@ class Company
   field :active, type: Boolean
   field :company_msg_path, type: String
   after_initialize :init
+
   has_many :users
   has_many :opportunities
   
   validates_presence_of :name, :on => :create, :message => "can't be blank"
-
+  validates_presence_of :company_msg_path, :on => :create, :message => "can't be blank"
+  
   def init
   	self.company_msg_path  ||= UUID.new.generate
   end

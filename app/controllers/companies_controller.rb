@@ -95,7 +95,7 @@ class CompaniesController < ApplicationController
 
   def opportunities 
     @company = Company.find(params[:id])
-    @opportunities = Opportunity.where(:company_id == @company.id)
+    @opportunities = @company.opportunities
 
     respond_to do |format|
       format.html # index.html.erb
