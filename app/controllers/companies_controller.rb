@@ -85,12 +85,23 @@ class CompaniesController < ApplicationController
 
   def events
     @company = Company.find(params[:id])
-    @events = @company.recent_events
+    @events = Event.where(:company_id => @company.id)
 
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @events, :callback => params[:callback] }
     end
   end
+
+  def opportunities 
+    @company = Company.find(params[:id])
+    @opportunities = Opportunity.where(:company_id == @company.id)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @opportunities, :callback => params[:callback] }
+    end
+  end
+
 
 end

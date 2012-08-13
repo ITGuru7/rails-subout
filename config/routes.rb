@@ -25,8 +25,8 @@ Subout::Application.routes.draw do
             :favorites, :locations, :opportunities, :opportunity_types, 
             :profiles, :regions, :region_types, :users,
             :events
-  
-  
+
+  match 'companies/events/:id' => 'companies#events'
 
   # Sample resource route with options:
   #   resources :products do
