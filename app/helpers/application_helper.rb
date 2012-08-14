@@ -4,8 +4,8 @@ module ApplicationHelper
 		
 		config = {
 				'new_oppotunity' => {
-					'href' => '/new-oppotunity',
-					'text' => 'New Oppotunity',
+					'href' => '/new-opportunity',
+					'text' => 'New Opportunity',
 					'visible'=> user_signed_in?,
 					'class'=>'address'
 				},

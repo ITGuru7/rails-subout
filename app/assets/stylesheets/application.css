@@ -11,7 +11,7 @@
  *= require bootstrap
  *= require_tree .
 */
-
+/* page */
 #pageWrapper { position:relative; }
 #headerWrapper{ padding:20px 0px; }
 	header{  }
@@ -24,8 +24,13 @@
 		nav a.last{ border:none; }
 #contentWrapper{ padding:20px 0px; }
 	#content{  }
-		#content #devise{ margin-left:140px; }
-		#content #devise .section-title{ margin-bottom:20px; text-align:center; }
+		.section-title { padding:20px; text-align:center; }
+		#content .section-title{ padding:20px; text-align:center; }
 		
-	#dashboard{}
-		#dashboard #company #company_links{ margin-top:20px; 	}
+		#devise{ margin-left:140px; }
+			#content #devise .section-title{ margin-bottom:20px; text-align:center; }
+		#dashboard{}
+			#dashboard #company #company_links{ margin-top:20px; }
+
+/* form */
+.form-horizontal .control-group{ margin-bottom:10px; }

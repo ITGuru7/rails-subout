@@ -18,3 +18,19 @@ mm_opportunity.all = function (handler) {
 		}
 	});
 }
+
+mm_opportunity.form = function(handler)
+{
+	$.ajax({
+		type : "GET",
+		url : "/opportunities/new.js",
+		data : {},
+		dataType : "html",
+		success : function (data) {
+			handler(data);
+		},
+		error : function (e) {
+			handler();
+		}
+	});
+}

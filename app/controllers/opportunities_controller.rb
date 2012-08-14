@@ -30,6 +30,7 @@ class OpportunitiesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
+	  format.js { render :layout => false }
       format.json { render json: @opportunity, :callback => params[:callback] }
     end
   end

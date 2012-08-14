@@ -12,11 +12,10 @@
 //
 //= require jquery.min
 //= require jquery_ujs
+//= require bootstrap-modal
+//= require jquery.address-1.4
 //= require company
 //= require opportunity
-//= require jquery.address-1.4
-var mm_page = {};
-
 
 var mm_default = {
 	appendLoadingImg : function (selector) {
@@ -30,9 +29,11 @@ var mm_default = {
 	markLastChild: function(container)
 	{
 		$(':last', container).addClass('last');
-	},
+	}
 }
 
+
+var mm_page = {};
 mm_page.init = function()
 {
 	/** global ajax setting **/
@@ -57,15 +58,26 @@ mm_page.init = function()
 mm_page.handleAddress = function()
 {
 		$.address.init(function(event){}).change(function(event) {
-			switch(event.path){
-				case '/new-oppotunity':
-				case '/settings':
-				case '/help':
-				case '/signout':
-			}
+			var fx = event.path.replace('-', '_').replace('/','');
+			var init = mm_page.actions[fx];
+			if ($.isFunction(init))
+				init();
 		});	
 }
 
+mm_page.actions = {};
+/* New opportunity menu click action */
+mm_page.actions.new_opportunity = function()
+{
+	mm_opportunity.form(function(html){
+			$('#page_new_opportunity').html(html);
+			$('#page_new_opportunity').modal();
+			$('#page_new_opportunity').on('hidden', function () {
+			  $.address.state('#');
+			})
+	});
+	
+}
 
 var mm_dashboard = {
 	init: function(){
@@ -83,7 +95,7 @@ var mm_dashboard = {
 	{
 		if(data){ 
 			$(data).each(function(idx, item){			
-				if(item.company_id){
+				if(item.company_id==mm_company.company_id){
 					var html_item = $("<div></div>").addClass('well row-fluid');
 					var html_name = $("<div></div>").html(item.name + '<br/>' + item.start_date).addClass('span4 col1');
 					var html_description = $("<div></div>").html(item.description).addClass('span4 col2');
