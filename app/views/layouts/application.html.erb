@@ -7,8 +7,36 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+	<div id="pageWrapper" class="container">
+		<div id="loading"></div>
+		<header id="header" class="row">
+			<div class="span4">
+				<div id="header_a">
+					<h1 id="slogan">subout</h1>
+				</div>
+			</div>
+			<div class="span8">
+				<div id="header_b">
+					<nav>
+					</nav><!--nav-->
+				</div>
+			</div>
+		</header><!--header-->
+		
+		<div id="contentWrapper" class="row">
+			<div class="span4">
+				<div id="sidebar">
+					<%= render :template => "layouts/sidebar" %>
+				</div><!--#sidebar-->
+			</div>
+			<div class="span8">
+				<div id="content">
+					<%= yield %>
+				</div><!--#content-->
+			</div>
+		</div><!--#contentWrapper-->
+		
+		<footer id="footer" class="row"></footer><!--footer-->
+	</div><!--#pageWrapper-->
 </body>
 </html>
