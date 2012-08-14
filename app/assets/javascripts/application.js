@@ -58,7 +58,7 @@ mm_page.init = function()
 mm_page.handleAddress = function()
 {
 		$.address.init(function(event){}).change(function(event) {
-			var fx = event.path.replace('-', '_').replace('/','');
+			var fx = event.path.replace('-', '_').replace('/','_');
 			var init = mm_page.actions[fx];
 			if ($.isFunction(init))
 				init();
@@ -67,13 +67,13 @@ mm_page.handleAddress = function()
 
 mm_page.actions = {};
 /* New opportunity menu click action */
-mm_page.actions.new_opportunity = function()
+mm_page.actions._new_opportunity = function()
 {
 	mm_opportunity.form(function(html){
 			$('#page_new_opportunity').html(html);
 			$('#page_new_opportunity').modal();
 			$('#page_new_opportunity').on('hidden', function () {
-			  $.address.state('#');
+			  $.address.state('#closed');
 			})
 	});
 	
