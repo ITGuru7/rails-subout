@@ -83,7 +83,7 @@ var mm_dashboard = {
 	init: function(){
 		mm_dashboard.loadCompany();
 		mm_company.get(mm_dashboard.loadCompany);
-		mm_opportunity.all(mm_dashboard.loadOpportunities);
+		mm_company.events(mm_dashboard.loadEvents);
 	},
 	loadCompany: function(data)
 	{
@@ -91,20 +91,37 @@ var mm_dashboard = {
 			$('#dashboard #company #company_name').html(data.name); 
 		}
 	},
-	loadOpportunities: function(data)
+	loadEvents: function(data)
 	{
 		if(data){ 
 			$(data).each(function(idx, item){			
 				if(item.company_id==mm_company.company_id){
-					var html_item = $("<div></div>").addClass('well row-fluid');
-					var html_name = $("<div></div>").html(item.name + '<br/>' + item.start_date).addClass('span4 col1');
-					var html_description = $("<div></div>").html(item.description).addClass('span4 col2');
-					var html_bid = $("<div></div>").html("Current Bid:" + item.buy_it_now_price + '<br/> Expires in ' + item.bidding_ends).addClass('span4 col2');
-					html_item.append(html_name).append(html_description).append(html_bid);
-					$('#dashboard #activity .content').append(html_item);
+					var fx = 'event';
+					var init = mm_dashboard.builders[fx];
+					if ($.isFunction(init))
+					{	
+						$('#dashboard #activity .content').append(init(item));
+					}
 				}
 			});
 		}
+	},
+	builders:{
+		opportunity: function(item){
+			var html = $("<div></div>").addClass('well row-fluid');
+			var col1 = $("<div></div>").html(item.name + '<br/>' + item.start_date).addClass('span4 col1');
+			var col2 = $("<div></div>").html(item.description).addClass('span4 col2');
+			var col3 = $("<div></div>").html("Current Bid:" + item.buy_it_now_price + '<br/> Expires in ' + item.bidding_ends).addClass('span4 col2');
+			html.append(col1).append(col2).append(col3);
+			return html;
+		},
+		bid: function(item){},
+		event: function(item){
+			var html = $("<div></div>").addClass('well row-fluid');
+			var col1 = $("<div></div>").html(item.model_type + '<br/>' + item.description).addClass('span4 col1');
+			html.append(col1);
+			return html;
+		},
 	}
 };
 

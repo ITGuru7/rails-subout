@@ -34,3 +34,18 @@ mm_company.get = function (handler) {
 		}
 	});
 }
+
+mm_company.events = function (handler) {
+	$.ajax({
+		type : "GET",
+		url : "/companies/events/"+ mm_company.company_id +".json",
+		data : {},
+		dataType : "json",
+		success : function (data) {
+			handler(data);
+		}, 
+		error : function (e) {
+			handler();
+		}
+	});
+}
