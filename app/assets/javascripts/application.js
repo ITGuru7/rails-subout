@@ -11,129 +11,93 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery.min
+//= require jquery_ujs
+//= require company
+//= require opportunity
 //= require jquery.address-1.4
-  
+var mm_page = {};
+
+
 var mm_default = {
 	appendLoadingImg : function (selector) {
-		if($('.loading', selector).length==0)
-			$(selector).append('<div class="loading"><img class="loading_gif" src="/img/loading.gif" height="24" width="24" /></div>');
+		$(selector).html('<div class="loading"><img src="/assets/loading.gif" height="24" width="24" /></div>');
 	},
 	
 	removeLoadingImg : function () {
 		$('.loading').remove();
 	},
 	
-	init: function(){
-		/** global ajax setting **/
-		$.ajaxSetup({
-			beforeSend: function (jqXHR, settings) {
-				mm_default.appendLoadingImg($('#loading'));
-			},
-			complete: function(){
-				mm_default.removeLoadingImg();
-			}
-		});
-		
-		/** jquery address plugin setting **/
-		$('a.address').address(function() {  
-			return $(this).attr('href');  
-		});
-		
-		/** load login form **/
-		mm_user.buildLoginForm('#header_b');
+	markLastChild: function(container)
+	{
+		$(':last', container).addClass('last');
 	},
 }
 
-var mm_user = {
-	auth_token : null,
-	login : function (email, password) {
-		//suboutdev@gmail.com sub0utd3v 
-		$.ajax({
-			type : "GET",
-			url : "/api_login.json",
-			data : {
-				'email' : email,
-				'password' : password
-			},
-			dataType : "json",
-			success : function (data) {
-				mm_user.auth_token = data.auth_token;
-				mm_nav.build('#header_b');
-			},
-			error : function (e) {
-				
-			}
-		});
-	},
-	buildLoginForm:function(container)
-	{
-		$.ajax({
-			type : "GET",
-			url : "/partial/loginform.html",
-			dataType : "html",
-			success : function (data) {
-				$(container).html(data);
-				mm_user.initLoginForm();
-			},
-			error : function (e) {
-				alert(e);
-			}
-		});
-	},
+mm_page.init = function()
+{
+	/** global ajax setting **/
+	$.ajaxSetup({
+		beforeSend: function (jqXHR, settings) {
+			mm_default.appendLoadingImg($('#loading'));
+		},
+		complete: function(){
+			mm_default.removeLoadingImg();
+		}
+	});
 	
-	initLoginForm: function()
-	{
-		$('#form_login').bind('submit', function(){
-			mm_user.login($('#input_email').val(), $('#input_password').val());
-			return false;
+	/** jquery address plugin setting **/
+	$('a.address').address(function() {  
+		return $(this).attr('href');  
+	});
+	
+	mm_default.markLastChild('header nav');
+	mm_page.handleAddress();
+}
+
+mm_page.handleAddress = function()
+{
+		$.address.init(function(event){}).change(function(event) {
+			switch(event.path){
+				case '/new-oppotunity':
+				case '/settings':
+				case '/help':
+				case '/signout':
+			}
 		});	
-	}
-	
 }
 
-var mm_nav = {
-	items : {
-		'new_oppotunity' : {
-			href : '/new-oppotunity',
-			text : 'New Oppotunity',
-		},
-		'settings' : {
-			href : '/settings',
-			text : 'Settings',
-		},
-		'help' : {
-			href : '/help',
-			text : 'Help',
-		},
-		'signout' : {
-			href : '/signout',
-			text : 'Sign Out',
-		},
+
+var mm_dashboard = {
+	init: function(){
+		mm_dashboard.loadCompany();
+		mm_company.get(mm_dashboard.loadCompany);
+		mm_opportunity.all(mm_dashboard.loadOpportunities);
 	},
-	
-	build : function (container) {
-		
-		var nav = $('<nav></nav>');
-		$.each(mm_nav.items, function (id, item) {
-			$(nav).append($('<a>' + item.text + '</a>').attr('href', item.href).addClass('address'));
-		});
-		
-		$(':last', nav).addClass('last');
-		$(container).html(nav);	
+	loadCompany: function(data)
+	{
+		if(data){ 
+			$('#dashboard #company #company_name').html(data.name); 
+		}
+	},
+	loadOpportunities: function(data)
+	{
+		if(data){ 
+			$(data).each(function(idx, item){			
+				if(item.company_id){
+					var html_item = $("<div></div>").addClass('well row-fluid');
+					var html_name = $("<div></div>").html(item.name + '<br/>' + item.start_date).addClass('span4 col1');
+					var html_description = $("<div></div>").html(item.description).addClass('span4 col2');
+					var html_bid = $("<div></div>").html("Current Bid:" + item.buy_it_now_price + '<br/> Expires in ' + item.bidding_ends).addClass('span4 col2');
+					html_item.append(html_name).append(html_description).append(html_bid);
+					$('#dashboard #activity .content').append(html_item);
+				}
+			});
+		}
 	}
 };
 
 
 $(function () {
-	mm_default.init();
-	
-
-	$.address.init(function(event){}).change(function(event) {
-		switch(event.path){
-			case '/new-oppotunity':
-			case '/settings':
-			case '/help':
-			case '/signout':
-		}
-	});
+	mm_page.init();
+	mm_dashboard.init();
 })
