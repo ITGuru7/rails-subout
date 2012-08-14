@@ -1,0 +1,17 @@
+<header id="header" class="row">
+	<div class="span4">
+		<div id="header_a">
+			<h1 id="slogan">subout</h1>
+		</div>
+	</div>
+	<div class="span8">
+		<div id="header_b">
+			<div id="menu">
+				
+				<nav><% if user_signed_in? %>
+					Welcome, <%= current_user.email %>
+				 <% end %><%= raw subout_menu_render %></nav>
+			</div><!--nav-->
+		</div>
+	</div>
+</header><!--header-->
