@@ -73,7 +73,7 @@ mm_page.actions._new_opportunity = function()
 			$('#page_new_opportunity').html(html);
 			$('#page_new_opportunity').modal();
 			$('#page_new_opportunity').on('hidden', function () {
-			  $.address.state('#closed');
+			  $.address.path('/');
 			})
 	});
 	
