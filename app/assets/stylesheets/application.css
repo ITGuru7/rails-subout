@@ -9,6 +9,8 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require bootstrap
+ *= jquery-ui-1.8.9.custom
+ *= require jquery.timeentry
  *= require_tree .
 */
 /* page */
