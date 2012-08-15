@@ -20,8 +20,8 @@ class Company
   	true
   end
 
-  def send_event(event)
+  def send_event(event, associated_object)
     Rails.logger.info "Queing event to be sent to path #{company_msg_path}"
-  	event.delay.send_msg(company_msg_path)
+  	event.delay.send_msg(company_msg_path, associated_object)
   end
 end

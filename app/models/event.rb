@@ -6,8 +6,7 @@ class Event
   field :model_type, :type => String
   field :company_id, :type => String  # Source of event
 
-
-  def send_msg(pubnub_path)
+  def send_msg(pubnub_path, associated_object)
     Rails.logger.info("Sending the message now!!!!")
   	pubnub = Pubnub.new(
     	Rails.configuration.pubnub_publish_key,
@@ -19,7 +18,7 @@ class Event
 
   	pubnub.publish({
     'channel' => pubnub_path,
-    'message' => self.to_json,
+    'message' => [self, associated_object].to_json,
     'callback' => lambda do |message|
        puts(message)
      end })
