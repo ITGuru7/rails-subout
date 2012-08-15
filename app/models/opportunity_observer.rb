@@ -14,7 +14,7 @@ class OpportunityObserver < Mongoid::Observer
     Company.all.each do |company| 
       if company.interested_in_event?(e) 
         Rails.logger.info "Telling company to send event : #{e.inspect}"
-        company.send_event(e) 
+        company.send_event(e, opportunity) 
       end
     end
 
