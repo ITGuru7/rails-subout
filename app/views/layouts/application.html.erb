@@ -5,10 +5,27 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <% if user_signed_in? %>
+  <script>
+	mm_company.company_id = '<%=current_user.company_id%>';
+	mm_company.auth_token = '<%=current_user.authentication_token%>';
+  </script>
+  <% end %>
 </head>
 <body>
-
-<%= yield %>
-
+	<div id="pageWrapper" class="container">
+		<div id="loading"></div>
+		<div id="headerWrapper">
+			<%= render :template => "layouts/header" %>
+		</div>
+		<div id="contentWrapper">
+			<div id="content">
+				<%= yield %>
+			</div><!--#content-->
+		</div><!--#contentWrapper-->
+		<div id="footerWrapper">
+			<%= render :template => "layouts/footer" %>
+		</div><!--#footerWrapper-->
+	</div><!--#pageWrapper-->
 </body>
 </html>

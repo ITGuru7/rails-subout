@@ -2,9 +2,6 @@ Subout::Application.routes.draw do
 
 
   resources :events
-
-  # Most specic routes first
-
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
@@ -65,7 +62,7 @@ Subout::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'dashboard#index'
 
   # See how all your routes lay out with "rake routes"
 
