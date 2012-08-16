@@ -13,4 +13,6 @@ class Location
   field :governing_district, type: String
   field :postal_area, type: String
   field :country, type: String
+
+  belongs_to :opportunity
 end

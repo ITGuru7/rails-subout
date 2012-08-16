@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+ruby '1.9.3'
 gem 'rails', '3.2.3'
 
 gem "mongoid", "~> 3.0.0.rc"
@@ -19,7 +20,12 @@ group :assets do
 end
 
 gem 'jquery-rails'
-
+gem 'pubnub'
+gem 'configuration'
+gem 'uuid'
+gem 'delayed_job_mongoid'
+gem 'thin'
+gem 'cancan'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

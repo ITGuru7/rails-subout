@@ -1,10 +1,7 @@
 Subout::Application.routes.draw do
 
 
-  # Most specic routes first
-  match 'api_login' => 'tokens#create'
- 
-	
+  resources :events
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
@@ -20,9 +17,15 @@ Subout::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  resources :companies, :bids, :contacts, :employees, :favorites, :locations, :opportunities, :opportunity_types, :profiles, :regions, :region_types, :users
-  
-  
+  resources :companies, :bids, :contacts, :employees, 
+            :favorites, :locations, :opportunities, :opportunity_types, 
+            :profiles, :regions, :region_types, :users,
+            :events
+
+  match 'companies/events/:id' => 'companies#events'
+  match 'companies/opportunities/:id' => 'companies#opportunities'
+  match 'opportunities/bids/:id' => 'opportunities#bids'
+  match 'api_login' => 'tokens#create'
 
   # Sample resource route with options:
   #   resources :products do

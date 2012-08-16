@@ -83,4 +83,13 @@ class OpportunitiesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def bids
+    @opportunity = Opportunity.find(params[:id])
+    @bids = @opportunity.bids
+
+    respond_to do |format|
+      format.json { render json: @bids, :callback => params[:callback] }
+    end
+  end
 end
