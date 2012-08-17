@@ -6,7 +6,7 @@ class OpportunityObserver < Mongoid::Observer
  
     e = Event.new
     e.description = opportunity.description
-    e.model_id = opportunity.id
+    e.model_id = opportunity["_id"]
     e.model_type = :opportunity
     e.company_id = opportunity.company_id
     e.save
@@ -20,4 +20,8 @@ class OpportunityObserver < Mongoid::Observer
 
   end
 
+  def after_create(opportunity)
+    Rails.logger.info "Just created a new opportunity"
+  end
+  
 end
