@@ -42,6 +42,7 @@ class User
   field :company_id, :type => String
 
   belongs_to :company, :class_name => "Company", :foreign_key => "company_id"
+  validates_presence_of :email, :on => :create, :message => "can't be blank"
   
   def self.find_by_email(email)
     where(:email => email).first

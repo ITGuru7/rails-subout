@@ -8,6 +8,7 @@ class Company
 
   has_many :users
   has_many :opportunities
+  has_many :favorites
   
   validates_presence_of :name, :on => :create, :message => "can't be blank"
   validates_presence_of :company_msg_path, :on => :create, :message => "can't be blank"
