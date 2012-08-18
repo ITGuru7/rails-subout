@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require bootstrap-modal
 //= require jquery.address-1.4
+//= require jquery-ui-1.8.9.custom.min
+//= require jquery.timeentry
 //= require company
 //= require opportunity
 
@@ -52,10 +54,10 @@ mm_page.init = function()
 	});
 	
 	mm_default.markLastChild('header nav');
-	mm_page.handleAddress();
+	mm_page.handleActions();
 }
 
-mm_page.handleAddress = function()
+mm_page.handleActions = function()
 {
 		$.address.init(function(event){}).change(function(event) {
 			var fx = event.path.replace('-', '_').replace('/','_');
@@ -69,21 +71,28 @@ mm_page.actions = {};
 /* New opportunity menu click action */
 mm_page.actions._new_opportunity = function()
 {
-	mm_opportunity.form(function(html){
-			$('#page_new_opportunity').html(html);
+	if($('#page_new_opportunity').html()!=""){
 			$('#page_new_opportunity').modal();
-			$('#page_new_opportunity').on('hidden', function () {
-			  $.address.path('/');
-			})
+			return;
+	}
+	
+	mm_opportunity.form(function(html){
+		
+		$('#page_new_opportunity').html(html);
+		mm_opportunity.init_form();
+		$('#page_new_opportunity').modal();
+		$('#page_new_opportunity').on('hidden', function () {
+		  $.address.path('/');
+		})
+		
 	});
 	
 }
 
 var mm_dashboard = {
 	init: function(){
-		mm_dashboard.loadCompany();
 		mm_company.get(mm_dashboard.loadCompany);
-		mm_company.events(mm_dashboard.loadEvents);
+		//mm_company.events(mm_dashboard.loadEvents);
 	},
 	loadCompany: function(data)
 	{

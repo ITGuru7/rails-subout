@@ -2,18 +2,6 @@
 	<section class="section-title"><h2>New Opportunity</h2></section>
 	<section class="section-content">
 		<%= form_for(@opportunity, :html=>{:class=>"form-horizontal"}) do |f| %>
-		  <% if @opportunity.errors.any? %>
-			<div id="error_explanation">
-			  <h2><%= pluralize(@opportunity.errors.count, "error") %> prohibited this opportunity from being saved:</h2>
-
-			  <ul>
-			  <% @opportunity.errors.full_messages.each do |msg| %>
-				<li><%= msg %></li>
-			  <% end %>
-			  </ul>
-			</div>
-		  <% end %>
-
 		  <%= f.hidden_field :company_id, :value=>current_user.company_id %>
 		  <div class="control-group">
 			<%= f.label :name, :class=>"control-label" %>
@@ -30,10 +18,14 @@
 		  </div>
 		  
 		  <div class="control-group">
-			<%= f.label :end_date, :class=>"control-label" %>
+			<%= f.label :bidding_ends, :class=>"control-label" %>
 			<div class="controls">
-				<%= f.text_field :end_date, :class=>"input-large" %>
+				<div class="input-append">
+					<%= f.text_field :bidding_ends, :class=>"input-small date" %><span class="add-on"><i class="icon-calendar"></i></span>
+				</div>
 			</div>
+			
+			
 		  </div>
 		  
 		  <div class="control-group">
@@ -69,14 +61,24 @@
 		  <div class="control-group">
 			<%= f.label :start_date, :class=>"control-label" %>
 			<div class="controls">
-				<%= f.text_field :start_date, :class=>"input-large" %>
+			
+				<%= f.hidden_field :start_date, :class=>"input-large" %>
+				<div class="input-append">
+					<input type="text" size="16" class="input-small input-append date"/><span class="add-on"><i class="icon-calendar"></i></span>
+				</div>
+
+				<input type="text" class="input-small time"/>
 			</div>
 		  </div>
 		  
 		  <div class="control-group">
 			<%= f.label :end_date, :class=>"control-label" %>
 			<div class="controls">
-				<%= f.text_field :end_date, :class=>"input-large" %>
+				<div class="input-append">
+					<input type="text" size="16" class="input-small input-append date"/><span class="add-on"><i class="icon-calendar"></i></span>
+				</div>
+
+				<input type="text" class="input-small time"/>
 			</div>
 		  </div>
 
