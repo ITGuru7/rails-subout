@@ -1,7 +1,7 @@
 class Favorite
   include Mongoid::Document
-  field :company_id, type: Integer
-  field :favorite_id, type: Integer
+  field :company_id, type: String
+  field :favorite_id, type: String
 
   belongs_to :company, :class_name => "Company", :foreign_key => "company_id"
   has_one :favorite, :class_name => "Company", :foreign_key => "favorite_id"

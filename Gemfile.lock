@@ -35,12 +35,6 @@ GEM
     bootstrap-sass (2.0.4.0)
     builder (3.0.0)
     cancan (1.6.8)
-    cantango (0.9.4.7)
-      cancan (>= 1.4)
-      hashie (>= 0.4)
-      rails (>= 3.0.1)
-      sugar-high (>= 0.6.0)
-      sweetloader (~> 0.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -85,7 +79,6 @@ GEM
       activesupport (~> 3.0)
       haml (~> 3.0)
       railties (~> 3.0)
-    hashie (1.2.0)
     hike (1.2.1)
     hpricot (0.8.6)
     http_parser.rb (0.5.3)
@@ -164,25 +157,15 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     remotipart (1.0.2)
-    require_all (1.2.1)
     sass (3.2.0)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    simple_roles (0.0.8)
-      activerecord
-      require_all
-      sugar-high
-      sweetloader
     sprockets (2.1.3)
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sugar-high (0.7.0)
-    sweetloader (0.1.6)
-      activesupport (>= 3.0.1)
-      i18n
     systemu (2.5.2)
     thin (1.4.1)
       daemons (>= 1.0.9)
@@ -207,7 +190,6 @@ PLATFORMS
 
 DEPENDENCIES
   cancan
-  cantango
   coffee-rails (~> 3.2.1)
   configuration
   delayed_job_mongoid
@@ -221,7 +203,6 @@ DEPENDENCIES
   rails (= 3.2.3)
   rails_admin
   sass-rails (~> 3.2.3)
-  simple_roles
   thin
   uglifier (>= 1.0.3)
   uuid

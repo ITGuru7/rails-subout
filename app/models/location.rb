@@ -1,6 +1,7 @@
 class Location
   include Mongoid::Document
-  field :company_id, type: Integer
+  field :company_id, type: String
+  field :contact_id, type: String
   field :street_number, type: Integer
   field :street_number_prefix, type: String
   field :street_name, type: String
@@ -13,6 +14,11 @@ class Location
   field :governing_district, type: String
   field :postal_area, type: String
   field :country, type: String
+  field :combined_street, type: String
+  
 
   belongs_to :opportunity
+  belongs_to :contact
+  belongs_to :company
+
 end
