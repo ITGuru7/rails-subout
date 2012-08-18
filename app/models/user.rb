@@ -43,6 +43,14 @@ class User
 
   belongs_to :company, :class_name => "Company", :foreign_key => "company_id"
   validates_presence_of :email, :on => :create, :message => "can't be blank"
+
+  ## Needed for simple_role and cancan
+  field :role, :type => String
+
+
+  ## Add the simple roles stuff
+  simple_roles
+  
   
   def self.find_by_email(email)
     where(:email => email).first

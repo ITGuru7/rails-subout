@@ -28,6 +28,8 @@ gem 'thin'
 gem 'cancan'
 gem "factory_girl_rails", "~> 4.0"
 gem 'ffaker'
+gem 'cantango'
+gem 'simple_roles'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
