@@ -1,0 +1,79 @@
+<div id="page_new_opportunity" class="page modal hide in" style="display: block; ">
+	<section class="section-title"><h2>New Opportunity</h2></section>
+	<section class="section-content">
+		<form accept-charset="UTF-8" action="/opportunities" class="form-horizontal" id="new_opportunity" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="?"><input name="authenticity_token" type="hidden" value="jiuCrjC5W9EFVHORzHrgt+jEX7b3927SdxiWv4mRlTU="></div>
+
+		  <input id="opportunity_company_id" name="opportunity[company_id]" type="hidden" value="503026b08859aed418000004">
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_name">Name</label>
+			<div class="controls">
+				<input class="input-xlarge" id="opportunity_name" name="opportunity[name]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_description">Description</label>
+			<div class="controls">
+				<textarea class="input-xlarge" cols="40" id="opportunity_description" name="opportunity[description]" rows="5"></textarea>
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_end_date">End date</label>
+			<div class="controls">
+				<input class="input-large" id="opportunity_end_date" name="opportunity[end_date]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="checkbox">
+				<div class="controls">
+					<input name="opportunity[buy_it_now]" type="hidden" value="0"><input class="input-xlarge" id="opportunity_buy_it_now" name="opportunity[buy_it_now]" type="checkbox" value="1">
+					Buy it now?
+				</div>
+			</label>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_buy_it_now_price">Buy it now price</label>
+			<div class="controls">
+				<input class="input-small" id="opportunity_buy_it_now_price" name="opportunity[buy_it_now_price]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_starting_location_id">Starting location</label>
+			<div class="controls">
+				<input class="input-xlarge" id="opportunity_starting_location_id" name="opportunity[starting_location_id]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_ending_location_id">Ending location</label>
+			<div class="controls">
+				<input class="input-xlarge" id="opportunity_ending_location_id" name="opportunity[ending_location_id]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_start_date">Start date</label>
+			<div class="controls">
+				<input class="input-large" id="opportunity_start_date" name="opportunity[start_date]" size="30" type="text">
+			</div>
+		  </div>
+		  
+		  <div class="control-group">
+			<label class="control-label" for="opportunity_end_date">End date</label>
+			<div class="controls">
+				<input class="input-large" id="opportunity_end_date" name="opportunity[end_date]" size="30" type="text">
+			</div>
+		  </div>
+		 
+		 
+		  <div class="form-actions">
+			<input class="btn" name="commit" type="submit" value="Create Opportunity">
+		  </div>
+
+		</form>	
+	</section>
+</div>
