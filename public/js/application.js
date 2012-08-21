@@ -127,8 +127,10 @@ mm_token = {
 			},
 			dataType : "jsonp",
 			success : function (data) {
-				mm_token.set(data.auth_token, data.company._id);
-				$.address.path('/dashboard');
+				if(data){
+					mm_token.set(data.auth_token, data.company._id);
+					$.address.path('/dashboard');
+				}
 			},
 			error : function (e) {
 				alert('Error')
@@ -147,7 +149,6 @@ mm_token = {
 		mm_default.removeLoadingImg();
 		$.removeCookie('mm_token.auth_token');
 		$.removeCookie('mm_token.company_id');
-		$.address.path('/');
 	}
 }
 
@@ -163,38 +164,23 @@ mm_application.init = function () {
 	});
 	mm_token.load();
 	mm_navigator.build('header nav');	
-	
+	$.address.path('/');
+	mm_application.openPage('signin');
 	
 	$.address.init(function (event) {}).change(function (event) {
 		var fx = event.path.replace('-', '_').replace('/', '_');
 		var init = mm_application.actions[fx];
 		if ($.isFunction(init))
 		{
-			mm_token.check(function(){init();});
+			if(fx!='_signin'){
+				mm_token.check(function(){init();});
+			}else{
+				init();
+			}
 		}else{
 			mm_application.actions['_default']();
 		}
 	});
-};
-
-mm_application.openPage = function (page, container) {
-	if(!container){container = $('#content');}
-	var html_url = '/page/'+page + '.html';
-	var js_url = '/page/'+page + '.js';
-		
-	$.ajax({
-		type : "GET",
-		url : html_url,
-		data : {},
-		dataType : "html",
-		success : function (html) {
-			$(container).html(html);
-			$.getScript(js_url, function(){ mm_application.page.init(); });
-			mm_navigator.build('header nav');
-		},
-		error : function (e) {
-			$(container).html("Error: Couldn't load page." + page);
-		}});
 };
 
 mm_application.actions = {};
@@ -236,6 +222,25 @@ mm_application.actions._new_opportunity = function () {
 	});
 }
 
+mm_application.openPage = function (page, container) {
+	if(!container){container = $('#content');}
+	var html_url = '/page/'+page + '.html';
+	var js_url = '/page/'+page + '.js';
+		
+	$.ajax({
+		type : "GET",
+		url : html_url,
+		data : {},
+		dataType : "html",
+		success : function (html) {
+			$(container).html(html);
+			$.getScript(js_url, function(){ mm_application.page.init(); });
+			mm_navigator.build('header nav');
+		},
+		error : function (e) {
+			$(container).html("Error: Couldn't load page." + page);
+		}});
+};
 
 $(function () {
 	mm_default.getScripts(['/js/company.js', '/js/event.js'], function(){
