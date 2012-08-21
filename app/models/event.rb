@@ -2,7 +2,7 @@ class Event
   include Mongoid::Document
 
   field :description, :type => String
-  field :model_id, :type => Integer
+  field :model_id, :type => String
   field :model_type, :type => String
   field :company_id, :type => String  # Source of event
 

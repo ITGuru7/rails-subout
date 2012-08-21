@@ -3,6 +3,7 @@ class OpportunityObserver < Mongoid::Observer
   
   def after_save(opportunity)
     Rails.logger.info "Observing opportunity: #{opportunity.inspect} "
+    Rails.logger.info "And the id is #{opportunity.id}"
  
     e = Event.new
     e.description = opportunity.description
@@ -20,4 +21,8 @@ class OpportunityObserver < Mongoid::Observer
 
   end
 
+  def after_create(opportunity)
+    Rails.logger.info "Just created a new opportunity"
+  end
+  
 end

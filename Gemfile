@@ -26,6 +26,9 @@ gem 'uuid'
 gem 'delayed_job_mongoid'
 gem 'thin'
 gem 'cancan'
+gem "factory_girl_rails", "~> 4.0"
+gem 'ffaker'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

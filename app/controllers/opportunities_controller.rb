@@ -45,6 +45,8 @@ class OpportunitiesController < ApplicationController
   def create
     @opportunity = Opportunity.new(params[:opportunity])
 
+    @opportunity.company_id ||= current_user.company.id
+
     respond_to do |format|
       if @opportunity.save
         format.html { redirect_to @opportunity, notice: 'Opportunity was successfully created.' }
