@@ -1,4 +1,4 @@
-<div id="page_new_opportunity" class="page modal hide in" style="display: block; ">
+<div id="page_new_opportunity" class="page modal hide in">
 	<section class="section-title"><h2>New Opportunity</h2></section>
 	<section class="section-content">
 		<form accept-charset="UTF-8" action="/opportunities" class="form-horizontal" id="new_opportunity" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="?"><input name="authenticity_token" type="hidden" value="jiuCrjC5W9EFVHORzHrgt+jEX7b3927SdxiWv4mRlTU="></div>
@@ -17,14 +17,17 @@
 				<textarea class="input-xlarge" cols="40" id="opportunity_description" name="opportunity[description]" rows="5"></textarea>
 			</div>
 		  </div>
-		  
+		  <!--
 		  <div class="control-group">
-			<label class="control-label" for="opportunity_end_date">End date</label>
+			<label class="control-label" for="opportunity_end_date">Expires</label>
 			<div class="controls">
-				<input class="input-large" id="opportunity_end_date" name="opportunity[end_date]" size="30" type="text">
+				<input class="input-small day" id="opportunity_expire_day" type="text">
+				<input class="input-small time" id="opportunity_expire_time" type="text">
+			
+				<input id="opportunity_end_date" name="opportunity[expire_date]" size="30" type="hidden">
 			</div>
 		  </div>
-		  
+		  -->
 		  <div class="control-group">
 			<label class="checkbox">
 				<div class="controls">
@@ -58,14 +61,19 @@
 		  <div class="control-group">
 			<label class="control-label" for="opportunity_start_date">Start date</label>
 			<div class="controls">
-				<input class="input-large" id="opportunity_start_date" name="opportunity[start_date]" size="30" type="text">
+				<input class="input-small day" id="opportunity_start_day" type="text">
+				<input class="input-small time" id="opportunity_start_time" type="text">
+			
+				<input id="opportunity_end_date" name="opportunity[start_date]" size="30" type="hidden">
 			</div>
 		  </div>
 		  
 		  <div class="control-group">
 			<label class="control-label" for="opportunity_end_date">End date</label>
 			<div class="controls">
-				<input class="input-large" id="opportunity_end_date" name="opportunity[end_date]" size="30" type="text">
+				<input class="input-small day" id="opportunity_end_day" type="text">
+				<input class="input-small time" id="opportunity_end_time" type="text">
+				<input id="opportunity_end_date" name="opportunity[end_date]" size="30" type="hidden">
 			</div>
 		  </div>
 		 

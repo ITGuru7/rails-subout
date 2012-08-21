@@ -26,9 +26,9 @@ var mm_default = {
 
 var mm_navigator = {
 	items : {
-		'new_oppotunity' : {
-			href : '/new-oppotunity',
-			text : 'New Oppotunity',
+		'new_opportunity' : {
+			href : '/new-opportunity',
+			text : 'New Opportunity',
 			visible : 0,
 		},
 		'dashboard' : {
@@ -66,7 +66,7 @@ var mm_navigator = {
 			items.signout.visible = 1;
 			items.signin.visible = 0;
 			items.settings.visible = 1;
-			items.new_oppotunity.visible = 1;
+			items.new_opportunity.visible = 1;
 			items.dashboard.visible = 1;
 		}else{
 			items.signout.visible = 0;
@@ -206,33 +206,22 @@ mm_application.actions._dashboard = function () {
 }
 
 mm_application.actions._new_opportunity = function () {
-	if ($('#page_new_opportunity').html() != "") {
-		$('#page_new_opportunity').modal();
-		return;
-	}
-	
-	mm_opportunity.form(function (html) {
-		
-		$('#page_new_opportunity').html(html);
-		mm_opportunity.init_form();
-		$('#page_new_opportunity').modal();
-		$('#page_new_opportunity').on('hidden', function () {
-			$.address.path('/');
-		})
-	});
+	mm_application.openPage('new_opportunity', '#pageModal');
 }
 
 mm_application.openPage = function (page, container) {
+	
 	if(!container){container = $('#content');}
 	var html_url = '/page/'+page + '.html';
 	var js_url = '/page/'+page + '.js';
-		
+	
 	$.ajax({
 		type : "GET",
 		url : html_url,
 		data : {},
 		dataType : "html",
 		success : function (html) {
+			
 			$(container).html(html);
 			$.getScript(js_url, function(){ mm_application.page.init(); });
 			mm_navigator.build('header nav');
@@ -243,7 +232,7 @@ mm_application.openPage = function (page, container) {
 };
 
 $(function () {
-	mm_default.getScripts(['/js/company.js', '/js/event.js'], function(){
+	mm_default.getScripts(['/js/company.js', '/js/event.js', '/js/opportunity.js'], function(){
 		mm_application.init();
 	});
 });
