@@ -90,7 +90,7 @@ var mm_navigator = {
 };
 
 var mm_application = {
-	api_path: "http://suboutdev.herokuapp.com",
+	api_path: "",
 	page: null,
 };
 
@@ -164,9 +164,6 @@ mm_application.init = function () {
 	});
 	mm_token.load();
 	mm_navigator.build('header nav');	
-	$.address.path('/');
-	mm_application.openPage('signin');
-	
 	$.address.init(function (event) {}).change(function (event) {
 		var fx = event.path.replace('-', '_').replace('/', '_');
 		var init = mm_application.actions[fx];
@@ -181,6 +178,8 @@ mm_application.init = function () {
 			mm_application.actions['_default']();
 		}
 	});
+	$.address.path('/');
+	mm_application.openPage('signin');
 };
 
 mm_application.actions = {};
@@ -190,10 +189,6 @@ mm_application.actions._default = function(){
 
 mm_application.actions._signin = function () {
 	mm_application.openPage('signin');
-}
-
-mm_application.actions._help = function () {
-
 }
 
 mm_application.actions._signout = function () {

@@ -13,8 +13,8 @@ mm_opportunity.all = function (handler) {
 		}
 	});
 }
-
 mm_opportunity.save = function(params, handler){
+	
 	$.ajax({
 		type : "POST",
 		url : mm_application.api_path + "/opportunities.json?auth_token=" + mm_token.data.auth_token,
@@ -25,6 +25,6 @@ mm_opportunity.save = function(params, handler){
 		},
 		error : function (e) {
 			handler();
-		}
+		},
 	});
 }
