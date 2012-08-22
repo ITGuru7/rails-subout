@@ -16,16 +16,19 @@ mm_application.page = {
 		builders:{
 			opportunity: function(item){
 				var html = $("<div></div>").addClass('well row-fluid');
-				var col1 = $("<div></div>").html(item.description).addClass('span4 col1');
-				var col2 = $("<div></div>").html(item.model_type).addClass('span4 col2');
-				html.append(col1).append(col2);
+				var col_desc = $("<div></div>").html(item.description).addClass('span4 col1');
+				var col_model = $("<div></div>").html(item.model_type).addClass('span4 col2');
+				html.append(col_desc).append(col_model);
 				return html;
 			},
-			bid: function(item){},
+			bid: function(item){
+				
+			},
 			event: function(item){
 				var html = $("<div></div>").addClass('well row-fluid');
-				var col1 = $("<div></div>").html(item.model_type + '<br/>' + item.description).addClass('span4 col1');
-				html.append(col1);
+				var col_desc = $("<div></div>").html(item.description).addClass('span4 col1');
+				var col_model = $("<div></div>").html(item.model_type).addClass('span4 col2');
+				html.append(col_desc).append(col_model);
 				return html;
 			},
 		},
@@ -43,6 +46,52 @@ mm_application.page = {
 					}
 				});
 			}
+			mm_application.page.dashboard.loadPubnubEvents();
 		},
+		
+		loadPubnubEvents: function()
+		{
+			// ----------------------------------------------
+			// INIT
+			// ----------------------------------------------
+			var channel = mm_company.data.company_msg_path;
+			log(mm_company.data.company_msg_path);
+			// ----------------------------------------------
+			// Establish a Connection
+			// ----------------------------------------------
+			log('Opening a Connection.');
+			pubnub.subscribe({
+				channel  : channel,
+				connect  : ready,
+				callback : function(message){
+					log('Received a Message.');
+					log(message);
+					log('Closing Connection');
+					var fx = message.model_type;
+					var init = mm_application.page.dashboard.builders[fx];
+					if ($.isFunction(init))
+					{	
+						$('#page_dashboard #activity .content').append(init(message));
+					}
+						
+					
+				}
+			});
+
+			// ----------------------------------------------
+			// Connection Is Open Now and Ready
+			// ----------------------------------------------
+			function ready() {
+				log('Connection Established.');
+				//send('hello');
+			}
+
+			// ----------------------------------------------
+			// Send Request Finished with Status
+			// ----------------------------------------------
+			function log(message) {
+				console.log(message);
+			}	
+		}
 	}
 }

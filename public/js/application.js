@@ -21,6 +21,22 @@ var mm_default = {
 		{
 			$.getScript(scripts[s], onScriptLoad);
 		}
+	},
+	serializeObject : function(form)
+	{
+		var o = {};
+		var a = $(form).serializeArray();
+		$.each(a, function() {
+			if (o[this.name] !== undefined) {
+				if (!o[this.name].push) {
+					o[this.name] = [o[this.name]];
+				}
+				o[this.name].push(this.value || '');
+			} else {
+				o[this.name] = this.value || '';
+			}
+		});
+		return o;
 	}
 };
 
@@ -89,7 +105,16 @@ var mm_navigator = {
 	}
 };
 
+
+var pubnub  = PUBNUB({
+				publish_key   : 'pub-bc2f574a-db24-436a-abb7-9b8976d67d83',
+				subscribe_key : 'sub-fd809ee8-d663-11e1-bf41-5deea89e8e90',
+				ssl           : false,
+				origin        : 'pubsub.pubnub.com'
+			});
+			
 var mm_application = {
+	//api_path: "http://suboutdev.herokuapp.com",
 	api_path: "",
 	page: null,
 };
@@ -99,14 +124,20 @@ mm_token = {
 		auth_token: null,
 		company_id: null,
 	},
-	check: function(handler){
+	check: function(){
+
 		var tid = setTimeout('mm_token.remove();', 5000);
 		$.ajax({
 			type : "GET",
 			url : mm_application.api_path + "/companies/"+ mm_token.data.company_id +".json?auth_token=" + mm_token.data.auth_token,
 			data : {},
 			dataType : "jsonp",
-			success: function(data){ clearTimeout(tid); mm_company.data = data; handler(); }, 
+			success: function(data){ 
+				clearTimeout(tid); 
+				mm_company.data = data; 
+				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 
+			}, 
+			error: function(){ mm_token.remove(); },
 		});
 	},
 	set: function(token, company)
@@ -115,6 +146,7 @@ mm_token = {
 		mm_token.data.company_id = company;	
 		$.cookie('mm_token.auth_token', mm_token.data.auth_token);
 		$.cookie('mm_token.company_id', mm_token.data.company_id);
+		$.address.path('/dashboard');
 	},
 	get: function (email, password) {
 		//suboutdev@gmail.com sub0utd3v 
@@ -141,6 +173,7 @@ mm_token = {
 	{
 		mm_token.data.auth_token = $.cookie('mm_token.auth_token');
 		mm_token.data.company_id = $.cookie('mm_token.company_id');
+		mm_token.check();
 	},
 	remove: function()
 	{
@@ -149,6 +182,7 @@ mm_token = {
 		mm_default.removeLoadingImg();
 		$.removeCookie('mm_token.auth_token');
 		$.removeCookie('mm_token.company_id');
+		$.address.path('/signin');
 	}
 }
 
@@ -169,17 +203,11 @@ mm_application.init = function () {
 		var init = mm_application.actions[fx];
 		if ($.isFunction(init))
 		{
-			if(fx!='_signin'){
-				mm_token.check(function(){init();});
-			}else{
-				init();
-			}
+			init();
 		}else{
 			mm_application.actions['_default']();
 		}
 	});
-	$.address.path('/');
-	mm_application.openPage('signin');
 };
 
 mm_application.actions = {};

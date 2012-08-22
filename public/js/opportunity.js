@@ -4,7 +4,7 @@ mm_opportunity.all = function (handler) {
 		type : "GET",
 		url : mm_application.api_path + "/opportunities.json?auth_token=" + mm_token.data.auth_token,
 		data : {},
-		dataType : "json",
+		dataType : "jsonp",
 		success : function (data) {
 			handler(data);
 		},
@@ -13,18 +13,21 @@ mm_opportunity.all = function (handler) {
 		}
 	});
 }
-mm_opportunity.save = function(params, handler){
+mm_opportunity.save = function(params, handler1, handler2){
 	
 	$.ajax({
 		type : "POST",
 		url : mm_application.api_path + "/opportunities.json?auth_token=" + mm_token.data.auth_token,
 		data : params,
-		dataType : "html",
+		dataType : "jsonp",
 		success : function (data) {
-			handler(data);
+			handler1(data);
 		},
-		error : function (e) {
-			handler();
+		error : function (request, status, error) {
+			var data = $.parseJSON(request.responseText)
+			if(handler2){
+				handler2($.parseJSON(request.responseText));
+			}
 		},
 	});
 }
