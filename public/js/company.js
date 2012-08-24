@@ -1,6 +1,6 @@
 var mm_company = {
 	data:{
-		id: null,
+		_id: null,
 		active: false,
 		company_msg_path: null,
 		hq_location_id: null,

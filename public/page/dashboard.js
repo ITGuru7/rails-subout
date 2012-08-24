@@ -15,10 +15,24 @@ mm_application.page = {
 		
 		builders:{
 			opportunity: function(item){
-				var html = $("<div></div>").addClass('well row-fluid');
-				var col_desc = $("<div></div>").html(item.description).addClass('span4 col1');
-				var col_model = $("<div></div>").html(item.model_type).addClass('span4 col2');
-				html.append(col_desc).append(col_model);
+				var html = $("<div></div>").addClass('well row-fluid opportunity');
+				var col_desc = $("<div></div>").html(item.description).addClass('span6 col1');
+				var col_model = $("<div></div>").addClass('span4 col2');
+				
+				col_model.html(mm_default.createLabel(item.model_type));
+				
+				var btn_view = mm_default.createButton("View").addClass("btn btn-primary address");
+				
+				if(item.company_id==mm_company.data._id)
+				{
+					$(btn_view).attr("href", "/opportunity/view?id=" + item.model_id);
+				}else{
+					$(btn_view).attr("href", "/opportunity/bid?id=/" + item.model_id);
+				}
+				
+				var col_actions = $("<div></div>").html(btn_view).addClass('span2 col3');
+				
+				html.append(col_desc).append(col_model).append(col_actions);
 				return html;
 			},
 			bid: function(item){

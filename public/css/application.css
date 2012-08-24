@@ -35,5 +35,5 @@
 /* form */
 .form-horizontal .control-group{ margin-bottom:10px; }
 #ui-datepicker-div{ z-index:99999!important; }
-.modal{position:absolute;}
+.modal{position:fixed;}
 .section-content{ padding:0px 20px; }

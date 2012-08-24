@@ -37,13 +37,24 @@ var mm_default = {
 			}
 		});
 		return o;
+	},
+	
+	createButton : function(label)
+	{
+		return $("<a></a>").addClass("btn").html(label);
+	},
+	
+	createLabel : function(label)
+	{
+		return $("<span></span>").addClass("label label-info").html(label);
 	}
+	
 };
 
 var mm_navigator = {
 	items : {
 		'new_opportunity' : {
-			href : '/new-opportunity',
+			href : '/opportunity-new',
 			text : 'New Opportunity',
 			visible : 0,
 		},
@@ -198,19 +209,25 @@ mm_application.init = function () {
 	});
 	mm_token.load();
 	mm_navigator.build('header nav');	
-	$.address.init(function (event) {}).change(function (event) {
-		var fx = event.path.replace('-', '_').replace('/', '_');
-		var init = mm_application.actions[fx];
-		if ($.isFunction(init))
-		{
-			init();
-		}else{
-			mm_application.actions['_default']();
-		}
+	mm_application.actions.handler($.address.path());
+	$.address.init(function (event){}).change(function (event) {
+		mm_application.actions.handler(event.path);
 	});
 };
 
 mm_application.actions = {};
+
+mm_application.actions.handler = function(path){ 
+	var fx = path.replace(new RegExp(/(-)|(\/)/g), '_');
+	var init = mm_application.actions[fx];
+	if ($.isFunction(init))
+	{
+		init();
+	}else{
+		mm_application.actions['_default']();
+	}
+}
+
 mm_application.actions._default = function(){
 	mm_application.openPage('index');
 };
@@ -228,8 +245,12 @@ mm_application.actions._dashboard = function () {
 	mm_application.openPage('dashboard');
 }
 
-mm_application.actions._new_opportunity = function () {
-	mm_application.openPage('new_opportunity', '#pageModal');
+mm_application.actions._opportunity_new = function () {
+	mm_application.openPage('opportunity_new', '#pageModal');
+}
+
+mm_application.actions._opportunity_view = function () {
+	mm_application.openPage('opportunity_view', '#pageModal');
 }
 
 mm_application.openPage = function (page, container) {
