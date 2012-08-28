@@ -21,16 +21,17 @@ mm_application.page = {
 				
 				col_model.html(mm_default.createLabel(item.model_type));
 				
-				var btn_view = mm_default.createButton("View").addClass("btn btn-primary address");
+				var btn_action = mm_default.createButton("View").addClass("btn btn-primary address");
 				
-				if(item.company_id==mm_company.data._id)
+				if(item.company_id==mm_company.data._id + 1)
 				{
-					$(btn_view).attr("href", "/opportunity/view?id=" + item.model_id);
+					$(btn_action).attr("href", "/opportunity/view?id=" + item.model_id);
 				}else{
-					$(btn_view).attr("href", "/opportunity/bid?id=/" + item.model_id);
+					$(btn_action).html('Bid');
+					$(btn_action).attr("href", "/opportunity/bid?id=" + item.model_id);
 				}
 				
-				var col_actions = $("<div></div>").html(btn_view).addClass('span2 col3');
+				var col_actions = $("<div></div>").html(btn_action).addClass('span2 col3');
 				
 				html.append(col_desc).append(col_model).append(col_actions);
 				return html;

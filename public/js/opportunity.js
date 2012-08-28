@@ -33,12 +33,50 @@ mm_opportunity.get = function (id, handler) {
 	});
 }
 
+
+mm_opportunity.getBids = function (id, handler) {
+	$.ajax({
+		type : "GET",
+		url : mm_application.api_path + "/opportunities/bids/" + id + ".json",
+		data : {
+			auth_token : mm_token.data.auth_token,
+		},
+		dataType : "jsonp",
+		success : function (data) {
+			handler(data);
+		},
+		error : function (e) {
+			handler();
+		}
+	});
+}
+
 mm_opportunity.save = function (params, handler1, handler2) {
 	
 	$.ajax({
 		type : "POST",
 		url : mm_application.api_path + "/opportunities.json?auth_token=" + mm_token.data.auth_token,
 		data : params,
+		dataType : "jsonp",
+		success : function (data) {
+			handler1(data);
+		},
+		error : function (request, status, error) {
+			var data = $.parseJSON(request.responseText)
+				if (handler2) {
+					handler2($.parseJSON(request.responseText));
+				}
+		},
+	});
+}
+
+mm_opportunity.saveBid = function (params, handler1, handler2) {
+	var _default = { "auth_token": mm_token.data.auth_token};
+	var _params = $.extend({}, _default, params);
+	$.ajax({
+		type : "POST",
+		url : mm_application.api_path + "/bids.json",
+		data : _params,
 		dataType : "jsonp",
 		success : function (data) {
 			handler1(data);

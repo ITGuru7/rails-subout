@@ -229,7 +229,7 @@ mm_application.actions.handler = function(path){
 }
 
 mm_application.actions._default = function(){
-	mm_application.openPage('index');
+	//mm_application.openPage('index');
 };
 
 mm_application.actions._signin = function () {
@@ -251,6 +251,10 @@ mm_application.actions._opportunity_new = function () {
 
 mm_application.actions._opportunity_view = function () {
 	mm_application.openPage('opportunity_view', '#pageModal');
+}
+
+mm_application.actions._opportunity_bid = function () {
+	mm_application.openPage('opportunity_bid', '#pageModal');
 }
 
 mm_application.openPage = function (page, container) {

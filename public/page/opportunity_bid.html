@@ -1,4 +1,4 @@
-<div id="page_view_opportunity" class="page modal hide in">
+<div id="page_bid_opportunity" class="page modal hide in">
 	<div id="opportunity_wrapper">
 		<section class="section-title"><h2>View Opportunity</h2></section>
 		<section class="section-content">
@@ -10,7 +10,7 @@
 					</div>
 					<div class="span3">
 						<div>Expires: (<span id="expires">0</span>)</div>
-						<div>Bids: <span id="bids">0</span></div>
+						<div>Bids: <span id="bid_count">0</span></div>
 						<div>Winning bid: <span id="winning_bid">0</span></div>
 					</div>
 				</div>
@@ -21,12 +21,19 @@
 		<section class="section-title"><h2>Bids</h2></section>
 		<section class="section-content">	
 			<div id="bids">
-				<div class="row-fluid bid">
-					<div class="span2"></div>
-					<div class="span7"><div id="bid_company"></div></div>
-					<div class="span3"><div id="bid_accept"></div></div>
+				<div class="row-fluid">
+					<div class="span7 offset2"><div class="bid"></div></div>
 				</div>
 			</div>
+
+			<form method="post" id="form_bid" class="form-inline">
+				<div id="message"></div>
+				Your Bid &nbsp;
+				<div class="input-prepend input-append">
+					<span class="add-on">$</span><input class="span2" name="bid[amount]" id="amount" size="16" type="text">
+				</div> 
+				<input type="submit" value="Bid" class="btn" />
+			</form>
 		</section>
 	</div>
 </div>
