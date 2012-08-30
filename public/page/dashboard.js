@@ -23,7 +23,7 @@ mm_application.page = {
 				
 				var btn_action = mm_default.createButton("View").addClass("btn btn-primary address");
 				
-				if(item.company_id==mm_company.data._id + 1)
+				if(item.company_id==mm_company.data._id+1)
 				{
 					$(btn_action).attr("href", "/opportunity/view?id=" + item.model_id);
 				}else{

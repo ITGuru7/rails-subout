@@ -136,7 +136,13 @@ mm_token = {
 		company_id: null,
 	},
 	check: function(){
-
+		
+		if(mm_token.data.company_id==null)
+		{
+			$.address.path('/signin');
+			return;
+		}
+		
 		var tid = setTimeout('mm_token.remove();', 5000);
 		$.ajax({
 			type : "GET",
