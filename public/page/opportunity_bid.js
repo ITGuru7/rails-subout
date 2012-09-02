@@ -12,8 +12,14 @@ mm_application.page = {
 			mm_opportunity.get(opportunity_id, function(data){ 
 				$("#opportunity_wrapper .section-title h2").html(data.name);
 				$("#opportunity_wrapper .section-content #opportunity #description").html(data.description);
+				
+				if(data.winning_bid_id){
+					mm_bid.get(data.winning_bid_id, function(bid){
+						$("#opportunity_wrapper #winning_bid").text( bid.amount );
+					});
+				}
+				
 				var diff =  Math.floor(( Date.parse(data.end_date) - Date.parse(new Date()) ) / 86400000);
-				$("#opportunity_wrapper #expires").text(diff);
 				var expires = diff;
 				if(diff<0)
 				{
@@ -30,7 +36,7 @@ mm_application.page = {
 				{
 					expires = diff + " days";
 				}
-				$("#opportunity_wrapper #winning_bid").text( data.winning_bid_id );
+
 				$("#opportunity_wrapper #expires").text( expires );
 			});
 			

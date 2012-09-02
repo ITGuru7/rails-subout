@@ -1,3 +1,12 @@
+$.fn.center = function () {
+    this.css("position","absolute");
+	this.css({
+			top: ( $(window).height() - this.height() ) / 2 + $(window).scrollTop() + "px"
+			});
+    return this;
+}
+
+
 var mm_default = {
 	appendLoadingImg : function (selector) {
 		$(selector).html('<div class="loading"><img src="/img/loading.gif" height="24" width="24" /></div>');
@@ -41,12 +50,22 @@ var mm_default = {
 	
 	createButton : function(label)
 	{
-		return $("<a></a>").addClass("btn").html(label);
+		var button = $("<a></a>").addClass("btn address").html(label);
+		return button;
+		
 	},
 	
 	createLabel : function(label)
 	{
 		return $("<span></span>").addClass("label label-info").html(label);
+	},
+	
+	initAddress: function()
+	{
+		/** jquery address plugin setting **/
+		$('a.address').address(function () {
+			return $(this).attr('href');
+		});
 	}
 	
 };
@@ -144,6 +163,16 @@ mm_token = {
 		}
 		
 		var tid = setTimeout('mm_token.remove();', 5000);
+		mm_company.get(mm_token.data.company_id, function(data){
+			if(data){
+				clearTimeout(tid); 
+				mm_company.data = data; 
+				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 	
+			}else{
+				mm_token.remove(); 
+			}
+		});
+		/*
 		$.ajax({
 			type : "GET",
 			url : mm_application.api_path + "/companies/"+ mm_token.data.company_id +".json?auth_token=" + mm_token.data.auth_token,
@@ -155,7 +184,7 @@ mm_token = {
 				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 
 			}, 
 			error: function(){ mm_token.remove(); },
-		});
+		});*/
 	},
 	set: function(token, company)
 	{
@@ -263,6 +292,11 @@ mm_application.actions._opportunity_bid = function () {
 	mm_application.openPage('opportunity_bid', '#pageModal');
 }
 
+mm_application.actions._bids_view = function () {
+	mm_application.openPage('bids_view', '#pageModal');
+}
+
+
 mm_application.openPage = function (page, container) {
 	
 	if(!container){container = $('#content');}
@@ -286,7 +320,7 @@ mm_application.openPage = function (page, container) {
 };
 
 $(function () {
-	mm_default.getScripts(['/js/company.js', '/js/event.js', '/js/opportunity.js'], function(){
+	mm_default.getScripts(['/js/company.js', '/js/event.js', '/js/opportunity.js', '/js/bid.js'], function(){
 		mm_application.init();
 	});
 });

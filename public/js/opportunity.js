@@ -33,7 +33,6 @@ mm_opportunity.get = function (id, handler) {
 	});
 }
 
-
 mm_opportunity.getBids = function (id, handler) {
 	$.ajax({
 		type : "GET",
@@ -66,6 +65,22 @@ mm_opportunity.save = function (params, handler1, handler2) {
 				if (handler2) {
 					handler2($.parseJSON(request.responseText));
 				}
+		},
+	});
+}
+
+mm_opportunity.update = function (id, params, handler1, handler2) {
+	
+	$.ajax({
+		type : "PUT",
+		url : mm_application.api_path + "/opportunities/"+id+".json?auth_token=" + mm_token.data.auth_token,
+		data : params,
+		dataType : "jsonp",
+		success : function (data) {
+			handler1(data);
+		},
+		error : function (request, status, error) {
+			handler2();
 		},
 	});
 }

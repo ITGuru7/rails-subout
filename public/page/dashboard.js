@@ -1,7 +1,7 @@
 mm_application.page = {
-	name: "Sign In",
+	name: "Dashboard",
 	init: function(){
-		mm_company.get(mm_application.page.dashboard.loadCompany);
+		mm_company.get(mm_company.data._id, mm_application.page.dashboard.loadCompany);
 		mm_event.all(mm_application.page.dashboard.loadEvents);
 	},
 	
@@ -23,7 +23,7 @@ mm_application.page = {
 				
 				var btn_action = mm_default.createButton("View").addClass("btn btn-primary address");
 				
-				if(item.company_id==mm_company.data._id+1)
+				if(item.company_id==mm_company.data._id)
 				{
 					$(btn_action).attr("href", "/opportunity/view?id=" + item.model_id);
 				}else{

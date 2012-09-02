@@ -8,10 +8,20 @@ mm_application.page = {
 			});
 
 			var opportunity_id = $.address.parameter('id');
+
 			
 			mm_opportunity.get(opportunity_id, function(data){ 
 				$("#opportunity_wrapper .section-title h2").html(data.name);
 				$("#opportunity_wrapper .section-content #opportunity #description").html(data.description);
+				
+				/* get winning_bid */
+				if(data.winning_bid_id){
+					mm_bid.get(data.winning_bid_id, function(bid){
+						$("#opportunity_wrapper #winning_bid").text( bid.amount );
+					});
+				}
+				
+				/* get expires */
 				var diff =  Math.floor(( Date.parse(data.end_date) - Date.parse(new Date()) ) / 86400000);
 				$("#opportunity_wrapper #expires").text(diff);
 				var expires = diff;
@@ -31,7 +41,6 @@ mm_application.page = {
 					expires = diff + " days";
 				}
 				
-				$("#opportunity_wrapper #winning_bid").text( data.winning_bid_id );
 				$("#opportunity_wrapper #expires").text( expires );
 			});
 			
@@ -45,7 +54,7 @@ mm_application.page = {
 					var b = bid.clone();
 					var bw = bid_wrapper.clone();
 					
-					var btn_accept = mm_default.createButton('Accept').attr("href", "/opportunity/accept?oid="+item.opportunity_id+"&bid=" + item._id);
+					var btn_accept = mm_default.createButton('Accept').attr("href", "/opportunity/accept?oid="+item.opportunity_id+"&bid=" + item._id + "&amount=" + item.amount);
 					
 					b.html(item.posting_company_id + ", Amount:" + item.amount + " ");
 					b.append(btn_accept);
@@ -57,5 +66,31 @@ mm_application.page = {
 				$("#bid_count").text(data.length);
 				
 			});
+			
+			/*$(window).scroll(function () { 
+				$('#page_view_opportunity.modal').center();	
+			});*/
+			
+			$('.modal').center();
 	}
+}
+
+/* accept opportunity action */
+mm_application.actions._opportunity_accept = function () {
+	
+	var oid = $.address.parameter('oid');
+	var bid = $.address.parameter('bid');
+	var amount = $.address.parameter('amount');
+	$("#winning_bid").text(amount);
+	var param = {
+		"opportunity[winning_bid_id]": bid,
+	};
+	
+	mm_opportunity.update(oid, param, 
+		function(){ 
+			
+		}, 
+		function(){ 
+			
+		});
 }
