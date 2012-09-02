@@ -6,7 +6,6 @@ $.fn.center = function () {
     return this;
 }
 
-
 var mm_default = {
 	appendLoadingImg : function (selector) {
 		$(selector).html('<div class="loading"><img src="/img/loading.gif" height="24" width="24" /></div>');
@@ -167,24 +166,12 @@ mm_token = {
 			if(data){
 				clearTimeout(tid); 
 				mm_company.data = data; 
-				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 	
+				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 
+				
 			}else{
 				mm_token.remove(); 
 			}
 		});
-		/*
-		$.ajax({
-			type : "GET",
-			url : mm_application.api_path + "/companies/"+ mm_token.data.company_id +".json?auth_token=" + mm_token.data.auth_token,
-			data : {},
-			dataType : "jsonp",
-			success: function(data){ 
-				clearTimeout(tid); 
-				mm_company.data = data; 
-				mm_token.set(mm_token.data.auth_token, mm_token.data.company_id); 
-			}, 
-			error: function(){ mm_token.remove(); },
-		});*/
 	},
 	set: function(token, company)
 	{
@@ -207,6 +194,7 @@ mm_token = {
 			success : function (data) {
 				if(data){
 					mm_token.set(data.auth_token, data.company._id);
+					mm_company.data = data.company; 
 					$.address.path('/dashboard');
 				}
 			},

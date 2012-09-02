@@ -1,7 +1,7 @@
 mm_application.page = {
 	name: "Dashboard",
 	init: function(){
-		mm_company.get(mm_company.data._id, mm_application.page.dashboard.loadCompany);
+		mm_company.get(mm_token.data.company_id, mm_application.page.dashboard.loadCompany);
 		mm_event.all(mm_application.page.dashboard.loadEvents);
 	},
 	

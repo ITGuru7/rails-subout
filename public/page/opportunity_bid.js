@@ -75,5 +75,7 @@ mm_application.page = {
 				);
 				return false;
 			});
+			
+			$('.modal').center();
 	}
 }
