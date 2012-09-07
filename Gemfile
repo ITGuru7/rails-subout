@@ -46,3 +46,9 @@ gem 'ffaker'
 
 
 gem "devise"
+
+gem "rspec-rails"
+gem "cucumber-rails"
+gem "therubyracer"
+gem "database_cleaner"
+gem "httparty"
