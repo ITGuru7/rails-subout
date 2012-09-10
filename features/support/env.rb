@@ -39,9 +39,9 @@ end
 
 Capybara.javascript_driver = :webkit  
 
-require 'headless'
-headless = Headless.new
-headless.start
+#require 'headless'
+#headless = Headless.new
+#headless.start
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:

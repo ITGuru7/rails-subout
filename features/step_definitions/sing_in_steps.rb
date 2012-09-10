@@ -6,7 +6,7 @@ Given /^a user exists with email: "(.*?)" and password: "(.*?)"$/ do |email, pas
 end
 
 Given /^I am on the sign in page$/ do
-  visit "/#/signin"
+  visit "/users/sign_in"
 end
 
 Given /^I fill in "(.*?)" with "(.*?)"$/ do |label, value|

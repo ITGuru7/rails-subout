@@ -1,1 +1,1 @@
-cucumber --profile=wip
+bundle exec cucumber --profile=wip
