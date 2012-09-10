@@ -28,6 +28,7 @@ class Company
   field :hq_location_id, type: String
   field :active, type: Boolean
   field :company_msg_path, type: String
+  field :member, type: Boolean, default: false
 
   after_initialize :init
 
@@ -46,6 +47,10 @@ class Company
 
   def interested_in_event?(event)
   	true
+  end
+
+  def guest? 
+    !member?
   end
 
   def send_event(event, associated_object)

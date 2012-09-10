@@ -12,7 +12,7 @@ development:
   sessions:
     # Defines the default session. (required)
     default:
-      database: subout
+      database: subout_development
       hosts:
         - localhost:27017
       options:

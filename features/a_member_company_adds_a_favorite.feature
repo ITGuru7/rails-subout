@@ -1,6 +1,5 @@
 Feature: A member company adds a favorite
 
-  @wip
   Scenario: A member company adds another member company
     Given a member company exists "Boston Bus" with an email "thomas@bostonbus.com" and logo "boston-bus-logo.gif"
     Given I am logged in as a member company "New York Bus"

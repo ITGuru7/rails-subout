@@ -10,6 +10,7 @@ gem 'haml-rails'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
+  gem "therubyracer"
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
 
@@ -26,8 +27,6 @@ gem 'uuid'
 gem 'delayed_job_mongoid'
 gem 'thin'
 gem 'cancan'
-gem "factory_girl_rails", "~> 4.0"
-gem 'ffaker'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -47,8 +46,16 @@ gem 'ffaker'
 
 gem "devise"
 
-gem "rspec-rails"
-gem "cucumber-rails"
-gem "therubyracer"
-gem "database_cleaner"
-gem "httparty"
+group :development, :test do
+  gem "pry"
+  gem "factory_girl_rails", "~> 4.0"
+  gem 'ffaker'
+end
+
+group :test do
+  gem "rspec-rails"
+  gem "cucumber-rails"
+  gem "database_cleaner"
+  gem "capybara-webkit"
+  gem "headless"
+end
