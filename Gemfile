@@ -13,6 +13,7 @@ gem 'delayed_job_mongoid'
 gem 'thin'
 gem 'cancan'
 gem "devise"
+gem 'simple_form'
 
 # Gems used only for assets and not required
 # in production environments by default.

@@ -3,8 +3,8 @@ class Opportunity
   field :company_id, type: Integer
   field :name, type: String
   field :description, type: String
-  field :starting_location_id, type: Integer
-  field :ending_location_id, type: Integer
+  field :starting_location, type: String
+  field :ending_location, type: String
   field :start_date, type: Time
   field :end_date, type: Time
   field :opportunity_type_id, type: Integer

@@ -7,4 +7,13 @@
     = csrf_meta_tags
   %body
     = link_to 'Sign out', destroy_user_session_path if user_signed_in?
+    %nav
+      %ul
+        %li= link_to "Create a new opportunity", new_opportunity_path
+
+    - flash().each do |name, msg|
+      %div{:class => "alert alert-#{name == :notice ? "success" : "error"}"}
+        %a.close{"data-dismiss" => "alert"} ×
+        = msg
+
     = yield

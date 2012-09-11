@@ -1,5 +1,6 @@
 class Location
   include Mongoid::Document
+
   field :company_id, type: String
   field :contact_id, type: String
   field :street_number, type: Integer
@@ -20,5 +21,4 @@ class Location
   belongs_to :opportunity
   belongs_to :contact
   belongs_to :company
-
 end

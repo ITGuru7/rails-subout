@@ -1,6 +1,5 @@
 Feature: Sign in
 
-  @javascript
   Scenario: A user signs in
     Given a user exists with email: "thomas@bostonbus.com" and password: "password1"
     And I am on the sign in page
