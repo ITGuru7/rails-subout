@@ -9,6 +9,7 @@ require 'rspec/autorun'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+  config.include Devise::TestHelpers
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -43,4 +44,8 @@ RSpec.configure do |config|
   config.before(:each) do
     DatabaseCleaner.clean
   end
+end
+
+def sign_in_user(user = FactoryGirl.create(:user))
+  sign_in user
 end

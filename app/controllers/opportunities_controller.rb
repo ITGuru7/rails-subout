@@ -10,7 +10,7 @@ class OpportunitiesController < ApplicationController
     @opportunity.company = current_user.company
 
     if @opportunity.save
-      redirect_to root_path, :notice => "Opportunity has been created"
+      redirect_to dashboard_path, :notice => "Opportunity has been created"
     else
       render :new
     end

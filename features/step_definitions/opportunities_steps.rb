@@ -1,15 +1,3 @@
-Given /^a user exist and logged in$/ do
-  @current_user = FactoryGirl.create(:user, email: "abc@example.com", password: "password1")
-
-  visit new_user_session_path
-
-  fill_in "Email", with: "abc@example.com"
-  fill_in "Password", with: "password1"
-  click_on "Sign in"
-  
-  page.should have_content("Sign out")
-end
-
 When /^I submit a new opportunity$/ do
   click_link "Create a new opportunity"
 

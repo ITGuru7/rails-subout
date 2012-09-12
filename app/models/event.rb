@@ -1,5 +1,8 @@
 class Event
   include Mongoid::Document
+  include Mongoid::Timestamps
+
+  scope :recent, order_by(:updated_at => :desc).limit(100)
 
   field :description, :type => String
   field :model_id, :type => String

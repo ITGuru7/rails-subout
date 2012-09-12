@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe OpportunitiesController do
-  include Devise::TestHelpers
-
   before do
-    @user = FactoryGirl.create(:user)
-    sign_in @user
+   sign_in_user
   end
 
   describe 'POST create' do
@@ -17,7 +14,7 @@ describe OpportunitiesController do
 
     it 'should redirect to dashboard' do
       post :create, :opportunity => FactoryGirl.attributes_for(:opportunity)
-      response.should redirect_to(root_path)
+      response.should redirect_to(dashboard_path)
     end
 
     it 'should render the form again on failure' do

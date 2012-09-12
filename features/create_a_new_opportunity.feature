@@ -4,7 +4,7 @@ Feature: Create a new opportunity
   So that other companies can bid on it
 
   Scenario: creating a opportunity for others to bid
-    Given a user exist and logged in
+    Given a user exist and is logged in
     When I submit a new opportunity
     Then I should see "Opportunity has been created"
 

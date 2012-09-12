@@ -3,11 +3,12 @@ Subout::Application.routes.draw do
 
   devise_for :users
 
-  resources :companies, :bids, :contacts, :employees, 
+  resources :bids, :contacts, :employees, 
             :favorites, :locations, :opportunities, :opportunity_types, 
-            :profiles, :regions, :region_types, :users,
-            :events
+            :profiles, :regions, :region_types, 
+            :events, :companies
 
+  get 'dashboard', to: 'companies#dashboard'
 
   #TODO ask thomas about this
   match 'companies/events/:id' => 'companies#events'
@@ -16,5 +17,5 @@ Subout::Application.routes.draw do
   match 'opportunities/bids/:id' => 'opportunities#bids'
   match 'api_login' => 'tokens#create'
 
-  root :to => 'dashboard#index'
+  root :to => 'companies#dashboard'
 end

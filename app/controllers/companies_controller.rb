@@ -103,5 +103,7 @@ class CompaniesController < ApplicationController
     end
   end
 
-
+  def dashboard
+    @events = Event.recent
+  end
 end
