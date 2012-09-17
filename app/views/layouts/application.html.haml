@@ -9,7 +9,8 @@
     = link_to 'Sign out', destroy_user_session_path if user_signed_in?
     %nav
       %ul
-        %li= link_to "Create a new opportunity", new_opportunity_path
+        %li= link_to "Create a new auction", new_opportunity_path
+        %li= link_to "My Needs", opportunities_path
 
     - flash().each do |name, msg|
       %div{:class => "alert alert-#{name == :notice ? "success" : "error"}"}

@@ -1,12 +1,24 @@
-Feature: Create a new opportunity
-  As I am a user of KEPEA
-  I want to create a opportunity
-  So that other companies can bid on it
+Feature: Buyer create a new auction
+  As a buyer
+  I want to create a auction
+  So I can buy what I need
 
-  Scenario: creating a opportunity for others to bid
+  Scenario: buyer creates a auction 
     Given a user exist and is logged in
-    When I submit a new opportunity
-    Then I should see "Opportunity has been created"
+    When I create a new auction
+    Then the need should have been created
+    Then a supplier should not be able to "win it now"
 
-  Scenario: create a new opportunity for someone to buy it now
-  Scenario: create a new opportunity for favorite only
+  @wip
+  Scenario: buyer creates a quick winable auction
+    Given a user exist and is logged in
+    When I create a new quick winable auction 
+    Then the item should have been created
+    Then a supplier should be able to "win it now"
+
+  Scenario: creates an auction for favorites only
+    Given a user exist and is logged in
+    When I create a new auction for favorites only
+    Then the item should have been created
+    And only my favorites should see the opportunity
+

@@ -19,7 +19,11 @@ class Company
 
   validates_presence_of :name, :on => :create, :message => "can't be blank"
   validates_presence_of :company_msg_path, :on => :create, :message => "can't be blank"
-  
+
+  def needs
+    self.opportunities
+  end
+
   def interested_in_event?(event)
   	true
   end

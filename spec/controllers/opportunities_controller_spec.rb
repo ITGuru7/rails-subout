@@ -2,7 +2,21 @@ require 'spec_helper'
 
 describe OpportunitiesController do
   before do
-   sign_in_user
+    @user = sign_in_user
+  end
+
+  describe "GET 'index'" do
+    it "assigns all my needs and only MY needs" do
+      my_needs = FactoryGirl.create(:opportunity, :company => @user.company)
+      my_need_2 = FactoryGirl.create(:opportunity, :company => @user.company)
+      not_mine = FactoryGirl.create(:opportunity)
+
+      get :index
+
+      assigns(:opportunities).should == [my_needs, my_need_2]
+      assigns(:opportunities).should_not include(not_mine)
+    end
+
   end
 
   describe 'POST create' do
