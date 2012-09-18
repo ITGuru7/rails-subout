@@ -9,10 +9,11 @@ class Opportunity
   field :end_date, type: Time
   field :opportunity_type_id, type: Integer
   field :bidding_ends, type: Time
-  field :bidding_done, type: Boolean
-  field :quick_winnable, type: Boolean
+  field :bidding_done, type: Boolean, default: false
+  field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal 
   field :winning_bid_id, type: Integer
+  field :for_favorites_only, type: Boolean, default: false
 
 
   belongs_to :company, :class_name => "Company"
