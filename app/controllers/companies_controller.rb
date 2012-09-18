@@ -1,5 +1,4 @@
 class CompaniesController < ApplicationController
-  before_filter :authenticate_user!
 
   # GET /companies
   # GET /companies.json

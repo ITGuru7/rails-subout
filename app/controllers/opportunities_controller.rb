@@ -1,6 +1,4 @@
 class OpportunitiesController < ApplicationController
-  before_filter :authenticate_user!
-
   def index
     @opportunities = current_company.needs
   end

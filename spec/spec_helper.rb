@@ -48,5 +48,6 @@ end
 
 def sign_in_user(user = FactoryGirl.create(:user))
   sign_in user
-  user
+  @current_company = user.company
+  @current_user = user
 end

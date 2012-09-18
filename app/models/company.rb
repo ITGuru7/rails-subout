@@ -3,6 +3,7 @@ require 'securerandom'
 class Company
   include Mongoid::Document
   field :name, type: String
+  field :email, type: String
   field :hq_location_id, type: String
 
   #TODO remove this once we figure out where it's being used
@@ -11,9 +12,35 @@ class Company
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
 
+  field :favorite_supplier_ids, type: Array, default: []
+  field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
+
+  def favorite_suppliers
+    Company.where(:id.in => self.favorite_supplier_ids)
+  end
+
+  def favoriting_buyers
+    Company.where(:id.in => self.favoriting_buyer_ids)
+  end
+
+  def add_favorite_supplier!(seller)
+    self.favorite_supplier_ids << seller.id
+    self.save
+
+    seller.favoriting_buyer_ids << self.id
+    seller.save
+  end
+
   has_many :users
   has_many :opportunities
-  has_many :favorites
+
+  #has_many :favorite
+  #has_many :favorite_suppliers, :through => :favorites, :source => :buyer
+
+  #has_and_belongs_to_many :favorite_suppliers
+  #has_and_belongs_to_many :connected_buyers
+
+
   has_many :contacts
   has_many :locations
 
