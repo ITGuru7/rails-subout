@@ -25,12 +25,23 @@ describe FavoritesController do
   end
 
   describe "POST 'create'" do
-    it 'adds a supplier to the current_companies list of favorites' do
+    it "adds a supplier to the current_company's list of favorites" do
       supplier = FactoryGirl.create(:company)
 
       post :create, :supplier_id => supplier.id
 
       @current_company.reload.favorite_suppliers.should include(supplier)
+    end
+  end
+
+  describe "DELETE 'destroy'" do
+    it "removes a supplier from the current_company's list of favorites" do
+      supplier = FactoryGirl.create(:company)
+      @current_company.add_favorite_supplier!(supplier)
+
+      delete :destroy, :id => supplier.id
+
+      @current_company.reload.favorite_supplier_ids.should_not include(supplier.id)
     end
   end
 end

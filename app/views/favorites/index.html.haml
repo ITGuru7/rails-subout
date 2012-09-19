@@ -2,7 +2,9 @@
 
 %ul.favorite-suppliers-list
   - @favorites.each do |supplier|
-    %li= supplier.name
+    %li[supplier]
+      =supplier.name
+      = link_to 'delete', favorite_path(supplier), :method => :delete, :confirm => 'are you sure?'
 
 -if @found_supplier
   We found:

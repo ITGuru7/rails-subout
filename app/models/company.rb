@@ -31,6 +31,14 @@ class Company
     supplier.save
   end
 
+  def remove_favorite_supplier!(supplier)
+    self.favorite_supplier_ids.delete( supplier.id )
+    self.save
+
+    supplier.favoriting_buyer_ids.delete( self.id )
+    supplier.save
+  end
+
   has_many :users
   has_many :opportunities
 
