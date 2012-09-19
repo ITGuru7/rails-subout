@@ -23,12 +23,12 @@ class Company
     Company.where(:id.in => self.favoriting_buyer_ids)
   end
 
-  def add_favorite_supplier!(seller)
-    self.favorite_supplier_ids << seller.id
+  def add_favorite_supplier!(supplier)
+    self.favorite_supplier_ids << supplier.id
     self.save
 
-    seller.favoriting_buyer_ids << self.id
-    seller.save
+    supplier.favoriting_buyer_ids << self.id
+    supplier.save
   end
 
   has_many :users

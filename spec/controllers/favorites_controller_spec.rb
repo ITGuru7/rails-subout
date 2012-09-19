@@ -14,5 +14,23 @@ describe FavoritesController do
 
       assigns(:favorites).to_a.should == [favorite_company]
     end
+
+    it 'searches for a supplier' do
+      supplier = FactoryGirl.create(:company, :email => 'some_known@email.com')
+
+      get :index, :company_email => supplier.email
+
+      assigns(:found_supplier).should == supplier
+    end
+  end
+
+  describe "POST 'create'" do
+    it 'adds a supplier to the current_companies list of favorites' do
+      supplier = FactoryGirl.create(:company)
+
+      post :create, :supplier_id => supplier.id
+
+      @current_company.reload.favorite_suppliers.should include(supplier)
+    end
   end
 end

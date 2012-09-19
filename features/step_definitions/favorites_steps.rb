@@ -9,16 +9,14 @@ Given /^I am logged in as a buyer called "(.*?)"$/ do |name|
 end
 
 When /^I add that seller as one of my favorite suppliers$/ do
-  expect {
-    click_on "Favorite suppliers"
-    fill_in "Email", :with => @seller.email
-    click_on "Find Seller"
-    page.should have_content @seller.name
-    click_on "Add #{@seller.name} to my favorite sellers"
-  }.to change(@buyer.favorite_suppliers, :size)
+  click_on "Favorite suppliers"
+  fill_in "Email", :with => @seller.email
+  click_on "Find Supplier"
+  page.should have_content @seller.name
+  click_on "Add to my favorite suppliers"
 end
 
-Then /^that seller should be in my list of favorite suppliers$/ do |name|
+Then /^that seller should be in my list of favorite suppliers$/ do
   click_on "Favorite supplier"
   page.should have_content @seller.name
 end
