@@ -1,6 +1,5 @@
 Feature: A buyer deletes a supplier from their list of favorites
 
-  @wip
   Scenario: delete
     Given I am logged in as a buyer
     And I have "Boston Bus" as a favorite supplier

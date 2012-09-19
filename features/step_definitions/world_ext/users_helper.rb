@@ -12,4 +12,4 @@ module WorldExt
   end
 end
 
-World(WorldExt::UsersHelper, ActionController::RecordIdentifier)
+World(WorldExt::UsersHelper)
