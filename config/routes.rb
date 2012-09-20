@@ -4,9 +4,21 @@ Subout::Application.routes.draw do
   devise_for :users
 
   resources :bids, :contacts, :employees, 
-            :favorites, :locations, :opportunities, :opportunity_types, 
+            :locations, :opportunities, :opportunity_types, 
             :profiles, :regions, :region_types, 
             :events, :companies
+
+  resources :favorites do
+    collection do
+      post :create_invitation
+      post :create_unknown_invitation
+    end
+
+    member do
+      get :accept
+    end
+  end
+
 
   get 'dashboard', to: 'companies#dashboard'
 

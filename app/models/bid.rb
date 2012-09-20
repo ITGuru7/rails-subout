@@ -14,4 +14,8 @@ class Bid
   validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
 
+  def description
+    "#{company.name} #{ammount}"
+  end
+  
 end

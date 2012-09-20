@@ -2,12 +2,6 @@ Given /^a supplier exists called "(.*?)"$/ do |name|
   @supplier = FactoryGirl.create(:company, :name => name, :email => 'thomas@bostonbus.com')
 end
 
-Given /^I am logged in as a buyer$/ do
-  @buyer = FactoryGirl.create(:company)
-  buyer_user = FactoryGirl.create(:user, :company => @buyer)
-  sign_in(buyer_user)
-end
-
 When /^I add that supplier as one of my favorite suppliers$/ do
   click_on "Favorite suppliers"
   fill_in "Email", :with => @supplier.email
@@ -36,4 +30,12 @@ end
 
 Then /^"(.*?)" should not be in my favorites$/ do |name|
   page.should_not have_content( @supplier.name )
+end
+
+Then /^that supplier should receive a favorite invitation email$/ do
+    pending # express the regexp above with the code you wish you had
+end
+
+When /^the supplier accpets the invitation$/ do
+    pending # express the regexp above with the code you wish you had
 end

@@ -2,6 +2,6 @@ Feature: Dashboard
 
   Scenario: A user view recent events
     Given some events exists
-    And a user exist and is logged in
+    And I am signed in as a buyer
     Then I should see recent events
 

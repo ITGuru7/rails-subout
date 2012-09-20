@@ -30,6 +30,7 @@ fi
 command='rspec'
 
 if [ $need_rails ]; then
+#    command="zeus $command"
     command="ruby -S bundle exec $command"
 fi
 

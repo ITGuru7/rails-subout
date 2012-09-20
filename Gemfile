@@ -15,6 +15,9 @@ gem 'cancan'
 gem "devise"
 gem 'simple_form'
 gem 'sqlite3'
+gem 'sidekiq'
+
+
 
 # Gems used only for assets and not required
 # in production environments by default.

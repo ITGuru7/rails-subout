@@ -24,14 +24,22 @@ describe FavoritesController do
     end
   end
 
-  describe "POST 'create'" do
-    it "adds a supplier to the current_company's list of favorites" do
+  describe "POST 'create_invitation'" do
+    it "sends a favorite invitation email to the supplier" do
       supplier = FactoryGirl.create(:company)
+      
+      post :create_invitation, :supplier_id => supplier.id
 
-      post :create, :supplier_id => supplier.id
-
-      @current_company.reload.favorite_suppliers.should include(supplier)
+      last_email.subject.should == "[SubOut] Favorite Invitation from #{@current_company.name}"
     end
+
+    #it "adds a supplier to the current_company's list of favorites" do
+      #supplier = FactoryGirl.create(:company)
+
+      #post :create, :supplier_id => supplier.id
+
+      #@current_company.reload.favorite_suppliers.should include(supplier)
+    #end
   end
 
   describe "DELETE 'destroy'" do

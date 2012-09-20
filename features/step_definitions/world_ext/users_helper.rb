@@ -8,6 +8,8 @@ module WorldExt
       click_on "Sign in"
 
       page.should have_content("Sign out")
+
+      @current_user = user
     end
   end
 end
