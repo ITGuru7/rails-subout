@@ -37,4 +37,5 @@ group :test do
   gem "database_cleaner"
   gem "capybara-webkit"
   gem "headless"
+  gem 'fivemat'
 end
