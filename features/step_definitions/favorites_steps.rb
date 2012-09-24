@@ -11,8 +11,7 @@ When /^I add that supplier as one of my favorite suppliers$/ do
 end
 
 Then /^that supplier should be in my list of favorite suppliers$/ do
-  page.should have_content @supplier.name
-  page.should_not have_content "Add to my favorite suppliers"
+  @buyer.reload.favorite_suppliers.should include(@supplier)
 end
 
 
@@ -33,9 +32,14 @@ Then /^"(.*?)" should not be in my favorites$/ do |name|
 end
 
 Then /^that supplier should receive a favorite invitation email$/ do
-    pending # express the regexp above with the code you wish you had
+  #eew hack!
+  sleep(0.1)
+
+  FavoriteInvitationWorker.drain
+  step %["#{@supplier.email}" should receive an email]
 end
 
 When /^the supplier accpets the invitation$/ do
-    pending # express the regexp above with the code you wish you had
+  step %{I opens the email}
+  step %{I click the first link in the email}
 end

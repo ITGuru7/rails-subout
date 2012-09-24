@@ -9,7 +9,7 @@
 -if @found_supplier
   We found:
   = @found_supplier.name
-  = link_to "Add to my favorite suppliers", favorites_path(:supplier_id => @found_supplier), :method => :post
+  = link_to "Add to my favorite suppliers", favorite_invitations_path(:supplier_id => @found_supplier), :method => :post
 -else
   = form_tag favorites_path, :method => :get do
     enter an email to search for a supplier

@@ -4,20 +4,13 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.3'
 
 gem "mongoid", "~> 3.0.0.rc"
-gem 'rails_admin'
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'pubnub'
-gem 'configuration'
-gem 'delayed_job_mongoid'
+#gem 'pubnub'
 gem 'thin'
-gem 'cancan'
 gem "devise"
 gem 'simple_form'
-gem 'sqlite3'
 gem 'sidekiq'
-
-
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -39,6 +32,7 @@ group :test do
   gem "cucumber-rails", :require => false
   gem "database_cleaner"
   gem "capybara-webkit"
-  gem "headless"
   gem 'fivemat'
+  gem 'email_spec'
+  gem 'action_mailer_cache_delivery'
 end

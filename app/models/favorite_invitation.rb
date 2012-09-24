@@ -10,4 +10,8 @@ class FavoriteInvitation
   belongs_to :buyer, :class_name => "Company"
   belongs_to :supplier, :class_name => "Company"
 
+  def accept!
+    buyer.add_favorite_supplier!(supplier)
+  end
+
 end

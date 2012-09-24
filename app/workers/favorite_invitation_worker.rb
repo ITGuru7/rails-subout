@@ -1,4 +1,4 @@
-class FavoriteInviationWorker
+class FavoriteInvitationWorker
   include Sidekiq::Worker
   
   def perform(id)
