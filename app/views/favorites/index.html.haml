@@ -6,13 +6,19 @@
       =supplier.name
       = link_to 'delete', favorite_path(supplier), :method => :delete, :confirm => 'are you sure?'
 
--if @found_supplier
-  We found:
-  = @found_supplier.name
-  = link_to "Add to my favorite suppliers", favorite_invitations_path(:supplier_id => @found_supplier), :method => :post
--else
-  = form_tag favorites_path, :method => :get do
-    enter an email to search for a supplier
-    = label_tag :company_email, 'Email'
-    = text_field_tag :company_email
-    = submit_tag 'Find Supplier'
+= form_tag favorites_path, :method => :get do
+  enter an email to search for a supplier
+  = label_tag :supplier_email, 'Email'
+  = text_field_tag :supplier_email
+  = submit_tag 'Find Supplier'
+
+-if defined?(@found_supplier)
+  -if @found_supplier
+    We found:
+    = @found_supplier.name
+    = link_to "Add to my favorite suppliers",
+        create_for_known_supplier_favorite_invitations_path(:supplier_id => @found_supplier),
+        :method => :post
+  -else
+    That supplier was not found
+    = link_to "Add to my favorite as a new guest supplier", new_favorite_invitation_path(supplier_email: params[:supplier_email])

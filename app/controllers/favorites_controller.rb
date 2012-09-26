@@ -1,7 +1,7 @@
 class FavoritesController < ApplicationController
   def index
     @favorites = current_company.favorite_suppliers
-    @found_supplier = Company.find_by(:email => params[:company_email]) if params[:company_email].present?
+    @found_supplier = Company.where(:email => params[:supplier_email]).first if params[:supplier_email].present?
   end
 
   def destroy

@@ -2,6 +2,13 @@ class Company
   include Mongoid::Document
   field :name, type: String
   field :email, type: String
+
+  #address stuff TODO ask Tom about this
+  field :street_address, type: String
+  field :zip_code, type: String
+  field :city, type: String
+  field :state, type: String
+
   field :hq_location_id, type: String
 
   #TODO remove this once we figure out where it's being used
@@ -12,6 +19,12 @@ class Company
 
   field :favorite_supplier_ids, type: Array, default: []
   field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
+
+  field :created_from_invitation_id
+
+  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
+
+  attr_accessor :password, :password_confirmation
 
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
@@ -51,7 +64,8 @@ class Company
   has_many :locations
 
   validates_presence_of :name, :on => :create, :message => "can't be blank"
-  validates_presence_of :company_msg_path, :on => :create, :message => "can't be blank"
+  validates_uniqueness_of :email
+  validates_confirmation_of :password
 
   def needs
     self.opportunities
@@ -70,4 +84,8 @@ class Company
     #event.delay.send_msg(company_msg_path, associated_object)
   end
 
+  def create_initial_user!
+    return unless users.empty?
+    users.create!(email: email, password: password)
+  end
 end

@@ -4,6 +4,10 @@ class FavoriteInvitationWorker
   def perform(id)
     invitation = FavoriteInvitation.find(id)
 
-    Notifier.send_favorite_invitation(invitation).deliver
+    if invitation.supplier
+      Notifier.send_known_favorite_invitation(invitation).deliver
+    else
+      Notifier.send_unknown_favorite_invitation(invitation).deliver
+    end
   end
 end

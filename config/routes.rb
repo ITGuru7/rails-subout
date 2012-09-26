@@ -5,15 +5,21 @@ Subout::Application.routes.draw do
   resources :bids, :contacts, :employees, 
             :locations, :opportunities, :opportunity_types, 
             :profiles, :regions, :region_types, 
-            :events, :companies, :favorites 
+            :events,  :favorites 
 
   resources :favorite_invitations do
-    #collection do
-      #post :create_unknown_invitation
-    #end
+    collection do
+      post :create_for_unknown_supplier, :create_for_known_supplier
+    end
 
     member do
       get :accept
+    end
+  end
+
+  resources :companies do
+    member do
+      get :new_supplier
     end
   end
 

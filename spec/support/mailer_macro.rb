@@ -1,9 +1,9 @@
 module MailerMacros
   def last_email
-    ActionMailer::Base.cached_deliveries.last
+    ActionMailer::Base.deliveries.last
   end
   
   def reset_email
-    ActionMailer::Base.cached_deliveries = []
+    ActionMailer::Base.deliveries = []
   end
 end

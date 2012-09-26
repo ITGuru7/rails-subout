@@ -33,6 +33,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.clean
+    reset_email
   end
 end
 

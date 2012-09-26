@@ -1,8 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    action_mailer_cache_delivery (0.3.2)
-      actionmailer (~> 3.0)
     actionmailer (3.2.3)
       actionpack (= 3.2.3)
       mail (~> 2.4.4)
@@ -219,7 +217,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  action_mailer_cache_delivery
   capybara-webkit
   coffee-rails (~> 3.2.1)
   cucumber-rails

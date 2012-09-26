@@ -34,5 +34,4 @@ group :test do
   gem "capybara-webkit"
   gem 'fivemat'
   gem 'email_spec'
-  gem 'action_mailer_cache_delivery'
 end
