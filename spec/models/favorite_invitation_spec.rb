@@ -1,15 +1,18 @@
 require 'spec_helper'
 
 describe FavoriteInvitation do
-  context "pending" do
-    it "should be pending by default" do
-      fail
-    end
+  it "should be pending by default" do
+    FavoriteInvitation.new.should be_pending
   end
 
-  describe "accpet!" do
+  describe "#accpet!" do
     it "should mark it as accepted" do
-      fail
+      invitation = FactoryGirl.create(:favorite_invitation)
+
+      invitation.accept!
+
+      invitation.should be_accepted
+      invitation.should_not be_pending
     end
   end
 end
