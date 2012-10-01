@@ -4,6 +4,7 @@ Feature: Buyer views their auctions
   So I can see the bids
 
   Scenario: Buyer views an auction
-    * pending
     Given I am signed in as a buyer
     And I have an auction
+    When I view my auctions
+    Then I should see that auction

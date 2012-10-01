@@ -3,9 +3,12 @@ Subout::Application.routes.draw do
   devise_for :users
 
   resources :bids, :contacts, :employees, 
-            :locations, :opportunities, :opportunity_types, 
+            :locations, :opportunity_types, 
             :profiles, :regions, :region_types, 
-            :events,  :favorites 
+            :events,  :favorites
+
+  resources :opportunities 
+  resources :auctions 
 
   resources :favorite_invitations do
     collection do

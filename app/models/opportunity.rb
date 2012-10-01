@@ -1,6 +1,5 @@
 class Opportunity
   include Mongoid::Document
-  field :company_id, type: Integer
   field :name, type: String
   field :description, type: String
   field :starting_location, type: String
@@ -16,13 +15,13 @@ class Opportunity
   field :for_favorites_only, type: Boolean, default: false
 
 
-  belongs_to :company, :class_name => "Company"
+  belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
   has_one :opportunity_type, :class_name => "OpportunityType", :foreign_key => "opportunity_type_id"
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
   has_many :bids
 
-  validates_presence_of :company_id
+  validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
   validates_presence_of :start_date, :on => :create, :message => "can't be blank"

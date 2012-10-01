@@ -9,7 +9,7 @@ class OpportunityObserver < Mongoid::Observer
     e.description = opportunity.description
     e.model_id = opportunity.id
     e.model_type = :opportunity
-    e.company_id = opportunity.company_id
+    e.company_id = opportunity.buyer_id
     e.save
 
     Company.all.each do |company| 

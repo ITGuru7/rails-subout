@@ -26,6 +26,17 @@ class Company
 
   attr_accessor :password, :password_confirmation
 
+  has_many :users
+  has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
+  has_many :opportunities
+
+  has_many :contacts
+  has_many :locations
+
+  validates_presence_of :name, :on => :create, :message => "can't be blank"
+  validates_uniqueness_of :email
+  validates_confirmation_of :password
+
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
   end
@@ -49,23 +60,6 @@ class Company
     supplier.favoriting_buyer_ids.delete( self.id )
     supplier.save
   end
-
-  has_many :users
-  has_many :opportunities
-
-  #has_many :favorite
-  #has_many :favorite_suppliers, :through => :favorites, :source => :buyer
-
-  #has_and_belongs_to_many :favorite_suppliers
-  #has_and_belongs_to_many :connected_buyers
-
-
-  has_many :contacts
-  has_many :locations
-
-  validates_presence_of :name, :on => :create, :message => "can't be blank"
-  validates_uniqueness_of :email
-  validates_confirmation_of :password
 
   def needs
     self.opportunities

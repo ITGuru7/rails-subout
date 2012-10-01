@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :opportunity do
-    company 
+    association :buyer, factory: :company
     name "New York to Boston"
     description "80 seats"
     starting_location "77 Barnhill Rd, West Barnstable, MA 02668"
