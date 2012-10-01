@@ -9,6 +9,8 @@ class FavoriteInvitation
   field :token, type: String, default: ->{ SecureRandom.uuid }
   field :accepted, type: Boolean, default: false
 
+  scope :pending, where(:accepted => false)
+
   belongs_to :buyer, :class_name => "Company"
   belongs_to :supplier, :class_name => "Company"
 

@@ -45,8 +45,12 @@ describe FavoriteInvitationsController do
       invitation.buyer.reload.favorite_suppliers.should include(invitation.supplier)
     end
 
-    it "only searches pending invitations" do
-      fail
+    it "doesn't search accepted invitations" do
+      accepted_invitation = FactoryGirl.create(:favorite_invitation, :token => 'accepted', :accepted => true)
+
+      get :accept, :id => accepted_invitation.token
+
+      response.should_not be_success
     end
   end
 end

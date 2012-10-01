@@ -28,9 +28,9 @@ class FavoriteInvitationsController < ApplicationController
   end
 
   def accept
-    invitation = FavoriteInvitation.find_by(:token => params[:id])
+    invitation = FavoriteInvitation.pending.find_by(:token => params[:id])
     invitation.accept!
-    redirect_to :root, :notice => 'Invitation accepted.'
+    redirect_to root_path, :notice => 'Invitation accepted.'
   end
 
 

@@ -18,7 +18,7 @@ describe FavoritesController do
     it 'searches for a supplier' do
       supplier = FactoryGirl.create(:company, :email => 'some_known@email.com')
 
-      get :index, :company_email => supplier.email
+      get :index, :supplier_email => supplier.email
 
       assigns(:found_supplier).should == supplier
     end
