@@ -1,21 +1,10 @@
 class OpportunitiesController < ApplicationController
   def index
-    @opportunities = current_company.needs
+    @opportunities = Opportunity.available
   end
 
-  def new
-    @opportunity = Opportunity.new
-  end
-
-  def create
-    @opportunity = Opportunity.new(params[:opportunity])
-    @opportunity.company = current_user.company
-
-    if @opportunity.save
-      redirect_to dashboard_path, :notice => "The auction has been created"
-    else
-      render :new
-    end
-
+  def show
+    #NOTE: thinking to use embed resource for bids
+    @opportunity = Opportunity.find(params[:id])
   end
 end

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :opportunity do
+  factory :opportunity, aliases: [:auction] do
     association :buyer, factory: :company
     name "New York to Boston"
     description "80 seats"

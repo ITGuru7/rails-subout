@@ -6,34 +6,23 @@ describe OpportunitiesController do
   end
 
   describe "GET 'index'" do
-    it "assigns all my needs and only MY needs" do
-      my_needs = FactoryGirl.create(:opportunity, :company => @user.company)
-      my_need_2 = FactoryGirl.create(:opportunity, :company => @user.company)
-      not_mine = FactoryGirl.create(:opportunity)
+    it 'assigns available opportunities' do
+      opportunities = stub
+      Opportunity.stub!(:available).and_return(opportunities)
 
       get :index
 
-      assigns(:opportunities).should == [my_needs, my_need_2]
-      assigns(:opportunities).should_not include(not_mine)
+      assigns(:opportunities).should == opportunities
     end
-
   end
 
-  describe 'POST create' do
-    it 'should create an opportunity' do
-      expect {
-        post :create, :opportunity => FactoryGirl.attributes_for(:opportunity)
-      }.to change(Opportunity, :count)
-    end
+  describe "GET 'show'" do
+    it 'assigns opportunity' do
+      opportunity = FactoryGirl.create(:opportunity)
 
-    it 'should redirect to dashboard' do
-      post :create, :opportunity => FactoryGirl.attributes_for(:opportunity)
-      response.should redirect_to(dashboard_path)
-    end
+      get :show, id: opportunity.id 
 
-    it 'should render the form again on failure' do
-      post :create, :opportunity => FactoryGirl.attributes_for(:opportunity, :name => nil)
-      response.should render_template("new")
+      assigns(:opportunity).should == opportunity
     end
   end
 end

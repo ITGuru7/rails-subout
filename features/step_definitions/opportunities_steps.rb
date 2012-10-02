@@ -1,50 +1,30 @@
-When /^I create a new auction$/ do
-  create_auction(FactoryGirl.build(:opportunity))
+Given /^a buyer exists "(.*?)"$/ do |name|
+  @buyer = FactoryGirl.create(:company, name: name)
 end
 
-When /^I create a new quick winnable auction$/ do
-  create_auction(FactoryGirl.build(:opportunity, :quick_winnable => true))
+Given /^I am logged in as a member supplier "(.*?)"$/ do |name|
+  @supplier = FactoryGirl.create(:member_supplier, name: name)
+  user = FactoryGirl.create(:user, company: @supplier)
+  sign_in(user)
 end
 
-When /^I create a new auction for favorites only$/ do
-  create_auction(FactoryGirl.build(:opportunity, :for_favorites_only => true))
-end 
-
-Then /^the need should have been created$/ do
-  page.should have_content("The auction has been created")
-  
-  click_on "My Needs"
-  page.should have_content("New York to Boston")
+Given /^that buyer has an auction "(.*?)"$/ do |name|
+  @auction = @opportunity = FactoryGirl.create(:auction, buyer: @buyer, name: name)
 end
 
-Then /^a supplier should not be able to \"win it now\"$/ do
-  last_opportunity.should_not be_quick_winnable
+When /^I bid on that opportunity$/ do
+  click_on "Available Opportunities"
+  click_on @opportunity.name
+  click_on "Bid Now"
+  fill_in :amount, with: 100.00
+  click_on "Submit Bid"
+  @bid = Bid.last
 end
 
-Then /^a supplier should be able to \"win it now\"$/ do
-  last_opportunity.should be_quick_winnable
+Then /^I should see my bid on that opportunity$/ do
+  page.should have_content("Your bid: $#{@bid.amount}")
 end
 
-Then /^only my favorites should see the opportunity$/ do
-  last_opportunity.should be_for_favorites_only
-end
-
-
-def last_opportunity
-  Opportunity.last
-end
-
-def create_auction(opportunity)
-  click_link "Create a new auction"
-
-  fill_in "Name", with: opportunity.name
-  fill_in "Description", with: opportunity.description
-  fill_in "Starting location", with: opportunity.starting_location
-  fill_in "Ending location", with: opportunity.ending_location
-  fill_in "Start date", with: opportunity.start_date
-  fill_in "End date", with: opportunity.end_date
-  fill_in "Bidding ends", with: opportunity.bidding_ends
-  check "Quick winnable" if opportunity.quick_winnable?
-  check "For favorites only" if opportunity.for_favorites_only?
-  click_on "Create Auction"
+Then /^the buyer should be notified about my bid$/ do
+  Sidekiq::Extensions::DelayedMailer.jobs.size.should == 1
 end

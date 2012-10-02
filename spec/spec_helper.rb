@@ -12,6 +12,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   config.include MailerMacros
+  config.include EmailSpec::Matchers
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of

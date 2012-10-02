@@ -6,12 +6,12 @@ class BidObserver < Mongoid::Observer
  
     e = Event.new
     # Build the description
-    company = bid.company
+    bidder = bid.bidder
     opportunity = bid.opportunity
-    e.description = "#{company.name} bid #{bid.amount} on #{opportunity.name}"
+    e.description = "#{bidder.name} bid #{bid.amount} on #{opportunity.name}"
     e.model_id = bid.id
     e.model_type = :bid
-    e.company_id = bid.posting_company_id
+    e.company_id = bid.bidder_id
     e.save
 
     Company.all.each do |company| 

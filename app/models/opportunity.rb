@@ -1,5 +1,7 @@
 class Opportunity
   include Mongoid::Document
+  include Mongoid::Timestamps
+
   field :name, type: String
   field :description, type: String
   field :starting_location, type: String
@@ -14,6 +16,7 @@ class Opportunity
   field :winning_bid_id, type: Integer
   field :for_favorites_only, type: Boolean, default: false
 
+  scope :available, order_by(:created_at => :desc)
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
   has_one :opportunity_type, :class_name => "OpportunityType", :foreign_key => "opportunity_type_id"

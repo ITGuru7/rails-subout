@@ -1,0 +1,9 @@
+%h1= @opportunity.name
+
+= link_to 'Bid Now', new_opportunity_bid_path(@opportunity.id)
+
+Bids
+
+%ul
+  - @opportunity.bids.each do |bid|
+    %li= "#{(bid.bidder == current_company) ? 'Your bid' : bid.bidder.name}: $#{bid.amount}"

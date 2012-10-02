@@ -2,12 +2,14 @@ Subout::Application.routes.draw do
 
   devise_for :users
 
-  resources :bids, :contacts, :employees, 
+  resources :contacts, :employees, 
             :locations, :opportunity_types, 
             :profiles, :regions, :region_types, 
             :events,  :favorites
 
-  resources :opportunities 
+  resources :opportunities  do
+    resources :bids
+  end
   resources :auctions 
 
   resources :favorite_invitations do
