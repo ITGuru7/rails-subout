@@ -2,10 +2,9 @@
 
 /* Controllers */
 
-function DashboardCtrl($scope, $location, Opportunity) {
+function DashboardCtrl($scope, $location, Opportunity, Company) {
   $scope.opportunities = Opportunity.query();
-  $scope.orderProp = 'age';
-  
+  $scope.company = Company.get({companyId:"503026b08859aed418000004"});
 }
 
 function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {

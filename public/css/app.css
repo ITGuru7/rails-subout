@@ -52,7 +52,18 @@ body{background:#bfbfbf; }
 	
 
 
-#activities{ border:3px solid #65b23e; }	
+#activities{ border:3px solid #65b23e; }
+#activities .table-striped tbody tr:nth-child(2n+1) td {
+    background-color: #d8e7d0;
+}
+#activities .table td{ padding:10px; font-size:0.9em; }
+
+
+
+
+
+
+	
 #ui-datepicker-div{ z-index:99999!important; }
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }
