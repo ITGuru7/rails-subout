@@ -1,0 +1,42 @@
+<div class="inner">
+  <div class="row-fluid">
+    <div class="span6">
+        <section id="company" class="well">
+            <section class="title"><h5>You</h5></section>
+            <section class="content">
+                <h2 id="company_name">Diversified Transportation Ltd.</h2>
+                <div id="company_links">
+                    <a href="/bids/view" class="address" address="true">Bids</a> | 
+                    <a href="/opportunities/view" class="address" address="true">Opportunities</a>
+                </div>
+            </section>
+        </section>
+        <section id="filters" class="well">
+            <section class="title"><h5>Filters</h5></section>
+            <section class="content">
+            </section>
+        </section>
+        <section id="tags" class="well">
+            <section class="title"><h5>Tags</h5></section>
+            <section class="content">
+            </section>
+        </section>
+    </div>
+    <div class="span6">
+
+       <section id="activities" class="well">
+          <h5>Activities</h5>
+          <ul class="opportunities">
+            <li ng-repeat="opportunity in opportunities" class="well">
+              <div class="row-fluid">
+              <div class="span6"><a href="#/opportunities/{{opportunity._id.$oid}}">{{opportunity.name}}</a></div>
+              <div class="span3">Opportunity</div>
+              <div class="span3"><a href="#/opportunities/{{opportunity._id.$oid}}" class="btn btn-primary">View</a></div>
+              </div>
+            </li>
+          </ul>
+      </section>
+
+    </div>
+  </div>
+</div>
