@@ -18,4 +18,16 @@ class AuctionsController < ApplicationController
     end
 
   end
+
+  def show
+    @auction = Opportunity.find(params[:id])
+  end
+
+  def select_winner
+    @auction = Opportunity.find(params[:id])
+    @auction.win!(params[:bid_id])
+
+    redirect_to :back
+  end
 end
+

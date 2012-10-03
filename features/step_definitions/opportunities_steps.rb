@@ -8,7 +8,7 @@ Given /^I am logged in as a member supplier "(.*?)"$/ do |name|
   sign_in(user)
 end
 
-Given /^that buyer has an auction "(.*?)"$/ do |name|
+Given /^(?:I|that buyer) (?:have|has) an auction "(.*?)"$/ do |name|
   @auction = @opportunity = FactoryGirl.create(:auction, buyer: @buyer, name: name)
 end
 
@@ -26,5 +26,5 @@ Then /^I should see my bid on that opportunity$/ do
 end
 
 Then /^the buyer should be notified about my bid$/ do
-  Sidekiq::Extensions::DelayedMailer.jobs.size.should == 1
+  there_shoud_be_one_email
 end

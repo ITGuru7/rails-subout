@@ -13,7 +13,8 @@ class Opportunity
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal 
-  field :winning_bid_id, type: Integer
+  field :winning_bid_id, type: String
+
   field :for_favorites_only, type: Boolean, default: false
 
   scope :available, order_by(:created_at => :desc)
@@ -31,5 +32,19 @@ class Opportunity
   validates_presence_of :end_date, :on => :create, :message => "can't be blank"
   validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
 
+  def win!(bid_id)
+    bid = self.bids.find(bid_id)
+
+    update_attributes(bidding_done: true, winning_bid_id: bid_id)
+    Notifier.delay.won_auction(self.id)
+  end
+
+  def winning_bid
+    bids.where(id: winning_bid_id).first
+  end
+
+  def won?
+    winning_bid.present?
+  end
 end
 

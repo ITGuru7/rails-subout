@@ -2,7 +2,6 @@ class Bid
   include Mongoid::Document
   field :opportunity_id, type: Integer
   field :amount, type: BigDecimal
-  field :active, type: Boolean
 
   has_one :event, :as => :eventable
 

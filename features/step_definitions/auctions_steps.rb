@@ -29,6 +29,32 @@ Then /^only my favorites should see the opportunity$/ do
   last_opportunity.should be_for_favorites_only
 end
 
+Given /^a supplier "(.*?)" has bid on that auction$/ do |name|
+  @supplier = FactoryGirl.create(:supplier)
+  @bid = FactoryGirl.create(:bid, :opportunity => @opportunity, :bidder => @supplier)
+end
+
+When /^I choose that bid as the winner$/ do
+  click_on 'My Auctions'
+  click_on @auction.name
+
+  within("#bid_#{@bid.id}") do
+    click_on "Select as Winner" 
+  end
+end
+
+Then /^that supplier should be notified that they won$/ do
+  there_shoud_be_one_email
+end
+
+Then /^that auction should show the winning bid$/ do
+  page.should have_content("Won By: #{@supplier.name}")
+  page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
+end
+
+Then /^bidding should be closed on that auction$/ do
+  page.should have_content("(Closed)")
+end
 
 def last_opportunity
   Opportunity.last

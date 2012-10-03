@@ -2,6 +2,6 @@
 
 %ul
   - @auctions.each do |auction|
-    %li= auction.name
+    %li= link_to auction.name, auction_path(auction)
 
 

@@ -36,4 +36,26 @@ describe AuctionsController do
       response.should render_template("new")
     end
   end
+
+  describe 'GET show' do
+    it 'assigns auction' do
+      auction = FactoryGirl.create(:auction)
+
+      get :show, :id => auction.id
+
+      assigns(:auction).should == auction
+    end
+  end
+
+  describe 'PUT select_winner' do
+    it 'records the winning bid' do
+      auction = FactoryGirl.create(:auction)
+      bid_id = '1'
+
+      Opportunity.stub(:find).and_return(auction)
+      auction.should_receive(:win!).with(bid_id)
+
+      put :select_winner, :id => auction.id, bid_id: bid_id
+    end
+  end
 end

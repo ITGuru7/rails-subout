@@ -10,7 +10,10 @@ Subout::Application.routes.draw do
   resources :opportunities  do
     resources :bids
   end
-  resources :auctions 
+
+  resources :auctions do
+    put :select_winner, on: :member
+  end
 
   resources :favorite_invitations do
     collection do

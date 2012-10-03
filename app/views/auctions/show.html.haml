@@ -1,0 +1,18 @@
+%h1
+  = @auction.name 
+  = '(Closed)' if @auction.bidding_done?
+
+- if @auction.won?
+  Won By: #{ @auction.winning_bid.bidder.name }
+  Winning Bid Amount: #{ @auction.winning_bid.amount }
+  Contact: ....
+  Phone: ...
+
+%ul
+  -@auction.bids.each do |bid|
+    %li[bid]
+      From: #{bid.bidder.name}
+      Amount: #{bid.amount}
+
+      = link_to "Select as Winner", select_winner_auction_path(@auction, :bid_id => bid.id), method: :put
+       

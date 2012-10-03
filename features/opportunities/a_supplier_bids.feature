@@ -1,6 +1,5 @@
 Feature: A supplier bids
 
-  @wip
   Scenario: A member supplier bids on an opportunity
     Given a buyer exists "Boston Bus"
     And I am logged in as a member supplier "New York Bus"
