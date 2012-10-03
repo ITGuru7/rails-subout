@@ -1,0 +1,392 @@
+[
+    {
+         "_id" : 
+        {
+             "$oid" : "502e56f1064de10200000004" 
+        },
+         "company_id" : "1",
+         "name" : "Wonderful Opportunity",
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "buy_it_now" : false,
+         "description" : "Desription",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e596a064de10200000007" 
+        },
+         "company_id" : "1",
+         "name" : "Wonderful Opportunity",
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "buy_it_now" : false,
+         "description" : "Desription",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e5a13064de1020000000a" 
+        },
+         "company_id" : "1",
+         "name" : "Wonderful Opportunity",
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "buy_it_now" : false,
+         "description" : "Desription",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e5a1e064de1020000000d" 
+        },
+         "name" : "desxxxxxxxx",
+         "description" : "resxxxxxxxxxx",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "buy_it_now" : false,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e5a99064de10200000016" 
+        },
+         "name" : "ooddddddddddddoooooo",
+         "description" : "ooooodddddddpppppppe",
+         "start_date" : 
+        {
+             "$date" : 1345507200000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1348185600000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1350777600000 
+        },
+         "buy_it_now" : false,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e5c601eea560200000001" 
+        },
+         "company_id" : "1",
+         "name" : "Wonderful Opportunity",
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "buy_it_now" : false,
+         "description" : "Desription",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e5da71eea560200000004" 
+        },
+         "company_id" : "1",
+         "name" : "Wonderful Opportunity",
+         "end_date" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_ends" : 
+        {
+             "$date" : 1229040000000 
+        },
+         "bidding_done" : false,
+         "buy_it_now" : false,
+         "description" : "Desription",
+         "start_date" : 
+        {
+             "$date" : 1231718400000 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e75f91430990200000010" 
+        },
+         "name" : "auth",
+         "description" : "11111111112222",
+         "start_date" : 
+        {
+             "$date" : 1345334400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1348099200000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1350604800000 
+        },
+         "buy_it_now" : false,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502e763f1430990200000013" 
+        },
+         "name" : "auth",
+         "description" : "11111111112222",
+         "start_date" : 
+        {
+             "$date" : 1345334400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1348099200000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1350604800000 
+        },
+         "buy_it_now" : false,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502f47ca2f8a880200000028" 
+        },
+         "name" : "des",
+         "description" : "des",
+         "start_date" : 
+        {
+             "$date" : 1345334400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1348099200000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1350604800000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502f4d582f8a88020000002e" 
+        },
+         "name" : "ds",
+         "description" : "sds",
+         "start_date" : 
+        {
+             "$date" : 1345334400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1348099200000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1350604800000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502f4d882f8a880200000031" 
+        },
+         "name" : "sdfsda",
+         "description" : "dsafasd",
+         "start_date" : 
+        {
+             "$date" : 1345768200000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1346382000000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1345248000000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "502f5e3d2f8a88020000003a" 
+        },
+         "name" : "des_new",
+         "description" : "des_new",
+         "start_date" : 
+        {
+             "$date" : 1345775400000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1346295600000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1345248000000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "502420888859aeafed000002" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "50323bfeb20269020001c619" 
+        },
+         "name" : "fesd",
+         "description" : "fesh",
+         "start_date" : 
+        {
+             "$date" : 1345429800000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1346041800000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1345420800000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "503026b08859aed418000004" 
+        }
+         
+    },
+    {
+         "_id" : 
+        {
+             "$oid" : "50323c69b20269020001dabd" 
+        },
+         "name" : "desf",
+         "description" : "desf",
+         "start_date" : 
+        {
+             "$date" : 1345509000000 
+        },
+         "end_date" : 
+        {
+             "$date" : 1346121000000 
+        },
+         "bidding_done" : false,
+         "bidding_ends" : 
+        {
+             "$date" : 1345507200000 
+        },
+         "buy_it_now" : true,
+         "company_id" : 
+        {
+             "$oid" : "503026b08859aed418000004" 
+        }
+         
+    }
+]
