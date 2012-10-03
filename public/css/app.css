@@ -23,7 +23,7 @@ body{background:#bfbfbf; }
 #pageWrapper { position:relative; background:#FFFFFF; }
 .inner{ padding:0px 3%; }
 
-#toolbar { background: #c7c6b2; vertical-align: middle; height:50px; line-height:50px; }
+#toolbar { width:100%; position:absolute; top:0px; left:0px; background: #c7c6b2; vertical-align: middle; height:50px; line-height:50px; }
 	#btn_back{ margin-left:20px;  }
 	#btn_next{ margin-left:20px; }
 	#btn_close{ margin-left:35px; }
@@ -44,7 +44,7 @@ body{background:#bfbfbf; }
 		border:none;
 		}
 
-#header{ margin:50px 0px; }
+#header{ margin:100px 0px; }
 #navigator{ text-align:right; font-size:1.1em; margin-top:3em; }
 	#navigator a{ border-right:1px solid #333; padding:0px 0.5em; text-decoration:none; }
 	#navigator a:last-child { border:none; }

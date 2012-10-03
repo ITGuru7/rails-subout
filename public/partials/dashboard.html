@@ -1,40 +1,62 @@
-<div class="inner">
-  <div class="row-fluid">
-    <div class="span6">
-        <section id="company" class="well">
-            <section class="title"><h5>You</h5></section>
-            <section class="content">
-                <h2 id="company_name">{{company.name}}</h2>
-                <div id="company_links">
-                    <a href="#/bids/{{company._id.$oid}}">Bids</a> | 
-                    <a href="#/opportunities/{{company._id.$oid}}">Opportunities</a>
+<div id="toolbar">
+    <div class="inner">
+        <div class="row-fluid">
+            <div class="span6">
+                <div id="navitation">
+                    <a href="#" id="btn_back"><img src="/img/toolbar-back.png"></a>
+                    <a href="#" id="btn_next"><img src="/img/toolbar-next.png"></a>
+                    <a href="#" id="btn_close"><img src="/img/toolbar-close.png"></a>
                 </div>
-            </section>
-        </section>
-        <section id="filters" class="well">
-            <section class="title"><h5>Filters</h5></section>
-            <section class="content">
-            </section>
-        </section>
-        <section id="tags" class="well">
-            <section class="title"><h5>Tags</h5></section>
-            <section class="content">
-            </section>
-        </section>
+            </div>
+            <div class="span6">
+                <div class="span6"></div>
+                <div id="search" class="span6">
+                    <input class="span10" ng-model="query" />
+                    <a href="#search" class="span2"><img src="/img/toolbar-search.png"></a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="span6">
-
-       <section id="activities" class="well">
-          <h5>Activities</h5><br/>
-          <table class="table table-striped">
-            <tr ng-repeat="opportunity in opportunities">
-                <td><a href="#/opportunities/{{opportunity._id.$oid}}">{{opportunity.name}}</a></td>
-                <td>Opportunity</td>
-                <td><a href="#/opportunities/{{opportunity._id.$oid}}" class="btn btn-primary">View</a></td>
-            </tr>
-          </table>
-      </section>
-
+</div>
+<div id="dashboard">
+    <div class="inner">
+      <div class="row-fluid">
+        <div class="span6">
+            <section id="company" class="well">
+                <section class="title"><h5>You</h5></section>
+                <section class="content">
+                    <h2 id="company_name">{{company.name}}</h2>
+                    <div id="company_links">
+                        <a href="#/bids/{{company._id.$oid}}">Bids</a> | 
+                        <a href="#/opportunities/{{company._id.$oid}}">Opportunities</a>
+                    </div>
+                </section>
+            </section>
+            <section id="filters" class="well">
+                <section class="title"><h5>Filters</h5></section>
+                <section class="content">
+                </section>
+            </section>
+            <section id="tags" class="well">
+                <section class="title"><h5>Tags</h5></section>
+                <section class="content">
+                </section>
+            </section>
+        </div>
+        <div class="span6">
+    
+           <section id="activities" class="well">
+              <h5>Activities</h5><br/>
+              <table class="table table-striped">
+                <tr ng-repeat="opportunity in opportunities | filter:query">
+                    <td><a href="#/opportunity/{{opportunity._id.$oid}}">{{opportunity.name}}</a></td>
+                    <td>Opportunity</td>
+                    <td><a href="#/opportunity/{{opportunity._id.$oid}}" class="btn btn-primary">View</a></td>
+                </tr>
+              </table>
+          </section>
+    
+        </div>
+      </div>
     </div>
-  </div>
 </div>
