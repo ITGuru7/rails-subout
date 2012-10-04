@@ -25,11 +25,13 @@
             <section id="company" class="well">
                 <section class="title"><h5>You</h5></section>
                 <section class="content">
-                    <h2 id="company_name">{{token.company.name}}</h2>
                     <div id="company_links">
                         <a href="#/bids/{{token.company._id}}">Bids</a> | 
                         <a href="#/opportunities/{{token.company._id}}">Opportunities</a>
                     </div>
+                    <div id="company_logo"><img ng-src="{{'/img/company/' + token.company._id + '.png'}}" ng-click="setImage(img)"></div>
+                    <h2 id="company_name">{{token.company.name}}</h2>
+                    
                 </section>
             </section>
             <section id="filters" class="well">

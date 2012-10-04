@@ -4,7 +4,7 @@
 
 function DashboardCtrl($scope, $location, Opportunity, Company) {
   $scope.opportunities = Opportunity.query();
-  $scope.company = Company.get({companyId:"503026b08859aed418000004"});
+  //$scope.company = Company.get({companyId:"503026b08859aed418000004"});
 }
 
 function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
@@ -13,7 +13,11 @@ function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
   });
 }
 
-function AppController($scope, $location, Token){
+function AppController($scope, $location, $http, Token, Company){
 	$scope.header = 'partials/header.html';
-	$scope.token = Token.get({email:'suboutdev@gmail.com', password:'sub0utd3v' });
+	$http.get('apis/token.json').success(function(data) {
+        $scope.token = data;
+        $scope.company = Company.get({companyId:data._id.$oid});
+    });
+  
 }

@@ -51,14 +51,15 @@ body{background:#bfbfbf; }
 	#navigator a:hover{ color:#85c265; }
 	
 
-
-#activities{ border:3px solid #65b23e; }
-	#activities .table-striped tbody tr:nth-child(2n+1) td {
-	    background-color: #d8e7d0;
-	}
-	#activities .table td{ padding:10px; font-size:0.9em; }
-	#activities .opportunity-title{ color:#75b952; }
-
+#dashboard{}
+	#activities{ border:3px solid #65b23e; }
+		#activities .table-striped tbody tr:nth-child(2n+1) td {
+		    background-color: #d8e7d0;
+		}
+		#activities .table td{ padding:10px; font-size:0.9em; }
+		#activities .opportunity-title{ color:#75b952; }
+	#dashboard #company #company_name{ text-align: center; }
+	#dashboard #company #company_logo{ text-align: center; }
 
 
 
