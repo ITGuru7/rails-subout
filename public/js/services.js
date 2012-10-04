@@ -18,4 +18,14 @@ angular.module('suboutServices', ['ngResource']).
         return $resource('/apis/token.json', {}, {
             query: {method:'GET', params:{}, isArray:false}
         });
+    }).
+    factory('Filter', function($resource){
+        return $resource('/apis/filters.json', {}, {
+            query: {method:'GET', params:{}, isArray:true}
+        });
+    }).
+    factory('Tag', function($resource){
+        return $resource('/apis/tags.json', {}, {
+            query: {method:'GET', params:{}, isArray:true}
+        });
     });

@@ -52,6 +52,7 @@ body{background:#bfbfbf; }
 	
 
 #dashboard{}
+	#dashboard section.title{ margin-bottom:10px; }
 	#activities{ border:3px solid #65b23e; }
 		#activities .table-striped tbody tr:nth-child(2n+1) td {
 		    background-color: #d8e7d0;
@@ -62,7 +63,10 @@ body{background:#bfbfbf; }
 	#dashboard #company #company_logo{ text-align: center; }
 
 
-
+	#filters .filter{ text-align:center; cursor:pointer; }
+	#filters .filter img{ margin:5px; }
+	
+	#tags .tag{ margin-bottom:0.3em; }
 
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }

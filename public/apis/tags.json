@@ -1,0 +1,71 @@
+[{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Software",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000005",
+    "active":true,
+    "name":"Statistics",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000006",
+    "active":true,
+    "name":"Teaching",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000007",
+    "active":true,
+    "name":"Technology",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000008",
+    "active":true,
+    "name":"Tips",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Tools",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Travel",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Routes",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Fuel",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":true,
+    "name":"Snacks",
+    "created_at":null,
+    "updated_at":null
+}
+]
