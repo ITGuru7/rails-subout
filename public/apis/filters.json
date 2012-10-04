@@ -1,40 +1,57 @@
 [{
     "_id":"503026b08859aed418000004",
-    "active":true,
-    "name":"Over 10 Seats",
-    
-    "seats_min":10,
-    "seats_max":100,
-    
+    "active":false,
+    "name":"20~60 Seats (range)",
     "color":"#69b644",
-    "image": "/img/filters/10.png",
-    "created_at":null,
-    "updated_at":null
+    
+    "evaluation":{
+       "type": "range",
+       "property":"seats",
+       "params":{
+            "min": 20,
+            "max": 60
+        }
+    } 
 },
 {
     "_id":"503026b08859aed418000005",
-    "active":true,
-    "name":"Over 20 Seats",
-    
-    "seats_min":20,
-    "seats_max":100,
-    
+    "active":false,
+    "name":"Ends Today (today)",
     "color":"#e1c212",
-    "image": "/img/filters/10.png",
-    "created_at":null,
-    "updated_at":null
+    
+    "evaluation":{
+       "type": "today",
+       "property":"bidding_ends",
+       "params":{}
+    }
 },
 {
     "_id":"503026b08859aed418000004",
-    "active":true,
-    "name":"Over 30 Seats",
-    
-    "seats_min":30,
-    "seats_max":100,
-    
+    "active":false,
+    "name":"Just 30 Seats (compare)",
     "color":"#f25a29",
-    "image": "/img/filters/10.png",
-    "created_at":null,
-    "updated_at":null
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"seats",
+       "params":{
+            "value": 30,
+            "operator": "=="
+        }   
+    }
+},
+{
+    "_id":"503026b08859aed418000009",
+    "active":false,
+    "name":"Boston (like)",
+    "color":"#f25a29",
+    
+    "evaluation":{
+       "type": "like",
+       "property":"name",
+       "params":{
+            "value": "boston"
+        }   
+    }
 }
 ]

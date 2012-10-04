@@ -18,10 +18,11 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
    
    $scope.query = "";
    $scope.filter = null;
+   $scope.tag = null;
    
    $scope.searchByFilter = function(input) {
         if(!$scope.filter) return true;
-        return (input.seats>$scope.filter.seats_min) && (input.seats<$scope.filter.seats_max);
+        return evaluation(input, $scope.filter.evaluation);
       };
       
    $scope.searchByQuery = function(input) {
@@ -32,12 +33,19 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
       };
         
    $scope.setFilter = function(filter){
-           $scope.filter = filter; 
+           
+           for(var i=0; i<$scope.filters.length; i++)
+           {
+               $scope.filters[i].active = false;
+           }
+           
+           filter.active = !filter.active;
+           $scope.filter = filter;
            $scope.query = "";
         }
-   $scope.setTag = function(tag, obj){ 
+        
+   $scope.setTag = function(tag){ 
            tag.active = !tag.active;
-           jQuery(obj).addClass("label");
         }
 }
 
