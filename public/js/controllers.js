@@ -13,6 +13,7 @@ function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
   });
 }
 
-function AppController($scope, $location){
+function AppController($scope, $location, Token){
 	$scope.header = 'partials/header.html';
+	$scope.token = Token.get({email:'suboutdev@gmail.com', password:'sub0utd3v' });
 }

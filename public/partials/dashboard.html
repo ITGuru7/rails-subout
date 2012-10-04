@@ -25,10 +25,10 @@
             <section id="company" class="well">
                 <section class="title"><h5>You</h5></section>
                 <section class="content">
-                    <h2 id="company_name">{{company.name}}</h2>
+                    <h2 id="company_name">{{token.company.name}}</h2>
                     <div id="company_links">
-                        <a href="#/bids/{{company._id.$oid}}">Bids</a> | 
-                        <a href="#/opportunities/{{company._id.$oid}}">Opportunities</a>
+                        <a href="#/bids/{{token.company._id}}">Bids</a> | 
+                        <a href="#/opportunities/{{token.company._id}}">Opportunities</a>
                     </div>
                 </section>
             </section>

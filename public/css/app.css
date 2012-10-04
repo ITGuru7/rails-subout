@@ -63,8 +63,5 @@ body{background:#bfbfbf; }
 
 
 
-
-	
-#ui-datepicker-div{ z-index:99999!important; }
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }

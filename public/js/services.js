@@ -16,6 +16,6 @@ angular.module('suboutServices', ['ngResource']).
     }).
     factory('Token', function($resource){
         return $resource('/apis/token.json', {}, {
-            query: {method:'GET', params:{email:'suboutdev@gmail.com', password:'sub0utd3v' }, isArray:false}
+            query: {method:'GET', params:{}, isArray:false}
         });
     });
