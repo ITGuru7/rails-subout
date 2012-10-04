@@ -1,6 +1,8 @@
 'use strict';
 
 /* Filters */
+angular.module("suboutFilters", []);
+
 var Evaluators = {};
 
 Evaluators.range = function(input, evaluation)
