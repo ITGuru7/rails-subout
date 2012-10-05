@@ -57,7 +57,6 @@ function evaluation(input, evaluation){
     var evaluator = Evaluators[evaluation.type];
     if($.isFunction(evaluator))
     {
-        
         return evaluator(input, evaluation);
     }else{
         alert("Evaluator doesn't exist.");

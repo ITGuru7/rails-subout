@@ -8,7 +8,17 @@ function AppController($scope, $location, $http, Token, Company){
         $scope.token = data;
         $scope.company = Company.get({companyId:data.company._id});
     });
+    
+    $scope.modal = '';
+    $scope.setModal = function(url)
+    {
+        $scope.modal = url;
+    }
   
+}
+
+function OpportunityNewCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
+
 }
 
 function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
