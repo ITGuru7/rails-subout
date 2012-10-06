@@ -4,9 +4,8 @@
 
 angular.module('suboutServices', ['ngResource']).
     factory('Opportunity', function($resource){
-
         return $resource('/apis/opportunities/:opportunityId.json', {}, {
-            query: {method:'GET', params:{opportunityId:'all'}, isArray:true}
+            query: {method:'GET', params:{opportunityId:'all'}, isArray:true},
         });
     }).
     factory('Company', function($resource){

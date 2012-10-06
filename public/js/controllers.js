@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function AppController($scope, $location, $http, Token, Company){
+function AppController($scope, $location, $http, $filter, Token, Company){
     
     $http.get('apis/token.json').success(function(data) {
         $scope.token = data;
@@ -18,7 +18,12 @@ function AppController($scope, $location, $http, Token, Company){
 }
 
 function OpportunityNewCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
+    
+    $scope.opportunity = Opportunity.get({opportunityId: 'new'});
 
+    $scope.submit = function(){
+      alert("coming soon");
+    }
 }
 
 function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
@@ -60,7 +65,5 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
 }
 
 function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
-  $scope.opportunity = Opportunity.get({opportunityId: $routeParams.opportunityId}, function(opportunity) {
-    $scope.name = opportunity.name;
-  });
+  $scope.opportunity = Opportunity.get({opportunityId: $routeParams.opportunityId});
 }
