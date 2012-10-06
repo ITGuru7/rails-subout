@@ -21,6 +21,10 @@ function OpportunityNewCtrl($scope, $location, Opportunity, Filter, Tag, Company
 
 }
 
+function OpportunityCtrl($scope, $location, Opportunity) {
+     $scope.opportunities = Opportunity.query();
+}
+
 function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
    $scope.opportunities = Opportunity.query();
    $scope.filters = Filter.query();
