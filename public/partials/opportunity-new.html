@@ -93,6 +93,7 @@
     </div>
 </div>
 <script>
-        jQuery('.time').timeEntry({spinnerImage: '/img/spinnerDefault.png', spinnerSize: [20, 20, 0]});
+       jQuery(function(){ jQuery('.time').timeEntry({spinnerImage: '/img/spinnerDefault.png', spinnerSize: [20, 20, 0]});
         jQuery('.day').datepicker({ changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: 'yy-mm-dd' }, "disabled");
+});
 </script>
