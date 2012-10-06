@@ -1,0 +1,19 @@
+{
+    "_id":"50706bf87092bb856e000002",
+    "bidding_done":false,
+    "bidding_ends":null,
+    "buyer_id":null,
+    "created_at":null,
+    "description":null,
+    "end_date":null,
+    "ending_location":null,
+    "for_favorites_only":false,
+    "name":null,
+    "opportunity_type_id":null,
+    "quick_winnable":false,
+    "start_date":null,
+    "starting_location":null,
+    "updated_at":null,
+    "win_it_now_price":null,
+    "winning_bid_id":null
+}

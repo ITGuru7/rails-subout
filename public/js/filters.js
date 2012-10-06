@@ -1,7 +1,12 @@
 'use strict';
 
 /* Filters */
-angular.module("suboutFilters", []);
+angular.module("suboutFilters", []).filter('timestamp', function() {
+    
+ return function(input){
+        return new Date(input).getTime();
+    };
+});
 
 var Evaluators = {};
 
