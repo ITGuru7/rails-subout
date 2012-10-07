@@ -17,13 +17,22 @@ function AppController($scope, $location, $http, $filter, Token, Company){
   
 }
 
-function OpportunityNewCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
-    
-    $scope.opportunity = Opportunity.get({opportunityId: 'new'});
+function OpportunityNewCtrl($scope, $location, Opportunity, Test, Filter, Tag, Company) {
 
+    $scope.opportunity = Opportunity.read({opportunityId: 'new'});
+    
+    
     $scope.submit = function(){
-      alert("coming soon");
+      
+        var oppModel = new Opportunity();
+        oppModel.opportunity = $scope.opportunity;
+        oppModel.auth_token = $scope.token.auth_token;
+        oppModel.$create(function(data){
+            alert("New Opportunity was created.")
+        });
+        
     }
+
 }
 
 function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
