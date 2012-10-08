@@ -1,6 +1,19 @@
-%h1= @opportunity.name
+%h1
+  = @opportunity.name 
+  = '(Closed)' if @opportunity.bidding_done?
 
-= link_to 'Bid Now', new_opportunity_bid_path(@opportunity.id)
+= link_to 'Bid Now', new_opportunity_bid_path(@opportunity.id) unless @opportunity.bidding_done?
+
+- if @opportunity.won?
+  Won By: #{ @opportunity.winning_bid.bidder.name }
+  Winning Bid Amount: #{ @opportunity.winning_bid.amount }
+  Contact: ....
+  Phone: ...
+
+-if @opportunity.quick_winnable?
+  = link_to "Win it now for #{@opportunity.win_it_now_price}!", 
+      opportunity_bids_path(@opportunity, bid: { amount: @opportunity.win_it_now_price}), 
+      method: :post
 
 Bids
 

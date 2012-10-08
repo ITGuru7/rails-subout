@@ -34,6 +34,10 @@ Given /^a supplier "(.*?)" has bid on that auction$/ do |name|
   @bid = FactoryGirl.create(:bid, :opportunity => @opportunity, :bidder => @supplier)
 end
 
+Given /^that buyer has a quick winnable auction "(.*?)"$/ do |name|
+  @auction = @opportunity = FactoryGirl.create(:quick_winnable_auction, buyer: @buyer, name: name, quick_winnable: true)
+end
+
 When /^I choose that bid as the winner$/ do
   click_on 'My Auctions'
   click_on @auction.name
@@ -47,13 +51,18 @@ Then /^that supplier should be notified that they won$/ do
   there_shoud_be_one_email
 end
 
-Then /^that auction should show the winning bid$/ do
+Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner)$/ do
   page.should have_content("Won By: #{@supplier.name}")
   page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
+  page.should_not have_content("Bid Now")
 end
 
-Then /^bidding should be closed on that auction$/ do
+Then /^bidding should be closed on that (?:auction|opportunity)$/ do
   page.should have_content("(Closed)")
+end
+
+Then /^the buyer should be notified that I won that auction$/ do
+  step %{"#{@buyer.email}" should receive an email with subject /#{@supplier.name} has won the bidding on #{@auction.name}/}
 end
 
 def last_opportunity

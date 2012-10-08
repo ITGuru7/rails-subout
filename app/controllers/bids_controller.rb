@@ -8,6 +8,10 @@ class BidsController < ApplicationController
     @bid.bidder = current_company
     @bid.save!
 
+    if opportunity.quick_winnable && @bid.amount <= opportunity.win_it_now_price
+      opportunity.win!(@bid)
+    end
+
     Notifier.delay.new_bid(@bid.id)
     redirect_to opportunity
   end
