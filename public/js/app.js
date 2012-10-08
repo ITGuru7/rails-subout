@@ -9,3 +9,4 @@ var subout = angular.module('subout', ['ui','suboutFilters', 'suboutServices']).
       when('/opportunity/:opportunityId', {templateUrl: 'partials/opportunity-detail.html', controller: OpportunityDetailCtrl}).
       otherwise({redirectTo: '/dashboard'});
 }]);
+

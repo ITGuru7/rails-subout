@@ -23,14 +23,14 @@ body{background:#bfbfbf; }
 #pageWrapper { position:relative; background:#FFFFFF; }
 .inner{ padding:0px 3%; }
 
-#toolbar { background: #c7c6b2; vertical-align: middle; height:50px; line-height:50px; }
+#topbar{ background: #c7c6b2; vertical-align: middle; height:50px; line-height:50px; }
+#toolbar { margin-bottom:10px; }
 	#btn_back{ margin-left:20px;  }
 	#btn_next{ margin-left:20px; }
 	#btn_close{ margin-left:35px; }
 	#search{ 
 		text-align:center;
 		border:1px solid #000000; 
-		margin-top:10px; 
 		height:30px;
 		background:#FFFFFF;
 		text-align:center;
@@ -44,15 +44,35 @@ body{background:#bfbfbf; }
 		border:none;
 		}
 
-#header{ margin:50px 0px; }
+#header{ margin:3em 0px; }
 #navigator{ text-align:right; font-size:1.1em; margin-top:3em; }
 	#navigator a{ border-right:1px solid #333; padding:0px 0.5em; text-decoration:none; }
 	#navigator a:last-child { border:none; }
 	#navigator a:hover{ color:#85c265; }
 	
 
+#dashboard{}
+	#dashboard section.title{ margin-bottom:10px; }
+	#activities{ border:3px solid #65b23e; }
+		#activities .table-striped tbody tr:nth-child(2n+1) td {
+		    background-color: #d8e7d0;
+		}
+		#activities .table td{ padding:10px; font-size:0.9em; }
+		#activities .opportunity-title{ color:#75b952; }
+	#dashboard #company #company_name{ text-align: center; }
+	#dashboard #company #company_logo{ text-align: center; padding:10px; }
 
-#activities{ border:3px solid #65b23e; }	
-#ui-datepicker-div{ z-index:99999!important; }
+
+	#filters .filter{ text-align:left; margin-bottom:5px; cursor:pointer; }
+	
+	#filters .filter .color{width:2em; height:2em; }
+	#filters .filter .status{ background: url(../img/filters/none-active.png) no-repeat left center; width:2em; height:2em; }
+	#filters .filter.active .status{ background: url(../img/filters/active.png) no-repeat left center; }
+	#filters .filter .name{ line-height:2em; padding-left:1em; }
+	#filters .filter.noneactive .name{ background:none!important;}
+	
+	
+	#tags .tag{ margin-bottom:0.3em; }
+
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }

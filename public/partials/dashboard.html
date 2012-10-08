@@ -1,42 +1,72 @@
-<div class="inner">
-  <div class="row-fluid">
-    <div class="span6">
-        <section id="company" class="well">
-            <section class="title"><h5>You</h5></section>
-            <section class="content">
-                <h2 id="company_name">Diversified Transportation Ltd.</h2>
-                <div id="company_links">
-                    <a href="/bids/view" class="address" address="true">Bids</a> | 
-                    <a href="/opportunities/view" class="address" address="true">Opportunities</a>
-                </div>
+<div id="dashboard">
+    <div class="inner">
+      <div class="row-fluid">
+        <div class="span4">
+            <section id="company" class="well">
+                <section class="title"><h5>You</h5></section>
+                <section class="content">
+                    <div id="company_links">
+                        <a href="#/bids/{{token.company._id}}">Bids</a> | 
+                        <a href="#/opportunities/{{token.company._id}}">Opportunities</a>
+                    </div>
+                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
+                </section>
             </section>
-        </section>
-        <section id="filters" class="well">
-            <section class="title"><h5>Filters</h5></section>
-            <section class="content">
+            <section id="filters" class="well">
+                <section class="title"><h5>Filters</h5></section>
+                <section class="content">
+                    <ul>
+                        <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}"  ng-click="setFilter(filter)">
+                            <div class="span2"><div class="color" style="background:{{filter.color}}"></div></div> 
+                            <div class="span1"><div class="status"></div></div>
+                            <div class="span9"><div class="name" style="background:{{filter.color}}">{{filter.name}}</div></div>
+                        </li>
+                    </ul>
+                </section>
             </section>
-        </section>
-        <section id="tags" class="well">
-            <section class="title"><h5>Tags</h5></section>
-            <section class="content">
+            <section id="tags" class="well">
+                <section class="title"><h5>Tags</h5></section>
+                <section class="content">
+                    <ul>
+                        <li ng-repeat="tag in tags" class="tag" ng-class="{label: tag.active==true}"  title="{{tag.name}}" ng-click="setTag(tag)">
+                            {{tag.name}}
+                        </li>
+                    </ul>
+                </section>
             </section>
-        </section>
-    </div>
-    <div class="span6">
-
-       <section id="activities" class="well">
-          <h5>Activities</h5>
-          <ul class="opportunities">
-            <li ng-repeat="opportunity in opportunities" class="well">
-              <div class="row-fluid">
-              <div class="span6"><a href="#/opportunities/{{opportunity._id.$oid}}">{{opportunity.name}}</a></div>
-              <div class="span3">Opportunity</div>
-              <div class="span3"><a href="#/opportunities/{{opportunity._id.$oid}}" class="btn btn-primary">View</a></div>
+        </div>
+        <div class="span8">
+    
+           <section id="activities" class="well">
+              
+              <div id="toolbar">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <h5>Activities</h5>
+                        </div>
+                        <div class="span9">
+                            <div id="search">
+                                <input class="span11" ng-model="query" />
+                                <a href="#search" class="span1"><img src="/img/toolbar-search.png"></a>
+                            </div>
+                        </div>
+                    </div>
               </div>
-            </li>
-          </ul>
-      </section>
 
+              <table class="table table-striped">
+                <tr ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | limitTo:20">
+                    <td>
+                        <span class="opportunity-title">{{opportunity.name}}</span>
+                        <br/>
+                        {{opportunity.bidding_ends|date}}
+                    </td>
+                    <td>{{opportunity.seats}} Seats</td>
+                    <td><a href="#/opportunity/{{opportunity._id}}" class="btn btn-primary">View</a></td>
+                </tr>
+              </table>
+          </section>
+    
+        </div>
+      </div>
     </div>
-  </div>
 </div>

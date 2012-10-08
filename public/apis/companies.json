@@ -1,0 +1,14 @@
+[
+    {
+         "_id" : "503026b08859aed418000004",
+         "active" : true,
+         "company_msg_path" : "47861790-cbbb-012f-95a1-68a86d005936",
+         "name" : "Diversified Transportation Ltd." 
+    },
+    {
+         "_id" : "503026b08859aed418000005",
+         "active" : true,
+         "company_msg_path" : "47861790-cbbb-012f-95a1-68a86d005937",
+         "name" : "Test Company 1" 
+    }
+]

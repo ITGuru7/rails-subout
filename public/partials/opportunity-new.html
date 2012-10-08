@@ -1,0 +1,88 @@
+<div id="opportunity-new">
+    <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">x</button>
+            <h3>New Opportunity</h3>
+    </div>
+    <div class="modal-body">
+
+            <form class="form-horizontal" ng-controller="OpportunityNewCtrl" ng-submit="submit()">
+                  
+                  <div class="control-group">
+                    <label class="control-label">Name</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.name" size="30" class="input-xlarge">
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Description</label>
+                    <div class="controls">
+                        <textarea rows="5" ng-model="opportunity.description" cols="40" class="input-xlarge"></textarea>
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Bidding ends</label>
+                    
+                    <div class="controls">
+                       <input type="text" ng-model="opportunity.bidding_ends" size="10" maxlength="10" class="input-small" ui-date>
+                       <span class="add-on"><i class="icon-calendar"></i></span>
+                    </div>
+                    
+                    
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="checkbox">
+                        <div class="controls">
+                            <input type="checkbox" ng-model="opportunity.buy_it_now" value="1">
+                            Buy it now?
+                        </div>
+                    </label>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Buy it now price</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.buy_it_now_price" size="30" class="input-small">
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Starting location</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.starting_location_id" size="30" class="input-xlarge">
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Ending location</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.ending_location_id" size="30" class="input-xlarge">
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Start date</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.start_date" class="input-small" size="10"  ui-date>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                        <input type="text" class="input-small" ng-model="start_date_time">
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">End date</label>
+                    <div class="controls">
+                        <input type="text" ng-model="opportunity.end_date" class="input-small" size="10" ui-date>
+                        <span class="add-on"><i class="icon-calendar"></i></span>
+                        <input type="text" class="input-small" ng-model="end_date_time">
+                    </div>
+                  </div>
+        
+                  <div class="form-actions">
+                    <input type="submit" value="Create Opportunity" name="commit" class="btn">
+                  </div>
+        </form>
+    </div>
+</div>
