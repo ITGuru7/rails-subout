@@ -27,7 +27,7 @@ class AuctionsController < ApplicationController
     @auction = Opportunity.find(params[:id])
     @auction.win!(params[:bid_id])
 
-    redirect_to :back
+    redirect_to auction_path(@auction)
   end
 end
 

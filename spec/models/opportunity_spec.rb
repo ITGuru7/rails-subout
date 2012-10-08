@@ -13,6 +13,7 @@ describe Opportunity do
   end
 
   describe "#win!" do
+    include EmailSpec::Helpers
     let(:auction) { FactoryGirl.create(:auction) }
     let(:bid) { FactoryGirl.create(:bid, opportunity: auction) }
 
@@ -32,7 +33,7 @@ describe Opportunity do
     it "notifies the winner" do
       auction.win!(bid.id)
 
-      last_email.should deliver_to(bid.bidder.email)
+      find_email(bid.bidder.email, :with_subject => /You won the bidding/).should_not be_nil
     end
   end
 end
