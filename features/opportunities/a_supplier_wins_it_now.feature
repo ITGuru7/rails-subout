@@ -11,4 +11,9 @@ Feature: A supplier does a quick win
     And that opportunity should have me as the winner
     And bidding should be closed on that opportunity
 
-  Scenario: A supplier bids bellow the win it now price
+  Scenario: A supplier bids below the win it now price
+    Given a buyer exists "Boston Bus"
+    And I am logged in as a member supplier "New York Bus"
+    And that buyer has a quick winnable auction "Boston to New York Charter"
+    When I bid on that opportunity with amount below the win it now price
+    Then I should win that opportunity automatically
