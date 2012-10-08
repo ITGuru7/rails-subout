@@ -28,3 +28,16 @@ end
 Then /^the buyer should be notified about my bid$/ do
   there_shoud_be_one_email
 end
+
+When /^I view that opportunity$/ do
+  click_on "Available Opportunities"
+  click_on @opportunity.name
+end
+
+Then /^I should see the win it now amount$/ do
+  page.should have_content(@opportunity.win_it_now_price)
+end
+
+When /^I do a quick win on that opportunity$/ do
+  click_on "Win it now"
+end

@@ -1,6 +1,5 @@
 require 'cucumber/rails'
 require 'email_spec/cucumber'
-require 'sidekiq/testing'
 require 'sidekiq/testing/inline'
 require 'database_cleaner/cucumber'
 

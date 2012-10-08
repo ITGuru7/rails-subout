@@ -34,9 +34,10 @@ class Opportunity
 
   def win!(bid_id)
     bid = self.bids.find(bid_id)
+    update_attributes(bidding_done: true, winning_bid_id: bid.id)
 
-    update_attributes(bidding_done: true, winning_bid_id: bid_id)
-    Notifier.delay.won_auction(self.id)
+    Notifier.delay.won_auction_to_supplier(self.id)
+    Notifier.delay.won_auction_to_buyer(self.id)
   end
 
   def winning_bid
