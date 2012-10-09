@@ -1,6 +1,5 @@
 Feature: A buyer adds a supplier to their list of favorites
 
-  @javascript
   Scenario: A buyer adds a member company as a favorite supplier
     Given a supplier exists called "Boston Bus"
     And I am signed in as a buyer
@@ -17,7 +16,3 @@ Feature: A buyer adds a supplier to their list of favorites
     When the supplier accpets the invitation
     And fills out their supplier details
     Then that supplier should be in my list of favorite suppliers
-
-    #And that supplier should be able to bid on my auctions
-    #And that supplier should be able to see other auctions but not bid on them
-

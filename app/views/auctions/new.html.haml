@@ -1,4 +1,4 @@
-= simple_form_for @opportunity do |f|
+= simple_form_for @auction, :url => auctions_path do |f|
   = f.input :name
   = f.input :description
   = f.input :starting_location

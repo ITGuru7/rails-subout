@@ -14,7 +14,8 @@ class FavoriteInvitationsController < ApplicationController
                                                     supplier: supplier, 
                                                     supplier_email: supplier.email,
                                                     supplier_name: supplier.name)
-    FavoriteInvitationWorker.perform_async(favorite_invitation.id)
+
+    Notifier.delay.send_known_favorite_invitation(favorite_invitation.id)
     redirect_to favorites_path, :notice => 'Invitation sent.'
   end
 
@@ -22,7 +23,7 @@ class FavoriteInvitationsController < ApplicationController
     @favorite_invitation = FavoriteInvitation.new(params[:favorite_invitation])
     @favorite_invitation.buyer = current_company
     if @favorite_invitation.save
-      FavoriteInvitationWorker.perform_async(@favorite_invitation.id)
+      Notifier.delay.send_unknown_favorite_invitation(@favorite_invitation.id)
       redirect_to dashboard_path
     end
   end

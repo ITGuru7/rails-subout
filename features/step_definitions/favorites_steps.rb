@@ -8,6 +8,7 @@ When /^I add that supplier as one of my favorite suppliers$/ do
   click_on "Find Supplier"
   page.should have_content @supplier.name
   click_on "Add to my favorite suppliers"
+#  page.should have_content 'Invitation sent.' 
 end
 
 Then /^that supplier should be in my list of favorite suppliers$/ do
@@ -32,10 +33,6 @@ Then /^"(.*?)" should not be in my favorites$/ do |name|
 end
 
 Then /^that supplier should receive a favorite invitation email$/ do
-  #eew hack!
-  sleep(0.1)
-
-  FavoriteInvitationWorker.drain
   step %["#{@supplier.email}" should receive an email]
 end
 
@@ -63,10 +60,6 @@ When /^I add "(.*?)" to my favorites as a new guest supplier with email "(.*?)"$
 end
 
 Then /^"(.*?)" should receive a new guest supplier invitation email$/ do |email|
-  #eew hack!
-  sleep(0.1)
-
-  FavoriteInvitationWorker.drain
   step %["#{email}" should receive an email]
 end
 

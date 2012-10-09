@@ -48,7 +48,7 @@ When /^I choose that bid as the winner$/ do
 end
 
 Then /^that supplier should be notified that they won$/ do
-  there_shoud_be_one_email
+  step %{"#{@supplier.email}" should receive an email with subject /You won the bidding on #{@auction.name}/}
 end
 
 Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner)$/ do

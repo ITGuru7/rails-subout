@@ -21,7 +21,7 @@ Then /^I should see my bid on that opportunity$/ do
 end
 
 Then /^the buyer should be notified about my bid$/ do
-  there_shoud_be_one_email
+  step %{"#{@buyer.email}" should receive an email}
 end
 
 When /^I view that opportunity$/ do
