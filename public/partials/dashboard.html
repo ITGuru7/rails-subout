@@ -6,8 +6,9 @@
                 <section class="title"><h5>You</h5></section>
                 <section class="content">
                     <div id="company_links">
-                        <a href="#/bids/{{token.company._id}}">Bids</a> | 
-                        <a href="#/opportunities/{{token.company._id}}">Opportunities</a>
+                        <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
+                        | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
+                        | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
                     </div>
                     <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
                 </section>
