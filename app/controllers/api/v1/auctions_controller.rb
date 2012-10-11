@@ -1,4 +1,4 @@
-class AuctionsController < ApplicationController
+class Api::V1::AuctionsController < ApplicationController
   skip_before_filter :authenticate_user!
   respond_to :json, :html
 

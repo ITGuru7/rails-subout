@@ -33,4 +33,13 @@ class TokensController < ApplicationController
       render :status=>200, :json=>{:auth_token=>@user.authentication_token, :company=>@company}, :callback => params[:callback]
     end
   end
+
+  def show
+    user = User.where(:email => params[:id]).first    
+    if user && user.authenticate(params[:password])
+      render :json => { api_token: user.authentication_token, authorized: 'true', company_id: user.company_id }
+    else      
+      render :json => { authorized: 'false' }
+    end 
+  end 
 end
