@@ -4,6 +4,13 @@ Subout::Application.routes.draw do
 
   devise_for :users
 
+  namespace :api do
+    namespace :v1 do
+      resources :tokens
+      resources :auctions
+    end
+  end
+
   resources :contacts, :employees, 
             :locations, :opportunity_types, 
             :profiles, :regions, :region_types, 

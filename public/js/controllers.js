@@ -3,18 +3,15 @@
 /* Controllers */
 
 function AppController($scope, $location, $http, $filter, Token, Company){
-    
-    $http.get('apis/token.json').success(function(data) {
-        $scope.token = data;
-        $scope.company = Company.get({companyId:data.company._id});
-    });
+   if ($scope.user && $scope.user.authorized != 'true' && !$location.path() == 'login') {
+     $location.path('login');
+   }
     
     $scope.modal = '';
     $scope.setModal = function(url)
     {
         $scope.modal = url;
     }
-  
 }
 
 function OpportunityNewCtrl($scope, $location, Opportunity, Test, Filter, Tag, Company) {
@@ -32,7 +29,6 @@ function OpportunityNewCtrl($scope, $location, Opportunity, Test, Filter, Tag, C
         });
         
     }
-
 }
 
 function OpportunityCtrl($scope, $location, Opportunity) {
@@ -80,3 +76,19 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
 function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
   $scope.opportunity = Opportunity.get({opportunityId: $routeParams.opportunityId});
 }
+
+function LoginCtrl($scope, $location, Token, Company) {
+  $scope.login = function() {
+    Token.save({email:$scope.user.email, password:$scope.user.password}, function(user){
+      $scope.user = user;
+      if (user.authorized == "true") {
+        $scope.company = Company.get({companyId:user.company_id});
+        $location.path('dashboard');
+      }
+      else{
+        $scope.message = "Invalid username or password!"
+      }
+    });
+  }
+}
+
