@@ -1,7 +1,7 @@
-<form id="login-form" ng:submit="login()" name="loginForm">
+<form id="sign-in-form" ng:submit="signIn()" name="signInForm">
 	<fieldset>
 		<legend>
-			Login
+			Sign In
 		</legend>
 		<p class="error-message" ng:show="showMessage(message)">{{message}}</p>
 		<label>
@@ -24,13 +24,6 @@
 					/>
 		</label>
 
-		<button type="submit" class="main-button" ng:disabled="{{loginForm.$invalid}}">Login</button>
-		<p class="info">Email: "luke@tatooine.com" Password: "Skywalker"</p>
-
+		<button type="submit" class="main-button" ng:disabled="{{signInForm.$invalid}}">Sign In</button>
 	</fieldset>
 </form>
-
-<div ng:show="debug">
-Debug View:
-<pre>user={{user}}</pre>
-</div>

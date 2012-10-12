@@ -55,7 +55,7 @@
               </div>
 
               <table class="table table-striped">
-                <tr ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | limitTo:20">
+                <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | limitTo:20">
                     <td>
                         <span class="opportunity-title">{{opportunity.name}}</span>
                         <br/>

@@ -3,8 +3,8 @@ Feature: Buyer views their auctions
   I want to view my auctions
   So I can see the bids
 
-  @wip
   Scenario: Buyer views an auction
+    pending
     Given I am signed in as a buyer
     And I have an auction
     When I view my auctions

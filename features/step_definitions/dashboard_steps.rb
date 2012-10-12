@@ -3,5 +3,5 @@ Given /^some events exists$/ do
 end
 
 Then /^I should see recent events$/ do
-  page.should have_selector('li.event')
+  page.should have_selector('tr.event')
 end

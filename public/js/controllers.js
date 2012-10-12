@@ -3,8 +3,8 @@
 /* Controllers */
 
 function AppController($scope, $location, $http, $filter, Token, Company){
-   if ($scope.user && $scope.user.authorized != 'true' && !$location.path() == 'login') {
-     $location.path('login');
+   if (($scope.user == undefined || $scope.user.authorized != 'true') && $location.path() != 'sign_in') {
+     $location.path('sign_in');
    }
     
     $scope.modal = '';
@@ -77,8 +77,8 @@ function OpportunityDetailCtrl($scope, $routeParams, Opportunity) {
   $scope.opportunity = Opportunity.get({opportunityId: $routeParams.opportunityId});
 }
 
-function LoginCtrl($scope, $location, Token, Company) {
-  $scope.login = function() {
+function SignInCtrl($scope, $location, Token, Company) {
+  $scope.signIn = function() {
     Token.save({email:$scope.user.email, password:$scope.user.password}, function(user){
       $scope.user = user;
       if (user.authorized == "true") {
