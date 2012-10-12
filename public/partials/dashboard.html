@@ -55,14 +55,18 @@
               </div>
 
               <table class="table table-striped">
+<<<<<<< HEAD
                 <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | limitTo:20">
+=======
+                <tr ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | filter:searchByTag | limitTo:20">
+>>>>>>> filter by tag
                     <td>
                         <span class="opportunity-title">{{opportunity.name}}</span>
                         <br/>
                         {{opportunity.bidding_ends|date}}
                     </td>
                     <td>{{opportunity.seats}} Seats</td>
-                    <td><a href="#/opportunity/{{opportunity._id}}" class="btn btn-primary">View</a></td>
+                    <td>{{opportunity.tags}}</td>
                 </tr>
               </table>
           </section>

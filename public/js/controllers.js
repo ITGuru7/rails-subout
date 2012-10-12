@@ -42,7 +42,7 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
    
    $scope.query = "";
    $scope.filter = null;
-   $scope.tag = null;
+   
    
    $scope.searchByFilter = function(input) {
         if(!$scope.filter) return true;
@@ -55,20 +55,38 @@ function DashboardCtrl($scope, $location, Opportunity, Filter, Tag, Company) {
         var reg = new RegExp($scope.query.toLowerCase());
         return reg.test(input.name.toLowerCase()) || reg.test(input.seats);
       };
-        
+   
+   $scope.searchByTag = function(input) {
+
+        var activeCount = 0;
+        for(var i=0; i<$scope.tags.length; i++){
+            
+            if($scope.tags[i].active){
+                activeCount++;
+                var reg = new RegExp($scope.tags[i].name.toLowerCase());
+                if(reg.test(input.tags.toLowerCase())){
+                    
+                    continue;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return true;
+      };
+          
    $scope.setFilter = function(filter){
-           
-           for(var i=0; i<$scope.filters.length; i++)
+            for(var i=0; i<$scope.filters.length; i++)
            {
                $scope.filters[i].active = false;
            }
-           
            filter.active = !filter.active;
            $scope.filter = filter;
            $scope.query = "";
         }
         
    $scope.setTag = function(tag){ 
+
            tag.active = !tag.active;
         }
 }
