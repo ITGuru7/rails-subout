@@ -18,7 +18,7 @@
                 <section class="content">
                     <ul>
                         <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}"  ng-click="setFilter(filter)">
-                            <div class="span2"><div class="color" style="background:{{filter.color}}"></div></div> 
+                            <div class="span2"><div class="color" style="background:{{filter.color}}"></div></div>
                             <div class="span1"><div class="status"></div></div>
                             <div class="span9"><div class="name" style="background:{{filter.color}}">{{filter.name}}</div></div>
                         </li>
@@ -37,9 +37,9 @@
             </section>
         </div>
         <div class="span8">
-    
+
            <section id="activities" class="well">
-              
+
               <div id="toolbar">
                     <div class="row-fluid">
                         <div class="span3">
@@ -55,11 +55,7 @@
               </div>
 
               <table class="table table-striped">
-<<<<<<< HEAD
-                <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | limitTo:20">
-=======
-                <tr ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByQuery | filter:searchByTag | limitTo:20">
->>>>>>> filter by tag
+                <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | limitTo:20">
                     <td>
                         <span class="opportunity-title">{{opportunity.name}}</span>
                         <br/>
@@ -70,7 +66,7 @@
                 </tr>
               </table>
           </section>
-    
+
         </div>
       </div>
     </div>

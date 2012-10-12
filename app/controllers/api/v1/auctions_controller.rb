@@ -1,14 +1,9 @@
-class Api::V1::AuctionsController < ApplicationController
-  skip_before_filter :authenticate_user!
-  respond_to :json, :html
+class Api::V1::AuctionsController < Api::V1::BaseController
+  respond_to :json
 
   def index
     @auctions = current_company.auctions
     respond_with(@auctions)
-  end
-
-  def new
-    @auction = Opportunity.new
   end
 
   def create
@@ -33,11 +28,4 @@ class Api::V1::AuctionsController < ApplicationController
 
     redirect_to auction_path(@auction)
   end
-
-  private
-
-  def current_company
-    Company.first
-  end
 end
-
