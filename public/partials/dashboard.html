@@ -10,7 +10,7 @@
                         | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
                         | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
                     </div>
-                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
+                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{'img/company/' + company._id + '.png'}}"></div>
                 </section>
             </section>
             <section id="filters" class="well">
@@ -53,9 +53,8 @@
                         </div>
                     </div>
               </div>
-
               <table class="table table-striped">
-                <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | limitTo:20">
+                <tr class="event" ng-repeat="opportunity in opportunities | filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
                         <span class="opportunity-title">{{opportunity.name}}</span>
                         <br/>
