@@ -14,11 +14,11 @@
                 <div id="logo"><a href="#/dashboard"><img src="/img/logo.png"></a></div>
             </div>
             <div class="span6">
-                <nav id="navigator">
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')" ng:show="user">New Opportunity</a>
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/settings.html')" ng:show="user">Settings</a>
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/help.html')" ng:show="user">Help</a>
-                    <a href="" ng-click="signOut();" ng:show="user">Sign Out</a>
+                <nav id="navigator" ng:show="user.authorized">
+                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
+                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/settings.html')">Settings</a>
+                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/help.html')">Help</a>
+                    <a href="" ng-click="signOut();">Sign Out</a>
                 </nav>
                 <!--nav-->
             </div>   

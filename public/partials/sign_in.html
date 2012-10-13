@@ -3,7 +3,7 @@
 		<legend>
 			Sign In
 		</legend>
-		<p class="error-message" ng:show="showMessage(message)">{{message}}</p>
+		<p class="alert alert-error" ng:show="message">{{message}}</p>
 		<div class="control-group">
             <label for="email" class="control-label">Email</label>
             <div class="controls">
@@ -15,7 +15,6 @@
                     required
                     autofocus
                     />
-              <span class="error" ng:show="myForm.list.$error.REQUIRED">Required!</span>
             </div>
         </div>
         
