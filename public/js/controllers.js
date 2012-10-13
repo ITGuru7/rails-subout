@@ -10,6 +10,12 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
     $rootScope.setModal = function(url) {
         $rootScope.modal = url;
     }
+    
+    $rootScope.signOut = function(){
+        $rootScope.user = null;
+        $rootScope.company = null;
+        $location.path('sign_in');
+    }
 }
 
 function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Test, Filter, Tag, Company) {
