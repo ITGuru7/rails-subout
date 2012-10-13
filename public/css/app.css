@@ -72,7 +72,7 @@ body{background:#bfbfbf; }
 	#filters .filter.noneactive .name{ background:none!important;}
 	
 	
-	#tags .tag{ margin-bottom:0.3em; }
+	#tags .tag{ margin-bottom:0.3em; cursor:pointer; }
 
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }
