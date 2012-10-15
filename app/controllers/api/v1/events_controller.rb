@@ -1,5 +1,5 @@
-class EventsController < ApplicationController
+class Api::V1::EventsController < Api::V1::BaseController
   def index
-    @events = Event.recent
+    respond_with Event.recent
   end
 end

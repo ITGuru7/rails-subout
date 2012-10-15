@@ -35,8 +35,8 @@ function OpportunityCtrl($scope, $location, Opportunity) {
      $scope.opportunities = Opportunity.query();
 }
 
-function DashboardCtrl($scope, $rootScope, $location, Opportunity, Filter, Tag, Company) {
-   $scope.opportunities = Opportunity.query({api_token: $rootScope.user.api_token});
+function DashboardCtrl($scope, $rootScope, $location, Event, Filter, Tag, Company) {
+   $scope.events = Event.query({api_token: $rootScope.user.api_token});
    //$scope.filters = Filter.query();
    //$scope.tags = Tag.query();
 

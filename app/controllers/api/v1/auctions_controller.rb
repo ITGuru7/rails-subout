@@ -1,6 +1,4 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
-  respond_to :json
-
   def index
     @auctions = current_company.auctions
     respond_with(@auctions)
