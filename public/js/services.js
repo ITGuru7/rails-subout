@@ -18,18 +18,16 @@ angular.module('suboutServices', ['ngResource']).
         return $resource('/api/v1/tokens', {}, {});
     }).
     factory('Filter', function($resource){
-        return $resource('/apis/filters.json', {}, {
+        return $resource('/api/v1/filters.json', {}, {
             query: {method:'GET', params:{}, isArray:true}
         });
     }).
     factory('Tag', function($resource){
-        return $resource('/apis/tags.json', {}, {
+        return $resource('/api/v1/tags.json', {}, {
             query: {method:'GET', params:{}, isArray:true}
         });
     }).
-    factory("Test", function($resource){
+    factory("OpportunityTest", function($resource){
         
-        return $resource('/opportunities.json', {}, {
-            create: {method:'POST', params:{ }, isArray:true},
-        });
+        return $resource('/api/v1/opportunities.json', {}, {});
     });

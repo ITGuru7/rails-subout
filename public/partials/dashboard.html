@@ -1,5 +1,4 @@
 <div id="dashboard">
-    <div class="inner">
       <div class="row-fluid">
         <div class="span4">
             <section id="company" class="well">
@@ -10,7 +9,7 @@
                         | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
                         | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
                     </div>
-                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
+                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{'img/company/' + company._id + '.png'}}"></div>
                 </section>
             </section>
             <section id="filters" class="well">
@@ -53,7 +52,6 @@
                         </div>
                     </div>
               </div>
-
               <table class="table table-striped">
                 <tr class="event" ng-repeat="event in events | filter:searchByFilter | limitTo:20">
                     <td>
@@ -69,5 +67,4 @@
 
         </div>
       </div>
-    </div>
 </div>

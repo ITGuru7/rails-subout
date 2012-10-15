@@ -49,8 +49,8 @@ body{background:#bfbfbf; }
 	#navigator a{ border-right:1px solid #333; padding:0px 0.5em; text-decoration:none; }
 	#navigator a:last-child { border:none; }
 	#navigator a:hover{ color:#85c265; }
-	
-
+#content{ padding:0px 40px; }	
+#sign-in-form{ max-width:560px; margin:0px auto; margin-bottom:40px; }
 #dashboard{}
 	#dashboard section.title{ margin-bottom:10px; }
 	#activities{ border:3px solid #65b23e; }
@@ -72,7 +72,7 @@ body{background:#bfbfbf; }
 	#filters .filter.noneactive .name{ background:none!important;}
 	
 	
-	#tags .tag{ margin-bottom:0.3em; }
+	#tags .tag{ margin-bottom:0.3em; cursor:pointer; }
 
 .modal{position:absolute;}
 .modal-body{ max-height:9999px; }
