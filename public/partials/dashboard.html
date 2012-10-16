@@ -52,17 +52,22 @@
                         </div>
                     </div>
               </div>
+              
               <table class="table table-striped">
-                <tr class="event" ng-repeat="event in events | filter:searchByFilter | limitTo:20">
-                    <td>
-                        <span class="event-title">{{event.name}}</span>
-                        <br/>
-                        {{event.bidding_ends|date}}
+                <thead>
+                    <th>OPPORTUNITY</th>
+                    <th>DESCRIPTION</th>
+                    <th>EXPIRATION</th>
+                </thead> 
+                <tr class="event" ng-repeat="event in events | filter:searchByFilter | filter:searchByTag | limitTo:20">
+                    <td ui-if="event.model_type=='opportunity'">
+                        <span class="event-title">{{event.resource.name}}</span>
                     </td>
-                    <td>{{event.seats}} Seats</td>
-                    <td>{{event.tags}}</td>
+                    <td ui-if="event.model_type=='opportunity'">{{event.resource.description}}</td>
+                    <td ui-if="event.model_type=='opportunity'">{{event.resource.bidding_ends|date}}</td>
                 </tr>
               </table>
+              
           </section>
 
         </div>

@@ -43,14 +43,14 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"Boston (like)",
+    "name":"auth (like)",
     "color":"#f25a29",
     
     "evaluation":{
        "type": "like",
        "property":"name",
        "params":{
-            "value": "boston"
+            "value": "auth"
         }   
     }
 }

@@ -29,13 +29,17 @@ function OpportunityCtrl($scope, $rootScope, $location, Opportunity) {
     $scope.opportunities = Opportunity.query();
 }
 
-function DashboardCtrl($scope, $rootScope, $location, Opportunity, OpportunityTest, Filter, Tag, Company) {
+function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, OpportunityTest, Filter, Tag, Company) {
     $scope.opportunities = OpportunityTest.query({
         api_token : $rootScope.user.api_token
     });
     
-    //$scope.filters = Filter.query();
-    //$scope.tags = Tag.query();
+    $scope.events = Event.query({
+        api_token : $rootScope.user.api_token
+    });
+    
+    $scope.filters = Filter.query();
+    $scope.tags = Tag.query();
 
     $scope.query = "";
     $scope.filter = null;
@@ -44,7 +48,7 @@ function DashboardCtrl($scope, $rootScope, $location, Opportunity, OpportunityTe
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)
             return true;
-        return evaluation(input, $scope.filter.evaluation);
+        return evaluation(input.resource, $scope.filter.evaluation);
     };
 
     $scope.searchByQuery = function(input) {
@@ -56,11 +60,13 @@ function DashboardCtrl($scope, $rootScope, $location, Opportunity, OpportunityTe
     };
 
     $scope.searchByTag = function(input) {
+        //input: event for now
+        
         if (!$scope.tag)
             return true;
             
         var reg = new RegExp($scope.tag.name.toLowerCase());
-        if (reg.test(input.tags.toLowerCase())) {
+        if (reg.test(input.resource.name.toLowerCase())) {
 
             return true;
         }
@@ -102,7 +108,6 @@ function DashboardCtrl($scope, $rootScope, $location, Opportunity, OpportunityTe
         }
         
         $scope.query = "";
-
     }
 }
 

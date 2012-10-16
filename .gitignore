@@ -33,3 +33,5 @@ pickle-email-*.html
 /log/*.log
 /tmp
 >>>>>>> Admin and mongo installed
+
+app/models/temp

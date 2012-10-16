@@ -67,5 +67,19 @@
     "name":"Snacks",
     "created_at":null,
     "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000009",
+    "active":0,
+    "name":"Auth",
+    "created_at":null,
+    "updated_at":null
+},
+{
+    "_id":"503026b08859aed418000014",
+    "active":0,
+    "name":"Wonderful",
+    "created_at":null,
+    "updated_at":null
 }
 ]

@@ -9,6 +9,11 @@ class Event
   field :model_type, :type => String
   field :company_id, :type => String  # Source of event
 
+  #TODO: Don't have to do this manually, please use polymorphic
+  def resource
+    model_type.titlecase.constantize.find(model_id)  
+  end
+  
   def send_msg(pubnub_path, associated_object)
     Rails.logger.info("Sending the message now!!!!")
   	pubnub = Pubnub.new(
