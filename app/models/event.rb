@@ -5,15 +5,10 @@ class Event
   scope :recent, order_by(:updated_at => :desc).limit(100)
 
   field :description, :type => String
-  field :model_id, :type => String
-  field :model_type, :type => String
   field :company_id, :type => String  # Source of event
 
-  #TODO: Don't have to do this manually, please use polymorphic
-  def resource
-    model_type.titlecase.constantize.find(model_id)  
-  end
-  
+  belongs_to :eventable, :polymorphic => true 
+
   def send_msg(pubnub_path, associated_object)
     Rails.logger.info("Sending the message now!!!!")
   	pubnub = Pubnub.new(

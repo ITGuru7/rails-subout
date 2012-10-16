@@ -7,8 +7,7 @@ class OpportunityObserver < Mongoid::Observer
  
     e = Event.new
     e.description = opportunity.description
-    e.model_id = opportunity.id
-    e.model_type = :opportunity
+    e.eventable = opportunity
     e.company_id = opportunity.buyer_id
     e.save
 

@@ -30,10 +30,6 @@ function OpportunityCtrl($scope, $rootScope, $location, Opportunity) {
 }
 
 function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, OpportunityTest, Filter, Tag, Company) {
-    $scope.opportunities = OpportunityTest.query({
-        api_token : $rootScope.user.api_token
-    });
-    
     $scope.events = Event.query({
         api_token : $rootScope.user.api_token
     });
@@ -48,7 +44,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)
             return true;
-        return evaluation(input.resource, $scope.filter.evaluation);
+        return evaluation(input.eventable, $scope.filter.evaluation);
     };
 
     $scope.searchByQuery = function(input) {
@@ -66,7 +62,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
             return true;
             
         var reg = new RegExp($scope.tag.name.toLowerCase());
-        if (reg.test(input.resource.name.toLowerCase())) {
+        if (reg.test(input.eventable.name.toLowerCase())) {
 
             return true;
         }
