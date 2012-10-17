@@ -3,7 +3,7 @@ Feature: Buyer create a new auction
   I want to create a auction
   So I can buy what I need
 
-  @javascript
+  @javascript @wip
   Scenario: buyer creates a auction 
     Given I am signed in as a buyer
     When I create a new auction

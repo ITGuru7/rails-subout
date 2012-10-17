@@ -70,7 +70,7 @@ def last_opportunity
 end
 
 def create_auction(opportunity)
-  click_link "Create a new auction"
+  click_link "New Auction"
 
   fill_in "Name", with: opportunity.name
   fill_in "Description", with: opportunity.description

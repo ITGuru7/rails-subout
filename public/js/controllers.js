@@ -18,10 +18,11 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
     }
 }
 
-function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Test, Filter, Tag, Company) {
-    $scope.submit = function() {
+function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company) {
+    $scope.save = function() {
         var newOpportunity = $scope.opportunity;
         Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token});
+        jQuery('#modal').modal('hide');
     }
 }
 

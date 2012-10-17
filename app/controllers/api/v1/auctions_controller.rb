@@ -8,12 +8,12 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = Opportunity.new(params[:opportunity])
     @auction.buyer = current_company
 
-    if @auction.save
-      redirect_to dashboard_path, :notice => "The auction has been created"
-    else
-      render :new
-    end
+    #TODO ask tom if the form should allow selection of type.  For now just going to default this
+    @auction.opportunity_type = OpportunityType.where(:name => 'Emergency').first
 
+    @auction.save
+
+    respond_with(@auction)
   end
 
   def show
