@@ -15,6 +15,14 @@
                   </div>
                   
                   <div class="control-group">
+                    <label class="control-label">Type</label>
+                    <div class="controls">
+                      <select ng-model="opportunity.type" ng-options="t for t in types">
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
                     <label class="control-label">Description</label>
                     <div class="controls">
                         <textarea rows="5" ng-model="opportunity.description" cols="40" class="input-xlarge"></textarea>

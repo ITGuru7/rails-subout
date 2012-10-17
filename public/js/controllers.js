@@ -19,6 +19,7 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
 }
 
 function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company) {
+    $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
     $scope.save = function() {
         var newOpportunity = $scope.opportunity;
         Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token});

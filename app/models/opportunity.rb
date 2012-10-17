@@ -2,6 +2,8 @@ class Opportunity
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  TYPES = ["Bus Needed", "Emergency", "Parts", "Dead Head"]
+
   field :name, type: String
   field :description, type: String
   field :starting_location, type: String
@@ -14,13 +16,13 @@ class Opportunity
   field :win_it_now_price, type: BigDecimal 
   field :winning_bid_id, type: String
   field :seats, type: Integer
+  field :type, type: String
 
   field :for_favorites_only, type: Boolean, default: false
 
   scope :available, order_by(:created_at => :desc)
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
-  belongs_to :opportunity_type
 
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
@@ -49,10 +51,6 @@ class Opportunity
 
   def won?
     winning_bid.present?
-  end
-
-  def type
-    opportunity_type.name.parameterize
   end
 end
 

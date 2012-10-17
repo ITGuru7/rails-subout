@@ -58,7 +58,7 @@
                     <td>
                       <span ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
                         <span class="event-title row-fluid">
-                          <div class="span1"><img ng-src="/img/filters/{{opportunity.type}}.png"></div>
+                          <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
                           <div class="span11">
                             <h3>
                               <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a>

@@ -8,9 +8,6 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = Opportunity.new(params[:opportunity])
     @auction.buyer = current_company
 
-    #TODO ask tom if the form should allow selection of type.  For now just going to default this
-    @auction.opportunity_type = OpportunityType.where(:name => 'Emergency').first
-
     @auction.save
 
     respond_with(@auction)
