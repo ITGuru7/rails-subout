@@ -35,3 +35,5 @@ pickle-email-*.html
 >>>>>>> Admin and mongo installed
 
 app/models/temp
+
+**.DS_Store

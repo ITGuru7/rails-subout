@@ -56,10 +56,21 @@
               <table class="table table-striped">
                 <tr class="event" ng-repeat="event in events | filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
-                      <span ui-if="event.eventable_type=='Opportunity'">
-                        <span class="event-title">{{event.eventable.name}}</span>
-                        {{event.eventable.description}}
-                        {{event.eventable.bidding_ends|date}}
+                      <span ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
+                        <span class="event-title row-fluid">
+                          <div class="span1"><img ng-src="/img/filters/{{opportunity.type}}.png"></div>
+                          <div class="span11">
+                            <h3>
+                              <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a>
+                            </h3>
+                            <div>{{opportunity.description}}</div>
+                            <div>{{opportunity.bidding_ends|date}}</div>
+                            <div>
+                               <a href='#'>Bid</a> * 
+                               <a href='#'>Buy Now</a>
+                            </div>
+                          </div>
+                        </span>
                       </span>
                     </td>
                 </tr>

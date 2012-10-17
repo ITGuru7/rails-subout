@@ -11,12 +11,13 @@ class OpportunityObserver < Mongoid::Observer
     e.company_id = opportunity.buyer_id
     e.save
 
-    Company.all.each do |company| 
-      if company.interested_in_event?(e) 
-        Rails.logger.info "Telling company to send event : #{e.inspect}"
-        company.send_event(e, opportunity) 
-      end
-    end
+    #TODO commented this out till we figure out how to deal with it without hanging up server every time opportunity changes
+    #Company.all.each do |company| 
+      #if company.interested_in_event?(e) 
+        #Rails.logger.info "Telling company to send event : #{e.inspect}"
+        #company.send_event(e, opportunity) 
+      #end
+    #end
 
   end
 

@@ -8,7 +8,6 @@ class Opportunity
   field :ending_location, type: String
   field :start_date, type: Time
   field :end_date, type: Time
-  field :opportunity_type_id, type: Integer
   field :bidding_ends, type: Time
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
@@ -21,7 +20,8 @@ class Opportunity
   scope :available, order_by(:created_at => :desc)
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
-  has_one :opportunity_type, :class_name => "OpportunityType", :foreign_key => "opportunity_type_id"
+  belongs_to :opportunity_type
+
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
   has_many :bids
@@ -49,6 +49,10 @@ class Opportunity
 
   def won?
     winning_bid.present?
+  end
+
+  def type
+    opportunity_type.name.parameterize
   end
 end
 
