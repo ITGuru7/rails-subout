@@ -1,41 +1,49 @@
 [{
     "_id":"503026b08859aed418000004",
     "active":false,
-    "name":"20~60 Seats (range)",
+    "name":"Emergency",
     "color":"#69b644",
+    "icon": "img/filters/emergency.png",
     
     "evaluation":{
-       "type": "range",
-       "property":"seats",
+       "type": "compare",
+       "property":"type",
        "params":{
-            "min": 20,
-            "max": 60
-        }
-    } 
+            "value": "Emergency",
+            "operator": "=="
+        }   
+    }
 },
+
 {
     "_id":"503026b08859aed418000005",
     "active":false,
-    "name":"Ends Today (today)",
+    "name":"Parts",
     "color":"#e1c212",
+    "icon": "img/filters/parts.png",
     
     "evaluation":{
-       "type": "today",
-       "property":"bidding_ends",
-       "params":{}
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Parts",
+            "operator": "=="
+        }   
     }
 },
 {
     "_id":"503026b08859aed418000004",
     "active":false,
-    "name":"Just 30 Seats (compare)",
+    "name":"Bus Needed",
     "color":"#f25a29",
+    
+    "icon": "img/filters/bus-needed.png",
     
     "evaluation":{
        "type": "compare",
-       "property":"seats",
+       "property":"type",
        "params":{
-            "value": 30,
+            "value": "Bus Needed",
             "operator": "=="
         }   
     }
@@ -43,15 +51,34 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"auth (like)",
+    "name":"Bid",
     "color":"#f25a29",
+
+    "icon": "img/filters/bid.png",
     
     "evaluation":{
-       "type": "like",
-       "property":"name",
+       "type": "compare",
+       "property":"type",
        "params":{
-            "value": "auth"
+            "value": "Bid",
+            "operator": "=="
         }   
     }
-}
-]
+},
+{
+    "_id":"503026b08859aed418000009",
+    "active":false,
+    "name":"Dead Head",
+    "color":"#f25a29",
+
+    "icon": "img/filters/dead-head.png",
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Dead Head",
+            "operator": "=="
+        }   
+    }
+}]

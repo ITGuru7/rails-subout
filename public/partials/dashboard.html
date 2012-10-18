@@ -17,8 +17,7 @@
                 <section class="content">
                     <ul>
                         <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}"  ng-click="setFilter(filter)">
-                            <div class="span2"><div class="color" style="background:{{filter.color}}"></div></div>
-                            <div class="span1"><div class="status"></div></div>
+                            <div class="span1"><div class="color" style="background:url({{filter.icon}})"></div></div>
                             <div class="span9"><div class="name" style="background:{{filter.color}}">{{filter.name}}</div></div>
                         </li>
                     </ul>

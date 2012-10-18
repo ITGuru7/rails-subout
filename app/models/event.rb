@@ -31,4 +31,8 @@ class Event
     eventable.initiated_by_name
   end
 
+  def type
+    eventable.type
+  end
+
 end

@@ -19,4 +19,8 @@ class Bid
   def initiated_by_name
     bidder.name
   end
+
+  def type
+    'Bid'
+  end
 end
