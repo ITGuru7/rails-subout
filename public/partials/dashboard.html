@@ -66,10 +66,13 @@
                             </h3>
                             <div>Buyer: {{event.initiated_by_name}}</div>
                             <div>{{opportunity.description}}</div>
-                            <div>{{opportunity.bidding_ends|date}}</div>
+                            <div>
+                              Created: {{opportunity.created_at|date}}
+                              Ends On: {{opportunity.bidding_ends|date}} 
+                            </div>
                             <div>
                                <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid.html')">Bid</a> * 
-                               <a href='#'>Buy Now</a> *
+                               <a ui-if="opportunity.quick_winnable" href='#'>Win Now for {{opportunity.win_it_now_price }}</a> *
                                <a href='#'>Watch</a>
                             </div>
                           </div>
