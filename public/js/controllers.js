@@ -180,7 +180,8 @@ function SignInCtrl($scope, $rootScope, $location, Token, Company) {
             $rootScope.user = user;
             if (user.authorized == "true") {
                 $rootScope.company = Company.get({
-                    companyId : user.company_id
+                    companyId : user.company_id,
+                    api_token : user.api_token
                 });
                 $location.path('dashboard');
             } else {

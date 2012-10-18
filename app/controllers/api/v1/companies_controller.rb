@@ -1,6 +1,4 @@
-class CompaniesController < ApplicationController
-  skip_before_filter :authenticate_user!, :only => [:new_supplier, :create]
-
+class Api::V1::CompaniesController < Api::V1::BaseController
   def new_supplier
     invitation = FavoriteInvitation.where(:token => params[:id]).first
 
@@ -29,7 +27,8 @@ class CompaniesController < ApplicationController
     end
   end
 
-  def dashboard
-    @events = Event.recent
+  def show
+    @company = Company.find(params[:id])
+    respond_with(@company)
   end
 end

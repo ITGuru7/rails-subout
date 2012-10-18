@@ -9,6 +9,7 @@ Subout::Application.routes.draw do
       resources :tokens
       resources :auctions
       resources :events
+      resources :companies
       resources :opportunities do
         resources :bids
       end
