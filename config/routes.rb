@@ -53,5 +53,5 @@ Subout::Application.routes.draw do
   match 'opportunities/bids/:id' => 'opportunities#bids'
   match 'api_login' => 'tokens#create'
 
-  root :to => 'companies#dashboard'
+  root :to => redirect("/index_js")
 end
