@@ -9,18 +9,16 @@ class BidObserver < Mongoid::Observer
     bidder = bid.bidder
     opportunity = bid.opportunity
     e.description = "#{bidder.name} bid #{bid.amount} on #{opportunity.name}"
-    e.model_id = bid.id
-    e.model_type = :bid
+    e.eventable = bid    
     e.company_id = bid.bidder_id
     e.save
 
-    Company.all.each do |company| 
-      if company.interested_in_event?(e) 
-        Rails.logger.info "Telling company to send event : #{e.inspect}"
-        company.send_event(e, bid) 
-      end
-    end
-
+    # Company.all.each do |company| 
+      # if company.interested_in_event?(e) 
+        # Rails.logger.info "Telling company to send event : #{e.inspect}"
+        # company.send_event(e, bid) 
+      # end
+    # end
   end
 
 end

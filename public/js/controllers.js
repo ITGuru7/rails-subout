@@ -16,14 +16,36 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
         $rootScope.company = null;
         $location.path('sign_in');
     }
+    
+    $rootScope.setOpportunity = function(opportunity)
+    {
+        $rootScope.opportunity = opportunity;
+    }
+    
+    
 }
 
 function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company) {
     $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
     $scope.save = function() {
         var newOpportunity = $scope.opportunity;
-        Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token});
-        jQuery('#modal').modal('hide');
+        Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token}, function(data){
+            $location.path('/dashboard/refresh');
+            jQuery('#modal').modal('hide');    
+        });
+        
+    }
+}
+
+function BidNewCtrl($scope, $rootScope, $location, Bid)
+{
+    $scope.save = function() {
+        var newBid = $scope.bid;
+        Bid.create({bid:newBid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
+            $location.path('/dashboard/refresh');
+            jQuery('#modal').modal('hide');    
+        });
+        
     }
 }
 
@@ -42,6 +64,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
     $scope.query = "";
     $scope.filter = null;
     $scope.tag = null;
+    $scope.opportunity = null;
 
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)

@@ -1,8 +1,4 @@
-class BidsController < ApplicationController
-  def new
-    @bid = opportunity.bids.new
-  end
-
+class Api::V1::BidsController < Api::V1::BaseController
   def create
     @bid = opportunity.bids.build(params[:bid])
     @bid.bidder = current_company
@@ -13,7 +9,7 @@ class BidsController < ApplicationController
     end
 
     Notifier.delay.new_bid(@bid.id)
-    redirect_to opportunity
+    respond_with(@bid.opportunity, @bid)
   end
 
 

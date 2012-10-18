@@ -6,6 +6,11 @@ angular.module('suboutServices', ['ngResource']).
     factory('Opportunity', function($resource){
         return $resource('/api/v1/auctions/:opportunityId', {}, {});
     }).
+    factory('Bid', function($resource){
+        return $resource('/api/v1/opportunities/:opportunityId/bids', {opportunityId:'@opportunityId'}, {
+            create: {method:'POST', params:{}, isArray:true}
+        });
+    }).
     factory('Event', function($resource){
         return $resource('/api/v1/events/:eventId', {}, {});
     }).
