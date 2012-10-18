@@ -80,6 +80,16 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
         return reg.test(input.name.toLowerCase()) || reg.test(input.seats);
     };
 
+    /*$scope.searchByQuery = function() {
+        return function(input) {
+            
+            Opportunity.get({
+                opportunityId : input
+            });
+            return input + ".png";
+        }
+    };*/
+
     $scope.searchByTag = function(input) {
         //input: event for now
         

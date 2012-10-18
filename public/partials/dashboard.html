@@ -56,6 +56,7 @@
               <table class="table table-striped">
                 <tr class="event" ng-repeat="event in events | filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
+                        
                       <span ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
                         <span class="event-title row-fluid">
                           <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
@@ -75,13 +76,12 @@
                       
                       <span ui-if="event.eventable_type=='Bid'" ng-init="bid=event.eventable">
                         <span class="event-title row-fluid">
-                          <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
+                          <div class="span1"><img ng-src="/img/filters/bid.png"></div>
                           <div class="span11">
                             <h3>
                               {{event.description}}
                             </h3>
-                            <div>{{bid.amount}}</div>
-                            <div>{{opportunity.bidding_ends|date}}</div>
+                            <div>${{bid.amount}} | {{event.updated_at|date}}</div>
                           </div>
                         </span>
                       </span>

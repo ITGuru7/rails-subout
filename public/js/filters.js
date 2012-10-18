@@ -1,8 +1,7 @@
 'use strict';
 
 /* Filters */
-angular.module("suboutFilters", []).filter('timestamp', function() {
-    
+angular.module("suboutFilters", []).filter('timestamp', function() { 
  return function(input){
         return new Date(input).getTime();
     };
