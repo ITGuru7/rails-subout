@@ -27,4 +27,8 @@ class Event
      end })
   end	
 
+  def initiated_by_name
+    eventable.initiated_by_name
+  end
+
 end

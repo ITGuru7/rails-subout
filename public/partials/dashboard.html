@@ -64,11 +64,13 @@
                             <h3>
                               <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a>
                             </h3>
+                            <div>Buyer: {{event.initiated_by_name}}</div>
                             <div>{{opportunity.description}}</div>
                             <div>{{opportunity.bidding_ends|date}}</div>
                             <div>
                                <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid.html')">Bid</a> * 
-                               <a href='#'>Buy Now</a>
+                               <a href='#'>Buy Now</a> *
+                               <a href='#'>Watch</a>
                             </div>
                           </div>
                         </span>
@@ -81,6 +83,7 @@
                             <h3>
                               {{event.description}}
                             </h3>
+                            <div>From: {{event.initiated_by_name}}</div>
                             <div>${{bid.amount}} | {{event.updated_at|date}}</div>
                           </div>
                         </span>

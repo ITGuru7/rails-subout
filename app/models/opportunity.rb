@@ -52,5 +52,9 @@ class Opportunity
   def won?
     winning_bid.present?
   end
+
+  def initiated_by_name
+    buyer.name
+  end
 end
 

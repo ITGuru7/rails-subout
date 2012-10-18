@@ -16,4 +16,7 @@ class Bid
     "#{company.name} #{ammount}"
   end
   
+  def initiated_by_name
+    bidder.name
+  end
 end
