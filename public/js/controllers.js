@@ -58,6 +58,26 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
         api_token : $rootScope.user.api_token
     });
     
+    function loadEvents()
+    {
+        setTimeout(function(){
+            Event.query({
+                api_token : $rootScope.user.api_token
+            }, function(events){
+                if(events[0]['_id']!=$scope.events[0]['_id'])
+                {
+                    $scope.events = events;
+                }    
+            });
+            
+            loadEvents(); 
+        
+        }, 10 * 1000);
+        
+    }
+    
+    loadEvents();
+    
     $scope.filters = Filter.query();
     $scope.tags = Tag.query();
 
