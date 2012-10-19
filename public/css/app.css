@@ -79,3 +79,6 @@ body{background:#bfbfbf; }
   top: 25%;
 }
 .modal-body{ max-height:9999px; }
+
+#company.well{ padding: 10px}
+div#company_links{ text-align: center}
