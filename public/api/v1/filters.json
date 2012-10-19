@@ -48,23 +48,7 @@
         }   
     }
 },
-{
-    "_id":"503026b08859aed418000009",
-    "active":false,
-    "name":"Bid",
-    "color":"#f25a29",
 
-    "icon": "img/filters/bid.png",
-    
-    "evaluation":{
-       "type": "compare",
-       "property":"type",
-       "params":{
-            "value": "Bid",
-            "operator": "=="
-        }   
-    }
-},
 {
     "_id":"503026b08859aed418000009",
     "active":false,
@@ -81,4 +65,22 @@
             "operator": "=="
         }   
     }
-}]
+},
+{
+    "_id":"503026b08859aed418000009",
+    "active":false,
+    "name":"Bid",
+    "color":"#f25a29",
+
+    "icon": "img/filters/bid.png",
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Bid",
+            "operator": "=="
+        }   
+    }
+}
+]
