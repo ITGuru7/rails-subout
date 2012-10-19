@@ -12,9 +12,7 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
     }
     
     $rootScope.signOut = function(){
-        $rootScope.user = null;
-        $rootScope.company = null;
-        $location.path('sign_in');
+        window.location.reload();
     }
     
     $rootScope.setOpportunity = function(opportunity)
@@ -49,8 +47,13 @@ function BidNewCtrl($scope, $rootScope, $location, Bid)
     }
 }
 
+function MyBidCtrl($scope, $rootScope, $location, MyBid) {
+    $scope.my_bids = MyBid.query({api_token:$rootScope.user.api_token});
+}
+
+
 function OpportunityCtrl($scope, $rootScope, $location, Opportunity) {
-    $scope.opportunities = Opportunity.query();
+    $scope.opportunities = Opportunity.query({api_token:$rootScope.user.api_token});
 }
 
 function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, OpportunityTest, Filter, Tag, Company) {

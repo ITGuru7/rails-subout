@@ -1,5 +1,7 @@
 class Bid
   include Mongoid::Document
+  include Mongoid::Timestamps
+
   field :opportunity_id, type: Integer
   field :amount, type: BigDecimal
 
@@ -22,5 +24,9 @@ class Bid
 
   def type
     'Bid'
+  end
+
+  def opportunity_title
+    opportunity.name
   end
 end

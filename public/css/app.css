@@ -74,10 +74,6 @@ body{background:#bfbfbf; }
 	
 	#tags .tag{ margin-bottom:0.3em; cursor:pointer; }
 
-.modal.fade.in{
-  position:absolute;
-  top: 25%;
-}
 .modal-body{ max-height:9999px; }
 
 #company.well{ padding: 10px}

@@ -1,4 +1,10 @@
 class Api::V1::BidsController < Api::V1::BaseController
+
+  def index
+    @bids = current_company.bids
+    respond_with(@bids, :methods => :opportunity_title)
+  end
+
   def create
     @bid = opportunity.bids.build(params[:bid])
     @bid.bidder = current_company

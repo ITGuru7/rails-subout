@@ -10,6 +10,7 @@ Subout::Application.routes.draw do
       resources :auctions
       resources :events
       resources :companies
+      resources :bids
       resources :opportunities do
         resources :bids
       end

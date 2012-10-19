@@ -32,6 +32,7 @@ class Company
 
   has_many :contacts
   has_many :locations
+  has_many :bids, foreign_key: 'bidder_id'
 
   validates_presence_of :name, :on => :create, :message => "can't be blank"
   validates_uniqueness_of :email
