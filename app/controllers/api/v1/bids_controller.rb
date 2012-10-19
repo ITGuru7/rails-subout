@@ -8,7 +8,7 @@ class Api::V1::BidsController < Api::V1::BaseController
       #opportunity.win!(@bid)
     #end
 
-    #Notifier.delay.new_bid(@bid.id)
+    Notifier.delay.new_bid(@bid.id)
     respond_with(@bid.opportunity, @bid)
   end
 
