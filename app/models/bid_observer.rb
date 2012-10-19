@@ -8,7 +8,7 @@ class BidObserver < Mongoid::Observer
     # Build the description
     bidder = bid.bidder
     opportunity = bid.opportunity
-    e.description = "#{bidder.name} bid #{bid.amount} on #{opportunity.name}"
+    e.description = "#{bidder.name} bid $#{bid.amount} on #{opportunity.name}"
     e.eventable = bid    
     e.company_id = bid.bidder_id
     e.save

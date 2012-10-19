@@ -30,8 +30,8 @@ function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company)
     $scope.save = function() {
         var newOpportunity = $scope.opportunity;
         Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token}, function(data){
-            $location.path('/dashboard/refresh');
             jQuery('#modal').modal('hide');    
+            $location.path('/dashboard/refresh');
         });
         
     }
@@ -42,8 +42,8 @@ function BidNewCtrl($scope, $rootScope, $location, Bid)
     $scope.save = function() {
         var newBid = $scope.bid;
         Bid.create({bid:newBid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
-            $location.path('/dashboard/refresh');
             jQuery('#modal').modal('hide');    
+            $location.path('/dashboard/refresh');
         });
         
     }

@@ -53,7 +53,7 @@
               </div>
               
               <table class="table table-striped">
-                <tr class="event" ng-repeat="event in events | filter:searchByFilter | filter:searchByTag | limitTo:20">
+                <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
                         
                       <span ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
