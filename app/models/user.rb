@@ -6,6 +6,8 @@ class User
   devise :database_authenticatable, :registerable, :token_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  before_save :ensure_authentication_token
+
   ## Database authenticatable
   field :email,              :type => String
   field :encrypted_password, :type => String
