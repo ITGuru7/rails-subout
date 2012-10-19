@@ -1,7 +1,7 @@
 class OpportunityObserver < Mongoid::Observer
   observe :opportunity
   
-  def after_save(opportunity)
+  def after_create(opportunity)
     Rails.logger.info "Observing opportunity: #{opportunity.inspect} "
     Rails.logger.info "And the id is #{opportunity.id}"
  
@@ -21,8 +21,4 @@ class OpportunityObserver < Mongoid::Observer
 
   end
 
-  def after_create(opportunity)
-    Rails.logger.info "Just created a new opportunity"
-  end
-  
 end
