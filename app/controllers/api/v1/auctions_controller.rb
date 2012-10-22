@@ -12,15 +12,4 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
     respond_with(@auction)
   end
-
-  def show
-    @auction = Opportunity.find(params[:id])
-  end
-
-  def select_winner
-    @auction = Opportunity.find(params[:id])
-    @auction.win!(params[:bid_id])
-
-    redirect_to auction_path(@auction)
-  end
 end
