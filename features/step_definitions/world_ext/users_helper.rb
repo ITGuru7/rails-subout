@@ -1,9 +1,9 @@
 module WorldExt
   module UsersHelper
     def sign_in(user)
-      visit '/index_js' #/loginnew_user_session_path
+      visit '/index_js'
 
-      
+
       fill_in "Email", with: user.email
       fill_in "Password", with: user.password
       click_on "Sign In"
