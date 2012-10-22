@@ -78,6 +78,6 @@ def create_auction(opportunity)
   fill_in "End date", with: opportunity.end_date
   fill_in "Bidding ends", with: opportunity.bidding_ends
   check "Quick Winnable?" if opportunity.quick_winnable?
-  check "For favorites only" if opportunity.for_favorites_only?
+  check "For Favorites Only?" if opportunity.for_favorites_only?
   click_on "Create Opportunity"
 end
