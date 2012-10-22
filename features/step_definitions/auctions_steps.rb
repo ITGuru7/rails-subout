@@ -8,13 +8,11 @@ end
 
 When /^I create a new auction for favorites only$/ do
   create_auction(FactoryGirl.build(:opportunity, :for_favorites_only => true))
-end 
+end
 
 Then /^the auction should have been created$/ do
-  page.should have_content("The auction has been created")
-  
-  click_on "My Auctions"
-  page.should have_content("New York to Boston")
+  click_on "Opportunities"
+  find('#modal').should have_content("New York to Boston")
 end
 
 Then /^a supplier should not be able to \"win it now\"$/ do
@@ -43,7 +41,7 @@ When /^I choose that bid as the winner$/ do
   click_on @auction.name
 
   within("#bid_#{@bid.id}") do
-    click_on "Select as Winner" 
+    click_on "Select as Winner"
   end
 end
 
@@ -70,9 +68,9 @@ def last_opportunity
 end
 
 def create_auction(opportunity)
-  click_link "New Auction"
+  click_link "New Opportunity"
 
-  fill_in "Name", with: opportunity.name
+  fill_in "Title", with: opportunity.name
   fill_in "Description", with: opportunity.description
   fill_in "Starting location", with: opportunity.starting_location
   fill_in "Ending location", with: opportunity.ending_location
@@ -81,5 +79,5 @@ def create_auction(opportunity)
   fill_in "Bidding ends", with: opportunity.bidding_ends
   check "Quick winnable" if opportunity.quick_winnable?
   check "For favorites only" if opportunity.for_favorites_only?
-  click_on "Create Auction"
+  click_on "Create Opportunity"
 end
