@@ -10,17 +10,15 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
     $rootScope.setModal = function(url) {
         $rootScope.modal = url;
     }
-    
+
     $rootScope.signOut = function(){
         window.location.reload();
     }
-    
+
     $rootScope.setOpportunity = function(opportunity)
     {
         $rootScope.opportunity = opportunity;
     }
-    
-    
 }
 
 function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company) {
@@ -28,10 +26,10 @@ function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity, Company)
     $scope.save = function() {
         var newOpportunity = $scope.opportunity;
         Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token}, function(data){
-            jQuery('#modal').modal('hide');    
+            jQuery('#modal').modal('hide');
             $location.path('/dashboard/refresh');
         });
-        
+
     }
 }
 
@@ -40,10 +38,10 @@ function BidNewCtrl($scope, $rootScope, $location, Bid)
     $scope.save = function() {
         var newBid = $scope.bid;
         Bid.create({bid:newBid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
-            jQuery('#modal').modal('hide');    
+            jQuery('#modal').modal('hide');
             $location.path('/dashboard/refresh');
         });
-        
+
     }
 }
 
@@ -56,11 +54,19 @@ function OpportunityCtrl($scope, $rootScope, $location, Opportunity) {
     $scope.opportunities = Opportunity.query({api_token:$rootScope.user.api_token});
 }
 
-function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, OpportunityTest, Filter, Tag, Company) {
+function DashboardCtrl($scope, $rootScope, Event, Filter, Tag) {
+    $scope.filters = Filter.query();
+    $scope.tags = Tag.query();
+
+    $scope.query = "";
+    $scope.filter = null;
+    $scope.tag = null;
+    $scope.opportunity = null;
+
     $scope.events = Event.query({
         api_token : $rootScope.user.api_token
     });
-    
+
     function loadEvents()
     {
         setTimeout(function(){
@@ -70,24 +76,15 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
                 if(events[0]['_id']!=$scope.events[0]['_id'])
                 {
                     $scope.events = events;
-                }    
+                }
             });
-            
-            loadEvents(); 
-        
-        }, 10 * 1000);
-        
-    }
-    
-    loadEvents();
-    
-    $scope.filters = Filter.query();
-    $scope.tags = Tag.query();
 
-    $scope.query = "";
-    $scope.filter = null;
-    $scope.tag = null;
-    $scope.opportunity = null;
+            loadEvents();
+
+        }, 10 * 1000);
+    }
+
+    loadEvents();
 
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)
@@ -103,22 +100,10 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
         return reg.test(input.name.toLowerCase()) || reg.test(input.seats);
     };
 
-    /*$scope.searchByQuery = function() {
-        return function(input) {
-            
-            Opportunity.get({
-                opportunityId : input
-            });
-            return input + ".png";
-        }
-    };*/
-
     $scope.searchByTag = function(input) {
-        //input: event for now
-        
         if (!$scope.tag)
             return true;
-            
+
         var reg = new RegExp($scope.tag.name.toLowerCase());
         if (reg.test(input.eventable.name.toLowerCase())) {
 
@@ -141,7 +126,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
         }else{
             $scope.filter = null;
         }
-       
+
         $scope.query = "";
     }
 
@@ -151,7 +136,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
             {
                 $scope.tags[i].active = false;
             }
-            
+
         }
         tag.active = !tag.active;
         if(tag.active)
@@ -160,7 +145,7 @@ function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, Opport
         }else{
             $scope.tag = null;
         }
-        
+
         $scope.query = "";
     }
 }
