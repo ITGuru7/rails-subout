@@ -1,21 +1,19 @@
 class Api::V1::BidsController < Api::V1::BaseController
-
   def index
-    @bids = current_company.bids
-    respond_with(@bids, :methods => :opportunity_title)
+    respond_with(current_company.bids, :methods => :opportunity_title)
   end
 
   def create
-    @bid = opportunity.bids.build(params[:bid])
-    @bid.bidder = current_company
-    @bid.save!
+    bid = opportunity.bids.build(params[:bid])
+    bid.bidder = current_company
+    bid.save!
 
-    #if opportunity.quick_winnable && @bid.amount <= opportunity.win_it_now_price
-      #opportunity.win!(@bid)
-    #end
+    if opportunity.quick_winnable && opportunity.win_it_now_price >= bid.amount
+      opportunity.win!(bid)
+    end
 
-    Notifier.delay.new_bid(@bid.id)
-    respond_with(@bid.opportunity, @bid)
+    Notifier.delay.new_bid(bid.id)
+    respond_with(bid.opportunity, bid)
   end
 
 

@@ -13,7 +13,7 @@ class Opportunity
   field :bidding_ends, type: Time
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
-  field :win_it_now_price, type: BigDecimal 
+  field :win_it_now_price, type: BigDecimal
   field :winning_bid_id, type: String
   field :seats, type: Integer
   field :type, type: String
@@ -24,11 +24,10 @@ class Opportunity
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
 
+  has_one :event, :as => :eventable
   has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
   has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
   has_many :bids
-
-  has_one :event, :as => :eventable
 
   validates_presence_of :buyer_id
   validates_presence_of :name

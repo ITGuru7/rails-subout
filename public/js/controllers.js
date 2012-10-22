@@ -36,8 +36,7 @@ function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity) {
 function BidNewCtrl($scope, $rootScope, $location, Bid)
 {
     $scope.save = function() {
-        var newBid = $scope.bid;
-        Bid.create({bid:newBid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
+        Bid.create({bid: $scope.bid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
             jQuery('#modal').modal('hide');
             $location.path('/dashboard/refresh');
         });
