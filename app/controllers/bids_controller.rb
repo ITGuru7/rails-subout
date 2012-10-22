@@ -1,8 +1,4 @@
 class BidsController < ApplicationController
-  def new
-    @bid = opportunity.bids.new
-  end
-
   def create
     @bid = opportunity.bids.build(params[:bid])
     @bid.bidder = current_company
