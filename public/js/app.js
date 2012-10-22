@@ -11,3 +11,5 @@ var subout = angular.module('subout', ['ui','suboutFilters', 'suboutServices']).
       otherwise({redirectTo: '/dashboard'});
 }]);
 
+jQuery.timeago.settings.allowFuture = true;
+

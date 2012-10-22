@@ -59,6 +59,8 @@ function OpportunityCtrl($scope, $rootScope, $location, Opportunity) {
 function DashboardCtrl($scope, $rootScope, $location, Event, Opportunity, OpportunityTest, Filter, Tag, Company) {
     $scope.events = Event.query({
         api_token : $rootScope.user.api_token
+    }, function(data){
+     jQuery('time.relative-time').timeago();
     });
     
     function loadEvents()

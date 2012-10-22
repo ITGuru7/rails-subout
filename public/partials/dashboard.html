@@ -63,12 +63,13 @@
                           <div class="span11">
                             <h3>
                               <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a>
+                              <ng:timeago from="Mon, 27 Feb 2012 15:28:53 -0800"></ng:timeago>
                             </h3>
                             <div>Buyer: {{event.initiated_by_name}}</div>
                             <div>{{opportunity.description}}</div>
                             <div>
-                              Created: {{opportunity.created_at|date}}
-                              Ends On: {{opportunity.bidding_ends|date}} 
+                              Created: <span class='timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
+                              Ends On: <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
                             </div>
                             <div>
                                <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid.html')">Bid</a> * 
