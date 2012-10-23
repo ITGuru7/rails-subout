@@ -13,11 +13,11 @@ Given /^(?:I|that buyer) (?:have|has) an auction "(.*?)"$/ do |name|
 end
 
 When /^I bid on that opportunity$/ do 
-  bid
+  do_a_bid
 end
 
 Then /^I should see my bid on that opportunity$/ do
-  page.should have_content("Your bid: $#{@bid.amount}")
+  page.should have_content("$#{@bid.formatted_amount}")
 end
 
 Then /^the buyer should be notified about my bid$/ do
@@ -38,7 +38,7 @@ When /^I do a quick win on that opportunity$/ do
 end
 
 When /^I bid on that opportunity with amount below the win it now price$/ do
-  bid(@opportunity.win_it_now_price - 1)
+  do_a_bid(@opportunity.win_it_now_price - 1)
 end
 
 Then /^I should win that opportunity automatically$/ do
@@ -49,11 +49,13 @@ Then /^I should win that opportunity automatically$/ do
   }
 end
 
-def bid(amount = '100.00')
-  click_on "Available Opportunities"
-  click_on @opportunity.name
+def do_a_bid(amount = '100.00')
+  #click_on "Available Opportunities"
+  within("#opportunity_#{@opportunity.id}") do
+    click_on "Bid"
+  end
+  fill_in "Price", with: amount
   click_on "Bid Now"
-  fill_in :amount, with: amount
-  click_on "Submit Bid"
+  page.should have_content(amount)
   @bid = Bid.last
 end

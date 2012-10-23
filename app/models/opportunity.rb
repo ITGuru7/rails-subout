@@ -55,5 +55,6 @@ class Opportunity
   def initiated_by_name
     buyer.name
   end
+
 end
 

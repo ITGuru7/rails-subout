@@ -28,4 +28,10 @@ class Event
        puts(message)
      end })
   end
+
+  def as_json(options={})
+    json_attributes = super(:methods => [:initiated_by_name, :type])
+    json_attributes[:eventable] = self.eventable.as_json(:methods => :formatted_amount)
+    json_attributes
+  end
 end
