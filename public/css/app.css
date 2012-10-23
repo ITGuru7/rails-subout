@@ -78,3 +78,35 @@ body{background:#bfbfbf; }
 
 #company.well{ padding: 10px}
 div#company_links{ text-align: center}
+
+div.created-at{ 
+  text-align: right;
+  font-size: .8em;
+  color: #666;  
+}
+
+.event h3.title{
+  margin: 0px;
+  padding: 0px;
+  line-height: 1em;
+}
+
+div.buyer{
+  font-size: .8em;
+  color: gray;
+}
+
+div.buyer span.buyer-name{
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.event div.description{
+  margin: .5em;
+}
+
+div.bidding-ends-on{
+  font-size: .9em;
+  font-weight: bold;
+  text-align: right;
+}

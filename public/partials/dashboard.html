@@ -58,19 +58,24 @@
                     <td>
 
                       <span id="opportunity_{{opportunity._id}}" ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
-                        <span class="event-title row-fluid">
+                        <span class="row-fluid">
                           <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
                           <div class="span11">
-                            <h3>
-                              <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a>
-                              <ng:timeago from="Mon, 27 Feb 2012 15:28:53 -0800"></ng:timeago>
-                            </h3>
-                            <div>Buyer: {{event.initiated_by_name}}</div>
-                            <div>{{opportunity.description}}</div>
-                            <div>
-                              Created: <span class='timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
-                              Ends On: <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
+                            <div class="row-fluid">
+                              <div class="span8">
+                                <h3 class='title'> <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a> </h3>
+                                <div class='buyer'>Offered By 
+                                  <span class='buyer-name'>{{event.initiated_by_name}}</span>
+                                  <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
+                                </div>
+                              </div>
+                              <div class="span4">
+                                <div class='bidding-ends-on'>
+                                  Ends <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
+                                </div>
+                              </div>
                             </div>
+                            <div class='description'>{{opportunity.description}}</div>
                             <div>
                                <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
                                <a ui-if="opportunity.quick_winnable" href='#'>Win Now for {{opportunity.win_it_now_price }}</a> *
