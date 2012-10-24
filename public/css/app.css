@@ -91,6 +91,7 @@ div.created-at{
   line-height: 1em;
 }
 
+/* Opportunity in event stream */
 div.buyer{
   font-size: .8em;
   color: gray;
@@ -109,4 +110,18 @@ div.bidding-ends-on{
   font-size: .9em;
   font-weight: bold;
   text-align: right;
+}
+
+div.bidder{
+  font-size: .8em;
+  color: gray;
+}
+
+div.bidder span.bidder-name{
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+span.bid-amount{
+  font-weight: bold;
 }

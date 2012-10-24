@@ -71,7 +71,7 @@
                               </div>
                               <div class="span4">
                                 <div class='bidding-ends-on'>
-                                  Ends <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
+                                  Ending <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
                                 </div>
                               </div>
                             </div>
@@ -86,14 +86,25 @@
                       </span>
 
                       <span ui-if="event.eventable_type=='Bid'" ng-init="bid=event.eventable">
-                        <span class="event-title row-fluid">
+                        <span class="row-fluid">
                           <div class="span1"><img ng-src="/img/filters/bid.png"></div>
                           <div class="span11">
-                            <h3>
-                              {{event.description}}
-                            </h3>
-                            <div>From: {{event.initiated_by_name}}</div>
-                            <div>${{bid.formatted_amount}} | {{event.updated_at|date}}</div>
+                            <div class="row-fluid">
+                              <div class="span8">
+                                <h3 class='title'> <a href="/opportunities/{{bid.opportunity_id}}">{{bid.opportunity_title}}</a> </h3>
+                                <div class='bidder'>
+                                  <span class='bidder-name'>{{event.initiated_by_name}}</span>
+                                  bid
+                                  <span class='bid-amount'>${{bid.formatted_amount}}</span>
+                                  <span class='created-at timeago' relative-time title="{{bid.created_at}}">{{bid.created_at|date}}</span>
+                                </div>
+                              </div>
+                              <div class="span4">
+                                <div class='bidding-ends-on'>
+                                  Ending <time class="timeago" relative-time datetime="{{bid.opportunity_bidding_ends}}">{{bid.opportunity_bidding_ends|date}}</time>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </span>
                       </span>

@@ -21,6 +21,10 @@ class Bid
     'Bid'
   end
 
+  def opportunity_bidding_ends
+    opportunity.bidding_ends
+  end
+
   def opportunity_title
     opportunity.name
   end
