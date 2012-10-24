@@ -13,7 +13,7 @@ class EventObserver < Mongoid::Observer
     @mycallback = lambda{|message| puts(message)}    
     pn.publish({
       'channel' => pubnub_path,
-      'message' => associated_object.to_json,
+      'message' => associated_object.as_json,
       'callback' => @mycallback
     })
     end
