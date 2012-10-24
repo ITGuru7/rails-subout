@@ -27,7 +27,6 @@ function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity) {
         var newOpportunity = $scope.opportunity;
         Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token}, function(data){
             jQuery('#modal').modal('hide');
-            $location.path('/dashboard/refresh');
         });
 
     }
@@ -38,7 +37,6 @@ function BidNewCtrl($scope, $rootScope, $location, Bid)
     $scope.save = function() {
         Bid.create({bid: $scope.bid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
             jQuery('#modal').modal('hide');
-            $location.path('/dashboard/refresh');
         });
 
     }
@@ -65,28 +63,18 @@ function DashboardCtrl($scope, $rootScope, Event, Filter, Tag) {
     $scope.events = Event.query({
         api_token : $rootScope.user.api_token
     }, function(data){
-     jQuery('time.relative-time').timeago();
+         
+         PUBNUB.subscribe({
+            channel    : "event_updated",
+            callback   : function(event) {
+                $scope.events.unshift(event);
+                $scope.$apply();
+            }
+        });
+        
+        jQuery('time.relative-time').timeago();
     });
-
-    function loadEvents()
-    {
-        setTimeout(function(){
-            Event.query({
-                api_token : $rootScope.user.api_token
-            }, function(events){
-                if(events[0]['_id']!=$scope.events[0]['_id'])
-                {
-                    $scope.events = events;
-                }
-            });
-
-            loadEvents();
-
-        }, 10 * 1000);
-    }
-
-    loadEvents();
-
+    
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)
             return true;
