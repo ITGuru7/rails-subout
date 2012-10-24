@@ -56,5 +56,16 @@ class Opportunity
     buyer.name
   end
 
+  def bids_count
+    bids.size
+  end
+
+  def latest_bid_amount
+    bids.latest_amount
+  end
+
+  def lowest_bid_amount
+    bids.lowest_amount
+  end
 end
 

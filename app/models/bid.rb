@@ -13,8 +13,19 @@ class Bid
   validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
 
+  scope :recent, desc(:created_at)
+  scope :by_amount, asc(:amount)
+
   def initiated_by_name
     bidder.name
+  end
+
+  def self.latest_amount
+    recent.first.try(:amount)
+  end
+
+  def self.lowest_amount
+    by_amount.first.try(:amount)
   end
 
   def type

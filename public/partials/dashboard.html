@@ -76,10 +76,17 @@
                               </div>
                             </div>
                             <div class='description'>{{opportunity.description}}</div>
-                            <div>
-                               <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
-                               <a ui-if="opportunity.quick_winnable" href='#'>Win Now for {{opportunity.win_it_now_price }}</a> *
-                               <a href='#'>Watch</a>
+                            <div class="row-fluid">
+                              <div class="span7 data-items">
+                                #bids: <span class='data'>{{opportunity.bids_count}}</span>, 
+                                Latest Bid: <span class='data'>{{opportunity.latest_bid_amount}}</span>,
+                                Lowest Bid: <span class='data'>{{opportunity.lowest_bid_amount}}</span>
+                              </div>
+                              <div class="span5 actions">
+                                 <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
+                                 <a ui-if="opportunity.quick_winnable" href='#'>Win Now for {{opportunity.win_it_now_price }}</a> *
+                                 <a href='#'>Watch</a>
+                              </div>
                             </div>
                           </div>
                         </span>

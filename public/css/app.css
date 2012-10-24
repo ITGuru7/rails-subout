@@ -125,3 +125,16 @@ div.bidder span.bidder-name{
 span.bid-amount{
   font-weight: bold;
 }
+
+tr.event div.actions{
+  text-align: right;
+}
+
+div.data-items{
+  font-size: .8em;
+  color: gray;
+}
+
+div.data-items span.data{
+  font-weight: bold;
+} 
