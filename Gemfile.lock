@@ -78,7 +78,7 @@ GEM
       mail (~> 2.2)
       rspec (~> 2.0)
     erubis (2.7.0)
-    eventmachine (0.12.10)
+    eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.0.0)
@@ -115,8 +115,6 @@ GEM
     libv8 (3.3.10.4)
     libwebsocket (0.1.5)
       addressable
-    macaddr (1.6.1)
-      systemu (~> 2.5.0)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -143,11 +141,9 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    pubnub-ruby (3.3.0.1)
-      activesupport
-      eventmachine (~> 0.12.9)
-      uuid (~> 2.3.5)
-      yajl-ruby
+    pusher (0.10.0)
+      multi_json (~> 1.0)
+      signature (~> 0.1.4)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -225,6 +221,7 @@ GEM
       multi_json (~> 1)
       redis (~> 3)
       redis-namespace
+    signature (0.1.4)
     simple_form (2.0.2)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -233,7 +230,6 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    systemu (2.5.2)
     therubyracer (0.10.2)
       libv8 (~> 3.3.10)
     thin (1.4.1)
@@ -250,13 +246,10 @@ GEM
     uglifier (1.2.7)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
-    uuid (2.3.5)
-      macaddr (~> 1.0)
     warden (1.2.1)
       rack (>= 1.0)
     xpath (0.1.4)
       nokogiri (~> 1.3)
-    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -268,7 +261,6 @@ DEPENDENCIES
   database_cleaner
   devise
   email_spec
-  eventmachine (~> 0.12.9)
   factory_girl_rails (~> 4.0)
   ffaker
   fivemat
@@ -277,8 +269,8 @@ DEPENDENCIES
   mongoid (~> 3.0.0.rc)
   mongoid_rails_migrations
   pry
-  pubnub-ruby (~> 3.3.0.1)
   rack-cors
+  pusher
   rails (= 3.2.3)
   rails_admin
   rspec-rails

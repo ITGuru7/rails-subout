@@ -12,4 +12,3 @@ var subout = angular.module('subout', ['ui','suboutFilters', 'suboutServices']).
 }]);
 
 jQuery.timeago.settings.allowFuture = true;
-
