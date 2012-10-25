@@ -64,18 +64,15 @@ function DashboardCtrl($scope, $rootScope, Event, Filter, Tag) {
     $scope.events = Event.query({
         api_token : $rootScope.user.api_token
     }, function(data){
-         
-         PUBNUB.subscribe({
-            channel    : "event_updated",
-            callback   : function(event) {
-                $scope.events.unshift(event);
-                $scope.$apply();
-            }
+        var channel = $rootScope.pusher.subscribe('event');
+        channel.bind('created', function(event) {
+            $scope.events.unshift(event);
+            $scope.$apply();
         });
-        
+
         jQuery('time.relative-time').timeago();
     });
-    
+
     $scope.searchByFilter = function(input) {
         if (!$scope.filter)
             return true;
@@ -156,7 +153,10 @@ function SignInCtrl($scope, $rootScope, $location, Token, Company) {
             password : $scope.password
         }, function(user) {
             $rootScope.user = user;
+
             if (user.authorized == "true") {
+                $rootScope.pusher = new Pusher(user.pusher_key);
+
                 $rootScope.company = Company.get({
                     companyId : user.company_id,
                     api_token : user.api_token

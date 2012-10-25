@@ -6,8 +6,7 @@ gem 'rails', '3.2.3'
 gem "mongoid", "~> 3.0.0.rc"
 gem 'haml-rails'
 gem 'jquery-rails'
-gem "pubnub-ruby", :path => "vendor/gems/pubnub-ruby-3.3.0.1", :require => "pubnub"
-gem "eventmachine",  "~> 1.0.0"
+gem 'pusher'
 gem 'thin'
 gem "devise"
 gem 'simple_form'

@@ -2,19 +2,19 @@
 <head>
   <meta charset="utf-8">
   <title>Subout</title>
-  
-  <script src="lib/jquery/jquery.min.js"></script>      
+
+  <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/jquery/jquery-ui.min.js"></script>
   <script src="lib/jquery/jquery.timeentry.js"></script>
   <script src="lib/jquery/jquery.timeago.js"></script>
-    
+
   <script src="lib/bootstrap/bootstrap-transition.js"></script>
   <script src="lib/bootstrap/bootstrap-alert.js"></script>
   <script src="lib/bootstrap/bootstrap-modal.js"></script>
   <script src="lib/bootstrap/bootstrap-typeahead.js"></script>
-  <!--<script src="lib/pubnub/pubnub-3.1.min.js"></script>-->
 
-  
+  <script src="http://js.pusher.com/1.12/pusher.min.js"></script>
+
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular-ui/angular-ui.js"></script>
 
@@ -24,24 +24,22 @@
   <script src="js/directives.js"></script>
   <script src="js/services.js"></script>
   <script src="lib/angular/angular-resource.js"></script>
-  
+
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/bootstrap-responsive.css">
   <link rel="stylesheet" href="/lib/angular-ui/angular-ui.css">
   <link rel="stylesheet" href="/lib/jquery/jquery-ui.css">
   <link rel="stylesheet" href="css/app.css">
-  
+
 </head>
 <body ng-controller="AppController">
     <div id="pageWrapper" class="container">
     	<div ng-include="'partials/header.html'"></div>
-    	
+
     	<div id="content" ng-view="content"></div>
     	<div id="modal" class="modal hide fade">
     	   <div ng-include="modal"></div>
-    	</div>        
+    	</div>
 	</div>
-	<div sub-key="sub-fd809ee8-d663-11e1-bf41-5deea89e8e90" ssl="off" origin="pubsub.pubnub.com" id="pubnub"></div>
-	<script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>
 </body>
 </html>
