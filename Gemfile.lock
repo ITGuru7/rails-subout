@@ -269,8 +269,8 @@ DEPENDENCIES
   mongoid (~> 3.0.0.rc)
   mongoid_rails_migrations
   pry
-  rack-cors
   pusher
+  rack-cors
   rails (= 3.2.3)
   rails_admin
   rspec-rails

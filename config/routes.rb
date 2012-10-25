@@ -11,6 +11,8 @@ Subout::Application.routes.draw do
       resources :events
       resources :companies
       resources :bids
+      resources :filters
+      resources :tags
       resources :opportunities do
         resources :bids
       end
