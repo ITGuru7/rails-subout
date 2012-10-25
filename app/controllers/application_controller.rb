@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
+
   protect_from_forgery
   
   unless Rails.application.config.consider_all_requests_local
@@ -17,4 +18,5 @@ private
   def render_404
     render :template => "errors/404", :status => 404
   end
+
 end

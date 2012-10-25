@@ -74,15 +74,16 @@ module Subout
     Mongoid.logger.level = Logger::WARN
     Moped.logger.level = Logger::WARN
 
-    # Pubnub options
-    Rails.configuration.pubnub_publish_key = ENV['PUBNUB_PUBLISH_KEY'] || 'pub-bc2f574a-db24-436a-abb7-9b8976d67d83'
-    Rails.configuration.pubnub_subscribe_key = ENV['PUBNUB_SUBSCRIBE_KEY'] || 'sub-fd809ee8-d663-11e1-bf41-5deea89e8e90'
-    Rails.configuration.pubnub_secret_key = ENV['PUBNUB_SECRET_KEY'] || 'sec-MjA4MjFjYzItMzBmMS00Y2Y4LTg3N2MtYjlhYmYyYzYzZDFi'
-    Rails.configuration.pubnub_global_event_path = ENV['PUBNUB_EVENT_PATH'] || 'global_events'
-
     if Rails.env.test?
       require 'diagnostic'
       config.middleware.use(Subout::DiagnosticMiddleware)
+    end
+
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
     end
   end
 end
