@@ -24,9 +24,9 @@ function AppController($scope, $rootScope, $location, $http, $filter, Token, Com
 function OpportunityNewCtrl($scope, $rootScope, $location, Opportunity) {
     $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
     $scope.save = function() {
-        var newOpportunity = $scope.opportunity;
-        Opportunity.save({opportunity:newOpportunity, api_token:$rootScope.user.api_token}, function(data){
+        Opportunity.save({opportunity: $scope.opportunity, api_token: $rootScope.user.api_token}, function(data){
             jQuery('#modal').modal('hide');
+            $scope.opportunity = null;
         });
 
     }
@@ -37,6 +37,7 @@ function BidNewCtrl($scope, $rootScope, $location, Bid)
     $scope.save = function() {
         Bid.create({bid: $scope.bid, api_token:$rootScope.user.api_token, opportunityId: $rootScope.opportunity._id}, function(data){
             jQuery('#modal').modal('hide');
+            $scope.bid = null;
         });
 
     }

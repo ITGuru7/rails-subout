@@ -1,3 +1,12 @@
+PATH
+  remote: vendor/gems/pubnub-ruby-3.3.0.1
+  specs:
+    pubnub-ruby (3.3.0.1)
+      activesupport
+      eventmachine (~> 1.0)
+      uuid (~> 2.3.5)
+      yajl-ruby
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -78,7 +87,7 @@ GEM
       mail (~> 2.2)
       rspec (~> 2.0)
     erubis (2.7.0)
-    eventmachine (0.12.10)
+    eventmachine (1.0.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.0.0)
@@ -143,11 +152,6 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    pubnub-ruby (3.3.0.1)
-      activesupport
-      eventmachine (~> 0.12.9)
-      uuid (~> 2.3.5)
-      yajl-ruby
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -266,7 +270,7 @@ DEPENDENCIES
   database_cleaner
   devise
   email_spec
-  eventmachine (~> 0.12.9)
+  eventmachine (~> 1.0.0)
   factory_girl_rails (~> 4.0)
   ffaker
   fivemat
@@ -275,7 +279,7 @@ DEPENDENCIES
   mongoid (~> 3.0.0.rc)
   mongoid_rails_migrations
   pry
-  pubnub-ruby (~> 3.3.0.1)
+  pubnub-ruby!
   rails (= 3.2.3)
   rails_admin
   rspec-rails

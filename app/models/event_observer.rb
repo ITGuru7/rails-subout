@@ -6,15 +6,14 @@ class EventObserver < Mongoid::Observer
   end
   
   def send_msg(pubnub_path, associated_object)
-    # We need to publish this event on the global event list.
-    pn = Pubnub.new(:publish_key => Rails.configuration.pubnub_publish_key, # publish_key only required if publishing.
-        :subscribe_key => Rails.configuration.pubnub_subscribe_key,         # required
-        :ssl => false)
-    @mycallback = lambda{|message| puts(message)}    
+    pn = Pubnub.new(:publish_key => Rails.configuration.pubnub_publish_key,
+                    :subscribe_key => Rails.configuration.pubnub_subscribe_key,
+                    :ssl => false)
+
     pn.publish({
       'channel' => pubnub_path,
       'message' => associated_object.as_json,
-      'callback' => @mycallback
+      'callback' => lambda{|message| puts(message)} 
     })
-    end
+  end
 end
