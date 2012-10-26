@@ -5,12 +5,12 @@ class Api::V1::TokensController < Api::V1::BaseController
     if user && user.valid_password?(params[:password])
       render :json => {
         api_token: user.authentication_token,
-        authorized: 'true',
+        authorized: true,
         company_id: user.company_id,
         pusher_key: Pusher.key
       }
     else
-      render :json => { authorized: 'false' }
+      render :json => { authorized: false }
     end
   end
 end
