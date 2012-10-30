@@ -50,7 +50,9 @@ end
 
 When /^I choose that bid as the winner$/ do
   click_on 'Opportunities'
-  click_on @auction.name
+  within("#modal") do
+    click_on @auction.name
+  end
 
   within("#bid_#{@bid.id}") do
     click_on "Select as Winner"

@@ -1,9 +1,14 @@
 class Api::V1::BidsController < Api::V1::BaseController
   def index
+    respond_with opportunity.bids
+  end
+
+  def my
     respond_with(current_company.bids, :methods => :opportunity_title)
   end
 
   def create
+    binding.pry
     bid = opportunity.bids.build(params[:bid])
     bid.bidder = current_company
     bid.save!

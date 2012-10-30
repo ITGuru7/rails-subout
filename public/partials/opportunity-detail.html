@@ -37,8 +37,9 @@
         <div class="control-label">Bid history</div>
         <div class="control-content">
           <ul>
-            <li ng-repeat="bid in opportunity.bids">
-              {{bid.initiated_by_name}}
+            <li id="bid_{{bid._id}}" ng-repeat="bid in bids">
+              {{bid.amount}}
+              <a ng-click="selectWinner(bid)">Select as Winner</a>
             </li>
           </ul>
         </div>

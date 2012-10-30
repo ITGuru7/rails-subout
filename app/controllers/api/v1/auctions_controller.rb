@@ -12,4 +12,9 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
     respond_with(@auction)
   end
+
+  def show
+    @auction = Opportunity.find(params[:id])
+    respond_with(@auction)
+  end
 end

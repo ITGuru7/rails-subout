@@ -47,7 +47,6 @@ OpportunityNewCtrl = function($scope, $rootScope, $location, Opportunity) {
   $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
   return $scope.save = function() {
     var newOpportunity;
-    console.log($scope.opportunity);
     newOpportunity = $scope.opportunity;
     return Opportunity.save({
       opportunity: newOpportunity,
@@ -161,10 +160,19 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag) {
   };
 };
 
-OpportunityDetailCtrl = function($scope, $routeParams, Opportunity) {
-  return $scope.opportunity = Opportunity.get({
-    opportunityId: $routeParams.opportunityId
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportunity) {
+  $scope.opportunity = $rootScope.opportunity;
+  $scope.bids = Bid.query({
+    opportunityId: $scope.opportunity._id,
+    api_token: $rootScope.user.api_token
   });
+  return $scope.selectWinner = function(bid) {
+    return Opportunity.select_winner({
+      opportunityId: $scope.opportunity._id,
+      bid_id: bid._id,
+      api_token: $rootScope.user.api_token
+    });
+  };
 };
 
 SignInCtrl = function($scope, $rootScope, $location, Token, Company) {
@@ -269,7 +277,14 @@ var api_path;
 api_path = "/api/v1";
 
 angular.module("suboutServices", ["ngResource"]).factory("Opportunity", function($resource) {
-  return $resource("" + api_path + "/auctions/:opportunityId", {}, {});
+  return $resource("" + api_path + "/auctions/:opportunityId/:method", {}, {
+    select_winner: {
+      params: {
+        method: "select_winner"
+      },
+      method: "PUT"
+    }
+  });
 }).factory("MyBid", function($resource) {
   return $resource("" + api_path + "/bids", {}, {});
 }).factory("Bid", function($resource) {
