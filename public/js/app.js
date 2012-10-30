@@ -8,7 +8,7 @@ subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).con
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
       controller: DashboardCtrl
-    }).when("/opportunity/:opportunityId", {
+    }).when("/opportunities/:opportunityId", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
     }).otherwise({

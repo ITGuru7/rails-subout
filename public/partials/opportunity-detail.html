@@ -1,98 +1,47 @@
-<div id="opportunity-new" ng-controller="OpportunityNewCtrl">
+<div id="opportunity-detail" ng-controller="OpportunityDetailCtrl">
     <div class="modal-header">
             <button data-dismiss="modal" class="close" type="button">x</button>
-            <h3>New Opportunity</h3>
+            <h3>Opportunity Detail</h3>
     </div>
     <div class="modal-body">
-        <section class="section-content">
-            <form method="post" class="form-horizontal" action="/opportunities" accept-charset="UTF-8">
-                <div id="message"></div>
-              <div class="control-group">
-                <label for="opportunity_name" class="control-label">Name</label>
-                <div class="controls">
-                    <input type="text" size="30" name="opportunity[name]" id="opportunity_name" class="input-xlarge">
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_description" class="control-label">Description</label>
-                <div class="controls">
-                    <textarea rows="5" name="opportunity[description]" id="opportunity_description" cols="40" class="input-xlarge"></textarea>
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_bidding_ends" class="control-label">Bidding ends</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="text" size="10" maxlength="10" name="opportunity[bidding_ends]" id="opportunity_bidding_ends" class="input-small day hasDatepicker"><span class="add-on"><i class="icon-calendar"></i></span>
-                    </div>
-                </div>
-                
-                
-              </div>
-              
-              <div class="control-group">
-                <label class="checkbox">
-                    <div class="controls">
-                        <input type="hidden" value="0" name="opportunity[buy_it_now]"><input type="checkbox" value="1" name="opportunity[buy_it_now]" id="opportunity_buy_it_now" class="input-xlarge">
-                        Buy it now?
-                    </div>
-                </label>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_buy_it_now_price" class="control-label">Buy it now price</label>
-                <div class="controls">
-                    <input type="text" size="30" name="opportunity[buy_it_now_price]" id="opportunity_buy_it_now_price" class="input-small">
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_starting_location_id" class="control-label">Starting location</label>
-                <div class="controls">
-                    <input type="text" size="30" name="opportunity[starting_location_id]" id="opportunity_starting_location_id" class="input-xlarge">
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_ending_location_id" class="control-label">Ending location</label>
-                <div class="controls">
-                    <input type="text" size="30" name="opportunity[ending_location_id]" id="opportunity_ending_location_id" class="input-xlarge">
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_start_date" class="control-label">Start date</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="text" class="input-small input-append day hasDatepicker" size="10" id="opportunity_start_date_day"><span class="add-on"><i class="icon-calendar"></i></span>
-                    </div>
-                    <span class="timeEntry_wrap"><input type="text" class="input-small time hasTimeEntry" id="opportunity_start_date_time"><span style="display: inline-block; background: url('/img/spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;" class="timeEntry_control"></span></span>
-                    <input type="hidden" name="opportunity[start_date]" maxlength="10" id="opportunity_start_date" class="input-large">
-                </div>
-              </div>
-              
-              <div class="control-group">
-                <label for="opportunity_end_date" class="control-label">End date</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="text" class="input-small input-append day hasDatepicker" maxlength="10" size="10" id="opportunity_end_date_day"><span class="add-on"><i class="icon-calendar"></i></span>
-                    </div>
-                    <span class="timeEntry_wrap"><input type="text" class="input-small time hasTimeEntry" id="opportunity_end_date_time"><span style="display: inline-block; background: url('/img/spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;" class="timeEntry_control"></span></span>
-                    <input type="hidden" name="opportunity[end_date]" maxlength="10" id="opportunity_end_date" class="input-large">
-                </div>
-              </div>
-    
-              <div class="form-actions">
-                <input type="submit" value="Create Opportunity" name="commit" class="btn">
-              </div>
-    
-            </form> 
-        </section>
+      <div class="control-group">
+        <div class="control-label">Name</div>
+        <div class="control-content">{{opportunity.name}}</div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Type</div>
+        <div class="control-content">{{opportunity.type}}</div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Description</div>
+        <div class="control-content">{{opportunity.description}}</div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Date range</div>
+        <div class="control-content">{{opportunity.start_date}} to {{opportunity.end_date}}</div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Start location</div>
+        <div class="control-content">{{opportunity.start_location}}</div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">End location</div>
+        <div class="control-content">{{opportunity.end_location}}</div>
+      </div>
+      <div class="control-group" ng-show="opportunity.quick_winnable">
+        <div class="control-label">Buy now</div>
+        <div class="control-content">{{opportunity.win_it_now_price}}</div>
+      </div>
+
+      <div class="control-group">
+        <div class="control-label">Bid history</div>
+        <div class="control-content">
+          <ul>
+            <li ng-repeat="bid in opportunity.bids">
+              {{bid.initiated_by_name}}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 </div>
-<script>
-        jQuery('.time').timeEntry({spinnerImage: '/img/spinnerDefault.png', spinnerSize: [20, 20, 0]});
-        jQuery('.day').datepicker({ changeMonth: true, changeYear: true, showOtherMonths: true, dateFormat: 'yy-mm-dd' }, "disabled");
-</script>

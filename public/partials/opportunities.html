@@ -12,9 +12,9 @@
               <th>Ends</th>
               <th>Winning Bidder</th>
               <th>Amount</th>
-            </tr>  
+            </tr>
             <tr ng-repeat="opportunity in opportunities" >
-              <td><a href="/opportunity_detail/{{opportunity._id}}">{{opportunity.name}}</a></td>
+              <td><a data-target="#modal" ng-click="setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></td>
               <td>{{opportunity.description}}</td>
               <td>Tomorrow</td>
               <td>None</td>

@@ -49,7 +49,7 @@ Given /^that buyer has a quick winnable auction "(.*?)"$/ do |name|
 end
 
 When /^I choose that bid as the winner$/ do
-  click_on 'My Auctions'
+  click_on 'Opportunities'
   click_on @auction.name
 
   within("#bid_#{@bid.id}") do
