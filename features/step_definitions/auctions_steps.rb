@@ -32,6 +32,18 @@ Given /^a supplier "(.*?)" has bid on that auction$/ do |name|
   @bid = FactoryGirl.create(:bid, :opportunity => @opportunity, :bidder => @supplier)
 end
 
+Given /^I have an auction$/ do
+  @auction = FactoryGirl.create(:auction, buyer: @buyer)
+end
+
+When /^I view my auctions$/ do
+  click_on "Opportunities"
+end
+
+Then /^I should see that auction$/ do
+  find('#modal').should have_content(@auction.name)
+end
+
 Given /^that buyer has a quick winnable auction "(.*?)"$/ do |name|
   @auction = @opportunity = FactoryGirl.create(:quick_winnable_auction, buyer: @buyer, name: name, quick_winnable: true)
 end
@@ -70,14 +82,15 @@ end
 def create_auction(opportunity)
   click_link "New Opportunity"
 
-  fill_in "Bidding ends", with: '10/9/2012' #opportunity.bidding_ends
-  fill_in "End date", with: '10/9/2012' #opportunity.end_date
-  fill_in "Start date", with: '10/9/2012' #opportunity.start_date
   fill_in "Title", with: opportunity.name
   fill_in "Description", with: opportunity.description
+  fill_in "Bidding ends", with: opportunity.bidding_ends
   fill_in "Starting location", with: opportunity.starting_location
   fill_in "Ending location", with: opportunity.ending_location
+  fill_in "Start date", with: opportunity.start_date
+  fill_in "End date", with: opportunity.end_date
   check "Quick Winnable?" if opportunity.quick_winnable?
   check "For Favorites Only?" if opportunity.for_favorites_only?
+
   click_on "Create Opportunity"
 end

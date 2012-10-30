@@ -12,7 +12,7 @@ Given /^(?:I|that buyer) (?:have|has) an auction "(.*?)"$/ do |name|
   @auction = @opportunity = FactoryGirl.create(:auction, buyer: @buyer, name: name)
 end
 
-When /^I bid on that opportunity$/ do 
+When /^I bid on that opportunity$/ do
   do_a_bid
 end
 
@@ -21,6 +21,7 @@ Then /^I should see my bid on that opportunity$/ do
 end
 
 Then /^the buyer should be notified about my bid$/ do
+  sleep(0.1)
   step %{"#{@buyer.email}" should receive an email}
 end
 

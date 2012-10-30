@@ -11,7 +11,7 @@ Feature: A supplier does a quick win
     And that opportunity should have me as the winner
     And bidding should be closed on that opportunity
 
-  @wip @javascript
+  @javascript
   Scenario: A supplier bids below the win it now price
     Given a buyer exists "Boston Bus"
     And I am logged in as a member supplier "New York Bus"
