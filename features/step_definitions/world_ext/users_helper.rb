@@ -1,7 +1,7 @@
 module WorldExt
   module UsersHelper
     def sign_in(user)
-      visit '/index_js'
+      visit '/'
 
 
       fill_in "Email", with: user.email

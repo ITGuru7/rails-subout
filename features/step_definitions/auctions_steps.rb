@@ -70,13 +70,13 @@ end
 def create_auction(opportunity)
   click_link "New Opportunity"
 
+  fill_in "Bidding ends", with: '10/9/2012' #opportunity.bidding_ends
+  fill_in "End date", with: '10/9/2012' #opportunity.end_date
+  fill_in "Start date", with: '10/9/2012' #opportunity.start_date
   fill_in "Title", with: opportunity.name
   fill_in "Description", with: opportunity.description
   fill_in "Starting location", with: opportunity.starting_location
   fill_in "Ending location", with: opportunity.ending_location
-  fill_in "Start date", with: opportunity.start_date
-  fill_in "End date", with: opportunity.end_date
-  fill_in "Bidding ends", with: opportunity.bidding_ends
   check "Quick Winnable?" if opportunity.quick_winnable?
   check "For Favorites Only?" if opportunity.for_favorites_only?
   click_on "Create Opportunity"
