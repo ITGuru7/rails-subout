@@ -7,7 +7,9 @@ Subout::Application.routes.draw do
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
       resources :tokens
-      resources :auctions
+      resources :auctions do
+        put :select_winner, :on => :member
+      end
       resources :events
       resources :companies
       resources :bids
@@ -28,9 +30,7 @@ Subout::Application.routes.draw do
     resources :bids
   end
 
-  resources :auctions do
-    put :select_winner, on: :member
-  end
+  resources :auctions
 
   resources :favorite_invitations do
     collection do

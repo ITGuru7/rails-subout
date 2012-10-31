@@ -1,6 +1,6 @@
 Feature: A buyer chooses a winning bid
 
-  @wip @javascript
+  @javascript
   Scenario:
     Given I am signed in as a buyer "Boston Bus"
     And I have an auction "Boston to New York Charter"

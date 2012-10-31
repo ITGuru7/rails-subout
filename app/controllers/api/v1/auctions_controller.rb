@@ -14,7 +14,14 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   end
 
   def show
-    @auction = Opportunity.find(params[:id])
+    @auction = current_company.auctions.find(params[:id])
     respond_with(@auction)
+  end
+  
+  def select_winner
+    @auction = current_company.auctions.find(params[:id])
+    @auction.win!(params[:bid_id])
+
+    head :ok
   end
 end

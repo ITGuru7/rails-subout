@@ -67,5 +67,25 @@ class Opportunity
   def lowest_bid_amount
     bids.lowest_amount
   end
+  
+  def winner_name
+    if winning_bid_id.present?
+      winning_bid.bidder.name
+    end
+  end
+  
+  def winning_amount
+    winning_bid.try(:amount)
+  end
+  
+  def as_json(options={})
+    if options[:methods].present?
+      options[:methods] = options[:methods] + [:winner_name, :winning_amount]
+    else
+      options[:methods] = [:winner_name, :winning_amount]
+    end
+    
+    super
+  end
 end
 

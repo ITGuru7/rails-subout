@@ -49,24 +49,25 @@ Given /^that buyer has a quick winnable auction "(.*?)"$/ do |name|
 end
 
 When /^I choose that bid as the winner$/ do
-  click_on 'Opportunities'
-  within("#modal") do
-    click_on @auction.name
-  end
+  go_to_opportunity_detail
 
   within("#bid_#{@bid.id}") do
+    page.should have_content("Select as Winner")
     click_on "Select as Winner"
   end
 end
 
 Then /^that supplier should be notified that they won$/ do
+  sleep(1)
   step %{"#{@supplier.email}" should receive an email with subject /You won the bidding on #{@auction.name}/}
 end
 
 Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner)$/ do
+  go_to_opportunity_detail
+  
   page.should have_content("Won By: #{@supplier.name}")
   page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
-  page.should_not have_content("Bid Now")
+  page.should have_xpath("//*[text()='Select as Winner']", :visible => false)
 end
 
 Then /^bidding should be closed on that (?:auction|opportunity)$/ do
@@ -79,6 +80,15 @@ end
 
 def last_opportunity
   Opportunity.last
+end
+
+def go_to_opportunity_detail
+  click_on 'Opportunities'
+  
+  sleep(1)
+  within("#modal") do
+    click_on @auction.name
+  end
 end
 
 def create_auction(opportunity)
