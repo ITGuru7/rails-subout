@@ -81,7 +81,7 @@ Then /^bidding should be closed on that (?:auction|opportunity)$/ do
 end
 
 Then /^the buyer should be notified that I won that auction$/ do
-  sleep(1)
+  page.should have_content("Won By #{@supplier.name}")
   step %{"#{@buyer.email}" should receive an email with subject /#{@supplier.name} has won the bidding on #{@auction.name}/}
 end
 

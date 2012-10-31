@@ -81,13 +81,24 @@ OpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   });
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag) {
+DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
   $scope.filters = Filter.query();
   $scope.tags = Tag.query();
   $scope.query = "";
   $scope.filter = null;
   $scope.tag = null;
   $scope.opportunity = null;
+  $scope.winOpportunityNow = function(opportunity) {
+    var bid;
+    bid = {
+      amount: opportunity.win_it_now_price
+    };
+    return Bid.save({
+      bid: bid,
+      api_token: $rootScope.user.api_token,
+      opportunityId: opportunity._id
+    });
+  };
   $scope.events = Event.query({
     api_token: $rootScope.user.api_token
   }, function(data) {

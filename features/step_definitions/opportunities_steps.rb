@@ -26,7 +26,6 @@ Then /^the buyer should be notified about my bid$/ do
 end
 
 When /^I view that opportunity$/ do
-  click_on "Available Opportunities"
   click_on @opportunity.name
 end
 
@@ -35,7 +34,7 @@ Then /^I should see the win it now amount$/ do
 end
 
 When /^I do a quick win on that opportunity$/ do
-  click_on "Win it now"
+  click_on "Win Now for #{@opportunity.win_it_now_price}"
 end
 
 When /^I bid on that opportunity with amount below the win it now price$/ do

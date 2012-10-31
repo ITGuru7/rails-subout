@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="span5 actions">
                                    <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
-                                   <a ui-if="opportunity.quick_winnable" href='#'>Win Now for {{opportunity.win_it_now_price }}</a> *
+                                   <a ui-if="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now for {{opportunity.win_it_now_price }}</a> *
                                    <a href='#'>Watch</a>
                                  </div><!--.actions-->
                               </div><!--.row-fluid-->

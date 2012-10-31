@@ -17,6 +17,7 @@ class Api::V1::BidsController < Api::V1::BaseController
     end
 
     Notifier.delay.new_bid(bid.id)
+
     respond_with(bid.opportunity, bid)
   end
 
