@@ -64,9 +64,8 @@ Then /^that supplier should be notified that they won$/ do
 end
 
 Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner)$/ do
-  page.should have_content("Won By: #{@supplier.name}")
-  page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
-  page.should_not have_content("Bid Now")
+  page.should have_content("Won By #{@supplier.name}")
+  page.should have_content("Winning Bid Amount #{@auction.reload.winning_bid.amount}")
 end
 
 Then /^bidding should be closed on that (?:auction|opportunity)$/ do
@@ -74,7 +73,7 @@ Then /^bidding should be closed on that (?:auction|opportunity)$/ do
 end
 
 Then /^the buyer should be notified that I won that auction$/ do
-  sleep(0.1)
+  sleep(1)
   step %{"#{@buyer.email}" should receive an email with subject /#{@supplier.name} has won the bidding on #{@auction.name}/}
 end
 

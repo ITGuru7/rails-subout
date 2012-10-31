@@ -2,7 +2,7 @@ class OpportunityObserver < Mongoid::Observer
   observe :opportunity
 
   def after_create(opportunity)
-    Event.create(description: opportunity.description, company_id: opportunity.buyer_id, eventable: opportunity)
+    Event.create(description: opportunity.description, verb: 'created', company_id: opportunity.buyer_id, eventable: opportunity)
 
     #TODO: commented this out till we figure out how to deal with it without hanging up server every time opportunity changes
     #Company.all.each do |company|

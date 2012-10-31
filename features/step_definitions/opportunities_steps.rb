@@ -46,7 +46,6 @@ Then /^I should win that opportunity automatically$/ do
   steps %Q{
     Then the buyer should be notified that I won that auction
     And that opportunity should have me as the winner
-    And bidding should be closed on that opportunity
   }
 end
 
