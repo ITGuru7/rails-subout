@@ -59,5 +59,4 @@ def do_a_bid(amount = '100.00')
   click_on "Bid Now"
   page.should have_content(amount)
   @bid = Bid.last
-  binding.pry
 end

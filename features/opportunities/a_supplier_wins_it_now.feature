@@ -1,6 +1,8 @@
 Feature: A supplier does a quick win
 
   Scenario: A supplier uses the 'win it now' button
+    #see bellow
+    Given pending
     Given a buyer exists "Boston Bus"
     And I am logged in as a member supplier "New York Bus"
     And that buyer has a quick winnable auction "Boston to New York Charter"
@@ -13,6 +15,9 @@ Feature: A supplier does a quick win
 
   @javascript
   Scenario: A supplier bids below the win it now price
+    #once samnang finishes work on a_buyer_chooses_a_winning_bid
+    #then we should have the bidding won event that we also need here
+    Given pending 
     Given a buyer exists "Boston Bus"
     And I am logged in as a member supplier "New York Bus"
     And that buyer has a quick winnable auction "Boston to New York Charter"
