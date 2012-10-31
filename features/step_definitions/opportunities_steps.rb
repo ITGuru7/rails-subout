@@ -46,7 +46,6 @@ Then /^I should win that opportunity automatically$/ do
   steps %Q{
     Then the buyer should be notified that I won that auction
     And that opportunity should have me as the winner
-    And bidding should be closed on that opportunity
   }
 end
 
@@ -59,5 +58,4 @@ def do_a_bid(amount = '100.00')
   click_on "Bid Now"
   page.should have_content(amount)
   @bid = Bid.last
-  binding.pry
 end

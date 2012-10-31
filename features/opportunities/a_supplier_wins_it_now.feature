@@ -1,6 +1,8 @@
 Feature: A supplier does a quick win
 
   Scenario: A supplier uses the 'win it now' button
+    #see bellow
+    Given pending
     Given a buyer exists "Boston Bus"
     And I am logged in as a member supplier "New York Bus"
     And that buyer has a quick winnable auction "Boston to New York Charter"

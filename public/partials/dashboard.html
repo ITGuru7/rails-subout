@@ -57,7 +57,27 @@
                 <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
 
-                      <div id="opportunity_{{opportunity._id}}" ui-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable">
+                      <div ui-if="event.type=='opportunity_bidding_won'" ng-init="opportunity=event.eventable">
+                        <div class="row-fluid">
+                          <div class="span1"><img ng-src="/img/events/bidding_won.png"></div>
+                          <div class="span11">
+                            <div class="left">
+                              <div class="row-fluid">
+                                <div class="span8">
+                                  <h3 class='title'> <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a> </h3>
+                                  <div class='buyer'>Won By 
+                                    <span class='buyer-name'>{{event.actor.name}}</span>
+                                    <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
+                                  </div>
+                                </div>
+                              </div><!--.row-fluid-->
+                              <div class='description'>Winning Bid Amount {{opportunity.winning_bid_amount}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="opportunity_{{opportunity._id}}" ui-if="event.type=='opportunity_created'" ng-init="opportunity=event.eventable">
                         <div class="row-fluid">
                           <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
                           <div class="span11">

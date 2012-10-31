@@ -40,12 +40,18 @@ class Opportunity
     bid = self.bids.find(bid_id)
     update_attributes(bidding_done: true, winning_bid_id: bid.id)
 
+    Event.create(:company => bid.bidder, :verb => 'bidding_won', :description => "won bidding", :eventable => self)
+
     Notifier.delay.won_auction_to_supplier(self.id)
     Notifier.delay.won_auction_to_buyer(self.id)
   end
 
   def winning_bid
     bids.where(id: winning_bid_id).first
+  end
+
+  def winning_bid_amount
+    winning_bid.try(:amount)
   end
 
   def won?

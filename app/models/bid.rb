@@ -28,10 +28,6 @@ class Bid
     by_amount.first.try(:amount)
   end
 
-  def type
-    'Bid'
-  end
-
   def opportunity_bidding_ends
     opportunity.bidding_ends
   end

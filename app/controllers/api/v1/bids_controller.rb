@@ -8,7 +8,6 @@ class Api::V1::BidsController < Api::V1::BaseController
   end
 
   def create
-    binding.pry
     bid = opportunity.bids.build(params[:bid])
     bid.bidder = current_company
     bid.save!
