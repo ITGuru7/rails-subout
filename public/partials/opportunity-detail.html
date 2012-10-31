@@ -4,6 +4,11 @@
             <h3>Opportunity Detail</h3>
     </div>
     <div class="modal-body">
+      <div class="control-group" ng-show="opportunity.winning_bid_id">
+        <div class="control-label">Won By: {{opportunity.winner_name}}</div>
+        <div class="control-label">Winning Bid Amount: {{opportunity.winning_amount}}</div>
+        <div class="control-label">(Closed)</div>
+      </div>
       <div class="control-group">
         <div class="control-label">Name</div>
         <div class="control-content">{{opportunity.name}}</div>
@@ -39,7 +44,7 @@
           <ul>
             <li id="bid_{{bid._id}}" ng-repeat="bid in bids">
               {{bid.amount}}
-              <a ng-click="selectWinner(bid)">Select as Winner</a>
+              <a ng-hide="opportunity.winning_bid_id" ng-click="selectWinner(bid)">Select as Winner</a>
             </li>
           </ul>
         </div>

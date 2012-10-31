@@ -58,7 +58,7 @@ When /^I choose that bid as the winner$/ do
 end
 
 Then /^that supplier should be notified that they won$/ do
-  sleep(1)
+  page.should have_content("Won By #{@supplier.name}")
   step %{"#{@supplier.email}" should receive an email with subject /You won the bidding on #{@auction.name}/}
 end
 

@@ -169,8 +169,11 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportun
   return $scope.selectWinner = function(bid) {
     return Opportunity.select_winner({
       opportunityId: $scope.opportunity._id,
+      action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.user.api_token
+    }, {}, function() {
+      return jQuery("#modal").modal("hide");
     });
   };
 };
@@ -277,11 +280,10 @@ var api_path;
 api_path = "/api/v1";
 
 angular.module("suboutServices", ["ngResource"]).factory("Opportunity", function($resource) {
-  return $resource("" + api_path + "/auctions/:opportunityId/:method", {}, {
+  return $resource("" + api_path + "/auctions/:opportunityId/:action", {
+    opportunityId: '@opportunityId'
+  }, {
     select_winner: {
-      params: {
-        method: "select_winner"
-      },
       method: "PUT"
     }
   });

@@ -14,6 +14,7 @@ gem 'sidekiq'
 gem 'rails_admin'
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'kiqstand'
 
 # Gems used only for assets and not required
 # in production environments by default.

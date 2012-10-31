@@ -38,12 +38,13 @@ class Opportunity
 
   def win!(bid_id)
     bid = self.bids.find(bid_id)
-    update_attributes(bidding_done: true, winning_bid_id: bid.id)
 
-    Event.create(:company => bid.bidder, :verb => 'bidding_won', :description => "won bidding", :eventable => self)
+    update_attributes(bidding_done: true, winning_bid_id: bid.id)
 
     Notifier.delay.won_auction_to_supplier(self.id)
     Notifier.delay.won_auction_to_buyer(self.id)
+
+    Event.create(:company => bid.bidder, :verb => 'bidding_won', :description => "won bidding", :eventable => self)
   end
 
   def winning_bid
