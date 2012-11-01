@@ -27,7 +27,7 @@ angular.element(document).ready(function($http, $templateCache) {
 });
 var AppCtrl, BidNewCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SignInCtrl;
 
-AppCtrl = function($scope, $rootScope, $location) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity) {
   var _ref;
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0) && $location.path() !== "sign_in") {
     $location.path("sign_in");
@@ -38,8 +38,14 @@ AppCtrl = function($scope, $rootScope, $location) {
   $rootScope.signOut = function() {
     return window.location.reload();
   };
-  return $rootScope.setOpportunity = function(opportunity) {
+  $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = opportunity;
+  };
+  return $rootScope.setOpportunityViaId = function(opportunity_id) {
+    return $rootScope.opportunity = Opportunity.get({
+      api_token: $rootScope.user.api_token,
+      opportunityId: opportunity_id
+    });
   };
 };
 

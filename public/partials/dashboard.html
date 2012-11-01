@@ -64,7 +64,7 @@
                             <div class="left">
                               <div class="row-fluid">
                                 <div class="span8">
-                                  <h3 class='title'> <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a> </h3>
+                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
                                   <div class='buyer'>Won By 
                                     <span class='buyer-name'>{{event.actor.name}}</span>
                                     <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
@@ -84,7 +84,7 @@
                             <div class="left">
                               <div class="row-fluid">
                                 <div class="span8">
-                                  <h3 class='title'> <a href="/opportunities/{{opportunity._id}}">{{opportunity.name}}</a> </h3>
+                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
                                   <div class='buyer'>Offered By 
                                     <span class='buyer-name'>{{event.initiated_by_name}}</span>
                                     <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
@@ -121,7 +121,7 @@
                             <div class="left">
                               <div class="row-fluid">
                                 <div class="span8">
-                                  <h3 class='title'> <a href="/opportunities/{{bid.opportunity_id}}">{{bid.opportunity_title}}</a> </h3>
+                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
                                   <div class='bidder'>
                                     <span class='bidder-name'>{{event.initiated_by_name}}</span>
                                     bid
