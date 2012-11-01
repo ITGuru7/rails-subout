@@ -9,5 +9,4 @@ class FavoritesController < ApplicationController
     current_company.remove_favorite_supplier!(@supplier)
     redirect_to favorites_path, :notice => 'Favorite supplier removed'
   end
-
 end

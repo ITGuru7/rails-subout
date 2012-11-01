@@ -43,3 +43,7 @@ def sign_in_user(user = FactoryGirl.create(:user))
   @current_company = user.company
   @current_user = user
 end
+
+def parse_json(json)
+  JSON.parse(json)
+end

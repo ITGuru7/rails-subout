@@ -2,23 +2,17 @@ class BidObserver < Mongoid::Observer
   observe :bid
   
   def after_save(bid)
-    Rails.logger.info "Observing bid: #{bid.inspect} "
- 
-    e = Event.new
-    # Build the description
-    bidder = bid.bidder
-    opportunity = bid.opportunity
-    e.description = "#{bidder.name} bid $#{bid.amount} on #{opportunity.name}"
-    e.eventable = bid    
-    e.company_id = bid.bidder_id
-    e.save
+    Event.create do |e|
+      bidder = bid.bidder
+      opportunity = bid.opportunity
 
-    # Company.all.each do |company| 
-      # if company.interested_in_event?(e) 
-        # Rails.logger.info "Telling company to send event : #{e.inspect}"
-        # company.send_event(e, bid) 
-      # end
-    # end
+      e.description = "#{bidder.name} bid $#{bid.amount} on #{opportunity.name}"
+      e.eventable = bid 
+      e.company_id = bid.bidder_id
+    end
   end
 
+  def after_create(bid)
+    Notifier.delay.new_bid(bid.id)
+  end
 end

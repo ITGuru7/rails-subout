@@ -38,6 +38,7 @@ describe FavoriteInvitationsController do
 
   describe "GET 'accept'" do
     it "adds the supplier to the buyer's list of favorites" do
+      pending
       invitation = FactoryGirl.create(:favorite_invitation)
 
       get :accept, :id => invitation.token

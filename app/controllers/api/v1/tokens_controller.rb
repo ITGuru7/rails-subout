@@ -1,6 +1,5 @@
 class Api::V1::TokensController < Api::V1::BaseController
   def create
-    logger.info params
     user = User.where(:email => params[:email]).first
     if user && user.valid_password?(params[:password])
       render :json => {

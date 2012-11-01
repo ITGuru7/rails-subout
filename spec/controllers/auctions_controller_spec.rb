@@ -49,6 +49,7 @@ describe AuctionsController do
 
   describe 'PUT select_winner' do
     it 'records the winning bid' do
+      pending
       auction = FactoryGirl.create(:auction)
       bid_id = '1'
 

@@ -12,15 +12,8 @@ class Api::V1::BidsController < Api::V1::BaseController
     bid.bidder = current_company
     bid.save!
 
-    if opportunity.quick_winnable && opportunity.win_it_now_price >= bid.amount
-      opportunity.win!(bid)
-    end
-
-    Notifier.delay.new_bid(bid.id)
-
     respond_with(bid.opportunity, bid)
   end
-
 
   private
 
