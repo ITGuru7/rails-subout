@@ -23,8 +23,7 @@
 
   <body ng-controller="AppCtrl">
     <div id="pageWrapper" class="container">
-      <div ng-include="'partials/header.html'"></div>
-      <div id="content" ng-view="content"></div>
+      <div ng-view="content"></div>
       <div id="modal" class="modal hide fade">
          <div ng-include="modal"></div>
       </div>

@@ -1,148 +1,183 @@
-<div id="dashboard">
-      <div class="row-fluid">
-        <div class="span4">
-            <section id="company" class="well">
-                <section class="content">
-                    <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{'img/company/' + company._id + '.png'}}"></div>
-                    <div id="company_links">
-                        <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
-                        | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
-                        | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
+<div id="topbar" class="container">
+    <div class="inner">
+        <span class='topbar-left'>
+            <a href="#" id="btn_home"><img src="/img/toolbar-back.png"></a>
+            <a href="#" id="btn_info"><img src="/img/toolbar-next.png"></a>
+            <a href="#modal" id="btn_support" data-toggle="modal" ng-click="setModal('partials/help.html')"><img title="Support" src="/img/toolbar-close.png"></a>
+        </span>
+        <span class='topbar-right pull-right'>
+          <a href="#modal" class="not-button" data-toggle="modal" ng-click="setModal('partials/settings.html')">Settings</a>
+         &nbsp; <a href="" class="btn" ng-click="signOut();">Sign Out</a>
+        </span>
+    </div>
+</div>
+
+<header id="header">
+    <div class="inner">
+        <div class="row-fluid">
+            <div class="span8">
+                <div id="logo"><a href="#/dashboard"><img src="/img/logo.png"></a></div>
+            </div>
+            <div class="span4">
+                <nav id="navigator" >
+                    <div id="search">
+                        <input class="span11" ng-model="query" placeholder="Search listings for..."/>
+                        <div class="icon-search"></div>
                     </div>
-                </section>
-            </section>
-            <section id="filters" class="well">
-                <section class="title"><h5>Filters</h5></section>
-                <section class="content">
-                    <ul>
-                        <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}"  ng-click="setFilter(filter)">
-                            <div class="filter-icon"><img ng-src="{{filter.icon}}" /></div>
-                            <div class="filter-name"><div class="name">{{filter.name}}</div></div>
-                        </li>
-                    </ul>
-                </section>
-            </section>
-            <section id="tags" class="well">
-                <section class="title"><h5>Tags</h5></section>
-                <section class="content">
-                    <ul>
-                        <li ng-repeat="tag in tags" class="tag" ng-class="{label: tag.active==true}"  title="{{tag.name}}" ng-click="setTag(tag)">
-                            {{tag.name}}
-                        </li>
-                    </ul>
-                </section>
-            </section>
+                </nav>
+                <!--nav-->
+            </div>   
         </div>
-        <div class="span8">
+    </div>
+</header>
 
-           <section id="activities" class="well">
-
-              <div id="toolbar">
-                    <div class="row-fluid">
-                        <span>
-                          <a href='#'>Today</a> |
-                          <a href='#'>This Week</a> |
-                          <a href='#'>Older</a>
-                        </span>
-                        <span class='pull-right'>
-                          <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
-                        </div>
-                    </div>
-              </div>
-
-              <table class="table table-striped clearfix">
-                <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
-                    <td>
-
-                      <div ui-if="event.type=='opportunity_bidding_won'" ng-init="opportunity=event.eventable">
-                        <div class="row-fluid">
-                          <div class="span1"><img ng-src="/img/events/bidding_won.png"></div>
-                          <div class="span11">
-                            <div class="left">
-                              <div class="row-fluid">
-                                <div class="span8">
-                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
-                                  <div class='buyer'>Won By 
-                                    <span class='buyer-name'>{{event.actor.name}}</span>
-                                    <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
-                                  </div>
-                                </div>
-                              </div><!--.row-fluid-->
-                              <div class='description'>Winning Bid Amount {{opportunity.winning_bid_amount}}</div>
-                            </div>
-                          </div>
-                        </div>
+<div id="content">
+  <div id="dashboard">
+        <div class="row-fluid">
+          <div class="span4">
+              <section id="company" class="well">
+                  <section class="content">
+                      <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{'img/company/' + company._id + '.png'}}"></div>
+                      <div id="company_links">
+                          <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
+                          | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
+                          | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
                       </div>
+                  </section>
+              </section>
+              <section id="filters" class="well">
+                  <section class="title"><h5>Filters</h5></section>
+                  <section class="content">
+                      <ul>
+                          <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}"  ng-click="setFilter(filter)">
+                              <div class="filter-icon"><img ng-src="{{filter.icon}}" /></div>
+                              <div class="filter-name"><div class="name">{{filter.name}}</div></div>
+                          </li>
+                      </ul>
+                  </section>
+              </section>
+              <section id="tags" class="well">
+                  <section class="title"><h5>Tags</h5></section>
+                  <section class="content">
+                      <ul>
+                          <li ng-repeat="tag in tags" class="tag" ng-class="{label: tag.active==true}"  title="{{tag.name}}" ng-click="setTag(tag)">
+                              {{tag.name}}
+                          </li>
+                      </ul>
+                  </section>
+              </section>
+          </div>
+          <div class="span8">
 
-                      <div id="opportunity_{{opportunity._id}}" ui-if="event.type=='opportunity_created'" ng-init="opportunity=event.eventable">
-                        <div class="row-fluid">
-                          <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
-                          <div class="span11">
-                            <div class="left">
-                              <div class="row-fluid">
-                                <div class="span8">
-                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
-                                  <div class='buyer'>Offered By 
-                                    <span class='buyer-name'>{{event.initiated_by_name}}</span>
-                                    <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
+             <section id="activities" class="well">
+
+                <div id="toolbar">
+                      <div class="row-fluid">
+                          <span>
+                            <a href='#'>Today</a> |
+                            <a href='#'>This Week</a> |
+                            <a href='#'>Older</a>
+                          </span>
+                          <span class='pull-right'>
+                            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
+                          </span>
+                      </div>
+                </div>
+
+                <table class="table">
+                  <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
+                      <td>
+
+                        <div ui-if="event.type=='opportunity_bidding_won'" ng-init="opportunity=event.eventable">
+                          <div class="row-fluid">
+                            <div class="span1"><img ng-src="/img/events/bidding_won.png"></div>
+                            <div class="span11">
+                              <div class="left">
+                                <div class="row-fluid">
+                                  <div class="span8">
+                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
+                                    <div class='buyer'>Won By 
+                                      <span class='buyer-name'>{{event.actor.name}}</span>
+                                      <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
+                                    </div>
                                   </div>
-                                </div>
-                                <div class="span4">
-                                  <div class='bidding-ends-on'>
-                                    Ending <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
-                                  </div>
-                                </div>
+                                </div><!--.row-fluid-->
+                                <div class='description'>Winning Bid Amount {{opportunity.winning_bid_amount}}</div>
                               </div>
-                              <div class='description'>{{opportunity.description}}</div>
-                              <div class="row-fluid">
-                                <div class="span7 data-items">
-                                  #bids: <span class='data'>{{opportunity.bids_count}}</span>, 
-                                  Latest Bid: <span class='data'>{{opportunity.latest_bid_amount}}</span>,
-                                  Lowest Bid: <span class='data'>{{opportunity.lowest_bid_amount}}</span>
-                                </div>
-                                <div class="span5 actions">
-                                   <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
-                                   <a ui-if="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now for {{opportunity.win_it_now_price }}</a> *
-                                   <a href='#'>Watch</a>
-                                 </div><!--.actions-->
-                              </div><!--.row-fluid-->
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div ui-if="event.eventable_type=='Bid'" ng-init="bid=event.eventable">
-                        <div class="row-fluid">
-                          <div class="span1"><img ng-src="/img/filters/bid.png"></div>
-                          <div class="span11">
-                            <div class="left">
-                              <div class="row-fluid">
-                                <div class="span8">
-                                  <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
-                                  <div class='bidder'>
-                                    <span class='bidder-name'>{{event.initiated_by_name}}</span>
-                                    bid
-                                    <span class='bid-amount'>${{bid.formatted_amount}}</span>
-                                    <span class='created-at timeago' relative-time title="{{bid.created_at}}">{{bid.created_at|date}}</span>
+                        <div id="opportunity_{{opportunity._id}}" ui-if="event.type=='opportunity_created'" ng-init="opportunity=event.eventable">
+                          <div class="row-fluid">
+                            <div class="span1"><img ng-src="/img/filters/{{opportunity.type.replace(' ', '-') | lowercase }}.png"></div>
+                            <div class="span11">
+                              <div class="left">
+                                <div >
+                                  <div class="span8">
+                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
+                                    <div class='buyer'>Offered By 
+                                      <span class='buyer-name'>{{event.initiated_by_name}}</span>
+                                      <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
+                                    </div>
+                                  </div>
+                                  <div class="span4">
+                                    <div class='bidding-ends-on'>
+                                      Ending <time class="timeago" relative-time datetime="{{opportunity.bidding_ends}}">{{opportunity.bidding_ends|date}}</time>
+                                    </div>
                                   </div>
                                 </div>
-                                <div class="span4">
-                                  <div class='bidding-ends-on'>
-                                    Ending <time class="timeago" relative-time datetime="{{bid.opportunity_bidding_ends}}">{{bid.opportunity_bidding_ends|date}}</time>
+                                <div class='description'>{{opportunity.description}}</div>
+                                <div class="row-fluid">
+                                  <div class="span6 data-items">
+                                    #bids: <span class='data'>{{opportunity.bids_count}}</span>, 
+                                    Latest Bid: <span class='data'>{{opportunity.latest_bid_amount}}</span>,
+                                    Lowest Bid: <span class='data'>{{opportunity.lowest_bid_amount}}</span>
                                   </div>
-                                </div>
-                              </div><!--.row-fluid-->
+                                  <div class="span6 actions">
+                                     <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a> *
+                                     <a ui-if="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now for {{opportunity.win_it_now_price }}</a> *
+                                     <a href='#'>Watch</a>
+                                   </div><!--.actions-->
+                                </div><!--.row-fluid-->
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                    </td>
-                </tr>
-              </table>
+                        <div ui-if="event.eventable_type=='Bid'" ng-init="bid=event.eventable">
+                          <div class="row-fluid">
+                            <div class="span1"><img ng-src="/img/filters/bid.png"></div>
+                            <div class="span11">
+                              <div class="left">
+                                <div class="row-fluid">
+                                  <div class="span8">
+                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
+                                    <div class='bidder'>
+                                      <span class='bidder-name'>{{event.initiated_by_name}}</span>
+                                      bid
+                                      <span class='bid-amount'>${{bid.formatted_amount}}</span>
+                                      <span class='created-at timeago' relative-time title="{{bid.created_at}}">{{bid.created_at|date}}</span>
+                                    </div>
+                                  </div>
+                                  <div class="span4">
+                                    <div class='bidding-ends-on'>
+                                      Ending <time class="timeago" relative-time datetime="{{bid.opportunity_bidding_ends}}">{{bid.opportunity_bidding_ends|date}}</time>
+                                    </div>
+                                  </div>
+                                </div><!--.row-fluid-->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-          </section>
+                      </td>
+                  </tr>
+                </table>
 
+            </section>
+
+          </div>
         </div>
-      </div>
+  </div>
 </div>
