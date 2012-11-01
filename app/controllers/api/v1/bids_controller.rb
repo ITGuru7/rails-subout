@@ -1,10 +1,10 @@
 class Api::V1::BidsController < Api::V1::BaseController
   def index
-    respond_with opportunity.bids
-  end
-
-  def my
-    respond_with(current_company.bids, :methods => :opportunity_title)
+    if params[:opportunity_id].present?
+      respond_with opportunity.bids
+    else
+      respond_with(current_company.bids, :methods => :opportunity_title)
+    end
   end
 
   def create
