@@ -1628,8 +1628,8 @@ select:focus:required:invalid:focus {
 }
 .input-append .active,
 .input-prepend .active {
-  background-color: #a9dba9;
-  border-color: #46a546;
+  background-color: #a7e18b;
+  border-color: #54a72c;
 }
 .input-prepend .add-on,
 .input-prepend .btn {
@@ -7050,4 +7050,210 @@ input[type="color"],
   margin-bottom: 20px;
   background-color: #FFFFFF;
   border: 1px solid #aaa;
+}
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+ul li {
+  list-style: none;
+}
+a,
+a:active {
+  outline: none;
+}
+h5 {
+  text-transform: uppercase;
+  font-size: 1.1em;
+  color: #686552;
+}
+body {
+  background: #bfbfbf;
+}
+#pageWrapper {
+  position: relative;
+  background: #FFFFFF;
+}
+.inner {
+  padding: 0px 3%;
+}
+#topbar {
+  background: #54a72c;
+  /*#54a72c;*/
+
+  vertical-align: middle;
+  height: 50px;
+  line-height: 50px;
+}
+#topbar span.topbar-right a.not-button {
+  color: #eeeeee;
+}
+#toolbar {
+  margin-bottom: 10px;
+}
+#btn_back,
+#btn_next {
+  margin-left: 20px;
+}
+#btn_close {
+  margin-left: 35px;
+}
+#search {
+  text-align: center;
+  border: 1px solid #000000;
+  height: 30px;
+  background: #FFFFFF;
+  text-align: center;
+  line-height: 30px;
+}
+#search img {
+  margin: 3px;
+}
+#search input {
+  float: left;
+  height: 100%;
+  outline: none;
+  border: none;
+}
+#header {
+  margin: 3em 0px;
+}
+#navigator {
+  text-align: right;
+  font-size: 1.1em;
+  margin-top: 3em;
+}
+#navigator a {
+  border-right: 1px solid #333;
+  padding: 0px 0.5em;
+  text-decoration: none;
+}
+#navigator a:last-child {
+  border: none;
+}
+#navigator a:hover {
+  color: #85c265;
+}
+#content {
+  padding: 0px 40px;
+}
+#sign-in-form {
+  max-width: 560px;
+  margin: 0px auto;
+  margin-bottom: 40px;
+}
+#dashboard section.title {
+  margin-bottom: 10px;
+}
+#dashboard #company #company_name {
+  text-align: center;
+}
+#dashboard #company #company_logo {
+  text-align: center;
+  padding: 10px;
+}
+#activities {
+  border: 4px solid #555555;
+}
+#activities .table-striped tbody tr:nth-child(2n+1) td {
+  background-color: #d8e7d0;
+}
+#activities .table td {
+  padding: 10px;
+  font-size: 0.9em;
+}
+#activities .opportunity-title {
+  color: #75b952;
+}
+#filters .filter {
+  text-align: left;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+#filters .filter .color {
+  width: 2em;
+  height: 2em;
+}
+#filters .filter .status {
+  background: url(../img/filters/none-active.png) no-repeat left center;
+  width: 2em;
+  height: 2em;
+}
+#filters .filter .name {
+  line-height: 2em;
+}
+#filters .filter .filter-icon {
+  width: 12%;
+  float: left;
+  overflow: hidden;
+  margin-right: 3%;
+}
+#filters .filter .filter-icon img {
+  width: 100%;
+}
+#filters .filter.active .status {
+  background: url(../img/filters/active.png) no-repeat left center;
+}
+#filters .filter.noneactive {
+  background: none!important;
+}
+#tags .tag {
+  margin-bottom: 0.3em;
+  cursor: pointer;
+}
+#company.well {
+  padding: 10px;
+}
+div#company_links {
+  text-align: center;
+}
+div.created-at {
+  text-align: right;
+  font-size: .8em;
+  color: #666;
+}
+.event h3.title {
+  margin: 0px;
+  padding: 0px;
+  line-height: 1em;
+}
+.event .left {
+  margin-left: 10px;
+}
+.event div.description {
+  margin: .5em;
+}
+div.buyer {
+  font-size: .8em;
+  color: gray;
+}
+div.buyer span.buyer-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+div.bidding-ends-on {
+  font-size: .9em;
+  font-weight: bold;
+  text-align: right;
+}
+div.bidder {
+  font-size: .8em;
+  color: gray;
+}
+div.bidder span.bidder-name {
+  font-weight: bold;
+  text-decoration: underline;
+}
+span.bid-amount {
+  font-weight: bold;
+}
+tr.event div.actions {
+  text-align: right;
+}
+div.data-items {
+  font-size: .8em;
+  color: gray;
+}
+div.data-items span.data {
+  font-weight: bold;
 }

@@ -1,10 +1,14 @@
 <div id="topbar" class="container">
     <div class="inner">
-        <div id="navitation">
-            <a href="#" id="btn_back"><img src="/img/toolbar-back.png"></a>
-            <a href="#" id="btn_next"><img src="/img/toolbar-next.png"></a>
-            <a href="#" id="btn_close"><img src="/img/toolbar-close.png"></a>
-        </div>
+        <span class='topbar-left'>
+            <a href="#" id="btn_home"><img src="/img/toolbar-back.png"></a>
+            <a href="#" id="btn_info"><img src="/img/toolbar-next.png"></a>
+            <a href="#modal" id="btn_support" data-toggle="modal" ng-click="setModal('partials/help.html')"><img title="Support" src="/img/toolbar-close.png"></a>
+        </span>
+        <span class='topbar-right pull-right'>
+          <a href="#modal" class="not-button" data-toggle="modal" ng-click="setModal('partials/settings.html')">Settings</a>
+         &nbsp; <a href="" class="btn" ng-click="signOut();">Sign Out</a>
+        </span>
     </div>
 </div>
 <header id="header">
@@ -14,11 +18,11 @@
                 <div id="logo"><a href="#/dashboard"><img src="/img/logo.png"></a></div>
             </div>
             <div class="span6">
-                <nav id="navigator" ng:show="user.authorized">
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/settings.html')">Settings</a>
-                    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/help.html')">Help</a>
-                    <a href="" ng-click="signOut();">Sign Out</a>
+                <nav id="navigator">
+                    <div id="search">
+                        <input class="span11" ng-model="query" placeholder="Search listings for..."/>
+                        <div class="icon-search"></div>
+                    </div>
                 </nav>
                 <!--nav-->
             </div>   

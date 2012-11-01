@@ -39,21 +39,18 @@
 
               <div id="toolbar">
                     <div class="row-fluid">
-                        <div class="span3">
+                        <span>
                           <a href='#'>Today</a> |
                           <a href='#'>This Week</a> |
                           <a href='#'>Older</a>
-                        </div>
-                        <div class="span9">
-                            <div id="search">
-                                <input class="span11" ng-model="query" />
-                                <a href="#search" class="span1"><img src="/img/toolbar-search.png"></a>
-                            </div>
+                        </span>
+                        <span class='pull-right'>
+                          <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
                         </div>
                     </div>
               </div>
 
-              <table class="table table-striped">
+              <table class="table table-striped clearfix">
                 <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
                     <td>
 
