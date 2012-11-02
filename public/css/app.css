@@ -7261,3 +7261,6 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
+div#toolbar .filter-title {
+  margin: 0;
+}

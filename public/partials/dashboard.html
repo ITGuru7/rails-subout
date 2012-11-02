@@ -73,14 +73,17 @@
 
                 <div id="toolbar">
                       <div class="row-fluid">
-                          <span>
-                            <a href='#'>Today</a> |
-                            <a href='#'>This Week</a> |
-                            <a href='#'>Older</a>
-                          </span>
-                          <span class='pull-right'>
+                          <div class="pull-left">
+                            <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
+                            <div>
+                              <a href='#'>Today</a> |
+                              <a href='#'>This Week</a> |
+                              <a href='#'>Older</a>
+                            </div>
+                          </div>
+                          <div class='pull-right'>
                             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setModal('partials/opportunity-new.html')">New Opportunity</a>
-                          </span>
+                          </div>
                       </div>
                 </div>
 
