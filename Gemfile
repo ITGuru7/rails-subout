@@ -29,6 +29,7 @@ group :development, :test do
   gem "pry"
   gem "factory_girl_rails", "~> 4.0"
   gem 'ffaker'
+  gem 'heroku'
 end
 
 group :test do
