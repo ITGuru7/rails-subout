@@ -37,3 +37,5 @@ pickle-email-*.html
 app/models/temp
 
 **.DS_Store
+
+public/js/app.js
