@@ -1,0 +1,80 @@
+<div id="company-profile" ng-controller="CompanyProfileCtrl">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">
+            x
+        </button>
+        <h3>PROFILE</h3>
+        <div>
+            <a href="#">Add to Favorites</a>
+        </div>
+    </div>
+    <div class="modal-body">
+        <section class="section-content">
+            <div class="row-fluid">
+                <div class="span6">
+                    <h4>{{other_company.name}}</h4>
+                </div>
+                <div class="span6"><img class="logo" ng-src="{{'img/company/' + other_company._id + '.png'}}" />
+                </div>
+            </div>
+            <table class="table">
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        Region:
+                    </div>
+                    <div class="span9">
+                        Northeast
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        Fleet Size:
+                    </div>
+                    <div class="span9">
+                        500 tour buses; Mini-tour vans; 5 streatch limos with full bars
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        Since:
+                    </div>
+                    <div class="span9">
+                        1980
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        Owner:
+                    </div>
+                    <div class="span9">
+                        John Q. Fleetric
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        Contact:
+                    </div>
+                    <div class="span9">
+                        <a href="mailto:{{other_company.email}}">Susie  Travelalways</a>
+                    </div></td>
+                </tr>
+                <tr>
+                    <td class="row-fluid">
+                    <div class="span3">
+                        TPA:
+                    </div>
+                    <div class="span9">
+                        #25641 on 10/29/12
+                    </div></td>
+                </tr>
+            </table>
+        </section>
+    </div>
+</div>
+<script>
+</script>
