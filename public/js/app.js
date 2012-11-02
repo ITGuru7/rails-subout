@@ -25,9 +25,9 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SignInCtrl;
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Company) {
   var _ref;
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0) && $location.path() !== "sign_in") {
     $location.path("sign_in");
@@ -41,10 +41,16 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity) {
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = opportunity;
   };
-  return $rootScope.setOpportunityViaId = function(opportunity_id) {
+  $rootScope.setOpportunityViaId = function(opportunity_id) {
     return $rootScope.opportunity = Opportunity.get({
       api_token: $rootScope.user.api_token,
       opportunityId: opportunity_id
+    });
+  };
+  return $rootScope.setOtherCompanyViaId = function(company_id) {
+    return $rootScope.other_company = Company.get({
+      api_token: $rootScope.user.api_token,
+      companyId: company_id
     });
   };
 };
@@ -193,6 +199,11 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportun
       return jQuery("#modal").modal("hide");
     });
   };
+};
+
+CompanyProfileCtrl = function($scope, $rootScope, $location, Company) {
+  var a;
+  return a = 1;
 };
 
 SignInCtrl = function($scope, $rootScope, $location, Token, Company) {
