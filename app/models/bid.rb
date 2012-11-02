@@ -16,6 +16,8 @@ class Bid
   scope :recent, desc(:created_at)
   scope :by_amount, asc(:amount)
 
+  after_create :win_quick_winable_opportunity
+
   def initiated_by_name
     bidder.name
   end
@@ -42,5 +44,13 @@ class Bid
 
   def formatted_amount
     formatted_amount = ActionController::Base.helpers.number_to_currency(amount, :unit=>'')
+  end
+
+  private
+
+  def win_quick_winable_opportunity
+    if opportunity.quick_winnable && opportunity.win_it_now_price >= self.amount
+      opportunity.win!(self)
+    end
   end
 end

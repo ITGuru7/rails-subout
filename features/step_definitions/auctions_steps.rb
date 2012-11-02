@@ -52,8 +52,8 @@ When /^I choose that bid as the winner$/ do
   go_to_opportunity_detail
 
   within("#bid_#{@bid.id}") do
-    page.should have_content("Select as Winner")
-    click_on "Select as Winner"
+    page.should have_content("Accept")
+    click_on "Accept"
   end
 end
 
@@ -72,7 +72,7 @@ Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as th
   
   page.should have_content("Won By: #{@supplier.name}")
   page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
-  page.should have_xpath("//*[text()='Select as Winner']", :visible => false)
+  page.should have_xpath("//*[text()='Accept']", :visible => false)
 end
 
 Then /^bidding should be closed on that (?:auction|opportunity)$/ do

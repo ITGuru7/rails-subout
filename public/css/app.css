@@ -7264,3 +7264,6 @@ div.data-items span.data {
 div#toolbar .filter-title {
   margin: 0;
 }
+div#opportunity-detail dl dd {
+  min-height: 20px;
+}
