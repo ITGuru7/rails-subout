@@ -64,12 +64,12 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   };
 };
 
-OpportunityNewCtrl = function($scope, $rootScope, $location, Opportunity) {
+OpportunityNewCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
   return $scope.save = function() {
     var newOpportunity;
     newOpportunity = $scope.opportunity;
-    return Opportunity.save({
+    return Auction.save({
       opportunity: newOpportunity,
       api_token: $rootScope.user.api_token
     }, function(data) {
@@ -96,15 +96,15 @@ MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
   });
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
-  return $scope.opportunities = Opportunity.query({
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
+  return $scope.opportunities = Auction.query({
     api_token: $rootScope.user.api_token
   });
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportunity) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
   return $scope.selectWinner = function(bid) {
-    return Opportunity.select_winner({
+    return Auction.select_winner({
       opportunityId: $rootScope.opportunity._id,
       action: 'select_winner',
       bid_id: bid._id,
@@ -311,7 +311,7 @@ var api_path;
 
 api_path = "/api/v1";
 
-angular.module("suboutServices", ["ngResource"]).factory("Opportunity", function($resource) {
+angular.module("suboutServices", ["ngResource"]).factory("Auction", function($resource) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId'
   }, {
@@ -319,6 +319,8 @@ angular.module("suboutServices", ["ngResource"]).factory("Opportunity", function
       method: "PUT"
     }
   });
+}).factory("Opportunity", function($resource) {
+  return $resource("" + api_path + "/opportunities/:opportunityId", {}, {});
 }).factory("MyBid", function($resource) {
   return $resource("" + api_path + "/bids", {}, {});
 }).factory("Bid", function($resource) {
