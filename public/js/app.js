@@ -184,14 +184,13 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportunity) {
-  $scope.opportunity = $rootScope.opportunity;
   $scope.bids = Bid.query({
-    opportunityId: $scope.opportunity._id,
+    opportunityId: $rootScope.opportunity._id,
     api_token: $rootScope.user.api_token
   });
   return $scope.selectWinner = function(bid) {
     return Opportunity.select_winner({
-      opportunityId: $scope.opportunity._id,
+      opportunityId: $rootScope.opportunity._id,
       action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.user.api_token
