@@ -100,7 +100,7 @@
                                   <div class="span8">
                                     <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
                                     <div class='buyer'>Won By 
-                                      <span class='buyer-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(event.actor._id); setModal('partials/company-profile.html')">{{event.actor.name}}</a></span>
+                                      <span class='buyer-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(opportunity.buyer_id); setModal('partials/company-profile.html')">{{event.actor.name}}</a></span>
                                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
                                     </div>
                                   </div>
@@ -120,7 +120,7 @@
                                   <div class="span8">
                                     <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
                                     <div class='buyer'>Offered By 
-                                      <span class='buyer-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(event.actor._id); setModal('partials/company-profile.html')">{{event.initiated_by_name}}</a></span>
+                                      <span class='buyer-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(opportunity.buyer_id); setModal('partials/company-profile.html')">{{event.initiated_by_name}}</a></span>
                                       <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.bidding_ends|date}}</span>
                                     </div>
                                   </div>
@@ -157,7 +157,7 @@
                                   <div class="span8">
                                     <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id, event.eventable_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
                                     <div class='bidder'>
-                                      <span class='bidder-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(event.actor._id); setModal('partials/company-profile.html')">{{event.initiated_by_name}}</a></span>
+                                      <span class='bidder-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(bid.bidder_id); setModal('partials/company-profile.html')">{{event.initiated_by_name}}</a></span>
                                       bid
                                       <span class='bid-amount'>${{bid.formatted_amount}}</span>
                                       <span class='created-at timeago' relative-time title="{{bid.created_at}}">{{bid.created_at|date}}</span>
