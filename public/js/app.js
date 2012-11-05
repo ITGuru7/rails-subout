@@ -25,7 +25,7 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   var _ref;
@@ -210,6 +210,19 @@ CompanyProfileCtrl = function($scope, $rootScope, $location, Company) {
   return a = 1;
 };
 
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, Setting) {
+  $scope.email = $rootScope.company.email;
+  return $scope.saveSetting = function() {
+    return Setting.save({
+      email: $scope.email,
+      password: $scope.password,
+      password2: $scope.password2
+    }, function(user) {
+      return $rootScope.user = user;
+    });
+  };
+};
+
 SignInCtrl = function($scope, $rootScope, $location, Token, Company) {
   $scope.email = "suboutdev@gmail.com";
   $scope.password = "sub0utd3v";
@@ -341,6 +354,8 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   });
 }).factory("Token", function($resource) {
   return $resource("" + api_path + "/tokens", {}, {});
+}).factory("Setting", function($resource) {
+  return $resource("" + api_path + "/settings", {}, {});
 }).factory("Filter", function($resource) {
   return $resource("" + api_path + "/filters.json", {}, {
     query: {
@@ -357,6 +372,4 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       isArray: true
     }
   });
-}).factory("OpportunityTest", function($resource) {
-  return $resource("" + api_path + "/opportunities.json", {}, {});
 });

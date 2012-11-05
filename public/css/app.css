@@ -7274,3 +7274,9 @@ div#opportunity-detail dl dd {
 table.bid-history {
   width: 100%;
 }
+#modal.modal {
+  margin-top: 0px;
+}
+#modal.modal.fade.in {
+  top: 10%;
+}
