@@ -7069,7 +7069,7 @@ a:active {
 h5 {
   text-transform: uppercase;
   font-size: 1.1em;
-  color: #686552;
+  color: #999999;
 }
 body {
   background: #bfbfbf;
@@ -7226,7 +7226,7 @@ div.created-at {
 }
 div.buyer {
   font-size: .8em;
-  color: gray;
+  color: #555555;
 }
 div.buyer span.buyer-name {
   font-weight: bold;
@@ -7266,4 +7266,11 @@ div#toolbar .filter-title {
 }
 div#opportunity-detail dl dd {
   min-height: 20px;
+}
+#modal dt {
+  color: #999999;
+  font-weight: normal;
+}
+table.bid-history {
+  width: 100%;
 }

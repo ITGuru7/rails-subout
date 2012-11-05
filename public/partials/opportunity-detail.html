@@ -1,38 +1,41 @@
 <div id="opportunity-detail" ng-controller="OpportunityDetailCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Opportunity Detail</h3>
+    <h3>Opportunity - {{opportunity.name}}</h3>
   </div>
   <div class="modal-body">
+    <a href='#'>Edit</a>
     <div class="control-group" ng-show="opportunity.bidding_done">
       <div class="control-label">Won By: {{opportunity.winner_name}}</div>
       <div class="control-label">Winning Bid Amount: {{opportunity.winning_amount}}</div>
       <div class="control-label">(Closed)</div>
     </div>
     <dl class="dl-horizontal">
-      <dt>Name</dt>
-      <dd>{{opportunity.name}}</dd>
-      <dt>Type</dt>
+      <dt>Type:</dt>
       <dd>{{opportunity.type}}</dd>
-      <dt>Description</dt>
+      <dt>Description:</dt>
       <dd>{{opportunity.description}}</dd>
-      <dt>Date range</dt>
-      <dd>{{opportunity.start_date}} to {{opportunity.end_date}}</dd>
-      <dt>End location</dt>
+      <dt>Date range:</dt>
+      <dd>{{opportunity.start_date| date:'MM/dd/yy'}} to {{opportunity.end_date| date:'MM/dd/yy'}}</dd>
+      <dt>End location:</dt>
       <dd>{{opportunity.end_location}}</dd>
       <div ng-show="opportunity.quick_winnable">
-        <dt>Buy now</dt>
-        <dd>{{opportunity.win_it_now_price}}</dd>
+        <dt>Buy now:</dt>
+        <dd><strong>${{opportunity.win_it_now_price}}</strong></dd>
       </div>
-      <dt>Bid history</dt>
-      <dd>
-        <ul>
-          <li id="bid_{{bid._id}}" ng-repeat="bid in bids">
-          {{bid.amount}} on {{bid.created_at | date:'MM/dd/yy'}} by {{bid.initiated_by_name}}
-          <a ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)">Accept</a>
-          </li>
-        </ul>
-      </dd>
     </dl>
+
+    <hr />
+
+    <h4>Bid History</h4>
+    <table class="bid-history">
+      <tr id="bid_{{bid._id}}" ng-repeat="bid in bids">
+        <td><strong>${{bid.amount}}</strong></td>
+        <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+        <td>by <a href='#'>{{bid.initiated_by_name}}</a></td>
+        <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+      </tr>
+    </table>
+
   </div>
 </div>
