@@ -7267,3 +7267,9 @@ div#toolbar .filter-title {
 div#opportunity-detail dl dd {
   min-height: 20px;
 }
+#modal.modal {
+  margin-top: 0px;
+}
+#modal.modal.fade.in {
+  top: 10%;
+}
