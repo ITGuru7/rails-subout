@@ -205,10 +205,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
   };
 };
 
-CompanyProfileCtrl = function($scope, $rootScope, $location, Company) {
-  var a;
-  return a = 1;
-};
+CompanyProfileCtrl = function($scope, $rootScope, $location, Company) {};
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, Setting) {
   $scope.email = $rootScope.company.email;
@@ -217,8 +214,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, Setting) {
       email: $scope.email,
       password: $scope.password,
       password2: $scope.password2
-    }, function(user) {
-      return $rootScope.user = user;
+    }, function(data) {
+      return jQuery("#modal").modal("hide");
     });
   };
 };

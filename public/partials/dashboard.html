@@ -37,7 +37,7 @@
           <div class="span4">
               <section id="company" class="well">
                   <section class="content">
-                      <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{'img/company/' + company._id + '.png'}}"></div>
+                      <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
                       <div id="company_links">
                           <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
                           | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>

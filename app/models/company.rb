@@ -83,4 +83,13 @@ class Company
     return unless users.empty?
     users.create!(email: email, password: password)
   end
+
+  def logo
+    "img/company/#{self.id}.png"
+  end
+
+  def as_json(options={})
+    options[:methods] = :logo
+    super
+  end
 end
