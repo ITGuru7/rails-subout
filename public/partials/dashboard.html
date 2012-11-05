@@ -155,7 +155,7 @@
                               <div class="left">
                                 <div class="row-fluid">
                                   <div class="span8">
-                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
+                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunityViaId(bid.opportunity_id, event.eventable_id); setModal('partials/opportunity-detail.html')">{{bid.opportunity_title}}</a></h3>
                                     <div class='bidder'>
                                       <span class='bidder-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(bid.bidder_id); setModal('partials/company-profile.html')">{{event.initiated_by_name}}</a></span>
                                       bid

@@ -27,7 +27,7 @@ angular.element(document).ready(function($http, $templateCache) {
 });
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SignInCtrl;
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Company) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   var _ref;
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0) && $location.path() !== "sign_in") {
     $location.path("sign_in");
@@ -39,12 +39,21 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company) {
     return window.location.reload();
   };
   $rootScope.setOpportunity = function(opportunity) {
-    return $rootScope.opportunity = opportunity;
+    $rootScope.opportunity = opportunity;
+    return $rootScope.bids = Bid.query({
+      opportunityId: $rootScope.opportunity._id,
+      api_token: $rootScope.user.api_token
+    });
   };
-  $rootScope.setOpportunityViaId = function(opportunity_id) {
+  $rootScope.setOpportunityViaId = function(opportunity_id, eventable_id) {
     return $rootScope.opportunity = Opportunity.get({
       api_token: $rootScope.user.api_token,
       opportunityId: opportunity_id
+    }, function(opportunity) {
+      return $rootScope.bids = Bid.query({
+        opportunityId: opportunity._id,
+        api_token: $rootScope.user.api_token
+      });
     });
   };
   return $rootScope.setOtherCompanyViaId = function(company_id) {
@@ -91,6 +100,19 @@ OpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   return $scope.opportunities = Opportunity.query({
     api_token: $rootScope.user.api_token
   });
+};
+
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportunity) {
+  return $scope.selectWinner = function(bid) {
+    return Opportunity.select_winner({
+      opportunityId: $rootScope.opportunity._id,
+      action: 'select_winner',
+      bid_id: bid._id,
+      api_token: $rootScope.user.api_token
+    }, {}, function() {
+      return jQuery("#modal").modal("hide");
+    });
+  };
 };
 
 DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
@@ -180,23 +202,6 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
       $scope.tag = null;
     }
     return $scope.query = "";
-  };
-};
-
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Opportunity) {
-  $scope.bids = Bid.query({
-    opportunityId: $rootScope.opportunity._id,
-    api_token: $rootScope.user.api_token
-  });
-  return $scope.selectWinner = function(bid) {
-    return Opportunity.select_winner({
-      opportunityId: $rootScope.opportunity._id,
-      action: 'select_winner',
-      bid_id: bid._id,
-      api_token: $rootScope.user.api_token
-    }, {}, function() {
-      return jQuery("#modal").modal("hide");
-    });
   };
 };
 
