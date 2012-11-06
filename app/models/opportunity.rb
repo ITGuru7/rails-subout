@@ -2,8 +2,6 @@ class Opportunity
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  TYPES = ["Bus Needed", "Emergency", "Parts", "Dead Head"]
-
   field :name, type: String
   field :description, type: String
   field :starting_location, type: String
@@ -93,6 +91,10 @@ class Opportunity
     end
     
     super
+  end
+
+  def icon_url
+    "img/filters/#{self.type.parameterize}.png"
   end
 end
 

@@ -1,8 +1,60 @@
 [{
     "_id":"503026b08859aed418000004",
     "active":false,
-    "name":"Emergency",
+    "name":"Vehicles Needed",
     "color":"#69b644",
+    "icon": "img/filters/vehicle-needed.png",
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Vehicle Needed",
+            "operator": "=="
+        }   
+    }
+},
+
+{
+    "_id":"503026b08859aed418000005",
+    "active":false,
+    "name":"Vehicles for Hire",
+    "color":"#e1c212",
+    "icon": "img/filters/vehicle-for-hire.png",
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Vehicle for Hire",
+            "operator": "=="
+        }   
+    }
+},
+{
+    "_id":"503026b08859aed418000004",
+    "active":false,
+    "name":"Specials",
+    "color":"#f25a29",
+    
+    "icon": "img/filters/special.png",
+    
+    "evaluation":{
+       "type": "compare",
+       "property":"type",
+       "params":{
+            "value": "Special",
+            "operator": "=="
+        }   
+    }
+},
+
+{
+    "_id":"503026b08859aed418000009",
+    "active":false,
+    "name":"Emergencies",
+    "color":"#f25a29",
+
     "icon": "img/filters/emergency.png",
     
     "evaluation":{
@@ -14,54 +66,19 @@
         }   
     }
 },
-
 {
-    "_id":"503026b08859aed418000005",
+    "_id":"503026b08859aed418000009",
     "active":false,
     "name":"Parts",
-    "color":"#e1c212",
-    "icon": "img/filters/parts.png",
-    
-    "evaluation":{
-       "type": "compare",
-       "property":"type",
-       "params":{
-            "value": "Parts",
-            "operator": "=="
-        }   
-    }
-},
-{
-    "_id":"503026b08859aed418000004",
-    "active":false,
-    "name":"Bus Needed",
-    "color":"#f25a29",
-    
-    "icon": "img/filters/bus-needed.png",
-    
-    "evaluation":{
-       "type": "compare",
-       "property":"type",
-       "params":{
-            "value": "Bus Needed",
-            "operator": "=="
-        }   
-    }
-},
-
-{
-    "_id":"503026b08859aed418000009",
-    "active":false,
-    "name":"Dead Head",
     "color":"#f25a29",
 
-    "icon": "img/filters/dead-head.png",
+    "icon": "img/filters/part.png",
     
     "evaluation":{
        "type": "compare",
        "property":"type",
        "params":{
-            "value": "Dead Head",
+            "value": "Part",
             "operator": "=="
         }   
     }
@@ -69,7 +86,7 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"Bid",
+    "name":"Bids",
     "color":"#f25a29",
 
     "icon": "img/filters/bid.png",

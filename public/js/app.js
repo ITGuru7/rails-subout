@@ -68,7 +68,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
 };
 
 OpportunityNewCtrl = function($scope, $rootScope, $location, Auction) {
-  $scope.types = ["Bus Needed", "Emergency", "Parts", "Dead Head"];
+  $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
   return $scope.save = function() {
     var newOpportunity;
     newOpportunity = $scope.opportunity;
