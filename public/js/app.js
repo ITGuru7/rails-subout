@@ -364,23 +364,34 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
 }).factory("Bid", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
     opportunityId: "@opportunityId"
-  });
+  }, {});
 }).factory("Event", function($resource) {
   return $resource("" + api_path + "/events/:eventId", {}, {});
 }).factory("Company", function($resource) {
-  return $resource("" + api_path + "/companies/:companyId.json", {}, {
+  return $resource("" + api_path + "/companies/:companyId.json", {
+    companyId: '@companyId'
+  }, {
     query: {
       method: "GET",
       params: {
         companyId: "all"
       },
       isArray: true
+    },
+    update: {
+      method: "PUT"
     }
   });
 }).factory("Token", function($resource) {
   return $resource("" + api_path + "/tokens", {}, {});
-}).factory("Setting", function($resource) {
-  return $resource("" + api_path + "/settings", {}, {});
+}).factory("User", function($resource) {
+  return $resource("" + api_path + "/users/:userId.json", {
+    userId: '@userId'
+  }, {
+    update: {
+      method: "PUT"
+    }
+  });
 }).factory("Filter", function($resource) {
   return $resource("" + api_path + "/filters.json", {}, {
     query: {

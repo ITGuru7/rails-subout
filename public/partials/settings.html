@@ -5,9 +5,11 @@
     </div>
     <div class="modal-body">
         <h3>{{company.name}}</h3>
-        <form id="setting-form" ng:submit="saveSetting()" name="settingForm" class="form-horizontal">
+        <form ng:submit="saveUserProfile()" class="form-horizontal">
             <fieldset>
-                <p class="alert alert-error" ng:show="message">{{message}}</p>
+                <p class="alert alert-success" ng:show="userProfileMessage">{{userProfileMessage}}</p>
+                <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
+                
                 <div class="control-group">
                     <label for="email" class="control-label">Email</label>
                     <div class="controls">
@@ -15,7 +17,7 @@
                       <input id="email" 
                             type="text"
                             class="input-xlarge"
-                            ng:model="email"
+                            ng:model="userProfile.email"
                             required
                             autofocus
                             />
@@ -23,35 +25,131 @@
                 </div>
                 
                 <div class="control-group">
-                    <label for="password" class="control-label">Password</label>
+                    <label for="current_password" class="control-label">Current Password</label>
+                    <div class="controls">
+                      
+                      <input id="current_password"
+                            type="password"
+                            class="input-xlarge"
+                            ng:model="userProfile.current_password"
+                            required
+                            autofocus
+                            />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="password" class="control-label">New Password</label>
                     <div class="controls">
                       
                       <input id="password"
                             type="password"
                             class="input-xlarge"
-                            ng:model="password"
-                            required
+                            ng:model="userProfile.password"
                             autofocus
+                            />
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-info" type="button" ng-click="closeModal()">Cancel</button>
+                </div>
+        
+            </fieldset>
+        </form>
+        
+        <form ng:submit="saveCompanyProfile()" class="form-horizontal">
+            <fieldset>
+                <p class="alert alert-success" ng:show="companyProfileMessage">{{companyProfileMessage}}</p>
+                <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+                <div class="control-group">
+                    <label for="region" class="control-label">Region:</label>
+                    <div class="controls">
+                      
+                      <input id="region" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.region"
                             />
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label for="password2" class="control-label">Password Conformation</label>
+                    <label for="fleet-size" class="control-label">Fleet Size:</label>
                     <div class="controls">
                       
-                      <input id="password2"
-                            type="password"
+                      <input id="fleet-size" 
+                            type="text"
                             class="input-xlarge"
-                            ng:model="password2"
-                            required
-                            autofocus
+                            ng:model="companyProfile.fleet_size"
+                            />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="since" class="control-label">Since:</label>
+                    <div class="controls">
+                      
+                      <input id="since" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.since"
+                            />
+                    </div>
+                </div>
+       
+                <div class="control-group">
+                    <label for="owner" class="control-label">Owner:</label>
+                    <div class="controls">
+                      
+                      <input id="owner" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.owner"
+                            />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="owner" class="control-label">Contact Name:</label>
+                    <div class="controls">
+                      
+                      <input id="contact" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.contact"
+                            />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="owner" class="control-label">Contact Email:</label>
+                    <div class="controls">
+                      
+                      <input id="contact" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.email"
+                            />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label for="tpa" class="control-label">TPA:</label>
+                    <div class="controls">
+                      
+                      <input id="tpa" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.tpa"
                             />
                     </div>
                 </div>
                 
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-info" type="button" ng-click="closeModal()">Cancel</button>
                 </div>
         
             </fieldset>
