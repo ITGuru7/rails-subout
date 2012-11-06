@@ -25,7 +25,7 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   var _ref;
@@ -207,11 +207,6 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
     }
     return $scope.query = "";
   };
-};
-
-CompanyProfileCtrl = function($scope, $rootScope, $location, Token, Company, User) {
-  var a;
-  return a = 1;
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {

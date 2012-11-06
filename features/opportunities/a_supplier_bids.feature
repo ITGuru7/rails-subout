@@ -1,6 +1,6 @@
 Feature: A supplier bids
 
-  @wip @javascript
+  @javascript
   Scenario: A member supplier bids on an opportunity
     Given a buyer exists "Boston Bus"
     And that buyer has an auction "Boston to New York Charter"
