@@ -35,6 +35,9 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };
+  $rootScope.closeModal = function() {
+    return $('#modal').modal("hide");
+  };
   $rootScope.signOut = function() {
     return window.location.reload();
   };
@@ -42,23 +45,23 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
     $rootScope.opportunity = opportunity;
     return $rootScope.bids = Bid.query({
       opportunityId: $rootScope.opportunity._id,
-      api_token: $rootScope.user.api_token
+      api_token: $rootScope.token.api_token
     });
   };
   $rootScope.setOpportunityViaId = function(opportunity_id, eventable_id) {
     return $rootScope.opportunity = Opportunity.get({
-      api_token: $rootScope.user.api_token,
+      api_token: $rootScope.token.api_token,
       opportunityId: opportunity_id
     }, function(opportunity) {
       return $rootScope.bids = Bid.query({
         opportunityId: opportunity._id,
-        api_token: $rootScope.user.api_token
+        api_token: $rootScope.token.api_token
       });
     });
   };
   return $rootScope.setOtherCompanyViaId = function(company_id) {
     return $rootScope.other_company = Company.get({
-      api_token: $rootScope.user.api_token,
+      api_token: $rootScope.token.api_token,
       companyId: company_id
     });
   };
@@ -71,7 +74,7 @@ OpportunityNewCtrl = function($scope, $rootScope, $location, Auction) {
     newOpportunity = $scope.opportunity;
     return Auction.save({
       opportunity: newOpportunity,
-      api_token: $rootScope.user.api_token
+      api_token: $rootScope.token.api_token
     }, function(data) {
       return jQuery("#modal").modal("hide");
     });
@@ -80,9 +83,10 @@ OpportunityNewCtrl = function($scope, $rootScope, $location, Auction) {
 
 BidNewCtrl = function($scope, $rootScope, $location, Bid) {
   return $scope.save = function() {
+    console.log($rootScope.token.api_token);
     return Bid.save({
       bid: $scope.bid,
-      api_token: $rootScope.user.api_token,
+      api_token: $rootScope.token.api_token,
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       return jQuery("#modal").modal("hide");
@@ -92,13 +96,13 @@ BidNewCtrl = function($scope, $rootScope, $location, Bid) {
 
 MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
   return $scope.my_bids = MyBid.query({
-    api_token: $rootScope.user.api_token
+    api_token: $rootScope.token.api_token
   });
 };
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   return $scope.opportunities = Auction.query({
-    api_token: $rootScope.user.api_token
+    api_token: $rootScope.token.api_token
   });
 };
 
@@ -108,7 +112,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction)
       opportunityId: $rootScope.opportunity._id,
       action: 'select_winner',
       bid_id: bid._id,
-      api_token: $rootScope.user.api_token
+      api_token: $rootScope.token.api_token
     }, {}, function() {
       return jQuery("#modal").modal("hide");
     });
@@ -129,12 +133,12 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
     };
     return Bid.save({
       bid: bid,
-      api_token: $rootScope.user.api_token,
+      api_token: $rootScope.token.api_token,
       opportunityId: opportunity._id
     });
   };
   $scope.events = Event.query({
-    api_token: $rootScope.user.api_token
+    api_token: $rootScope.token.api_token
   }, function(data) {
     var channel;
     channel = $rootScope.pusher.subscribe('event');
@@ -205,35 +209,64 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
   };
 };
 
-CompanyProfileCtrl = function($scope, $rootScope, $location, Company) {};
+CompanyProfileCtrl = function($scope, $rootScope, $location, Token, Company, User) {
+  var a;
+  return a = 1;
+};
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, Setting) {
-  $scope.email = $rootScope.company.email;
-  return $scope.saveSetting = function() {
-    return Setting.save({
-      email: $scope.email,
-      password: $scope.password,
-      password2: $scope.password2
-    }, function(data) {
-      return jQuery("#modal").modal("hide");
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
+  $scope.userProfile = $rootScope.user;
+  $scope.companyProfile = $rootScope.company;
+  $scope.saveUserProfile = function() {
+    $scope.userProfileError = "";
+    $scope.userProfileMessage = "";
+    return User.update({
+      userId: $rootScope.user._id,
+      user: $scope.userProfile,
+      api_token: $rootScope.token.api_token
+    }, function(user) {
+      $scope.userProfile.password = '';
+      $scope.userProfile.current_password = '';
+      $rootScope.user = $scope.userProfile;
+      return $scope.userProfileMessage = "Saved successfully";
+    }, function(error) {
+      return $scope.userProfileError = "Invalid password or email!";
+    });
+  };
+  return $scope.saveCompanyProfile = function() {
+    $scope.companyProfileError = "";
+    $scope.companyProfileMessage = "";
+    return Company.update({
+      companyId: $rootScope.company._id,
+      company: $scope.companyProfile,
+      api_token: $rootScope.token.api_token
+    }, function(company) {
+      $rootScope.company = $scope.companyProfile;
+      return $scope.companyProfileMessage = "Saved successfully";
+    }, function(error) {
+      return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company) {
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $scope.email = "suboutdev@gmail.com";
   $scope.password = "sub0utd3v";
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,
       password: $scope.password
-    }, function(user) {
-      $rootScope.user = user;
-      if (user.authorized) {
-        $rootScope.pusher = new Pusher(user.pusher_key);
+    }, function(token) {
+      $rootScope.token = token;
+      if (token.authorized) {
+        $rootScope.pusher = new Pusher(token.pusher_key);
         $rootScope.company = Company.get({
-          companyId: user.company_id,
-          api_token: user.api_token
+          companyId: token.company_id,
+          api_token: token.api_token
+        });
+        $rootScope.user = User.get({
+          userId: token.user_id,
+          api_token: token.api_token
         });
         return $location.path("dashboard");
       } else {
