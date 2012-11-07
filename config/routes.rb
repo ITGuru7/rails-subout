@@ -14,6 +14,18 @@ Subout::Application.routes.draw do
           put :cancel
         end
       end
+
+      resources :favorite_invitations do
+        collection do
+          post :create_for_unknown_supplier
+        end
+
+        member do
+          get :accept
+        end
+      end
+
+      resources :favorites
       resources :events
       resources :companies
       resources :bids

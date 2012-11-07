@@ -1,9 +1,9 @@
 class Notifier < ActionMailer::Base
-  def send_known_favorite_invitation(invitation_id)
-    invitation = FavoriteInvitation.find(invitation_id)
-    @buyer = invitation.buyer
-    @invitation = invitation
-    mail(subject: "[SubOut] Favorite Invitation from #{@buyer.name}", to: invitation.supplier_email)
+  def send_known_favorite_invitation(buyer_id, supplier_id)
+    @buyer = Company.find(buyer_id)
+    @supplier = Company.find(supplier_id)
+
+    mail(subject: "[SubOut] Favorite Invitation from #{@buyer.name}", to: @supplier.email)
   end
 
   def send_unknown_favorite_invitation(invitation_id)

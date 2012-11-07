@@ -2,19 +2,29 @@ Given /^a supplier exists called "(.*?)"$/ do |name|
   @supplier = FactoryGirl.create(:company, :name => name, :email => 'thomas@bostonbus.com')
 end
 
-When /^I add that supplier as one of my favorite suppliers$/ do
-  click_on "Favorite suppliers"
-  fill_in "Email", :with => @supplier.email
-  click_on "Find Supplier"
-  page.should have_content @supplier.name
-  click_on "Add to my favorite suppliers"
-#  page.should have_content 'Invitation sent.' 
+When /^I add that supplier as one of my favorite suppliers from the supplier's profile$/ do
+  click_on @supplier.name
+
+  sleep(0.5)
+  #page.should have_content "Add to Favorites"
+  click_on "Add to Favorites"
 end
+
+Given /^the supplier just had an auction$/ do
+  @opportunity = FactoryGirl.create(:opportunity, buyer: @supplier)
+end
+
+#When /^I add that supplier as one of my favorite suppliers$/ do
+  #click_on "Favorite suppliers"
+  #fill_in "Email", :with => @supplier.email
+  #click_on "Find Supplier"
+  #page.should have_content @supplier.name
+  #click_on "Add to my favorite suppliers"
+#end
 
 Then /^that supplier should be in my list of favorite suppliers$/ do
   @buyer.reload.favorite_suppliers.should include(@supplier)
 end
-
 
 Given /^I have "(.*?)" as a favorite supplier$/ do |name|
   @supplier = FactoryGirl.create(:company, :name => name)
@@ -33,6 +43,7 @@ Then /^"(.*?)" should not be in my favorites$/ do |name|
 end
 
 Then /^that supplier should receive a favorite invitation email$/ do
+  sleep(0.5)
   step %["#{@supplier.email}" should receive an email]
 end
 
@@ -76,12 +87,3 @@ When /^fills out their supplier details$/ do
 
   @supplier = Company.last
 end
-
-Then /^that supplier should be able to bid on my auctions$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then /^that supplier should be able to see other auctions but not bid on them$/ do
-  pending # express the regexp above with the code you wish you had
-end
- 

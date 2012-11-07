@@ -1,7 +1,16 @@
-class FavoritesController < ApplicationController
+class Api::V1::FavoritesController < Api::V1::BaseController
   def index
     @favorites = current_company.favorite_suppliers
     @found_supplier = Company.where(:email => params[:supplier_email]).first if params[:supplier_email].present?
+  end
+
+  def create
+    supplier = Company.find(params[:supplier_id])
+    current_company.add_favorite_supplier!(supplier)
+
+    Notifier.delay.send_known_favorite_invitation(current_company.id, supplier.id)
+
+    respond_with(favorite_invitation)
   end
 
   def destroy

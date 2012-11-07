@@ -24,5 +24,4 @@ class FavoriteInvitation
   def pending?
     !accepted
   end
-
 end
