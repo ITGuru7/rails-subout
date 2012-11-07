@@ -51,6 +51,19 @@
                     </div>
                 </div>
 
+                <div class="control-group">
+                    <label for="password_confirmation" class="control-label">Password Confirmation</label>
+                    <div class="controls">
+                      
+                      <input id="password_confirmation"
+                            type="password"
+                            class="input-xlarge"
+                            ng:model="userProfile.password_confirmation"
+                            autofocus
+                            />
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit">Save</button>
                     <button class="btn btn-info" type="button" ng-click="closeModal()">Cancel</button>
