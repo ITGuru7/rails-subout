@@ -225,18 +225,22 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
     $scope.userProfileMessage = "";
-    return User.update({
-      userId: $rootScope.user._id,
-      user: $scope.userProfile,
-      api_token: $rootScope.token.api_token
-    }, function(user) {
-      $scope.userProfile.password = '';
-      $scope.userProfile.current_password = '';
-      $rootScope.user = $scope.userProfile;
-      return $scope.userProfileMessage = "Saved successfully";
-    }, function(error) {
-      return $scope.userProfileError = "Invalid password or email!";
-    });
+    if ($scope.userProfile.password === $scope.userProfile.password_confirmation) {
+      return User.update({
+        userId: $rootScope.user._id,
+        user: $scope.userProfile,
+        api_token: $rootScope.token.api_token
+      }, function(user) {
+        $scope.userProfile.password = '';
+        $scope.userProfile.current_password = '';
+        $rootScope.user = $scope.userProfile;
+        return $scope.userProfileMessage = "Saved successfully";
+      }, function(error) {
+        return $scope.userProfileError = "Invalid password or email!";
+      });
+    } else {
+      return $scope.userProfileError = "The new password and password confirmation are not identical.";
+    }
   };
   return $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";

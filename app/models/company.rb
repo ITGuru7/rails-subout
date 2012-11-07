@@ -9,6 +9,13 @@ class Company
   field :city, type: String
   field :state, type: String
 
+  field :region, type: String
+  field :fleet_size, type: String
+  field :since, type: String
+  field :owner, type: String
+  field :contact_name, type: String
+  field :tpa, type: String
+
   field :hq_location_id, type: String
 
   #TODO remove this once we figure out where it's being used

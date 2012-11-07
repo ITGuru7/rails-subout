@@ -25,6 +25,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  config.color_enabled = true
+
   # Clean up the database
   require 'database_cleaner'
   config.before(:suite) do
