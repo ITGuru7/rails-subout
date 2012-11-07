@@ -25,7 +25,7 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
   var _ref;
@@ -101,6 +101,12 @@ BidNewCtrl = function($scope, $rootScope, $location, Bid) {
 
 MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
   return $scope.my_bids = MyBid.query({
+    api_token: $rootScope.token.api_token
+  });
+};
+
+FavoritesCtrl = function($scope, $rootScope, Favorite) {
+  return $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
 };
@@ -285,6 +291,17 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
+CompanyProfileCtrl = function($rootScope, $scope, Favorite) {
+  return $scope.addToFavorites = function() {
+    return Favorite.save({
+      supplier_id: $rootScope.other_company._id,
+      api_token: $rootScope.token.api_token
+    }, {}, function() {
+      return jQuery("#modal").modal("hide");
+    });
+  };
+};
+
 subout.directive("relativeTime", function() {
   return {
     link: function(scope, element, attr) {
@@ -426,4 +443,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       isArray: true
     }
   });
+}).factory("Favorite", function($resource) {
+  return $resource("" + api_path + "/favorites/:favoriteId", {}, {});
 });

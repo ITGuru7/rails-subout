@@ -87,3 +87,11 @@ When /^fills out their supplier details$/ do
 
   @supplier = Company.last
 end
+
+When /^I go to see all my favorites list$/ do
+  click_on "Favorites"
+end
+
+Then /^then I should see the supplier "(.*?)" in the list$/ do |supplier_name|
+  find('#modal').should have_content(supplier_name)
+end

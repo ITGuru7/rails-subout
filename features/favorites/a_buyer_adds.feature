@@ -1,6 +1,6 @@
 Feature: A buyer adds a supplier to their list of favorites
 
-  @wip @javascript
+  @javascript
   Scenario: A buyer adds a member company as a favorite supplier from event stream
     Given a supplier exists called "Boston Bus"
     And the supplier just had an auction

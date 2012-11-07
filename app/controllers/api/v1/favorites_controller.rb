@@ -1,7 +1,8 @@
 class Api::V1::FavoritesController < Api::V1::BaseController
   def index
     @favorites = current_company.favorite_suppliers
-    @found_supplier = Company.where(:email => params[:supplier_email]).first if params[:supplier_email].present?
+
+    respond_with(@favorites)
   end
 
   def create

@@ -1,11 +1,11 @@
-<div id="company-profile">
+<div id="company-profile" ng-controller="CompanyProfileCtrl">
     <div class="modal-header">
         <button data-dismiss="modal" class="close" type="button">
             x
         </button>
         <h3>PROFILE</h3>
         <div>
-            <a href="#">Add to Favorites</a>
+            <a ng-click="addToFavorites()">Add to Favorites</a>
         </div>
     </div>
     <div class="modal-body">
