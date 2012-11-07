@@ -58,7 +58,17 @@ class Opportunity
   end
 
   def winning_bid_amount
-    winning_bid.try(:amount)
+    self.winning_bid.try(:amount)
+  end
+
+  def serializable_hash(options = nil)
+    options ||= {}
+    opportunity = self.attributes
+    opportunity[:winning_bid_amount] = self.winning_bid_amount
+    opportunity[:bids_count] = self.bids_count
+    opportunity[:latest_bid_amount] = self.latest_bid_amount
+    opportunity[:lowest_bid_amount] = self.lowest_bid_amount
+    opportunity
   end
 
   def won?
@@ -91,15 +101,6 @@ class Opportunity
     winning_bid.try(:amount)
   end
   
-  def as_json(options={})
-    if options[:methods].present?
-      options[:methods] = options[:methods] + [:winner_name, :winning_amount]
-    else
-      options[:methods] = [:winner_name, :winning_amount]
-    end
-    
-    super
-  end
 
   def icon_url
     "img/filters/#{self.type.parameterize}.png"

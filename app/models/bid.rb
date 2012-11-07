@@ -50,7 +50,7 @@ class Bid
 
   def win_quick_winable_opportunity
     if opportunity.quick_winnable && opportunity.win_it_now_price >= self.amount
-      opportunity.win!(self)
+      opportunity.win!(self.id)
     end
   end
 end

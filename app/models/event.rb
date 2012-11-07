@@ -14,7 +14,8 @@ class Event
 
   def as_json(options={})
     json_attributes = super(:methods => [:initiated_by_name, :type])
-    json_attributes[:eventable] = self.eventable.as_json(:methods => [:winning_bid_amount, :type, :formatted_amount, :opportunity_title, :opportunity_bidding_ends, :bids_count, :latest_bid_amount, :lowest_bid_amount, :icon_url] )
+
+    json_attributes[:eventable] = self.eventable.as_json(:methods => [:type, :formatted_amount, :opportunity_title, :opportunity_bidding_ends, :bids_count, :latest_bid_amount, :lowest_bid_amount, :icon_url] )
     json_attributes[:actor] = self.company.as_json
     json_attributes
   end
