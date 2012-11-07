@@ -49,10 +49,11 @@ Then /^I should win that opportunity automatically$/ do
 end
 
 def do_a_bid(amount = '100.00')
-  #click_on "Available Opportunities"
   within("#opportunity_#{@opportunity.id}") do
     click_on "Bid"
   end
+
+  page.should have_content("Price")
   fill_in "Price", with: amount
   click_on "Bid Now"
   page.should have_content(amount)
