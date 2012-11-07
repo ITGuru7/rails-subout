@@ -98,6 +98,15 @@ Then /^the auction should be canceled$/ do
   end
 end
 
+Given /^that auction has a bid$/ do
+  @auction.bids << FactoryGirl.create(:bid)
+end
+
+Then /^I should not be able to cancel that auction$/ do
+  go_to_opportunity_detail
+  page.should have_xpath("//*[text()='Cancel']", :visible => false)
+end
+
 def last_opportunity
   Opportunity.last
 end
