@@ -5,6 +5,7 @@
   </div>
   <div class="modal-body">
     <a href='#'>Edit</a>
+    <a class='btn btn-danger' ng-click="cancelOpportunity(opportunity)">Cancel</a>
     <div class="control-group" ng-show="opportunity.bidding_done">
       <div class="control-label">Won By: {{opportunity.winner_name}}</div>
       <div class="control-label">Winning Bid Amount: {{opportunity.winning_amount}}</div>

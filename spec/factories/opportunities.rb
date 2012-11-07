@@ -9,6 +9,7 @@ FactoryGirl.define do
     end_date { 2.months.from_now}
     bidding_ends { 2.weeks.from_now }
     quick_winnable false
+    type 'Vehicle Needed'
 
     factory :quick_winnable_auction do
       quick_winnable true

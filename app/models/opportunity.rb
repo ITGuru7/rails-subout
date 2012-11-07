@@ -15,10 +15,12 @@ class Opportunity
   field :winning_bid_id, type: String
   field :seats, type: Integer
   field :type, type: String
+  field :canceled, type: Boolean, default: false
 
   field :for_favorites_only, type: Boolean, default: false
 
   scope :available, order_by(:created_at => :desc)
+  scope :active, where(:canceled => false)
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
 
@@ -33,6 +35,12 @@ class Opportunity
   validates_presence_of :start_date, :on => :create, :message => "can't be blank"
   validates_presence_of :end_date, :on => :create, :message => "can't be blank"
   validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
+
+  def cancel!
+    self.update_attributes(:canceled => true)
+
+    Event.create(:company => self.buyer, :verb => 'canceled', :description => "opportunity canceled", :eventable => self)
+  end
 
   def win!(bid_id)
     bid = self.bids.find(bid_id)

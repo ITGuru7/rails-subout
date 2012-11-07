@@ -85,6 +85,19 @@ Then /^the buyer should be notified that I won that auction$/ do
   step %{"#{@buyer.email}" should receive an email with subject /#{@supplier.name} has won the bidding on #{@auction.name}/}
 end
 
+When /^I cancel the auction$/ do
+  go_to_opportunity_detail
+  click_on "Cancel"
+end
+
+Then /^the auction should be canceled$/ do
+  page.should have_content("Canceled by #{@buyer.name}")
+  click_on "Opportunities"
+  within("#modal") do
+    page.should_not have_content @auction.name
+  end
+end
+
 def last_opportunity
   Opportunity.last
 end

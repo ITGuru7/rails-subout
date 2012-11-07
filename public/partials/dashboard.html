@@ -40,7 +40,7 @@
                       <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
                       <div id="company_links">
                           <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
-                          | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/opportunities.html')">Opportunities</a>
+                          | <a href="#modal" data-toggle="modal" ng-click="setOpportunities(); setModal('partials/opportunities.html')">Opportunities</a>
                           | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
                       </div>
                   </section>
@@ -90,6 +90,24 @@
                 <table class="table">
                   <tr class="event" ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20">
                       <td>
+                        <div ui-if="event.type=='opportunity_canceled'" ng-init="opportunity=event.eventable">
+                          <div class="row-fluid">
+                            <div class="span1"><img ng-src="/img/events/canceled.png"></div>
+                            <div class="span11">
+                              <div class="left">
+                                <div class="row-fluid">
+                                  <div class="span8">
+                                    <h3 class='title'><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></h3>
+                                    <div class='buyer'>Canceled by
+                                      <span class='buyer-name'><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(event.actor._id); setModal('partials/company-profile.html')">{{event.actor.name}}</a></span>
+                                      <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created|date}}</span>
+                                    </div>
+                                  </div>
+                                </div><!--.row-fluid-->
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         <div ui-if="event.type=='opportunity_bidding_won'" ng-init="opportunity=event.eventable">
                           <div class="row-fluid">

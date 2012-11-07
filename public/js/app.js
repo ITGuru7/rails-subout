@@ -27,7 +27,7 @@ angular.element(document).ready(function($http, $templateCache) {
 });
 var AppCtrl, BidNewCtrl, DashboardCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
   var _ref;
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0) && $location.path() !== "sign_in") {
     $location.path("sign_in");
@@ -40,6 +40,11 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company) {
   };
   $rootScope.signOut = function() {
     return window.location.reload();
+  };
+  $rootScope.setOpportunities = function() {
+    return $rootScope.opportunities = Auction.query({
+      api_token: $rootScope.token.api_token
+    });
   };
   $rootScope.setOpportunity = function(opportunity) {
     $rootScope.opportunity = opportunity;
@@ -100,13 +105,18 @@ MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
   });
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
-  return $scope.opportunities = Auction.query({
-    api_token: $rootScope.token.api_token
-  });
-};
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {};
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
+  $scope.cancelOpportunity = function(opportunity) {
+    return Auction.cancel({
+      opportunityId: opportunity._id,
+      action: 'cancel',
+      api_token: $rootScope.token.api_token
+    }, {}, function() {
+      return jQuery("#modal").modal("hide");
+    });
+  };
   return $scope.selectWinner = function(bid) {
     return Auction.select_winner({
       opportunityId: $rootScope.opportunity._id,
@@ -351,9 +361,13 @@ api_path = "/api/v1";
 
 angular.module("suboutServices", ["ngResource"]).factory("Auction", function($resource) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
-    opportunityId: '@opportunityId'
+    opportunityId: '@opportunityId',
+    action: '@action'
   }, {
     select_winner: {
+      method: "PUT"
+    },
+    cancel: {
       method: "PUT"
     }
   });

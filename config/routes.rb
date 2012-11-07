@@ -9,7 +9,10 @@ Subout::Application.routes.draw do
       resources :tokens
       resources :users
       resources :auctions do
-        put :select_winner, :on => :member
+        member do
+          put :select_winner
+          put :cancel
+        end
       end
       resources :events
       resources :companies

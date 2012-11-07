@@ -34,6 +34,7 @@ class AuctionsController < ApplicationController
     redirect_to auction_path(@auction)
   end
 
+
   private
 
   def current_company
