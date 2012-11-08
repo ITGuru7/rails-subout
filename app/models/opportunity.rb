@@ -6,9 +6,11 @@ class Opportunity
   field :description, type: String
   field :starting_location, type: String
   field :ending_location, type: String
-  field :start_date, type: Time
-  field :end_date, type: Time
-  field :bidding_ends, type: Time
+  field :start_date, type: Date
+  field :start_time, type: String
+  field :end_date, type: Date
+  field :end_time, type: String
+  field :bidding_ends, type: Date
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal

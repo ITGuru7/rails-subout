@@ -3,13 +3,9 @@ class OpportunityObserver < Mongoid::Observer
 
   def after_create(opportunity)
     Event.create(description: opportunity.description, verb: 'created', company_id: opportunity.buyer_id, eventable: opportunity)
+  end
 
-    #TODO: commented this out till we figure out how to deal with it without hanging up server every time opportunity changes
-    #Company.all.each do |company|
-      #if company.interested_in_event?(e)
-        #Rails.logger.info "Telling company to send event : #{e.inspect}"
-        #company.send_event(e, opportunity)
-      #end
-    #end
+  def after_update(opportunity)
+    Event.create(description: opportunity.description, verb: 'updated', company_id: opportunity.buyer_id, eventable: opportunity)
   end
 end

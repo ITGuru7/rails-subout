@@ -25402,7 +25402,7 @@ angular.element(document).find('head').append('<style type="text/css">@charset "
 
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-09-19
+ * @version v0.3.0 - 2012-10-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -25449,6 +25449,72 @@ angular.module('ui.directives').directive('uiAnimate', ['ui.config', '$timeout',
   };
 }]);
 
+
+    /*
+*  Implementation of JQuery FullCalendar 
+*  inspired by http://arshaw.com/fullcalendar/ 
+*  
+*  Basic Angular Calendar Directive that takes in live events as the ng-model and watches that event array for changes, to update the view accordingly. 
+*  
+* Authors
+*  @andyjoslin
+*  @joshkurz
+*/
+
+angular.module('ui.directives').directive('uiCalendar',['ui.config', '$parse', function (uiConfig,$parse) {
+
+    uiConfig.uiCalendar = uiConfig.uiCalendar || {};    
+    //returns the calendar     
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        scope: {
+          eventChanged: "=changed",
+          events: "=ngModel"
+        },
+        link: function(scope, elm, $attrs) {
+            var ngModel = $parse($attrs.ngModel);
+            //update method that is called on load and whenever the events array is changed. 
+            function update() {
+            //Default View Options
+            var expression,
+              options = {
+                header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+              },
+            // add event name to title attribute on mouseover. Would be nice if this was an angular popover. 
+            eventMouseover: function(event, jsEvent, view) {
+            if (view.name !== 'agendaDay') {
+              $(jsEvent.target).attr('title', event.title);
+             }
+            },
+        
+            // Calling the events from the scope through the ng-model binding attribute. 
+            events: ngModel(scope)
+            };          
+            //if attrs have been entered to directive, then create a relative expression. 
+            if ($attrs.uiCalendar)
+              expression = scope.$eval($attrs.uiCalendar);
+            else 
+              expression = {};
+              //extend the options to suite the custom directive.
+              angular.extend(options, uiConfig.uiCalendar, expression);
+              //call fullCalendar from an empty html tag, to keep angular happy.
+              elm.html('').fullCalendar(options);
+            }
+            //on load update call.
+            update();
+            //watch for changes to the eventChanged object passed into the directive, and update if changed. 
+            scope.$watch(function() {
+                return scope.eventChanged;
+            }, function() {
+                update();
+            },true);
+        }
+    };
+}]);
 
 /*global angular, CodeMirror, Error*/
 /**
@@ -25593,7 +25659,9 @@ angular.module('ui.directives').directive('uiCurrency', ['ui.config', 'currencyF
  @param [ui-date] {object} Options to pass to $.fn.datepicker() merged onto ui.config
  */
 
-angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiConfig) {
+angular.module('ui.directives')
+
+.directive('uiDate', ['ui.config', function (uiConfig) {
   'use strict';
   var options;
   options = {};
@@ -25613,7 +25681,9 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
         if (controller) {
           var updateModel = function () {
             scope.$apply(function () {
-              controller.$setViewValue(element.datepicker("getDate"));
+              var date = element.datepicker("getDate");
+              element.datepicker("setDate", element.val());
+              controller.$setViewValue(date);
             });
           };
           if (opts.onSelect) {
@@ -25633,11 +25703,10 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
           // Update the date picker when the model changes
           controller.$render = function () {
             var date = controller.$viewValue;
-            element.datepicker("setDate", date);
-            // Update the model if we received a string
-            if (angular.isString(date)) {
-              controller.$setViewValue(element.datepicker("getDate"));
+            if ( angular.isDefined(date) && date !== null && !angular.isDate(date) ) {
+              throw new Error('ng-Model value must be a Date object - currently it is a ' + typeof date + ' - use ui-date-format to convert it from a string');
             }
+            element.datepicker("setDate", date);
           };
         }
         // If we don't destroy the old one it doesn't update properly when the config changes
@@ -25652,7 +25721,46 @@ angular.module('ui.directives').directive('uiDate', ['ui.config', function (uiCo
     }
   };
 }
-]);
+])
+
+.directive('uiDateFormat', [function() {
+  var directive = {
+    require:'ngModel',
+    link: function(scope, element, attrs, modelCtrl) {
+      if ( attrs.uiDateFormat === '' ) {
+        // Default to ISO formatting
+        modelCtrl.$formatters.push(function(value) {
+          if (angular.isString(value) ) {
+            return new Date(value);
+          }
+          return null;
+        });
+        modelCtrl.$parsers.push(function(value){
+          if (angular.isString(value) ) {
+            return value.toISOString();
+          }
+          return null;
+        });
+      } else {
+        var format = attrs.uiDateFormat;
+        // Use the datepicker with the attribute value as the format string to convert to and from a string
+        modelCtrl.$formatters.push(function(value) {
+          if (angular.isString(value) ) {
+            return $.datepicker.parseDate(format, value);
+          }
+          return null;
+        });
+        modelCtrl.$parsers.push(function(value){
+          if (angular.isString(value) ) {
+            return $.datepicker.formatDate(format, value);
+          }
+          return null;
+        });
+      }
+    }
+  };
+  return directive;
+}]);
 
 /**
  * General-purpose Event binding. Bind any event not natively supported by Angular
@@ -25773,95 +25881,116 @@ angular.module('ui.directives').directive('uiJq', ['ui.config', function (uiConf
   };
 }]);
 
+angular.module('ui.directives').factory('keypressHelper', ['$parse', function keypress($parse){
+  var keysByCode = {
+    8: 'backspace',
+    9: 'tab',
+    13: 'enter',
+    27: 'esc',
+    32: 'space',
+    33: 'pageup',
+    34: 'pagedown',
+    35: 'end',
+    36: 'home',
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down',
+    45: 'insert',
+    46: 'delete'
+  };
+
+  var capitaliseFirstLetter = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  return function(mode, scope, elm, attrs) {
+    var params, combinations = [];
+    params = scope.$eval(attrs['ui'+capitaliseFirstLetter(mode)]);
+
+    // Prepare combinations for simple checking
+    angular.forEach(params, function (v, k) {
+      var combination, expression;
+      expression = $parse(v);
+
+      angular.forEach(k.split(' '), function(variation) {
+        combination = {
+          expression: expression,
+          keys: {}
+        };
+        angular.forEach(variation.split('-'), function (value) {
+          combination.keys[value] = true;
+        });
+        combinations.push(combination);
+      });
+    });
+
+    // Check only matching of pressed keys one of the conditions
+    elm.bind(mode, function (event) {
+      // No need to do that inside the cycle
+      var altPressed = event.metaKey || event.altKey;
+      var ctrlPressed = event.ctrlKey;
+      var shiftPressed = event.shiftKey;
+      var keyCode = event.keyCode;
+
+      // normalize keycodes
+      if (mode === 'keypress' && !shiftPressed && keyCode >= 97 && keyCode <= 122) {
+        keyCode = keyCode - 32;
+      }
+
+      // Iterate over prepared combinations
+      angular.forEach(combinations, function (combination) {
+
+        var mainKeyPressed = (combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()]) || false;
+
+        var altRequired = combination.keys.alt || false;
+        var ctrlRequired = combination.keys.ctrl || false;
+        var shiftRequired = combination.keys.shift || false;
+
+        if (
+          mainKeyPressed &&
+          ( altRequired == altPressed ) &&
+          ( ctrlRequired == ctrlPressed ) &&
+          ( shiftRequired == shiftPressed )
+        ) {
+          // Run the function
+          scope.$apply(function () {
+            combination.expression(scope, { '$event': event });
+          });
+        }
+      });
+    });
+  };
+}]);
+
 /**
  * Bind one or more handlers to particular keys or their combination
  * @param hash {mixed} keyBindings Can be an object or string where keybinding expression of keys or keys combinations and AngularJS Exspressions are set. Object syntax: "{ keys1: expression1 [, keys2: expression2 [ , ... ]]}". String syntax: ""expression1 on keys1 [ and expression2 on keys2 [ and ... ]]"". Expression is an AngularJS Expression, and key(s) are dash-separated combinations of keys and modifiers (one or many, if any. Order does not matter). Supported modifiers are 'ctrl', 'shift', 'alt' and key can be used either via its keyCode (13 for Return) or name. Named keys are 'backspace', 'tab', 'enter', 'esc', 'space', 'pageup', 'pagedown', 'end', 'home', 'left', 'up', 'right', 'down', 'insert', 'delete'.
  * @example <input ui-keypress="{enter:'x = 1', 'ctrl-shift-space':'foo()', 'shift-13':'bar()'}" /> <input ui-keypress="foo = 2 on ctrl-13 and bar('hello') on shift-esc" />
  **/
-angular.module('ui.directives').directive('uiKeypress', ['$parse', function ($parse) {
+angular.module('ui.directives').directive('uiKeydown', ['keypressHelper', function(keypressHelper){
   return {
     link: function (scope, elm, attrs) {
-      var keysByCode = {
-        8: 'backspace',
-        9: 'tab',
-        13: 'enter',
-        27: 'esc',
-        32: 'space',
-        33: 'pageup',
-        34: 'pagedown',
-        35: 'end',
-        36: 'home',
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down',
-        45: 'insert',
-        46: 'delete'
-      };
-
-      var params, paramsParsed, expression, keys, combinations = [];
-      try {
-        params = scope.$eval(attrs.uiKeypress);
-        paramsParsed = true;
-      } catch (error) {
-        params = attrs.uiKeypress.split(/\s+and\s+/i);
-        paramsParsed = false;
-      }
-
-      // Prepare combinations for simple checking
-      angular.forEach(params, function (v, k) {
-        var combination = {};
-        if (paramsParsed) {
-          // An object passed
-          combination.expression = $parse(v);
-          combination.keys = k;
-        } else {
-          // A string passed
-          v = v.split(/\s+on\s+/i);
-          combination.expression = $parse(v[0]);
-          combination.keys = v[1];
-        }
-
-        keys = {};
-        angular.forEach(combination.keys.split('-'), function (value) {
-          keys[value] = true;
-        });
-        combination.keys = keys;
-        combinations.push(combination);
-      });
-
-      // Check only mathcing of pressed keys one of the conditions
-      elm.bind('keydown', function (event) {
-        // No need to do that inside the cycle
-        var altPressed = event.metaKey || event.altKey;
-        var ctrlPressed = event.ctrlKey;
-        var shiftPressed = event.shiftKey;
-
-        // Iterate over prepared combinations
-        angular.forEach(combinations, function (combination) {
-
-          var mainKeyPressed = (combination.keys[keysByCode[event.keyCode]] || combination.keys[event.keyCode.toString()]) || false;
-
-          var altRequired = combination.keys.alt || false;
-          var ctrlRequired = combination.keys.ctrl || false;
-          var shiftRequired = combination.keys.shift || false;
-
-          if (mainKeyPressed &&
-            ( altRequired == altPressed   ) &&
-            ( ctrlRequired == ctrlPressed  ) &&
-            ( shiftRequired == shiftPressed )
-            ) {
-            // Run the function
-            scope.$apply(function () {
-              combination.expression(scope, { '$event': event });
-            });
-          }
-        });
-      });
+      keypressHelper('keydown', scope, elm, attrs);
     }
   };
 }]);
 
+angular.module('ui.directives').directive('uiKeypress', ['keypressHelper', function(keypressHelper){
+  return {
+    link: function (scope, elm, attrs) {
+      keypressHelper('keypress', scope, elm, attrs);
+    }
+  };
+}]);
+
+angular.module('ui.directives').directive('uiKeyup', ['keypressHelper', function(keypressHelper){
+  return {
+    link: function (scope, elm, attrs) {
+      keypressHelper('keyup', scope, elm, attrs);
+    }
+  };
+}]);
 (function () {
   var app = angular.module('ui.directives');
 
@@ -25989,39 +26118,36 @@ angular.module('ui.directives').directive('uiKeypress', ['$parse', function ($pa
 })();
 /*
  Attaches jquery-ui input mask onto input element
-*/
-
+ */
 angular.module('ui.directives').directive('uiMask', [
-  function() {
+  function () {
     return {
-      require: 'ngModel',
-      scope: {
-        uiMask: '='
-      },
-      link: function($scope, element, attrs, controller) {
+      require:'ngModel',
+      link:function ($scope, element, attrs, controller) {
+
         /* We override the render method to run the jQuery mask plugin
-        */
-        controller.$render = function() {
-          var value;
-          value = controller.$viewValue || '';
+         */
+        controller.$render = function () {
+          var value = controller.$viewValue || '';
           element.val(value);
-          return element.mask($scope.uiMask);
+          element.mask($scope.$eval(attrs.uiMask));
         };
+
         /* Add a parser that extracts the masked value into the model but only if the mask is valid
-        */
-
-        controller.$parsers.push(function(value) {
-          var isValid;
-          isValid = element.data('mask-isvalid');
+         */
+        controller.$parsers.push(function (value) {
+          //the second check (or) is only needed due to the fact that element.isMaskValid() will keep returning undefined
+          //until there was at least one key event
+          var isValid = element.isMaskValid() || angular.isUndefined(element.isMaskValid()) && element.val().length>0;
           controller.$setValidity('mask', isValid);
-          return element.mask();
+          return isValid ? value : undefined;
         });
-        /* When keyup, update the viewvalue
-        */
 
-        return element.bind('keyup', function() {
-          return $scope.$apply(function() {
-            return controller.$setViewValue(element.mask());
+        /* When keyup, update the view value
+         */
+        element.bind('keyup', function () {
+          $scope.$apply(function () {
+            controller.$setViewValue(element.mask());
           });
         });
       }
@@ -26037,6 +26163,9 @@ angular.module('ui.directives')
     link: function(scope, elm, attrs, model) {
       //helper so you don't have to type class="modal hide"
       elm.addClass('modal hide');
+      elm.on( 'shown', function() {
+        elm.find( "[autofocus]" ).focus();
+      });
       scope.$watch(attrs.ngModel, function(value) {
         elm.modal(value && 'show' || 'hide');
       });
@@ -26057,18 +26186,23 @@ angular.module('ui.directives')
 /**
  * Add a clear button to form inputs to reset their value
  */
-angular.module('ui.directives').directive('uiReset', ['$parse', function ($parse) {
+angular.module('ui.directives').directive('uiReset', ['ui.config', function (uiConfig) {
+  var resetValue = null;
+  if (uiConfig.reset !== undefined)
+      resetValue = uiConfig.reset;
   return {
     require: 'ngModel',
     link: function (scope, elm, attrs, ctrl) {
-      var aElement = angular.element('<a class="ui-reset" />');
+      var aElement;
+      aElement = angular.element('<a class="ui-reset" />');
       elm.wrap('<span class="ui-resetwrap" />').after(aElement);
-
       aElement.bind('click', function (e) {
         e.preventDefault();
         scope.$apply(function () {
-          // This lets you SET the value of the 'parsed' model
-          ctrl.$setViewValue(null);
+          if (attrs.uiReset)
+            ctrl.$setViewValue(scope.$eval(attrs.uiReset));
+          else
+            ctrl.$setViewValue(resetValue);
           ctrl.$render();
         });
       });
@@ -26133,14 +26267,17 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
     compile: function (tElm, tAttrs) {
       var watch,
         repeatOption,
+    repeatAttr,
         isSelect = tElm.is('select'),
         isMultiple = (tAttrs.multiple !== undefined);
 
       // Enable watching of the options dataset if in use
       if (tElm.is('select')) {
-        repeatOption = tElm.find('option[ng-repeat]');
+        repeatOption = tElm.find('option[ng-repeat], option[data-ng-repeat]');
+    
         if (repeatOption.length) {
-          watch = repeatOption.attr('ng-repeat').split(' ').pop();
+      repeatAttr = repeatOption.attr('ng-repeat') || repeatOption.attr('data-ng-repeat');
+          watch = repeatAttr.split('|')[0].trim().split(' ').pop();
         }
       }
 
@@ -26206,6 +26343,10 @@ angular.module('ui.directives').directive('uiSelect2', ['ui.config', '$http', fu
 
         attrs.$observe('disabled', function (value) {
           elm.select2(value && 'disable' || 'enable');
+        });
+
+        scope.$watch(attrs.ngMultiple, function(newVal) {
+          elm.select2(opts);
         });
 
         // Set initial value since Angular doesn't
@@ -26348,7 +26489,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
             if (inst.isDirty()) {
               inst.save();
               ngModel.$setViewValue(elm.val());
-              scope.$apply();
+              if (!scope.$$phase)
+                scope.$apply();
             }
           },
           // Update model on keypress
@@ -26356,7 +26498,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
             if (this.isDirty()) {
               this.save();
               ngModel.$setViewValue(elm.val());
-              scope.$apply();
+              if (!scope.$$phase)
+                scope.$apply();
             }
             return true; // Continue handling
           },
@@ -26366,7 +26509,8 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (u
               if (ed.isDirty()) {
                 ed.save();
                 ngModel.$setViewValue(elm.val());
-                scope.$apply();
+                if (!scope.$$phase)
+                  scope.$apply();
               }
             });
           }
@@ -27186,21 +27330,42 @@ angular.module('ngCookies', ['ng']).
 
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-09-19
+ * @version v0.3.0 - 2012-10-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
 // READ: http://docs-next.angularjs.org/guide/ie
+// element tags are statically defined in order to accommodate lazy-loading whereby directives are also unknown
+
+// The ieshiv takes care of our ui.directives and AngularJS's ng-view, ng-include, ng-pluralize, ng-switch.
+// However, IF you have custom directives that can be used as html tags (yours or someone else's) then
+// add list of directives into <code>window.myCustomTags</code>
+
+// <!--[if lte IE 8]>
+//    <script>
+//    window.myCustomTags = [ 'yourCustomDirective', 'somebodyElsesDirective' ]; // optional
+//    </script>
+//    <script src="build/angular-ui-ieshiv.js"></script>
+// <![endif]-->
+
 (function (exports) {
 
-  var debug = window.ieShivDebug || false;
+  var debug = window.ieShivDebug || false,
+      tags = [ "ngInclude", "ngPluralize", "ngView", "ngSwitch", "uiCurrency", "uiCodemirror", "uiDate", "uiEvent",
+                "uiKeypress", "uiKeyup", "uiKeydown", "uiMask", "uiMapInfoWindow", "uiMapMarker", "uiMapPolyline",
+                "uiMapPolygon", "uiMapRectangle", "uiMapCircle", "uiMapGroundOverlay", "uiModal", "uiReset",
+                "uiScrollfix", "uiSelect2", "uiShow", "uiHide", "uiToggle", "uiSortable", "uiTinymce"
+                ];
+
+  window.myCustomTags =  window.myCustomTags || []; // externally defined by developer using angular-ui directives
+  tags.push.apply(tags, window.myCustomTags);
 
   var getIE = function () {
     // Returns the version of Internet Explorer or a -1
     // (indicating the use of another browser).
     var rv = -1; // Return value assumes failure.
-    if (navigator.appName === 'Microsoft Internet Explorer') {
+    if (navigator.appName == 'Microsoft Internet Explorer') {
       var ua = navigator.userAgent;
       var re = new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");
       if (re.exec(ua) !== null) {
@@ -27228,38 +27393,10 @@ angular.module('ngCookies', ['ng']).
   };
 
   var shiv = function () {
-    // TODO: unfortunately, angular is not exposing these in 'ng' module
-    var tags = [ 'ngInclude', 'ngPluralize', 'ngView', 'ngSwitch' ]; // angular specific,
-
-    // TODO: unfortunately, angular does not expose module names, it is a simple change to angular's loader.js
-    // however, not sure if something happens when referencing them, so maybe an OK thing.
-
-    var moduleNames = window.myAngularModules || []; // allow user to inject their own directives
-    moduleNames.push('ui.directives');
-
-    if (debug) console.log('moduleNames', moduleNames);
-    function pushDirectives(item) {
-      // only allow directives
-      if (item[1] === "directive") {
-        var dirname = item[2][0];
-        tags.push(dirname);
-      } else {
-        if (debug) console.log("skipping", item[1], item[2][0]);
-      }
-    }
-
-    for (var k = 0, mlen = moduleNames.length; k < mlen; k++) {
-      var modules = angular.module(moduleNames[k]); // will throw runtime exception
-      angular.forEach(modules._invokeQueue, pushDirectives);
-    }
-
-    if (debug) console.log("tags found", tags);
     for (var i = 0, tlen = tags.length; i < tlen; i++) {
-      if (debug) console.log("tag", tags[i]);
       var customElements = toCustomElements(tags[i], ':');
       for (var j = 0, clen = customElements.length; j < clen; j++) {
         var customElement = customElements[j];
-        if (debug) console.log("shivving", customElement);
         document.createElement(customElement);
       }
     }
@@ -27271,23 +27408,26 @@ angular.module('ngCookies', ['ng']).
     shiv();
   }
 
-})(window);;
+})(window);
+;
 
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-09-19
+ * @version v0.3.0 - 2012-10-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-(function(e){var t=window.ieShivDebug||!1,n=function(){var e=-1;if(navigator.appName==="Microsoft Internet Explorer"){var t=navigator.userAgent,n=new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");n.exec(t)!==null&&(e=parseFloat(RegExp.$1))}return e},r=function(e,t){var n=[],r=e.replace(/([A-Z])/g,function(e){return" "+e.toLowerCase()}),i=r.split(" "),s=i[0],o=i.slice(1).join("-");return n.push(s+":"+o),n.push(s+"-"+o),n.push("x-"+s+"-"+o),n.push("data-"+s+"-"+o),n},i=function(){function i(n){if(n[1]==="directive"){var r=n[2][0];e.push(r)}else t&&console.log("skipping",n[1],n[2][0])}var e=["ngInclude","ngPluralize","ngView","ngSwitch"],n=window.myAngularModules||[];n.push("ui.directives"),t&&console.log("moduleNames",n);for(var s=0,o=n.length;s<o;s++){var u=angular.module(n[s]);angular.forEach(u._invokeQueue,i)}t&&console.log("tags found",e);for(var a=0,f=e.length;a<f;a++){t&&console.log("tag",e[a]);var l=r(e[a],":");for(var c=0,h=l.length;c<h;c++){var p=l[c];t&&console.log("shivving",p),document.createElement(p)}}},s=n();(s>-1&&s<9||t)&&i()})(window);;
+(function(a){var b=window.ieShivDebug||!1,c=["ngInclude","ngPluralize","ngView","ngSwitch","uiCurrency","uiCodemirror","uiDate","uiEvent","uiKeypress","uiKeyup","uiKeydown","uiMask","uiMapInfoWindow","uiMapMarker","uiMapPolyline","uiMapPolygon","uiMapRectangle","uiMapCircle","uiMapGroundOverlay","uiModal","uiReset","uiScrollfix","uiSelect2","uiShow","uiHide","uiToggle","uiSortable","uiTinymce"];window.myCustomTags=window.myCustomTags||[],c.push.apply(c,window.myCustomTags);var d=function(){var a=-1;if(navigator.appName=="Microsoft Internet Explorer"){var b=navigator.userAgent,c=new RegExp("MSIE ([0-9]{1,}[\\.0-9]{0,})");c.exec(b)!==null&&(a=parseFloat(RegExp.$1))}return a},e=function(a,b){var c=[],d=a.replace(/([A-Z])/g,function(a){return" "+a.toLowerCase()}),e=d.split(" "),f=e[0],g=e.slice(1).join("-");return c.push(f+":"+g),c.push(f+"-"+g),c.push("x-"+f+"-"+g),c.push("data-"+f+"-"+g),c},f=function(){for(var a=0,b=c.length;a<b;a++){var d=e(c[a],":");for(var f=0,g=d.length;f<g;f++){var h=d[f];document.createElement(h)}}},g=d();(g>-1&&g<9||b)&&f()})(window);
+;
 
 /**
  * AngularUI - The companion suite for AngularJS
- * @version v0.2.1 - 2012-09-19
+ * @version v0.3.0 - 2012-10-30
  * @link http://angular-ui.github.com
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
-angular.module("ui.config",[]).value("ui.config",{}),angular.module("ui.filters",["ui.config"]),angular.module("ui.directives",["ui.config"]),angular.module("ui",["ui.filters","ui.directives","ui.config"]),angular.module("ui.directives").directive("uiAnimate",["ui.config","$timeout",function(e,t){var n={};return angular.isString(e.animate)?n["class"]=e.animate:e.animate&&(n=e.animate),{restrict:"A",link:function(e,r,i){var s={};i.uiAnimate&&(s=e.$eval(i.uiAnimate),angular.isString(s)&&(s={"class":s})),s=angular.extend({"class":"ui-animate"},n,s),r.addClass(s["class"]),t(function(){r.removeClass(s["class"])},20,!1)}}}]),angular.module("ui.directives").directive("uiCodemirror",["ui.config","$parse",function(e,t){"use strict";return e.codemirror=e.codemirror||{},{require:"ngModel",link:function(n,r,i,s){if(!r.is("textarea"))throw new Error("ui-codemirror can only be applied to a textarea element");var o,u=t(i.uiCodemirror),a=function(e){var t=e.getValue();t!==s.$viewValue&&(s.$setViewValue(t),n.$apply())},f=function(t){t=angular.extend({},t,e.codemirror);var n=t.onChange;n?t.onChange=function(e){a(e),n(e)}:t.onChange=a,o&&o.toTextArea(),o=CodeMirror.fromTextArea(r[0],t)};f(u()),n.$watch(u,f,!0),s.$formatters.push(function(e){if(angular.isUndefined(e)||e===null)return"";if(angular.isObject(e)||angular.isArray(e))throw new Error("ui-codemirror cannot use an object or an array as a model");return e}),s.$render=function(){o.setValue(s.$viewValue)}}}}]),angular.module("ui.directives").directive("uiCurrency",["ui.config","currencyFilter",function(e,t){var n={pos:"ui-currency-pos",neg:"ui-currency-neg",zero:"ui-currency-zero"};return e.currency&&angular.extend(n,e.currency),{restrict:"EAC",require:"ngModel",link:function(e,r,i,s){var o,u,a;o=angular.extend({},n,e.$eval(i.uiCurrency)),u=function(e){var n;return n=e*1,n>0?r.addClass(o.pos):r.removeClass(o.pos),n<0?r.addClass(o.neg):r.removeClass(o.neg),n===0?r.addClass(o.zero):r.removeClass(o.zero),e===""?r.text(""):r.text(t(n,o.symbol)),!0},s.$render=function(){a=s.$viewValue,r.val(a),u(a)}}}}]),angular.module("ui.directives").directive("uiDate",["ui.config",function(e){"use strict";var t;return t={},angular.isObject(e.date)&&angular.extend(t,e.date),{require:"?ngModel",link:function(t,n,r,i){var s=function(){return angular.extend({},e.date,t.$eval(r.uiDate))},o=function(){var e=s();if(i){var r=function(){t.$apply(function(){i.$setViewValue(n.datepicker("getDate"))})};if(e.onSelect){var o=e.onSelect;e.onSelect=function(e,t){return r(),o(e,t)}}else e.onSelect=r;n.bind("change",r),i.$render=function(){var e=i.$viewValue;n.datepicker("setDate",e),angular.isString(e)&&i.$setViewValue(n.datepicker("getDate"))}}n.datepicker("destroy"),n.datepicker(e),i.$render()};t.$watch(s,o,!0)}}}]),angular.module("ui.directives").directive("uiEvent",["$parse",function(e){return function(t,n,r){var i=t.$eval(r.uiEvent);angular.forEach(i,function(r,i){var s=e(r);n.bind(i,function(e){var n=Array.prototype.slice.call(arguments);n=n.splice(1),t.$apply(function(){s(t,{$event:e,$params:n})})})})}}]),angular.module("ui.directives").directive("uiIf",[function(){return{transclude:"element",priority:1e3,terminal:!0,restrict:"A",compile:function(e,t,n){return function(e,t,r){t[0].doNotMove=!0;var i=r.uiIf,s,o;e.$watch(i,function(r){s&&(s.remove(),s=null),o&&(o.$destroy(),o=null),r&&(o=e.$new(),n(o,function(e){s=e,t.after(e)})),t.parent().trigger("$childrenChanged")})}}}}]),angular.module("ui.directives").directive("uiJq",["ui.config",function(e){return{restrict:"A",compile:function(t,n){if(!angular.isFunction(t[n.uiJq]))throw new Error('ui-jq: The "'+n.uiJq+'" function does not exist');var r=e.jq&&e.jq[n.uiJq];return function(e,t,n){var i=[],s="change";n.uiOptions?(i=e.$eval("["+n.uiOptions+"]"),angular.isObject(r)&&angular.isObject(i[0])&&(i[0]=angular.extend(r,i[0]))):r&&(i=[r]),n.ngModel&&t.is("select,input,textarea")&&(i&&angular.isObject(i[0])&&i[0].ngChange!==undefined&&(s=i[0].ngChange),s&&t.on(s,function(){t.trigger("input")})),t[n.uiJq].apply(t,i)}}}}]),angular.module("ui.directives").directive("uiKeypress",["$parse",function(e){return{link:function(t,n,r){var i={8:"backspace",9:"tab",13:"enter",27:"esc",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down",45:"insert",46:"delete"},s,o,u,a,f=[];try{s=t.$eval(r.uiKeypress),o=!0}catch(l){s=r.uiKeypress.split(/\s+and\s+/i),o=!1}angular.forEach(s,function(t,n){var r={};o?(r.expression=e(t),r.keys=n):(t=t.split(/\s+on\s+/i),r.expression=e(t[0]),r.keys=t[1]),a={},angular.forEach(r.keys.split("-"),function(e){a[e]=!0}),r.keys=a,f.push(r)}),n.bind("keydown",function(e){var n=e.metaKey||e.altKey,r=e.ctrlKey,s=e.shiftKey;angular.forEach(f,function(o){var u=o.keys[i[e.keyCode]]||o.keys[e.keyCode.toString()]||!1,a=o.keys.alt||!1,f=o.keys.ctrl||!1,l=o.keys.shift||!1;u&&a==n&&f==r&&l==s&&t.$apply(function(){o.expression(t,{$event:e})})})})}}}]),function(){function t(e,t,n,r){angular.forEach(t.split(" "),function(t){var i={type:"map-"+t};google.maps.event.addListener(n,t,function(t){r.trigger(angular.extend({},i,t)),e.$$phase||e.$apply()})})}function n(n,r){e.directive(n,[function(){return{restrict:"A",link:function(e,i,s){e.$watch(s[n],function(n){t(e,r,n,i)})}}}])}var e=angular.module("ui.directives");e.directive("uiMap",["ui.config","$parse",function(e,n){var r="bounds_changed center_changed click dblclick drag dragend dragstart heading_changed idle maptypeid_changed mousemove mouseout mouseover projection_changed resize rightclick tilesloaded tilt_changed zoom_changed",i=e.map||{};return{restrict:"A",link:function(e,s,o){var u=angular.extend({},i,e.$eval(o.uiOptions)),a=new google.maps.Map(s[0],u),f=n(o.uiMap);f.assign(e,a),t(e,r,a,s)}}}]),e.directive("uiMapInfoWindow",["ui.config","$parse","$compile",function(e,n,r){var i="closeclick content_change domready position_changed zindex_changed",s=e.mapInfoWindow||{};return{link:function(e,o,u){var a=angular.extend({},s,e.$eval(u.uiOptions));a.content=o[0];var f=n(u.uiMapInfoWindow),l=f(e);l||(l=new google.maps.InfoWindow(a),f.assign(e,l)),t(e,i,l,o),o.replaceWith("<div></div>");var c=l.open;l.open=function(n,i,s,u,a,f){r(o.contents())(e),c.call(l,n,i,s,u,a,f)}}}}]),n("uiMapMarker","animation_changed click clickable_changed cursor_changed dblclick drag dragend draggable_changed dragstart flat_changed icon_changed mousedown mouseout mouseover mouseup position_changed rightclick shadow_changed shape_changed title_changed visible_changed zindex_changed"),n("uiMapPolyline","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapPolygon","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapRectangle","bounds_changed click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),n("uiMapCircle","center_changed click dblclick mousedown mousemove mouseout mouseover mouseup radius_changed rightclick"),n("uiMapGroundOverlay","click dblclick")}(),angular.module("ui.directives").directive("uiMask",[function(){return{require:"ngModel",scope:{uiMask:"="},link:function(e,t,n,r){return r.$render=function(){var n;return n=r.$viewValue||"",t.val(n),t.mask(e.uiMask)},r.$parsers.push(function(e){var n;return n=t.data("mask-isvalid"),r.$setValidity("mask",n),t.mask()}),t.bind("keyup",function(){return e.$apply(function(){return r.$setViewValue(t.mask())})})}}}]),angular.module("ui.directives").directive("uiModal",["$timeout",function(e){return{restrict:"EAC",require:"ngModel",link:function(t,n,r,i){n.addClass("modal hide"),t.$watch(r.ngModel,function(e){n.modal(e&&"show"||"hide")}),n.on(jQuery.support.transition&&"shown"||"show",function(){e(function(){i.$setViewValue(!0)})}),n.on(jQuery.support.transition&&"hidden"||"hide",function(){e(function(){i.$setViewValue(!1)})})}}}]),angular.module("ui.directives").directive("uiReset",["$parse",function(e){return{require:"ngModel",link:function(e,t,n,r){var i=angular.element('<a class="ui-reset" />');t.wrap('<span class="ui-resetwrap" />').after(i),i.bind("click",function(t){t.preventDefault(),e.$apply(function(){r.$setViewValue(null),r.$render()})})}}}]),angular.module("ui.directives").directive("uiScrollfix",["$window",function(e){"use strict";return{link:function(t,n,r){var i=n.offset().top;r.uiScrollfix?r.uiScrollfix.charAt(0)==="-"?r.uiScrollfix=i-r.uiScrollfix.substr(1):r.uiScrollfix.charAt(0)==="+"&&(r.uiScrollfix=i+parseFloat(r.uiScrollfix.substr(1))):r.uiScrollfix=i,angular.element(e).on("scroll.ui-scrollfix",function(){var t;if(angular.isDefined(e.pageYOffset))t=e.pageYOffset;else{var i=document.compatMode&&document.compatMode!=="BackCompat"?document.documentElement:document.body;t=i.scrollTop}!n.hasClass("ui-scrollfix")&&t>r.uiScrollfix?n.addClass("ui-scrollfix"):n.hasClass("ui-scrollfix")&&t<r.uiScrollfix&&n.removeClass("ui-scrollfix")})}}}]),angular.module("ui.directives").directive("uiSelect2",["ui.config","$http",function(e,t){var n={};return e.select2&&angular.extend(n,e.select2),{require:"?ngModel",compile:function(e,t){var r,i,s=e.is("select"),o=t.multiple!==undefined;return e.is("select")&&(i=e.find("option[ng-repeat]"),i.length&&(r=i.attr("ng-repeat").split(" ").pop())),function(e,t,i,u){var a=angular.extend({},n,e.$eval(i.uiSelect2));s?(delete a.multiple,delete a.initSelection):o&&(a.multiple=!0);if(u){u.$render=function(){s?t.select2("val",u.$modelValue):o&&!u.$modelValue?t.select2("data",[]):t.select2("data",u.$modelValue)},r&&e.$watch(r,function(e,n,r){if(!e)return;setTimeout(function(){t.select2("val",u.$viewValue),t.trigger("change")})});if(!s){t.bind("change",function(){e.$apply(function(){u.$setViewValue(t.select2("data"))})});if(a.initSelection){var f=a.initSelection;a.initSelection=function(e,t){f(e,function(e){u.$setViewValue(e),t(e)})}}}}i.$observe("disabled",function(e){t.select2(e&&"disable"||"enable")}),t.val(e.$eval(i.ngModel)),setTimeout(function(){t.select2(a)})}}}}]),angular.module("ui.directives").directive("uiShow",[function(){return function(e,t,n){e.$watch(n.uiShow,function(e,n){e?t.addClass("ui-show"):t.removeClass("ui-show")})}}]).directive("uiHide",[function(){return function(e,t,n){e.$watch(n.uiHide,function(e,n){e?t.addClass("ui-hide"):t.removeClass("ui-hide")})}}]).directive("uiToggle",[function(){return function(e,t,n){e.$watch(n.uiToggle,function(e,n){e?t.removeClass("ui-hide").addClass("ui-show"):t.removeClass("ui-show").addClass("ui-hide")})}}]),angular.module("ui.directives").directive("uiSortable",["ui.config",function(e){var t;return t={},e.sortable!=null&&angular.extend(t,e.sortable),{require:"?ngModel",link:function(e,n,r,i){var s,o,u,a,f;return u=angular.extend({},t,e.$eval(r.uiOptions)),i!=null&&(s=function(e,t){return t.item.data("ui-sortable-start",t.item.index())},o=function(t,n){var r,s;return s=n.item.data("ui-sortable-start"),r=n.item.index(),i.$modelValue.splice(r,0,i.$modelValue.splice(s,1)[0]),e.$apply()},a=u.start,u.start=function(t,n){return s(t,n),typeof a=="function"&&a(t,n),e.$apply()},f=u.update,u.update=function(t,n){return o(t,n),typeof f=="function"&&f(t,n),e.$apply()}),n.sortable(u)}}}]),angular.module("ui.directives").directive("uiTinymce",["ui.config",function(e){return e.tinymce=e.tinymce||{},{require:"ngModel",link:function(t,n,r,i){var s,o={onchange_callback:function(e){e.isDirty()&&(e.save(),i.$setViewValue(n.val()),t.$apply())},handle_event_callback:function(e){return this.isDirty()&&(this.save(),i.$setViewValue(n.val()),t.$apply()),!0},setup:function(e){e.onSetContent.add(function(e,r){e.isDirty()&&(e.save(),i.$setViewValue(n.val()),t.$apply())})}};r.uiTinymce?s=t.$eval(r.uiTinymce):s={},angular.extend(o,e.tinymce,s),setTimeout(function(){n.tinymce(o)})}}}]),angular.module("ui.directives").directive("uiValidate",function(){return{restrict:"A",require:"ngModel",link:function(e,t,n,r){var i,s=n.uiValidate;s=e.$eval(s);if(!s)return;angular.isFunction(s)&&(s={validator:s}),angular.forEach(s,function(e,t){i=function(n){return e(n)?(r.$setValidity(t,!0),n):(r.$setValidity(t,!1),undefined)},r.$formatters.push(i),r.$parsers.push(i)})}}}),angular.module("ui.filters").filter("format",function(){return function(e,t){if(!e)return e;var n=e.toString(),r;return t===undefined?n:!angular.isArray(t)&&!angular.isObject(t)?n.split("$0").join(t):(r=angular.isArray(t)&&"$"||":",angular.forEach(t,function(e,t){n=n.split(r+t).join(e)}),n)}}),angular.module("ui.filters").filter("highlight",function(){return function(e,t,n){return t||angular.isNumber(t)?(e=e.toString(),t=t.toString(),n?e.split(t).join('<span class="ui-match">'+t+"</span>"):e.replace(new RegExp(t,"gi"),'<span class="ui-match">$&</span>')):e}}),angular.module("ui.filters").filter("inflector",function(){function e(e){return e.replace(/^([a-z])|\s+([a-z])/g,function(e){return e.toUpperCase()})}function t(e,t){return e.replace(/[A-Z]/g,function(e){return t+e})}var n={humanize:function(n){return e(t(n," ").split("_").join(" "))},underscore:function(e){return e.substr(0,1).toLowerCase()+t(e.substr(1),"_").toLowerCase().split(" ").join("_")},variable:function(t){return t=t.substr(0,1).toLowerCase()+e(t.split("_").join(" ")).substr(1).split(" ").join(""),t}};return function(e,t,r){return t!==!1&&angular.isString(e)?(t=t||"humanize",n[t](e)):e}}),angular.module("ui.filters").filter("unique",function(){return function(e,t){if(t===!1)return e;if((t||angular.isUndefined(t))&&angular.isArray(e)){var n={},r=[],i=function(e){return angular.isObject(e)&&angular.isString(t)?e[t]:e};angular.forEach(e,function(e){var t,n=!1;for(var s=0;s<r.length;s++)if(angular.equals(i(r[s]),i(e))){n=!0;break}n||r.push(e)}),e=r}return e}});;
+angular.module("ui.config",[]).value("ui.config",{}),angular.module("ui.filters",["ui.config"]),angular.module("ui.directives",["ui.config"]),angular.module("ui",["ui.filters","ui.directives","ui.config"]),angular.module("ui.directives").directive("uiAnimate",["ui.config","$timeout",function(a,b){var c={};return angular.isString(a.animate)?c["class"]=a.animate:a.animate&&(c=a.animate),{restrict:"A",link:function(a,d,e){var f={};e.uiAnimate&&(f=a.$eval(e.uiAnimate),angular.isString(f)&&(f={"class":f})),f=angular.extend({"class":"ui-animate"},c,f),d.addClass(f["class"]),b(function(){d.removeClass(f["class"])},20,!1)}}}]),angular.module("ui.directives").directive("uiCalendar",["ui.config","$parse",function(a,b){return a.uiCalendar=a.uiCalendar||{},{require:"ngModel",restrict:"A",scope:{eventChanged:"=changed",events:"=ngModel"},link:function(c,d,e){function g(){var b,g={header:{left:"prev,next today",center:"title",right:"month,agendaWeek,agendaDay"},eventMouseover:function(a,b,c){c.name!=="agendaDay"&&$(b.target).attr("title",a.title)},events:f(c)};e.uiCalendar?b=c.$eval(e.uiCalendar):b={},angular.extend(g,a.uiCalendar,b),d.html("").fullCalendar(g)}var f=b(e.ngModel);g(),c.$watch(function(){return c.eventChanged},function(){g()},!0)}}}]),angular.module("ui.directives").directive("uiCodemirror",["ui.config","$parse",function(a,b){return"use strict",a.codemirror=a.codemirror||{},{require:"ngModel",link:function(c,d,e,f){if(!d.is("textarea"))throw new Error("ui-codemirror can only be applied to a textarea element");var g,h=b(e.uiCodemirror),i=function(a){var b=a.getValue();b!==f.$viewValue&&(f.$setViewValue(b),c.$apply())},j=function(b){b=angular.extend({},b,a.codemirror);var c=b.onChange;c?b.onChange=function(a){i(a),c(a)}:b.onChange=i,g&&g.toTextArea(),g=CodeMirror.fromTextArea(d[0],b)};j(h()),c.$watch(h,j,!0),f.$formatters.push(function(a){if(angular.isUndefined(a)||a===null)return"";if(angular.isObject(a)||angular.isArray(a))throw new Error("ui-codemirror cannot use an object or an array as a model");return a}),f.$render=function(){g.setValue(f.$viewValue)}}}}]),angular.module("ui.directives").directive("uiCurrency",["ui.config","currencyFilter",function(a,b){var c={pos:"ui-currency-pos",neg:"ui-currency-neg",zero:"ui-currency-zero"};return a.currency&&angular.extend(c,a.currency),{restrict:"EAC",require:"ngModel",link:function(a,d,e,f){var g,h,i;g=angular.extend({},c,a.$eval(e.uiCurrency)),h=function(a){var c;return c=a*1,c>0?d.addClass(g.pos):d.removeClass(g.pos),c<0?d.addClass(g.neg):d.removeClass(g.neg),c===0?d.addClass(g.zero):d.removeClass(g.zero),a===""?d.text(""):d.text(b(c,g.symbol)),!0},f.$render=function(){i=f.$viewValue,d.val(i),h(i)}}}}]),angular.module("ui.directives").directive("uiDate",["ui.config",function(a){"use strict";var b;return b={},angular.isObject(a.date)&&angular.extend(b,a.date),{require:"?ngModel",link:function(b,c,d,e){var f=function(){return angular.extend({},a.date,b.$eval(d.uiDate))},g=function(){var a=f();if(e){var d=function(){b.$apply(function(){var a=c.datepicker("getDate");c.datepicker("setDate",c.val()),e.$setViewValue(a)})};if(a.onSelect){var g=a.onSelect;a.onSelect=function(a,b){return d(),g(a,b)}}else a.onSelect=d;c.bind("change",d),e.$render=function(){var a=e.$viewValue;if(angular.isDefined(a)&&a!==null&&!angular.isDate(a))throw new Error("ng-Model value must be a Date object - currently it is a "+typeof a+" - use ui-date-format to convert it from a string");c.datepicker("setDate",a)}}c.datepicker("destroy"),c.datepicker(a),e.$render()};b.$watch(f,g,!0)}}}]).directive("uiDateFormat",[function(){var a={require:"ngModel",link:function(a,b,c,d){if(c.uiDateFormat==="")d.$formatters.push(function(a){return angular.isString(a)?new Date(a):null}),d.$parsers.push(function(a){return angular.isString(a)?a.toISOString():null});else{var e=c.uiDateFormat;d.$formatters.push(function(a){return angular.isString(a)?$.datepicker.parseDate(e,a):null}),d.$parsers.push(function(a){return angular.isString(a)?$.datepicker.formatDate(e,a):null})}}};return a}]),angular.module("ui.directives").directive("uiEvent",["$parse",function(a){return function(b,c,d){var e=b.$eval(d.uiEvent);angular.forEach(e,function(d,e){var f=a(d);c.bind(e,function(a){var c=Array.prototype.slice.call(arguments);c=c.splice(1),b.$apply(function(){f(b,{$event:a,$params:c})})})})}}]),angular.module("ui.directives").directive("uiIf",[function(){return{transclude:"element",priority:1e3,terminal:!0,restrict:"A",compile:function(a,b,c){return function(a,b,d){b[0].doNotMove=!0;var e=d.uiIf,f,g;a.$watch(e,function(d){f&&(f.remove(),f=null),g&&(g.$destroy(),g=null),d&&(g=a.$new(),c(g,function(a){f=a,b.after(a)})),b.parent().trigger("$childrenChanged")})}}}}]),angular.module("ui.directives").directive("uiJq",["ui.config",function(a){return{restrict:"A",compile:function(b,c){if(!angular.isFunction(b[c.uiJq]))throw new Error('ui-jq: The "'+c.uiJq+'" function does not exist');var d=a.jq&&a.jq[c.uiJq];return function(a,b,c){var e=[],f="change";c.uiOptions?(e=a.$eval("["+c.uiOptions+"]"),angular.isObject(d)&&angular.isObject(e[0])&&(e[0]=angular.extend(d,e[0]))):d&&(e=[d]),c.ngModel&&b.is("select,input,textarea")&&(e&&angular.isObject(e[0])&&e[0].ngChange!==undefined&&(f=e[0].ngChange),f&&b.on(f,function(){b.trigger("input")})),b[c.uiJq].apply(b,e)}}}}]),angular.module("ui.directives").factory("keypressHelper",["$parse",function a(a){var b={8:"backspace",9:"tab",13:"enter",27:"esc",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down",45:"insert",46:"delete"},c=function(a){return a.charAt(0).toUpperCase()+a.slice(1)};return function(d,e,f,g){var h,i=[];h=e.$eval(g["ui"+c(d)]),angular.forEach(h,function(b,c){var d,e;e=a(b),angular.forEach(c.split(" "),function(a){d={expression:e,keys:{}},angular.forEach(a.split("-"),function(a){d.keys[a]=!0}),i.push(d)})}),f.bind(d,function(a){var c=a.metaKey||a.altKey,f=a.ctrlKey,g=a.shiftKey,h=a.keyCode;d==="keypress"&&!g&&h>=97&&h<=122&&(h=h-32),angular.forEach(i,function(d){var h=d.keys[b[a.keyCode]]||d.keys[a.keyCode.toString()]||!1,i=d.keys.alt||!1,j=d.keys.ctrl||!1,k=d.keys.shift||!1;h&&i==c&&j==f&&k==g&&e.$apply(function(){d.expression(e,{$event:a})})})})}}]),angular.module("ui.directives").directive("uiKeydown",["keypressHelper",function(a){return{link:function(b,c,d){a("keydown",b,c,d)}}}]),angular.module("ui.directives").directive("uiKeypress",["keypressHelper",function(a){return{link:function(b,c,d){a("keypress",b,c,d)}}}]),angular.module("ui.directives").directive("uiKeyup",["keypressHelper",function(a){return{link:function(b,c,d){a("keyup",b,c,d)}}}]),function(){function b(a,b,c,d){angular.forEach(b.split(" "),function(b){var e={type:"map-"+b};google.maps.event.addListener(c,b,function(b){d.trigger(angular.extend({},e,b)),a.$$phase||a.$apply()})})}function c(c,d){a.directive(c,[function(){return{restrict:"A",link:function(a,e,f){a.$watch(f[c],function(c){b(a,d,c,e)})}}}])}var a=angular.module("ui.directives");a.directive("uiMap",["ui.config","$parse",function(a,c){var d="bounds_changed center_changed click dblclick drag dragend dragstart heading_changed idle maptypeid_changed mousemove mouseout mouseover projection_changed resize rightclick tilesloaded tilt_changed zoom_changed",e=a.map||{};return{restrict:"A",link:function(a,f,g){var h=angular.extend({},e,a.$eval(g.uiOptions)),i=new google.maps.Map(f[0],h),j=c(g.uiMap);j.assign(a,i),b(a,d,i,f)}}}]),a.directive("uiMapInfoWindow",["ui.config","$parse","$compile",function(a,c,d){var e="closeclick content_change domready position_changed zindex_changed",f=a.mapInfoWindow||{};return{link:function(a,g,h){var i=angular.extend({},f,a.$eval(h.uiOptions));i.content=g[0];var j=c(h.uiMapInfoWindow),k=j(a);k||(k=new google.maps.InfoWindow(i),j.assign(a,k)),b(a,e,k,g),g.replaceWith("<div></div>");var l=k.open;k.open=function(b,c,e,f,h,i){d(g.contents())(a),l.call(k,b,c,e,f,h,i)}}}}]),c("uiMapMarker","animation_changed click clickable_changed cursor_changed dblclick drag dragend draggable_changed dragstart flat_changed icon_changed mousedown mouseout mouseover mouseup position_changed rightclick shadow_changed shape_changed title_changed visible_changed zindex_changed"),c("uiMapPolyline","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),c("uiMapPolygon","click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),c("uiMapRectangle","bounds_changed click dblclick mousedown mousemove mouseout mouseover mouseup rightclick"),c("uiMapCircle","center_changed click dblclick mousedown mousemove mouseout mouseover mouseup radius_changed rightclick"),c("uiMapGroundOverlay","click dblclick")}(),angular.module("ui.directives").directive("uiMask",[function(){return{require:"ngModel",link:function(a,b,c,d){d.$render=function(){var e=d.$viewValue||"";b.val(e),b.mask(a.$eval(c.uiMask))},d.$parsers.push(function(a){var c=b.isMaskValid()||angular.isUndefined(b.isMaskValid())&&b.val().length>0;return d.$setValidity("mask",c),c?a:undefined}),b.bind("keyup",function(){a.$apply(function(){d.$setViewValue(b.mask())})})}}}]),angular.module("ui.directives").directive("uiModal",["$timeout",function(a){return{restrict:"EAC",require:"ngModel",link:function(b,c,d,e){c.addClass("modal hide"),c.on("shown",function(){c.find("[autofocus]").focus()}),b.$watch(d.ngModel,function(a){c.modal(a&&"show"||"hide")}),c.on(jQuery.support.transition&&"shown"||"show",function(){a(function(){e.$setViewValue(!0)})}),c.on(jQuery.support.transition&&"hidden"||"hide",function(){a(function(){e.$setViewValue(!1)})})}}}]),angular.module("ui.directives").directive("uiReset",["ui.config",function(a){var b=null;return a.reset!==undefined&&(b=a.reset),{require:"ngModel",link:function(a,c,d,e){var f;f=angular.element('<a class="ui-reset" />'),c.wrap('<span class="ui-resetwrap" />').after(f),f.bind("click",function(c){c.preventDefault(),a.$apply(function(){d.uiReset?e.$setViewValue(a.$eval(d.uiReset)):e.$setViewValue(b),e.$render()})})}}}]),angular.module("ui.directives").directive("uiScrollfix",["$window",function(a){return"use strict",{link:function(b,c,d){var e=c.offset().top;d.uiScrollfix?d.uiScrollfix.charAt(0)==="-"?d.uiScrollfix=e-d.uiScrollfix.substr(1):d.uiScrollfix.charAt(0)==="+"&&(d.uiScrollfix=e+parseFloat(d.uiScrollfix.substr(1))):d.uiScrollfix=e,angular.element(a).on("scroll.ui-scrollfix",function(){var b;if(angular.isDefined(a.pageYOffset))b=a.pageYOffset;else{var e=document.compatMode&&document.compatMode!=="BackCompat"?document.documentElement:document.body;b=e.scrollTop}!c.hasClass("ui-scrollfix")&&b>d.uiScrollfix?c.addClass("ui-scrollfix"):c.hasClass("ui-scrollfix")&&b<d.uiScrollfix&&c.removeClass("ui-scrollfix")})}}}]),angular.module("ui.directives").directive("uiSelect2",["ui.config","$http",function(a,b){var c={};return a.select2&&angular.extend(c,a.select2),{require:"?ngModel",compile:function(a,b){var d,e,f,g=a.is("select"),h=b.multiple!==undefined;return a.is("select")&&(e=a.find("option[ng-repeat], option[data-ng-repeat]"),e.length&&(f=e.attr("ng-repeat")||e.attr("data-ng-repeat"),d=f.split("|")[0].trim().split(" ").pop())),function(a,b,e,f){var i=angular.extend({},c,a.$eval(e.uiSelect2));g?(delete i.multiple,delete i.initSelection):h&&(i.multiple=!0);if(f){f.$render=function(){g?b.select2("val",f.$modelValue):h&&!f.$modelValue?b.select2("data",[]):b.select2("data",f.$modelValue)},d&&a.$watch(d,function(a,c,d){if(!a)return;setTimeout(function(){b.select2("val",f.$viewValue),b.trigger("change")})});if(!g){b.bind("change",function(){a.$apply(function(){f.$setViewValue(b.select2("data"))})});if(i.initSelection){var j=i.initSelection;i.initSelection=function(a,b){j(a,function(a){f.$setViewValue(a),b(a)})}}}}e.$observe("disabled",function(a){b.select2(a&&"disable"||"enable")}),a.$watch(e.ngMultiple,function(a){b.select2(i)}),b.val(a.$eval(e.ngModel)),setTimeout(function(){b.select2(i)})}}}}]),angular.module("ui.directives").directive("uiShow",[function(){return function(a,b,c){a.$watch(c.uiShow,function(a,c){a?b.addClass("ui-show"):b.removeClass("ui-show")})}}]).directive("uiHide",[function(){return function(a,b,c){a.$watch(c.uiHide,function(a,c){a?b.addClass("ui-hide"):b.removeClass("ui-hide")})}}]).directive("uiToggle",[function(){return function(a,b,c){a.$watch(c.uiToggle,function(a,c){a?b.removeClass("ui-hide").addClass("ui-show"):b.removeClass("ui-show").addClass("ui-hide")})}}]),angular.module("ui.directives").directive("uiSortable",["ui.config",function(a){var b;return b={},a.sortable!=null&&angular.extend(b,a.sortable),{require:"?ngModel",link:function(a,c,d,e){var f,g,h,i,j;return h=angular.extend({},b,a.$eval(d.uiOptions)),e!=null&&(f=function(a,b){return b.item.data("ui-sortable-start",b.item.index())},g=function(b,c){var d,f;return f=c.item.data("ui-sortable-start"),d=c.item.index(),e.$modelValue.splice(d,0,e.$modelValue.splice(f,1)[0]),a.$apply()},i=h.start,h.start=function(b,c){return f(b,c),typeof i=="function"&&i(b,c),a.$apply()},j=h.update,h.update=function(b,c){return g(b,c),typeof j=="function"&&j(b,c),a.$apply()}),c.sortable(h)}}}]),angular.module("ui.directives").directive("uiTinymce",["ui.config",function(a){return a.tinymce=a.tinymce||{},{require:"ngModel",link:function(b,c,d,e){var f,g={onchange_callback:function(a){a.isDirty()&&(a.save(),e.$setViewValue(c.val()),b.$$phase||b.$apply())},handle_event_callback:function(a){return this.isDirty()&&(this.save(),e.$setViewValue(c.val()),b.$$phase||b.$apply()),!0},setup:function(a){a.onSetContent.add(function(a,d){a.isDirty()&&(a.save(),e.$setViewValue(c.val()),b.$$phase||b.$apply())})}};d.uiTinymce?f=b.$eval(d.uiTinymce):f={},angular.extend(g,a.tinymce,f),setTimeout(function(){c.tinymce(g)})}}}]),angular.module("ui.directives").directive("uiValidate",function(){return{restrict:"A",require:"ngModel",link:function(a,b,c,d){var e,f=c.uiValidate;f=a.$eval(f);if(!f)return;angular.isFunction(f)&&(f={validator:f}),angular.forEach(f,function(a,b){e=function(c){return a(c)?(d.$setValidity(b,!0),c):(d.$setValidity(b,!1),undefined)},d.$formatters.push(e),d.$parsers.push(e)})}}}),angular.module("ui.filters").filter("format",function(){return function(a,b){if(!a)return a;var c=a.toString(),d;return b===undefined?c:!angular.isArray(b)&&!angular.isObject(b)?c.split("$0").join(b):(d=angular.isArray(b)&&"$"||":",angular.forEach(b,function(a,b){c=c.split(d+b).join(a)}),c)}}),angular.module("ui.filters").filter("highlight",function(){return function(a,b,c){return b||angular.isNumber(b)?(a=a.toString(),b=b.toString(),c?a.split(b).join('<span class="ui-match">'+b+"</span>"):a.replace(new RegExp(b,"gi"),'<span class="ui-match">$&</span>')):a}}),angular.module("ui.filters").filter("inflector",function(){function a(a){return a.replace(/^([a-z])|\s+([a-z])/g,function(a){return a.toUpperCase()})}function b(a,b){return a.replace(/[A-Z]/g,function(a){return b+a})}var c={humanize:function(c){return a(b(c," ").split("_").join(" "))},underscore:function(a){return a.substr(0,1).toLowerCase()+b(a.substr(1),"_").toLowerCase().split(" ").join("_")},variable:function(b){return b=b.substr(0,1).toLowerCase()+a(b.split("_").join(" ")).substr(1).split(" ").join(""),b}};return function(a,b,d){return b!==!1&&angular.isString(a)?(b=b||"humanize",c[b](a)):a}}),angular.module("ui.filters").filter("unique",function(){return function(a,b){if(b===!1)return a;if((b||angular.isUndefined(b))&&angular.isArray(a)){var c={},d=[],e=function(a){return angular.isObject(a)&&angular.isString(b)?a[b]:a};angular.forEach(a,function(a){var b,c=!1;for(var f=0;f<d.length;f++)if(angular.equals(e(d[f]),e(a))){c=!0;break}c||d.push(a)}),a=d}return a}});
+;
 
 /**
  * @license AngularJS v1.0.2

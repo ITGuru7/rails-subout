@@ -13,6 +13,14 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     respond_with(@auction)
   end
 
+  def update
+    @auction = current_company.auctions.find(params[:id])
+
+    @auction.update_attributes(params[:opportunity])
+
+    respond_with(@auction)
+  end
+
   def show
     @auction = current_company.auctions.find(params[:id])
     respond_with(@auction)

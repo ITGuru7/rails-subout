@@ -25,7 +25,7 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityNewCtrl, SettingCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
   var _ref;
@@ -53,7 +53,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auc
       api_token: $rootScope.token.api_token
     });
   };
-  $rootScope.setOpportunityViaId = function(opportunity_id, eventable_id) {
+  $rootScope.setOpportunityViaId = function(opportunity_id) {
     return $rootScope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
       opportunityId: opportunity_id
@@ -64,25 +64,41 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auc
       });
     });
   };
-  return $rootScope.setOtherCompanyViaId = function(company_id) {
+  $rootScope.setOtherCompanyViaId = function(company_id) {
     return $rootScope.other_company = Company.get({
       api_token: $rootScope.token.api_token,
       companyId: company_id
     });
   };
+  return $rootScope.dateOptions = {
+    dateFormat: 'dd/mm/yy'
+  };
 };
 
-OpportunityNewCtrl = function($scope, $rootScope, $location, Auction) {
+OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
   return $scope.save = function() {
-    var newOpportunity;
-    newOpportunity = $scope.opportunity;
-    return Auction.save({
-      opportunity: newOpportunity,
-      api_token: $rootScope.token.api_token
-    }, function(data) {
-      return jQuery("#modal").modal("hide");
-    });
+    var opportunity;
+    opportunity = $scope.opportunity;
+    opportunity.bidding_ends = $('#opportunity_ends').val();
+    opportunity.start_date = $('#opportunity_start_date').val();
+    opportunity.end_date = $('#opportunity_end_date').val();
+    if (opportunity._id) {
+      return Auction.update({
+        opportunityId: opportunity._id,
+        opportunity: opportunity,
+        api_token: $rootScope.token.api_token
+      }, function(data) {
+        return jQuery("#modal").modal("hide");
+      });
+    } else {
+      return Auction.save({
+        opportunity: opportunity,
+        api_token: $rootScope.token.api_token
+      }, function(data) {
+        return jQuery("#modal").modal("hide");
+      });
+    }
   };
 };
 
@@ -114,9 +130,9 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {};
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
-  $scope.cancelOpportunity = function(opportunity) {
+  $scope.cancelOpportunity = function() {
     return Auction.cancel({
-      opportunityId: opportunity._id,
+      opportunityId: $scope.opportunity._id,
       action: 'cancel',
       api_token: $rootScope.token.api_token
     }, {}, function() {
@@ -389,6 +405,9 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       method: "PUT"
     },
     cancel: {
+      method: "PUT"
+    },
+    update: {
       method: "PUT"
     }
   });

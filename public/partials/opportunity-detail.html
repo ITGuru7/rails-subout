@@ -4,8 +4,8 @@
     <h3>Opportunity - {{opportunity.name}}</h3>
   </div>
   <div class="modal-body">
-    <a href='#'>Edit</a>
-    <a class='btn btn-danger' ng-show="bids.length == 0" ng-click="cancelOpportunity(opportunity)">Cancel</a>
+    <a data-target="#modal" ng-click="setOpportunityViaId(opportunity._id); setModal('partials/opportunity-form.html')">Edit</a>
+    <a class='btn btn-danger' ng-show="bids.length == 0" ng-click="cancelOpportunity()">Cancel</a>
     <div class="control-group" ng-show="opportunity.bidding_done">
       <div class="control-label">Won By: {{opportunity.winner_name}}</div>
       <div class="control-label">Winning Bid Amount: {{opportunity.winning_amount}}</div>
