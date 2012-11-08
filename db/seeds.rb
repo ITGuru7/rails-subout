@@ -5,3 +5,24 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Event.all.destroy_all
+
+%W[companies contacts locations opportunities bids events].each do |collection|
+  puts "importing #{collection}.json"
+  puts `mongoimport --db subout_development --collection #{collection} --upsert --file db/seeds/#{collection}.json`
+end
+
+demo_companies = {
+  'Diversified Transportation Ltd.' => 'suboutdev@gmail.com',
+  'Valley Bus Coaches, Llc' => 'ed@valley_bus.com',
+  'Peter Pan Bus Lines, Inc.' => 'peter@peterpan_bus.com',
+  'Phoenix Bus Inc' => 'tom@phoenix_bus.com',
+  'Boston Express Bus Inc.' => 'steve@boston_bus.com'
+}
+
+User.all.destroy_all
+demo_companies.each do |company_name, user_email|
+  company = Company.where(:name => company_name).first
+  FactoryGirl.create(:user, :email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
+end

@@ -266,7 +266,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
 
 SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $scope.email = "suboutdev@gmail.com";
-  $scope.password = "sub0utd3v";
+  $scope.password = "password";
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,

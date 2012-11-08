@@ -68,6 +68,7 @@ class Opportunity
     opportunity[:bids_count] = self.bids_count
     opportunity[:latest_bid_amount] = self.latest_bid_amount
     opportunity[:lowest_bid_amount] = self.lowest_bid_amount
+    opportunity[:icon_url] = self.icon_url
     opportunity
   end
 
