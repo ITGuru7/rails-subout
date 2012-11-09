@@ -35,14 +35,16 @@ Given /^I have "(.*?)" as a favorite supplier$/ do |name|
 end
 
 When /^I remove "(.*?)" from my favorites$/ do |name|
-  visit favorites_path
-  within "##{dom_id(@supplier)}" do
-    click_on 'delete'
+  click_on "Favorites"
+
+  sleep(0.5)
+  within "#modal" do
+    click_on 'Remove'
   end
 end
 
 Then /^"(.*?)" should not be in my favorites$/ do |name|
-  page.should_not have_content( @supplier.name )
+  find('#modal').should_not have_content(name)
 end
 
 Then /^that supplier should receive a favorite invitation email$/ do

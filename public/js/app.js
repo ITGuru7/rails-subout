@@ -122,9 +122,19 @@ MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
 };
 
 FavoritesCtrl = function($scope, $rootScope, Favorite) {
-  return $scope.favoriteCompanies = Favorite.query({
+  $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
+  return $scope.removeFavorite = function(company) {
+    return Favorite["delete"]({
+      api_token: $rootScope.token.api_token,
+      favoriteId: company._id
+    }, function() {
+      var index;
+      index = $scope.favoriteCompanies.indexOf(company);
+      return $scope.favoriteCompanies.splice(index, 1);
+    });
+  };
 };
 
 NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
