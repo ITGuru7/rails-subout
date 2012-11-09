@@ -55,6 +55,14 @@ class Opportunity
     Event.create(:company => bid.bidder, :verb => 'bidding_won', :description => "won bidding", :eventable => self)
   end
 
+  def update!(options)
+    if bids.any?
+      errors.add(:base, "Opportunity cannot be updated if it already has a bid")
+    else
+      update_attributes(options)
+    end
+  end
+
   def winning_bid
     bids.where(id: winning_bid_id).first
   end

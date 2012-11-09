@@ -16,7 +16,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   def update
     @auction = current_company.auctions.find(params[:id])
 
-    @auction.update_attributes(params[:opportunity])
+    @auction.update!(params[:opportunity])
 
     respond_with(@auction)
   end

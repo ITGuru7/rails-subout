@@ -59,4 +59,27 @@ describe Api::V1::AuctionsController do
       response.should be_success
     end
   end
+
+  describe "PUT 'update'" do
+    it "responds success" do
+      auction = FactoryGirl.create(:auction, buyer: user.company, name: "Old name")
+
+      put :update, id: auction.id, opportunity: {name: "New name"}, api_token: user.authentication_token, format: 'json'
+
+      response.should be_success
+      auction.reload.name.should == "New name"
+    end
+
+    context "when there is a bid" do
+      it "responds error" do
+        auction = FactoryGirl.create(:auction, buyer: user.company, name: "Old name")
+        FactoryGirl.create(:bid, opportunity: auction)
+
+        put :update, id: auction.id, opportunity: {name: "New name"}, api_token: user.authentication_token, format: 'json'
+
+        response.status.should == 422
+        auction.reload.name.should == "Old name"
+      end
+    end
+  end
 end
