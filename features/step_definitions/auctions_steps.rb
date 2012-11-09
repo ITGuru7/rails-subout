@@ -107,10 +107,6 @@ Then /^I should not be able to cancel that auction$/ do
   page.should have_xpath("//*[text()='Cancel']", :visible => false)
 end
 
-Given /^that no one has bid on my opportunity$/ do
-  @auction.bids.should have(0).items
-end
-
 When /^I edit the auction$/ do
   go_to_opportunity_detail
 
@@ -123,6 +119,11 @@ end
 Then /^the action should be updated$/ do
   click_on "Opportunities"
   find('#modal').should have_content(@new_auction_name)
+end
+
+Then /^I should not be able to edit that auction$/ do
+  go_to_opportunity_detail
+  page.should have_xpath("//*[text()='Edit']", :visible => false)
 end
 
 def last_opportunity
