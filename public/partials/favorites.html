@@ -1,18 +1,19 @@
 <div id="bid-new" ng-controller="FavoritesCtrl">
-    <div class="modal-header">
-            <button data-dismiss="modal" class="close" type="button">x</button>
-            <h3>Your Favorite Companies</h3>
-    </div>
-    <div class="modal-body">
-        <section class="section-content">
-          <table class="table">
-            <tr>
-              <th>Name</th>
-            </tr>  
-            <tr ng-repeat="company in favoriteCompanies" >
-              <td>{{company.name}}</td>
-            </tr>
-          </table>
-        </section>
-    </div>
+  <div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">x</button>
+    <h3>Your Favorite Companies</h3>
+  </div>
+  <div class="modal-body">
+    <a data-target="#modal" ng-click="setModal('partials/add-new-favorite.html')" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+    <section class="section-content">
+      <table class="table">
+        <tr>
+          <th>Name</th>
+        </tr>  
+        <tr ng-repeat="company in favoriteCompanies" >
+          <td>{{company.name}}</td>
+        </tr>
+      </table>
+    </section>
+  </div>
 </div>

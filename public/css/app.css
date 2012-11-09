@@ -7340,3 +7340,7 @@ table.bid-history {
 #search-listing {
   padding-left: 5px;
 }
+.add-new-favorite {
+  float: right;
+  margin-bottom: 15px;
+}

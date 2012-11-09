@@ -25,7 +25,7 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
   var _ref;
@@ -125,6 +125,32 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
   return $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
+};
+
+NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
+  $scope.addToFavorites = function(company) {
+    return Favorite.save({
+      supplier_id: company._id,
+      api_token: $rootScope.token.api_token
+    }, {}, function() {
+      return jQuery("#modal").modal("hide");
+    });
+  };
+  return $scope.findSupplier = function() {
+    $scope.showCompany = false;
+    $scope.errorMessage = "";
+    return Company.search({
+      email: $scope.supplierEmail,
+      api_token: $rootScope.token.api_token,
+      action: "search"
+    }, {}, function(data) {
+      $scope.showCompany = true;
+      return $scope.foundCompany = data;
+    }, function(error) {
+      $scope.showCompany = false;
+      return $scope.errorMessage = "There is no company found for this email address";
+    });
+  };
 };
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {};
@@ -308,9 +334,9 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
 };
 
 CompanyProfileCtrl = function($rootScope, $scope, Favorite) {
-  return $scope.addToFavorites = function() {
+  return $scope.addToFavorites = function(company) {
     return Favorite.save({
-      supplier_id: $rootScope.other_company._id,
+      supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
       return jQuery("#modal").modal("hide");
@@ -422,8 +448,9 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
 }).factory("Event", function($resource) {
   return $resource("" + api_path + "/events/:eventId", {}, {});
 }).factory("Company", function($resource) {
-  return $resource("" + api_path + "/companies/:companyId.json", {
-    companyId: '@companyId'
+  return $resource("" + api_path + "/companies/:companyId/:action", {
+    companyId: '@companyId',
+    action: '@action'
   }, {
     query: {
       method: "GET",
@@ -434,6 +461,10 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     },
     update: {
       method: "PUT"
+    },
+    search: {
+      method: "GET",
+      action: "search"
     }
   });
 }).factory("Token", function($resource) {

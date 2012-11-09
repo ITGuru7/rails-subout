@@ -27,7 +27,9 @@ Subout::Application.routes.draw do
 
       resources :favorites
       resources :events
-      resources :companies
+      resources :companies do
+        get :search, on: :collection
+      end
       resources :bids
       resources :filters
       resources :tags

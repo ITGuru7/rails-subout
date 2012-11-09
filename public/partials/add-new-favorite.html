@@ -1,0 +1,19 @@
+<div id="add-new-favorite" ng-controller="NewFavoriteCtrl">
+  <div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">
+      x
+    </button>
+    <h3>ADD NEW FAVORITE</h3>
+  </div>
+  <div class="modal-body">
+    <section class="section-content">
+      <input type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
+      <a class="btn btn-primary" ng-click="findSupplier(foundCompany)">Find Supplier</a>
+      <div ng-show="showCompany">
+        {{foundCompany.name}}
+        <a ng-click="addToFavorites(foundCompany)">Add to Favorites</a>
+      </div>
+      <div ng-hide="showCompany">{{errorMessage}}</div>
+    </section>
+  </div>
+</div>

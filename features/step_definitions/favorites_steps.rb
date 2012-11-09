@@ -22,6 +22,17 @@ end
   #click_on "Add to my favorite suppliers"
 #end
 
+When /^I find that company to add into my favorite suppliers$/ do
+  click_on "Favorites"
+  click_on "Add new Favorite"
+
+  fill_in "Email", :with => @supplier.email
+  click_on "Find Supplier"
+
+  page.should have_content @supplier.name
+  click_on "Add to my favorite suppliers"
+end
+
 Then /^that supplier should be in my list of favorite suppliers$/ do
   @buyer.reload.favorite_suppliers.should include(@supplier)
 end
