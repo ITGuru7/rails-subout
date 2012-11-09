@@ -14,23 +14,15 @@ Given /^the supplier just had an auction$/ do
   @opportunity = FactoryGirl.create(:opportunity, buyer: @supplier)
 end
 
-#When /^I add that supplier as one of my favorite suppliers$/ do
-  #click_on "Favorite suppliers"
-  #fill_in "Email", :with => @supplier.email
-  #click_on "Find Supplier"
-  #page.should have_content @supplier.name
-  #click_on "Add to my favorite suppliers"
-#end
-
 When /^I find that company to add into my favorite suppliers$/ do
   click_on "Favorites"
   click_on "Add new Favorite"
 
-  fill_in "Email", :with => @supplier.email
+  fill_in "supplier_email", :with => @supplier.email
   click_on "Find Supplier"
 
   page.should have_content @supplier.name
-  click_on "Add to my favorite suppliers"
+  click_on "Add to Favorites"
 end
 
 Then /^that supplier should be in my list of favorite suppliers$/ do

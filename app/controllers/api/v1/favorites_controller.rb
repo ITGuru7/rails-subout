@@ -11,7 +11,7 @@ class Api::V1::FavoritesController < Api::V1::BaseController
 
     Notifier.delay.send_known_favorite_invitation(current_company.id, supplier.id)
 
-    respond_with(favorite_invitation)
+    head :ok
   end
 
   def destroy

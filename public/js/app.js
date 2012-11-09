@@ -137,15 +137,13 @@ NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
     });
   };
   return $scope.findSupplier = function() {
-    $scope.showCompany = false;
-    $scope.errorMessage = "";
     return Company.search({
       email: $scope.supplierEmail,
       api_token: $rootScope.token.api_token,
       action: "search"
-    }, {}, function(data) {
+    }, {}, function(company) {
       $scope.showCompany = true;
-      return $scope.foundCompany = data;
+      return $scope.foundCompany = company;
     }, function(error) {
       $scope.showCompany = false;
       return $scope.errorMessage = "There is no company found for this email address";

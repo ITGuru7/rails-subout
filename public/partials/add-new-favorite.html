@@ -7,7 +7,7 @@
   </div>
   <div class="modal-body">
     <section class="section-content">
-      <input type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
+      <input id="supplier_email" type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
       <a class="btn btn-primary" ng-click="findSupplier(foundCompany)">Find Supplier</a>
       <div ng-show="showCompany">
         {{foundCompany.name}}
