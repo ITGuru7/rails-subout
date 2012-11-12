@@ -7,13 +7,27 @@
   </div>
   <div class="modal-body">
     <section class="section-content">
-      <input id="supplier_email" type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
-      <a class="btn btn-primary" ng-click="findSupplier(foundCompany)">Find Supplier</a>
+      <form>
+        <input id="supplier_email" type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
+        <button class="btn btn-primary" ng-click="findSupplier(foundCompany)">Find Supplier</button>
+      </form>
       <div ng-show="showCompany">
         {{foundCompany.name}}
         <a ng-click="addToFavorites(foundCompany)">Add to Favorites</a>
       </div>
-      <div ng-hide="showCompany">{{errorMessage}}</div>
+      <div ng-show="companyNotFound">
+        That supplier was not found
+        <a ng-click="showInvitationForm()">Invite them to join as a guest supplier</a>
+        <div ng-show="showInvitation">
+          <form>
+            <input id="supplier_name" type="text" placeholder="Company Name" ng-model="invitation.supplier_name" />
+            <input id="supplier_email" type="email" placeholder="Email" ng-model="invitation.email" />
+            <textarea id="message" ng-model="invitation.message"></textarea>
+
+            <button class="btn btn-primary" ng-click="sendInvitation()">Send Inviation</button>
+          </form>
+        </div>
+      </div>
     </section>
   </div>
 </div>

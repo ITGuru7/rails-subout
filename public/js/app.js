@@ -138,6 +138,7 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
 };
 
 NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
+  $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
       supplier_id: company._id,
@@ -147,17 +148,23 @@ NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
     });
   };
   return $scope.findSupplier = function() {
-    return Company.search({
+    Company.search({
       email: $scope.supplierEmail,
       api_token: $rootScope.token.api_token,
       action: "search"
     }, {}, function(company) {
       $scope.showCompany = true;
+      $scope.companyNotFound = false;
       return $scope.foundCompany = company;
     }, function(error) {
       $scope.showCompany = false;
-      return $scope.errorMessage = "There is no company found for this email address";
+      return $scope.companyNotFound = true;
     });
+    return $scope.showInvitationForm = function() {
+      $scope.showInvitation = true;
+      $scope.invitation.email = $scope.supplierEmail;
+      return $scope.invitation.message = "Hi <supplier_name>," + $rootScope.company.name + " would like to add youas a favorite supplier on Subout.";
+    };
   };
 };
 

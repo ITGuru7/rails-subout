@@ -59,19 +59,26 @@ end
 
 
 When /^I try to add "(.*?)" with email "(.*?)" as one of my favorite suppliers but don't find it$/ do |arg1, email|
-  click_on "Favorite suppliers"
-  fill_in "Email", :with => email
+  click_on "Favorites"
+
+  sleep(0.5)
+  click_on "Add new Favorite"
+
+  fill_in "supplier_email", :with => email
   click_on "Find Supplier"
+
   page.should have_content "That supplier was not found"
 end
 
 When /^I add "(.*?)" to my favorites as a new guest supplier with email "(.*?)"$/ do |supplier_name, email|
-  click_on "Add to my favorite as a new guest supplier"
-  fill_in 'Supplier Company Name', :with => supplier_name
-  find_field('Send Invitation To').value.should == email
-  find_field('Custom message').value.should == "\nHi <supplier_name>, #{@buyer.name} would to add you as a favorite supplier on Subout."
+  click_on "Invite them to join as a guest supplier"
+
+  fill_in 'Company Name', :with => supplier_name
+  find_field('Email').value.should == email
+  find_field('Custom message').value.should == "\nHi <supplier_name>, #{@buyer.name} would like to add you as a favorite supplier on Subout."
   fill_in 'Custom message', :with => "Hey Tom, It's Bob.  I'm trying to buy this thing from you.  Please sign up."
-  click_on "Send"
+  click_on "Send Invitation"
+
   @favorite_invitation = FavoriteInvitation.last
 end
 

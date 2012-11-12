@@ -17,8 +17,8 @@ Feature: A buyer adds a supplier to their list of favorites
     Then that supplier should receive a favorite invitation email 
     And that supplier should be in my list of favorite suppliers
 
+  @wip @javascript
   Scenario: A buyer adds an unknown company as a favorite supplier
-    Given padding
     Given I am signed in as a buyer
     When I try to add "Boston Bus" with email "thomas@bostonbus.com" as one of my favorite suppliers but don't find it
     And I add "Boston Bus" to my favorites as a new guest supplier with email "thomas@bostonbus.com"
