@@ -39,7 +39,3 @@ Subout::Application.configure do
 
   DEFAULT_HOST_WITH_PORT = "localhost:3000"
 end
-
-
-DEFAULT_HOST_WITH_PORT = "#{ActionMailer::Base.default_url_options[:host]}:#{ActionMailer::Base.default_url_options[:port]}"
-DEFAULT_HOST_WITH_PORT = "#{ActionMailer::Base.default_url_options[:host]}:#{ActionMailer::Base.default_url_options[:port]}"

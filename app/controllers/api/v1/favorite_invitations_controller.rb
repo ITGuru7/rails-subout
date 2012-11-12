@@ -1,4 +1,10 @@
 class Api::V1::FavoriteInvitationsController < Api::V1::BaseController
+  def show
+    favorite_invitation = FavoriteInvitation.pending.find(params[:id])
+
+    respond_with(favorite_invitation)
+  end
+
   def create
     @favorite_invitation = FavoriteInvitation.new(params[:favorite_invitation])
     @favorite_invitation.buyer = current_company
@@ -7,12 +13,5 @@ class Api::V1::FavoriteInvitationsController < Api::V1::BaseController
     end
 
     respond_with @favorite_invitation
-  end
-
-  def accept
-    invitation = FavoriteInvitation.pending.find_by(:token => params[:id])
-    invitation.accept!
-
-    respond_with invitation
   end
 end

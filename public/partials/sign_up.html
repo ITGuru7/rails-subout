@@ -7,7 +7,8 @@
         </div>
     </div>
 </header>
-<form id="sign-in-form" ng:submit="signUp()" name="signInForm" class="form-horizontal well">
+
+<form id="sign-up-form" ng:submit="signUp()" name="signUpForm" class="form-horizontal well">
 	<fieldset>
 		<legend>
 			Sign Up
@@ -20,7 +21,21 @@
               <input id="email" 
                     type="text"
                     class="input-xlarge"
-                    ng:model="email"
+                    ng:model="company.email"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="name" class="control-label">Company Name</label>
+            <div class="controls">
+              
+              <input id="name"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.name"
                     required
                     autofocus
                     />
@@ -34,16 +49,84 @@
               <input id="password"
                     type="password"
                     class="input-xlarge"
-                    ng:model="password"
+                    ng:model="company.password"
                     required
                     autofocus
                     />
             </div>
         </div>
         
-        <div class="form-actions">
-            <button class="btn btn-primary" type="submit" ng:disabled="{{signInForm.$invalid}}">Sign In</button>
+        <div class="control-group">
+            <label for="password_confirmation" class="control-label">Password Confirmation</label>
+            <div class="controls">
+              
+              <input id="password_confirmation"
+                    type="password"
+                    class="input-xlarge"
+                    ng:model="company.password_confirmation"
+                    required
+                    autofocus
+                    />
+            </div>
         </div>
 
+        <div class="control-group">
+            <label for="street_address" class="control-label">Street Address</label>
+            <div class="controls">
+              
+              <input id="street_address"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.street_address"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="zip_code" class="control-label">Zip Code</label>
+            <div class="controls">
+              
+              <input id="zip_code"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.zip_code"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="city" class="control-label">City</label>
+            <div class="controls">
+              
+              <input id="city"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.city"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label for="state" class="control-label">State</label>
+            <div class="controls">
+              
+              <input id="state"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.state"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" ng:disabled="{{signUpForm.$invalid}}">Sign Up</button>
+        </div>
 	</fieldset>
 </form>

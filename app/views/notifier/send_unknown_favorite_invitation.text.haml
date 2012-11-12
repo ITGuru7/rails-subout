@@ -3,4 +3,4 @@
 #{@buyer.name} has added your company (#{@invitation.supplier_name}) as a favorite on subout.
 
 Click the bellow link to accept.
-= "http://#{DEFAULT_HOST_WITH_PORT}/#/sign_up?token=#{@invitation.token}"
+= "http://#{DEFAULT_HOST_WITH_PORT}/#/sign_up?invitation_id=#{@invitation.id}"

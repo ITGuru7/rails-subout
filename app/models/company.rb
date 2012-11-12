@@ -99,4 +99,8 @@ class Company
     options[:methods] = :logo
     super
   end
+
+  def inviter
+    self.created_from_invitation.buyer
+  end
 end

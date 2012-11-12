@@ -360,8 +360,20 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-SignUpCtrl = function($scope, $rootScope, $location, Token, Company) {
-  return console.log("Sign Up Ctrl");
+SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation) {
+  $scope.company = {};
+  FavoriteInvitation.get({
+    invitationId: $routeParams.invitation_id
+  }, function(invitation) {
+    $scope.company.email = invitation.supplier_email;
+    $scope.company.name = invitation.supplier_name;
+    return $scope.company.created_from_invitation_id = invitation._id;
+  });
+  return $scope.signUp = function() {
+    return Company.save({
+      company: $scope.company
+    });
+  };
 };
 
 CompanyProfileCtrl = function($rootScope, $scope, Favorite) {
@@ -527,5 +539,5 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
 }).factory("Favorite", function($resource) {
   return $resource("" + api_path + "/favorites/:favoriteId", {}, {});
 }).factory("FavoriteInvitation", function($resource) {
-  return $resource("" + api_path + "/favorite_invitations/:favoriteInvitationId", {}, {});
+  return $resource("" + api_path + "/favorite_invitations/:invitationId", {}, {});
 });
