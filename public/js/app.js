@@ -5,6 +5,9 @@ subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).con
     return $routeProvider.when("/sign_in", {
       templateUrl: "partials/sign_in.html",
       controller: SignInCtrl
+    }).when("/sign_up", {
+      templateUrl: "partials/sign_up.html",
+      controller: SignUpCtrl
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
       controller: DashboardCtrl
@@ -25,12 +28,14 @@ angular.element(document).ready(function($http, $templateCache) {
   });
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
   var _ref;
-  if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0) && $location.path() !== "sign_in") {
-    $location.path("sign_in");
+  if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
+    if (["/sign_up", "/sign_in"].indexOf($location.path()) === -1) {
+      $location.path("/sign_in");
+    }
   }
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
@@ -104,7 +109,6 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 
 BidNewCtrl = function($scope, $rootScope, $location, Bid) {
   return $scope.save = function() {
-    console.log($rootScope.token.api_token);
     return Bid.save({
       bid: $scope.bid,
       api_token: $rootScope.token.api_token,
@@ -137,7 +141,7 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
   };
 };
 
-NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
+NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company, FavoriteInvitation) {
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
@@ -160,10 +164,18 @@ NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company) {
       $scope.showCompany = false;
       return $scope.companyNotFound = true;
     });
-    return $scope.showInvitationForm = function() {
+    $scope.showInvitationForm = function() {
       $scope.showInvitation = true;
-      $scope.invitation.email = $scope.supplierEmail;
-      return $scope.invitation.message = "Hi <supplier_name>," + $rootScope.company.name + " would like to add youas a favorite supplier on Subout.";
+      $scope.invitation.supplier_email = $scope.supplierEmail;
+      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on Subout.";
+    };
+    return $scope.sendInvitation = function() {
+      return FavoriteInvitation.save({
+        favorite_invitation: $scope.invitation,
+        api_token: $rootScope.token.api_token
+      }, function() {
+        return jQuery("#modal").modal("hide");
+      });
     };
   };
 };
@@ -348,6 +360,10 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
+SignUpCtrl = function($scope, $rootScope, $location, Token, Company) {
+  return console.log("Sign Up Ctrl");
+};
+
 CompanyProfileCtrl = function($rootScope, $scope, Favorite) {
   return $scope.addToFavorites = function(company) {
     return Favorite.save({
@@ -510,4 +526,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   });
 }).factory("Favorite", function($resource) {
   return $resource("" + api_path + "/favorites/:favoriteId", {}, {});
+}).factory("FavoriteInvitation", function($resource) {
+  return $resource("" + api_path + "/favorite_invitations/:favoriteInvitationId", {}, {});
 });

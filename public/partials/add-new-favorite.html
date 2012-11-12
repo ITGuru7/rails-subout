@@ -19,12 +19,19 @@
         That supplier was not found
         <a ng-click="showInvitationForm()">Invite them to join as a guest supplier</a>
         <div ng-show="showInvitation">
-          <form>
-            <input id="supplier_name" type="text" placeholder="Company Name" ng-model="invitation.supplier_name" />
-            <input id="supplier_email" type="email" placeholder="Email" ng-model="invitation.email" />
-            <textarea id="message" ng-model="invitation.message"></textarea>
-
-            <button class="btn btn-primary" ng-click="sendInvitation()">Send Inviation</button>
+          <form class="form-horizontal invitation-form">
+            <div class="control-group">
+              <input id="supplier_email" class="input-xlarge" required disabled type="email" placeholder="Email" ng-model="invitation.supplier_email" />
+            </div>
+            <div class="control-group">
+              <input id="supplier_name" class="input-xlarge" required type="text" placeholder="Company Name" ng-model="invitation.supplier_name" />
+            </div>
+            <div class="control-group">
+              <textarea id="message" class="span5" rows="4" required ng-model="invitation.message"></textarea>
+            </div>
+            <div class="control-group last">
+              <button class="btn btn-primary" ng-click="sendInvitation()">Send Inviation</button>
+            </div>
           </form>
         </div>
       </div>

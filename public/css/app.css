@@ -7028,7 +7028,6 @@ div.data-items span.data {
   font-weight: bold;
 }
 select,
-textarea,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -7045,6 +7044,9 @@ input[type="tel"],
 input[type="color"],
 .uneditable-input {
   height: 28px;
+  line-height: 28px;
+}
+textarea {
   line-height: 28px;
 }
 .help-block,
@@ -7343,4 +7345,10 @@ table.bid-history {
 .add-new-favorite {
   float: right;
   margin-bottom: 15px;
+}
+#add-new-favorite form.invitation-form {
+  margin: 20px 0 0 0;
+}
+#add-new-favorite .control-group.last {
+  margin-bottom: 0;
 }

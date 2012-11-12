@@ -1,8 +1,12 @@
+require 'sidekiq/web'
+
 Subout::Application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 
   devise_for :users
+
+  mount Sidekiq::Web => '/sidekiq'
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do

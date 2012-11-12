@@ -11,6 +11,8 @@ gem 'thin'
 gem "devise"
 gem 'simple_form'
 gem 'sidekiq'
+gem 'sinatra'
+gem 'slim'
 gem 'rails_admin'
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'

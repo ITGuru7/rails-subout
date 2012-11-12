@@ -1,5 +1,6 @@
+#{@invitation.message}
+
 #{@buyer.name} has added your company (#{@invitation.supplier_name}) as a favorite on subout.
 
-Clike the link bellow to accept
-= new_supplier_company_url(@invitation.token)
-
+Click the bellow link to accept.
+= "http://#{DEFAULT_HOST_WITH_PORT}/#/sign_up?token=#{@invitation.token}"

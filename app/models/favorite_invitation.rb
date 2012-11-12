@@ -5,7 +5,7 @@ class FavoriteInvitation
 
   field :supplier_name, type: String
   field :supplier_email, type: String
-  field :custom_message, type: String
+  field :message, type: String
   field :token, type: String, default: ->{ SecureRandom.uuid }
   field :accepted, type: Boolean, default: false
 
