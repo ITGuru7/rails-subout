@@ -1,4 +1,4 @@
-Given /^a buyer exists "(.*?)"$/ do |name|
+Given /^a (?:buyer|company) exists "(.*?)"$/ do |name|
   @buyer = FactoryGirl.create(:company, name: name)
 end
 
@@ -8,7 +8,7 @@ Given /^I am logged in as a member supplier "(.*?)"$/ do |name|
   sign_in(user)
 end
 
-Given /^(?:I|that buyer) (?:have|has) an auction "(.*?)"$/ do |name|
+Given /^(?:I|that buyer|that company) (?:have|has) an auction "(.*?)"$/ do |name|
   @auction = @opportunity = FactoryGirl.create(:auction, buyer: @buyer, name: name)
 end
 
@@ -20,7 +20,7 @@ Then /^I should see my bid on that opportunity$/ do
   page.should have_content("$#{@bid.formatted_amount}")
 end
 
-Then /^the buyer should be notified about my bid$/ do
+Then /^the (?:buyer|company) should be notified about my bid$/ do
   sleep(0.1)
   step %{"#{@buyer.email}" should receive an email}
 end
