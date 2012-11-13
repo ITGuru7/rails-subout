@@ -4,6 +4,7 @@ describe BidsController do
   let(:opportunity) { FactoryGirl.create(:opportunity) }
 
   before do
+    pending
     sign_in_user
   end
 

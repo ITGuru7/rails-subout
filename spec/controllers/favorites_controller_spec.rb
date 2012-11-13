@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe FavoritesController do
   before do
+    pending
     sign_in_user
   end
 

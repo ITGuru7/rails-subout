@@ -1,6 +1,10 @@
 class Api::V1::BaseController < ActionController::Base
   respond_to :json
 
+  unless Rails.application.config.consider_all_requests_local
+    rescue_from Mongoid::Errors::DocumentNotFound, :with => :render_404
+  end 
+
   private
 
   def current_user
@@ -9,5 +13,9 @@ class Api::V1::BaseController < ActionController::Base
 
   def current_company
     current_user.company
+  end
+
+  def render_404
+    render :json => {:error => "not-found"}.to_json, :status => 404
   end
 end

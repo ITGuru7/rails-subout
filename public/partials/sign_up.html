@@ -13,7 +13,7 @@
 		<legend>
 			Sign Up
 		</legend>
-		<p class="alert alert-error" ng:show="message">{{message}}</p>
+		<p class="alert alert-error" ng:show="errorMessage">{{errorMessage}}</p>
 		<div class="control-group">
             <label for="email" class="control-label">Email</label>
             <div class="controls">
@@ -49,7 +49,7 @@
               <input id="password"
                     type="password"
                     class="input-xlarge"
-                    ng:model="company.password"
+                    ng:model="user.password"
                     required
                     autofocus
                     />
@@ -63,7 +63,7 @@
               <input id="password_confirmation"
                     type="password"
                     class="input-xlarge"
-                    ng:model="company.password_confirmation"
+                    ng:model="user.password_confirmation"
                     required
                     autofocus
                     />

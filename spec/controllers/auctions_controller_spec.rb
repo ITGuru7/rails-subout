@@ -3,6 +3,8 @@ require 'spec_helper'
 
 describe AuctionsController do
   before do
+    pending
+
     sign_in_user
     @buyer = @current_company
   end

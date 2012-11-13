@@ -11,7 +11,6 @@ class FavoriteInvitation
   scope :pending, where(:accepted => false)
 
   belongs_to :buyer, :class_name => "Company"
- # belongs_to :supplier, :class_name => "Company"
 
   has_one :created_company, :class_name => "Company"
 

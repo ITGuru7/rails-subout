@@ -41,7 +41,10 @@ class Company
   has_many :locations
   has_many :bids, foreign_key: 'bidder_id'
 
-  validates_presence_of :name, :on => :create, :message => "can't be blank"
+  accepts_nested_attributes_for :users
+
+  validates_presence_of :name, :on => :create
+  validates_presence_of :created_from_invitation_id, :on => :create
   validates_uniqueness_of :email
   validates_confirmation_of :password
 

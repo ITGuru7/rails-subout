@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe CompaniesController do
+  before do
+    pending
+  end
+
   describe 'GET dashboard' do
     before do
       sign_in_user

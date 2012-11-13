@@ -30,6 +30,25 @@ describe Api::V1::CompaniesController do
       response.should be_success
     end
 
+    it "creates the first user of the company" do
+      company_attributes["users_attributes"] = {
+        "0" => {
+          "password" => "password",
+          "password_confirmation" => "password",
+          "email" => company_attributes[:email]
+        }
+      }
+
+      expect {
+        post :create, company: company_attributes, format: 'json'
+      }.to change(User, :count)
+
+      user = User.last
+      company = Company.last
+
+      user.company.should == company
+    end
+
     it "becomes a favorite company in the inviter's favorites list" do
       post :create, company: company_attributes, format: 'json'
 
@@ -41,6 +60,16 @@ describe Api::V1::CompaniesController do
       post :create, company: company_attributes, format: 'json'
 
       favorite_invitation.reload.should be_accepted
+    end
+
+    context "without invitation" do
+      it "reponds with the error" do
+        company_attributes.delete(:created_from_invitation_id)
+
+        post :create, company: company_attributes, format: 'json'
+
+        response.status.should == 422
+      end
     end
   end
 end

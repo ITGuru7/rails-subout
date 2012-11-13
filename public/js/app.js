@@ -362,16 +362,27 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation) {
   $scope.company = {};
+  $scope.user = {};
   FavoriteInvitation.get({
     invitationId: $routeParams.invitation_id
   }, function(invitation) {
     $scope.company.email = invitation.supplier_email;
     $scope.company.name = invitation.supplier_name;
     return $scope.company.created_from_invitation_id = invitation._id;
+  }, function() {
+    return $location.path("/sign_in").search({});
   });
   return $scope.signUp = function() {
+    $scope.user.email = $scope.company.email;
+    $scope.company.users_attributes = {
+      "0": $scope.user
+    };
     return Company.save({
       company: $scope.company
+    }, function() {
+      return $location.path("/sign_in").search({});
+    }, function(response) {
+      return $scope.errorMessage = response.data.errors.join("<br />");
     });
   };
 };

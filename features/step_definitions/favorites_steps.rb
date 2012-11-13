@@ -73,29 +73,32 @@ end
 When /^I add "(.*?)" to my favorites as a new guest supplier with email "(.*?)"$/ do |supplier_name, email|
   click_on "Invite them to join as a guest supplier"
 
-  fill_in 'Company Name', :with => supplier_name
-  find_field('Email').value.should == email
-  find_field('Custom message').value.should == "\nHi <supplier_name>, #{@buyer.name} would like to add you as a favorite supplier on Subout."
-  fill_in 'Custom message', :with => "Hey Tom, It's Bob.  I'm trying to buy this thing from you.  Please sign up."
+  fill_in 'supplier_name', :with => supplier_name
+  find_field('supplier_email').value.should == email
+  find_field('message').value.should =~ /#{@buyer.name}/
+  fill_in 'message', :with => "Hey Tom, It's Bob.  I'm trying to buy this thing from you.  Please sign up."
   click_on "Send Invitation"
 
   @favorite_invitation = FavoriteInvitation.last
 end
 
 Then /^"(.*?)" should receive a new guest supplier invitation email$/ do |email|
+  sleep(0.5)
   step %["#{email}" should receive an email]
 end
 
 When /^fills out their supplier details$/ do
-  find_field('Company name').value.should == @favorite_invitation.supplier_name
-  find_field('Company email').value.should == @favorite_invitation.supplier_email
+  find_field('Company Name').value.should == @favorite_invitation.supplier_name
+  find_field('Email').value.should == @favorite_invitation.supplier_email
 
   fill_in('Password', :with => 'password1') 
-  fill_in('Password confirmation', :with => 'password1') 
-  fill_in('Street address', :with => '33 Comm Ave') 
-  fill_in('Zip code', :with => '02634') 
+  fill_in('Password Confirmation', :with => 'password1') 
+  fill_in('Street Address', :with => '33 Comm Ave') 
+  fill_in('Zip Code', :with => '02634') 
+  fill_in('City', :with => 'New York') 
+  fill_in('State', :with => 'New York') 
 
-  click_on('Create Company')
+  click_on('Sign Up')
 
   @supplier = Company.last
 end
@@ -106,4 +109,11 @@ end
 
 Then /^then I should see the supplier "(.*?)" in the list$/ do |supplier_name|
   find('#modal').should have_content(supplier_name)
+end
+
+Then /^that supplier be able to sign in$/ do
+  user = @supplier.users.first
+  user.password = "password1"
+
+  sign_in(user)
 end
