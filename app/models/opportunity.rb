@@ -18,6 +18,7 @@ class Opportunity
   field :seats, type: Integer
   field :type, type: String
   field :canceled, type: Boolean, default: false
+  field :forward_auction, type: Boolean, default: false
 
   field :for_favorites_only, type: Boolean, default: false
 

@@ -12,7 +12,7 @@ end
 
 Then /^the auction should have been created$/ do
   click_on "Opportunities"
-  find('#modal').should have_content("New York to Boston")
+  find('#modal').should have_content(@auction.name)
 end
 
 Then /^a supplier should not be able to \"win it now\"$/ do
@@ -151,6 +151,11 @@ def create_auction(opportunity)
   fill_in "End date", with: opportunity.end_date
   check "Quick Winnable?" if opportunity.quick_winnable?
   check "For Favorites Only?" if opportunity.for_favorites_only?
+  check "Sell?" if opportunity.forward_auction?
 
-  click_on "Create Opportunity"
+  select(opportunity.type, :from => 'Type')
+
+  click_on "Save Opportunity"
+
+  @auction = Opportunity.last
 end

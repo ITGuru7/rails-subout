@@ -15,5 +15,9 @@ FactoryGirl.define do
       quick_winnable true
       win_it_now_price 200
     end
+
+    factory :forward_auction do
+      forward_auction true
+    end
   end
 end
