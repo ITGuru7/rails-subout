@@ -102,6 +102,11 @@ Given /^that auction has a bid$/ do
   @auction.bids << FactoryGirl.create(:bid)
 end
 
+Given /^that auction has some bids$/ do
+  @auction.bids << FactoryGirl.create(:bid)
+  @auction.bids << FactoryGirl.create(:bid, amount: 10)
+end
+
 Then /^I should not be able to cancel that auction$/ do
   go_to_opportunity_detail
   page.should have_xpath("//*[text()='Cancel']", :visible => false)
@@ -116,6 +121,14 @@ When /^I edit the auction$/ do
   click_on "Save"
 end
 
+When /^the auction is expired$/ do
+  Timecop.travel(@auction.bidding_ends + 1.day)
+
+  Event.observers.disable :all do
+    Opportunity.send_expired_notification
+  end
+end
+
 Then /^the action should be updated$/ do
   click_on "Opportunities"
   find('#modal').should have_content(@new_auction_name)
@@ -124,6 +137,11 @@ end
 Then /^I should not be able to edit that auction$/ do
   go_to_opportunity_detail
   page.should have_xpath("//*[text()='Edit']", :visible => false)
+end
+
+Then /^the owner of the auction should be notified$/ do
+  sleep(1)
+  step %{"#{@buyer.email}" should receive an email with subject /#{@auction.name} is expired/}
 end
 
 def last_opportunity

@@ -19,6 +19,7 @@ class Opportunity
   field :type, type: String
   field :canceled, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
+  field :expired_notification_sent, type: Boolean, default: false
 
   field :for_favorites_only, type: Boolean, default: false
 
@@ -38,6 +39,13 @@ class Opportunity
   validates_presence_of :start_date, :on => :create, :message => "can't be blank"
   validates_presence_of :end_date, :on => :create, :message => "can't be blank"
   validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
+
+  def self.send_expired_notification
+    where(:bidding_ends.lte => Date.today, :expired_notification_sent => false).each do |auction|
+      Notifier.delay.expired_auction_notification(auction.id)
+      auction.update_attribute(:expired_notification_sent, true)
+    end
+  end
 
   def cancel!
     self.update_attributes(:canceled => true)
@@ -118,4 +126,3 @@ class Opportunity
     "img/filters/#{self.type.parameterize}.png"
   end
 end
-

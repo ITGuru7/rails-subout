@@ -42,5 +42,6 @@ group :test do
   #gem 'poltergeist'
   gem 'fivemat'
   gem 'email_spec'
+  gem 'timecop'
   #gem 'capybara-screenshot'
 end

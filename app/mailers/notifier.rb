@@ -33,4 +33,10 @@ class Notifier < ActionMailer::Base
     @bid = @auction.winning_bid
     mail(subject: "You won the bidding on #{@auction.name}", to: @bid.bidder.email)
   end
+
+  def expired_auction_notification(auction_id)
+    @auction = Opportunity.find(auction_id)
+
+    mail(subject: "Your auction #{@auction.name} is expired", to: @auction.buyer.email)
+  end
 end
