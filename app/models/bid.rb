@@ -64,14 +64,15 @@ class Bid
   end
 
   def validate_multiple_bids_on_the_same_opportunity
+    previous_bids = opportunity.bids.where(bidder_id: bidder.id, :id.ne => self.id)
     if opportunity.forward_auction?
-      max_amount = opportunity.bids.where(bidder_id: bidder.id).max(:amount)
-      if max_amount && amount <= BigDecimal.new(max_amount)
+      max_amount = previous_bids.max(:amount)
+      if max_amount && amount <= BigDecimal.new(max_amount.to_s)
         errors.add :amount, "cannot be lower than previous bid"
       end
     else
-      min_amount = opportunity.bids.where(bidder_id: bidder.id).min(:amount)
-      if min_amount && amount >= BigDecimal.new(min_amount)
+      min_amount = previous_bids.min(:amount)
+      if min_amount && amount >= BigDecimal.new(min_amount.to_s)
         errors.add :amount, "cannot be higher than previous bid"
       end
     end
