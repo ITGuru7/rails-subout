@@ -17,6 +17,7 @@ end
 
 After do
   DatabaseCleaner.clean
+  Timecop.return
 end
 
 Cucumber::Rails::Database.javascript_strategy = :truncation

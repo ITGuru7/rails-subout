@@ -16,6 +16,8 @@ end
 
 When /^I find that company to add into my favorite suppliers$/ do
   click_on "Favorites"
+
+  sleep(0.5)
   click_on "Add new Favorite"
 
   fill_in "supplier_email", :with => @supplier.email

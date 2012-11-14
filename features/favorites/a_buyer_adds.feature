@@ -9,7 +9,7 @@ Feature: A buyer adds a supplier to their list of favorites
     Then that supplier should receive a favorite invitation email 
     And that supplier should be in my list of favorite suppliers
 
-  @javascript
+  @wip @javascript
   Scenario: A buyer adds a member company as a favorite supplier
     Given a supplier exists called "Boston Bus"
     And I am signed in as a buyer

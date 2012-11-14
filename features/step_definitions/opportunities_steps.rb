@@ -2,8 +2,8 @@ Given /^a (?:buyer|company) exists "(.*?)"$/ do |name|
   @buyer = FactoryGirl.create(:company, name: name)
 end
 
-Given /^I am logged in as a member supplier "(.*?)"$/ do |name|
-  @supplier = FactoryGirl.create(:member_supplier, name: name)
+Given /^I am logged in as a member (?:supplier|company) "(.*?)"$/ do |name|
+  @bidder = @supplier = FactoryGirl.create(:member_supplier, name: name)
   user = FactoryGirl.create(:user, company: @supplier)
   sign_in(user)
 end

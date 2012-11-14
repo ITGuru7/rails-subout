@@ -28,7 +28,7 @@ Then /^only my favorites should see the opportunity$/ do
 end
 
 Given /^a supplier "(.*?)" has bid on that auction$/ do |name|
-  @supplier = FactoryGirl.create(:supplier)
+  @bidder = @supplier = FactoryGirl.create(:supplier)
   @bid = FactoryGirl.create(:bid, :opportunity => @opportunity, :bidder => @supplier)
 end
 
@@ -45,7 +45,11 @@ Then /^I should see that auction$/ do
 end
 
 Given /^that buyer has a quick winnable auction "(.*?)"$/ do |name|
-  @auction = @opportunity = FactoryGirl.create(:quick_winnable_auction, buyer: @buyer, name: name, quick_winnable: true)
+  @auction = @opportunity = FactoryGirl.create(:quick_winnable_auction, buyer: @buyer, name: name)
+end
+
+Given /^that company has a quick winnable forward auction "(.*?)"$/ do |name|
+  @auction = @opportunity = FactoryGirl.create(:quick_winnable_auction, buyer: @buyer, name: name, forward_auction: true)
 end
 
 When /^I choose that bid as the winner$/ do
@@ -64,14 +68,14 @@ end
 
 Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner)$/ do  
   page.should have_content("Won By #{@supplier.name}")
-  page.should have_content("Winning Bid Amount #{@auction.reload.winning_bid.amount}")
+  page.should have_content("Winning Bid Amount $#{@auction.reload.winning_bid.amount}")
 end
 
 Then /^that (?:auction|opportunity) should (?:show the winning bid|have me as the winner) on detail$/ do
   go_to_opportunity_detail
   
-  page.should have_content("Won By: #{@supplier.name}")
-  page.should have_content("Winning Bid Amount: #{@auction.reload.winning_bid.amount}")
+  page.should have_content("Won By #{@supplier.name}")
+  page.should have_content("Winning Bid Amount $#{@auction.reload.winning_bid.amount}")
   page.should have_xpath("//*[text()='Accept']", :visible => false)
 end
 
@@ -80,9 +84,9 @@ Then /^bidding should be closed on that (?:auction|opportunity)$/ do
   page.should have_content("(Closed)")
 end
 
-Then /^the buyer should be notified that I won that auction$/ do
-  page.should have_content("Won By #{@supplier.name}")
-  step %{"#{@buyer.email}" should receive an email with subject /#{@supplier.name} has won the bidding on #{@auction.name}/}
+Then /^the (?:buyer|opportunity creator) should be notified that I won that auction$/ do
+  page.should have_content("Won By #{@bidder.name}")
+  step %{"#{@buyer.email}" should receive an email with subject /#{@bidder.name} has won the bidding on #{@auction.name}/}
 end
 
 When /^I cancel the auction$/ do

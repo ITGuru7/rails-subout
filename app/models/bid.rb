@@ -43,14 +43,22 @@ class Bid
   end
 
   def formatted_amount
-    formatted_amount = ActionController::Base.helpers.number_to_currency(amount, :unit=>'')
+    ActionController::Base.helpers.number_to_currency(amount, :unit=>'')
   end
 
   private
 
   def win_quick_winable_opportunity
-    if opportunity.quick_winnable && opportunity.win_it_now_price >= self.amount
-      opportunity.win!(self.id)
-    end
+    return unless opportunity.quick_winnable
+
+    opportunity.win!(self.id) if quick_win_forward_auction? or quick_win_reverse_auction?
+  end
+
+  def quick_win_forward_auction?
+    opportunity.forward_auction? and opportunity.win_it_now_price <= self.amount 
+  end
+
+  def quick_win_reverse_auction?
+    !opportunity.forward_auction? and opportunity.win_it_now_price >= self.amount 
   end
 end
