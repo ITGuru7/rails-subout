@@ -16,6 +16,12 @@ When /^I bid on that opportunity$/ do
   do_a_bid
 end
 
+Then /^I cannot bid again that opportunity with higher price$/ do
+  do_a_bid(@bid.amount + 1, false)
+
+  page.should have_content("cannot be higher than previous bid")
+end
+
 Then /^I should see my bid on that opportunity$/ do
   page.should have_content("$#{@bid.formatted_amount}")
 end
@@ -48,7 +54,7 @@ Then /^I should win that opportunity automatically$/ do
   }
 end
 
-def do_a_bid(amount = '100.00')
+def do_a_bid(amount = '100.00', verify_the_bid=true)
   within("#opportunity_#{@opportunity.id}") do
     click_on "Bid"
   end
@@ -56,6 +62,6 @@ def do_a_bid(amount = '100.00')
   page.should have_content("Price")
   fill_in "Price", with: amount
   click_on "Bid Now"
-  page.should have_content(amount)
+  page.should have_content(amount) if verify_the_bid
   @bid = Bid.last
 end

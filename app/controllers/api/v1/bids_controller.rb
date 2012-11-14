@@ -10,7 +10,7 @@ class Api::V1::BidsController < Api::V1::BaseController
   def create
     bid = opportunity.bids.build(params[:bid])
     bid.bidder = current_company
-    bid.save!
+    bid.save
 
     respond_with(bid.opportunity, bid)
   end

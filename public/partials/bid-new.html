@@ -8,6 +8,8 @@
     <div class="modal-body">
         <h3>{{opportunity.name}}</h3>
         <form name="newOpportunity" class="form-horizontal">
+            <p class="alert alert-error" ng:show="errorMessage">{{errorMessage}}</p>
+
             <div class="control-group">
                 <label for="bid_amount" class="control-label">Price</label>
 

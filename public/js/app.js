@@ -107,7 +107,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-BidNewCtrl = function($scope, $rootScope, $location, Bid) {
+BidNewCtrl = function($scope, $rootScope, Bid) {
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -115,6 +115,8 @@ BidNewCtrl = function($scope, $rootScope, $location, Bid) {
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       return jQuery("#modal").modal("hide");
+    }, function(error) {
+      return $scope.errorMessage = error.data.errors.amount[0];
     });
   };
 };
