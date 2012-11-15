@@ -11,7 +11,12 @@ Subout::Application.routes.draw do
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
       resources :tokens
-      resources :users
+      resources :users  do 
+        collection do 
+          post :account
+        end
+      end
+      
       resources :auctions do
         member do
           put :select_winner
