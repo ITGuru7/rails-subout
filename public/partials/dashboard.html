@@ -1,51 +1,23 @@
-<div id="topbar" class="container">
-    <div class="inner">
-        <span class='topbar-left'>
-            <a href="#" id="btn_home"><img src="/img/icon_home.png"></a>
-            <a href="#" id="btn_info"><img src="/img/icon_info.png"></a>
-            <a href="#modal" id="btn_support" data-toggle="modal" ng-click="setModal('partials/help.html')"><img title="Support" src="/img/icon_support.png"></a>
-        </span>
-        <span class='topbar-right pull-right'>
-          <a href="#modal" class="not-button" data-toggle="modal" ng-click="setModal('partials/settings.html')">Settings</a>
-         &nbsp; <a href="" class="btn" ng-click="signOut();">Sign Out</a>
-        </span>
+<div id="subout-navbar" class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">SubOut</a>
+    <ul class="nav">
+      <li class="active"><a href="#/dashboard">Home</a></li>
+      <li><a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">My Bids</a></li>
+      <li><a href="#modal" data-toggle="modal" ng-click="setOpportunities(); setModal('partials/opportunities.html')">My Opportunities</a></li>
+    </ul>
+    <div class="btn-group pull-right navbar-buttons">
+      <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
+      <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
     </div>
+  </div>
 </div>
-
-<header id="header">
-    <div class="inner">
-        <div class="row-fluid">
-            <div class="span8">
-                <div id="logo"><a href="#/dashboard"><img src="/img/logo.png"></a></div>
-            </div>
-            <div class="span4">
-                <nav id="navigator" >
-                    <div id="search">
-                        <input id="search-listing" class="span11" ng-model="query" placeholder="Search listings for..."/>
-                        <div class="icon-search"></div>
-                    </div>
-                </nav>
-                <!--nav-->
-            </div>   
-        </div>
-    </div>
-</header>
 
 <div id="content">
   <div id="dashboard">
         <div class="row-fluid">
-          <div class="span4">
-              <section id="company" class="well">
-                  <section class="content">
-                      <div id="company_logo"><img title="{{token.company.name}}" ng-src="{{company.logo}}"></div>
-                      <div id="company_links">
-                          <a href="#modal" data-toggle="modal" ng-click="setModal('partials/bids.html')">Bids</a>
-                          | <a href="#modal" data-toggle="modal" ng-click="setOpportunities(); setModal('partials/opportunities.html')">Opportunities</a>
-                          | <a href="#modal" data-toggle="modal" ng-click="setModal('partials/favorites.html')">Favorites</a>
-                      </div>
-                  </section>
-              </section>
-              <section id="filters" class="well">
+          <div id="sidebar" class="span3">
+              <section id="filters">
                   <section class="title"><h5>Filters</h5></section>
                   <section class="content">
                       <ul>
@@ -56,7 +28,7 @@
                       </ul>
                   </section>
               </section>
-              <section id="tags" class="well">
+              <section id="tags">
                   <section class="title"><h5>Tags</h5></section>
                   <section class="content">
                       <ul>
@@ -67,24 +39,21 @@
                   </section>
               </section>
           </div>
-          <div class="span8">
-
-             <section id="activities" class="well">
-
+          <div class="span9">
+             <section id="activities">
                 <div id="toolbar">
-                      <div class="row-fluid">
-                          <div class="pull-left">
-                            <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
-                            <div>
-                              <a href='#'>Today</a> |
-                              <a href='#'>This Week</a> |
-                              <a href='#'>Older</a>
-                            </div>
+                    <div class="row-fluid">
+                        <div class="pull-left span4">
+                          <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
+                        </div>
+                        <div class='pull-right span8 toolbar-buttons'>
+                          <div id="search" class="pull-right span6">
+                              <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
+                              <div class="icon-search"></div>
                           </div>
-                          <div class='pull-right'>
-                            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setModal('partials/opportunity-form.html')">New Opportunity</a>
-                          </div>
-                      </div>
+                          <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setModal('partials/opportunity-form.html')">New Opportunity</a>
+                        </div>
+                    </div>
                 </div>
 
                 <table class="table">
