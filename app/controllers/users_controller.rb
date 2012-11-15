@@ -82,4 +82,8 @@ class UsersController < ApplicationController
     end
   end
 
+  def account
+    debug(params)
+  end
+
 end
