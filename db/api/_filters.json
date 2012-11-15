@@ -3,7 +3,7 @@
     "active":false,
     "name":"Vehicles Needed",
     "color":"#69b644",
-    "icon": "img/filters/vehicle-needed.png",
+    "icon": "icon-hand-up",
     
     "evaluation":{
        "type": "compare",
@@ -20,7 +20,7 @@
     "active":false,
     "name":"Vehicles for Hire",
     "color":"#e1c212",
-    "icon": "img/filters/vehicle-for-hire.png",
+    "icon": "icon-road",
     
     "evaluation":{
        "type": "compare",
@@ -37,7 +37,7 @@
     "name":"Specials",
     "color":"#f25a29",
     
-    "icon": "img/filters/special.png",
+    "icon": "icon-bullhorn",
     
     "evaluation":{
        "type": "compare",
@@ -55,7 +55,7 @@
     "name":"Emergencies",
     "color":"#f25a29",
 
-    "icon": "img/filters/emergency.png",
+    "icon": "icon-plus-sign",
     
     "evaluation":{
        "type": "compare",
@@ -72,30 +72,13 @@
     "name":"Parts",
     "color":"#f25a29",
 
-    "icon": "img/filters/part.png",
+    "icon": "icon-cog",
     
     "evaluation":{
        "type": "compare",
        "property":"type",
        "params":{
             "value": "Part",
-            "operator": "=="
-        }   
-    }
-},
-{
-    "_id":"503026b08859aed418000009",
-    "active":false,
-    "name":"Bids",
-    "color":"#f25a29",
-
-    "icon": "img/filters/bid.png",
-    
-    "evaluation":{
-       "type": "compare",
-       "property":"type",
-       "params":{
-            "value": "Bid",
             "operator": "=="
         }   
     }

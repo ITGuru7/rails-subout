@@ -7102,6 +7102,12 @@ a:hover {
 .btn-primary.active {
   background-color: #2b5d85 \9;
 }
+[class^="icon-"],
+[class*=" icon-"],
+[class^="icon-"]:hover,
+[class*=" icon-"]:hover {
+  background: none !important;
+}
 body {
   font-family: "myriad-pro";
   font-weight: 400;
