@@ -7402,3 +7402,18 @@ table.bid-history {
 #subout-navbar.navbar .navbar-buttons i {
   margin-right: 5px;
 }
+.icon-vehicle-needed:before {
+  content: "\f0a6";
+}
+.icon-vehicle-for-hire:before {
+  content: "\f018";
+}
+.icon-special:before {
+  content: "\f0a1";
+}
+.icon-emergency:before {
+  content: "\f0d4";
+}
+.icon-part:before {
+  content: "\f013";
+}

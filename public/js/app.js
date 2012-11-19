@@ -52,21 +52,9 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auc
     });
   };
   $rootScope.setOpportunity = function(opportunity) {
-    $rootScope.opportunity = opportunity;
-    return $rootScope.bids = Bid.query({
-      opportunityId: $rootScope.opportunity._id,
-      api_token: $rootScope.token.api_token
-    });
-  };
-  $rootScope.setOpportunityViaId = function(opportunity_id) {
     return $rootScope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
-      opportunityId: opportunity_id
-    }, function(opportunity) {
-      return $rootScope.bids = Bid.query({
-        opportunityId: opportunity._id,
-        api_token: $rootScope.token.api_token
-      });
+      opportunityId: opportunity._id
     });
   };
   $rootScope.setOtherCompanyViaId = function(company_id) {
@@ -277,7 +265,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
     }
     return $scope.query = "";
   };
-  return $scope.setTag = function(tag) {
+  $scope.setTag = function(tag) {
     var i;
     i = 0;
     while (i < $scope.tags.length) {
@@ -293,6 +281,14 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
       $scope.tag = null;
     }
     return $scope.query = "";
+  };
+  return $scope.actionDescription = function(action) {
+    switch (action.type) {
+      case "bid_created":
+        return "bids $" + action.details.amount + " on";
+      default:
+        return action.type.split('_').pop();
+    }
   };
 };
 

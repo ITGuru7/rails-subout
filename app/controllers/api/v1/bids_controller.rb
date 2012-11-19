@@ -1,10 +1,6 @@
 class Api::V1::BidsController < Api::V1::BaseController
   def index
-    if params[:opportunity_id].present?
-      respond_with opportunity.bids, :methods => :initiated_by_name
-    else
-      respond_with(current_company.bids, :methods => :opportunity_title)
-    end
+    respond_with current_company.bids
   end
 
   def create

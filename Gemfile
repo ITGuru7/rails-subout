@@ -17,6 +17,7 @@ gem 'rails_admin'
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'kiqstand'
+gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
 
 # Gems used only for assets and not required
 # in production environments by default.

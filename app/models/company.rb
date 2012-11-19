@@ -94,14 +94,14 @@ class Company
     users.create!(email: email, password: password)
   end
 
-  def logo
-    "img/company/#{self.id}.png"
-  end
+  #def logo
+    #"img/company/#{self.id}.png"
+  #end
 
-  def as_json(options={})
-    options[:methods] = :logo
-    super
-  end
+  #def as_json(options={})
+    #options[:methods] = :logo
+    #super
+  #end
 
   def inviter
     self.created_from_invitation.buyer

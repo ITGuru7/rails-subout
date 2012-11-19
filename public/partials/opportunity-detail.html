@@ -4,13 +4,13 @@
     <h3>Opportunity - {{opportunity.name}}</h3>
   </div>
   <div class="modal-body">
-    <div class="actions" ng-show="bids.length == 0">
-      <a data-target="#modal" ng-click="setOpportunityViaId(opportunity._id); setModal('partials/opportunity-form.html')">Edit</a>
+    <div class="actions" ng-show="opportunity.bids.length == 0">
+      <a data-target="#modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-form.html')">Edit</a>
       <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel</a>
     </div>
     <div class="control-group" ng-show="opportunity.bidding_done">
-      <div class="control-label">Won By: {{opportunity.winner_name}}</div>
-      <div class="control-label">Winning Bid Amount: {{opportunity.winning_amount}}</div>
+      <div class="control-label">Won By: {{opportunity.winner.name}}</div>
+      <div class="control-label">Winning Bid Amount: {{opportunity.winner.amount}}</div>
       <div class="control-label">(Closed)</div>
     </div>
     <dl class="dl-horizontal">
@@ -32,10 +32,10 @@
 
     <h4>Bid History</h4>
     <table class="bid-history">
-      <tr id="bid_{{bid._id}}" ng-repeat="bid in bids">
+      <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
         <td><strong>${{bid.amount}}</strong></td>
         <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
-        <td>by <a href='#'>{{bid.initiated_by_name}}</a></td>
+        <td>by <a href='#'>{{bid.bidder.name}}</a></td>
         <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
       </tr>
     </table>

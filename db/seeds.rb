@@ -6,9 +6,10 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Event.all.destroy_all
+[Company, Contact, Location, Opportunity, Bid, Event].each do |model|
+  model.all.destroy_all
 
-%W[companies contacts locations opportunities bids events].each do |collection|
+  collection = model.collection_name
   puts "importing #{collection}.json"
   puts `mongoimport --db subout_development --collection #{collection} --upsert --file db/seeds/#{collection}.json`
 end
