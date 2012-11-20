@@ -1,6 +1,5 @@
-var subout;
 
-subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).config([
+window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).config([
   "$routeProvider", function($routeProvider) {
     return $routeProvider.when("/sign_in", {
       templateUrl: "partials/sign_in.html",
@@ -11,6 +10,9 @@ subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).con
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
       controller: DashboardCtrl
+    }).when("/bids", {
+      templateUrl: "partials/bids.html",
+      controller: MyBidCtrl
     }).when("/opportunities/:opportunityId", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
@@ -23,9 +25,6 @@ subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).con
 jQuery.timeago.settings.allowFuture = true;
 
 angular.element(document).ready(function($http, $templateCache) {
-  $http.get('/partials/header.html', {
-    cache: $templateCache
-  });
   return angular.bootstrap(document, ['subout']);
 });
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
@@ -109,7 +108,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, $location, MyBid) {
+MyBidCtrl = function($scope, $rootScope, MyBid) {
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
@@ -194,7 +193,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction)
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
+DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunity) {
   $scope.filters = Filter.query();
   $scope.tags = Tag.query();
   $scope.query = "";
@@ -282,12 +281,21 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid) {
     }
     return $scope.query = "";
   };
-  return $scope.actionDescription = function(action) {
+  $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
         return "bids $" + action.details.amount + " on";
       default:
         return action.type.split('_').pop();
+    }
+  };
+  return $scope.toggleEvent = function(event) {
+    event.selected = !event.selected;
+    if (event.selected) {
+      return event.eventable = Opportunity.get({
+        api_token: $rootScope.token.api_token,
+        opportunityId: event.eventable._id
+      });
     }
   };
 };
