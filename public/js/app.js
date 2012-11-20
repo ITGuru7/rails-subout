@@ -1,5 +1,5 @@
 
-window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices"]).config([
+window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]).config([
   "$routeProvider", function($routeProvider) {
     return $routeProvider.when("/sign_in", {
       templateUrl: "partials/sign_in.html",
@@ -13,6 +13,9 @@ window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices
     }).when("/bids", {
       templateUrl: "partials/bids.html",
       controller: MyBidCtrl
+    }).when("/opportunities", {
+      templateUrl: "partials/opportunities.html",
+      controller: OpportunityCtrl
     }).when("/opportunities/:opportunityId", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
@@ -24,15 +27,30 @@ window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices
 
 jQuery.timeago.settings.allowFuture = true;
 
-angular.element(document).ready(function($http, $templateCache) {
+angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auction) {
-  var _ref;
+AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User) {
+  var token, _ref;
+  $rootScope.signedInSuccess = function(token) {
+    $rootScope.pusher = new Pusher(token.pusher_key);
+    $rootScope.company = Company.get({
+      companyId: token.company_id,
+      api_token: token.api_token
+    });
+    return $rootScope.user = User.get({
+      userId: token.user_id,
+      api_token: token.api_token
+    });
+  };
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
-    if (["/sign_up", "/sign_in"].indexOf($location.path()) === -1) {
+    if ($cookieStore.get('token')) {
+      token = $cookieStore.get('token');
+      $rootScope.token = token;
+      $rootScope.signedInSuccess(token);
+    } else if (["/sign_up", "/sign_in"].indexOf($location.path()) === -1) {
       $location.path("/sign_in");
     }
   }
@@ -43,12 +61,8 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Bid, Company, Auc
     return $('#modal').modal("hide");
   };
   $rootScope.signOut = function() {
+    $cookieStore.remove('token');
     return window.location.reload();
-  };
-  $rootScope.setOpportunities = function() {
-    return $rootScope.opportunities = Auction.query({
-      api_token: $rootScope.token.api_token
-    });
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
@@ -169,7 +183,11 @@ NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company, FavoriteInvita
   };
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction) {};
+OpportunityCtrl = function($scope, $rootScope, Auction) {
+  return $scope.opportunities = Auction.query({
+    api_token: $rootScope.token.api_token
+  });
+};
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
   $scope.cancelOpportunity = function() {
@@ -339,7 +357,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
+SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Company, User) {
   $scope.email = "suboutdev@gmail.com";
   $scope.password = "password";
   return $scope.signIn = function() {
@@ -348,16 +366,9 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
       password: $scope.password
     }, function(token) {
       $rootScope.token = token;
+      $cookieStore.put('token', token);
       if (token.authorized) {
-        $rootScope.pusher = new Pusher(token.pusher_key);
-        $rootScope.company = Company.get({
-          companyId: token.company_id,
-          api_token: token.api_token
-        });
-        $rootScope.user = User.get({
-          userId: token.user_id,
-          api_token: token.api_token
-        });
+        $rootScope.signedInSuccess(token);
         return $location.path("dashboard");
       } else {
         return $scope.message = "Invalid username or password!";
