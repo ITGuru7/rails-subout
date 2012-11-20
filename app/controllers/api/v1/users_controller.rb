@@ -8,4 +8,9 @@ class Api::V1::UsersController < Api::V1::BaseController
     user = User.find(params[:id])
     respond_with(user)
   end
+
+  def account
+    debug(params)
+  end
+
 end
