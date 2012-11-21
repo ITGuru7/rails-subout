@@ -10,6 +10,8 @@ class Bid
   validates_presence_of :bidder_id, :on => :create, :message => "can't be blank"
   validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
+  validate :validate_opportunity_bidable
+  validate :validate_bidable_by_bidder
   validate :validate_multiple_bids_on_the_same_opportunity
 
   scope :recent, desc(:created_at)
@@ -31,6 +33,18 @@ class Bid
 
   def quick_win_reverse_auction?
     !opportunity.forward_auction? and opportunity.win_it_now_price >= self.amount 
+  end
+
+  def validate_opportunity_bidable
+    unless opportunity.bidable?
+      errors.add :base, "opportunity has been closed"
+    end
+  end
+
+  def validate_bidable_by_bidder
+    unless opportunity.buyer_id != bidder_id
+      errors.add :bidder_id, "cannot bid on your own opportunity"
+    end
   end
 
   def validate_multiple_bids_on_the_same_opportunity

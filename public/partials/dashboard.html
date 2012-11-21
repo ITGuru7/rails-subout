@@ -57,7 +57,7 @@
                       </span>
                       <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
 
-                      <div class="pull-right" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')">
+                      <div class="pull-right">
                         <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>
                       </div>
                     </span>
@@ -73,9 +73,9 @@
                         <dd><strong>${{event.eventable.win_it_now_price}}</strong></dd>
                       </div>
                     </dl>
-                    <div class="pull-right">
-                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
-                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated') && opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                    <div class="pull-right" ng-show="opportunity.bidable && opportunity.buyer_id != company._id">
+                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
+                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                     </div>
                     <div class="clearfix"></div>
                   </div>

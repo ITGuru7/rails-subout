@@ -1,6 +1,17 @@
 require 'spec_helper'
 
 describe Bid do
+  #describe "validate_opportunity_bidable" do
+    #it "is invalid when the opportunity is not biddable by this bidder" do
+      #let(:bidder) { FactoryGirl.create(:company) }
+      #let(:opportunity) { FactoryGirl.create(:opportunity) }
+      #opportunity.stub(:biddable_by?).with(bidder).and_return(false)
+      
+      #my_new_bid = FactoryGirl.build(:bid, bidder: bidder, opportunity: opportunity, amount: 101.0)
+      #my_new_bid.should_not be_valid
+    #end
+  #end
+
   describe "validate_multiple_bids_on_the_same_opportunity" do
     let(:bidder) { FactoryGirl.create(:company) }
 

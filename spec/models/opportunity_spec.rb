@@ -1,19 +1,9 @@
 require 'spec_helper'
 
 describe Opportunity do
-  describe ".available" do
-    it 'returns all opportunities sorted by the newest' do
-      opportunities = FactoryGirl.create_list(:opportunity, 3)
-
-      result = Opportunity.available
-
-      result.first.should == opportunities.last
-      result.last.should == opportunities.first
-    end
-  end
-
   describe "#win!" do
     include EmailSpec::Helpers
+
     let(:auction) { FactoryGirl.create(:auction) }
     let(:bid) { FactoryGirl.create(:bid, opportunity: auction) }
 
@@ -34,6 +24,32 @@ describe Opportunity do
       auction.win!(bid.id)
 
       find_email(bid.bidder.email, :with_subject => /You won the bidding/).should_not be_nil
+    end
+  end
+
+  describe "#bidable?" do
+    it "returns false if the opportunity has been canceled" do
+      opportunity = Opportunity.new(canceled: true)
+
+      opportunity.should_not be_bidable
+    end
+
+    it "returns false if the opportunity has been done" do
+      opportunity = Opportunity.new(bidding_done: true)
+
+      opportunity.should_not be_bidable
+    end
+
+    it "returns false if the opportunity has been won by a company" do
+      opportunity = Opportunity.new(winning_bid_id: "123")
+
+      opportunity.should_not be_bidable
+    end
+
+    it "returns false if the opportunity has been ended" do
+      opportunity = Opportunity.new(bidding_ends: 1.day.ago) 
+
+      opportunity.should_not be_bidable
     end
   end
 end

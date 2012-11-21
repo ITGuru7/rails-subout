@@ -22,7 +22,6 @@ class Opportunity
   field :expired_notification_sent, type: Boolean, default: false
   field :for_favorites_only, type: Boolean, default: false
 
-  scope :available, order_by(:created_at => :desc)
   scope :active, where(:canceled => false)
 
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
@@ -69,5 +68,13 @@ class Opportunity
 
   def winning_bid
     bids.where(id: winning_bid_id).first
+  end
+
+  def bidding_ended?
+    self.bidding_ends <= Date.today
+  end
+
+  def bidable?
+    not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
   end
 end
