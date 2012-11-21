@@ -267,16 +267,18 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     reg = new RegExp($scope.query.toLowerCase());
     return reg.test(input.name.toLowerCase()) || reg.test(input.seats);
   };
-  $scope.searchByTag = function(input) {
-    var reg;
-    if (!$scope.tag) {
+  $scope.searchByEventType = function(event) {
+    if (!$scope.eventType) {
       return true;
     }
-    reg = new RegExp($scope.tag.name.toLowerCase());
-    if (reg.test(input.eventable.name.toLowerCase())) {
-      return true;
+    return event.action.type === $scope.eventType;
+  };
+  $scope.setEventType = function(eventType) {
+    if ($scope.eventType === eventType) {
+      return $scope.eventType = null;
+    } else {
+      return $scope.eventType = eventType;
     }
-    return false;
   };
   $scope.setFilter = function(filter) {
     var i;
@@ -322,7 +324,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
   };
   return $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
-    if (event.selected) {
+    if (event.selected && event.eventable._id) {
       return event.eventable = Opportunity.get({
         api_token: $rootScope.token.api_token,
         opportunityId: event.eventable._id

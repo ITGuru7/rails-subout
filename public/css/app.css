@@ -7264,6 +7264,12 @@ body {
 #filters .filter.noneactive {
   background: none!important;
 }
+#event_types .content li.active {
+  background-color: #69b645;
+}
+#event_types .content li.active a {
+  display: block;
+}
 #tags .tag {
   margin-bottom: 0.3em;
   cursor: pointer;

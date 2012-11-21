@@ -2,25 +2,25 @@
       <div class="row-fluid">
         <div id="sidebar" class="span3">
             <section id="filters">
-                <section class="title"><h5>Opportunity Type</h5></section>
-                <section class="content">
-                    <ul>
-                        <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
-                            <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
-                        </li>
-                    </ul>
-                </section>
+              <section class="title"><h5>Opportunity Type</h5></section>
+              <section class="content">
+                <ul>
+                  <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
+                  <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
+                  </li>
+                </ul>
+              </section>
             </section>
             <section id="event_types">
-                <section class="title"><h5>Event Type</h5></section>
-                <section class="content">
-                    <ul>
-                      <li><a href='#'>Created</a></li>
-                      <li><a href='#'>New Bid</a></li>
-                      <li><a href='#'>Bidding Won</a></li>
-                      <li><a href='#'>Cancelled</a></li>
-                    </ul>
-                </section>
+              <section class="title"><h5>Event Type</h5></section>
+              <section class="content">
+                <ul>
+                  <li ng-class="{active: eventType=='opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
+                  <li ng-class="{active: eventType=='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
+                  <li ng-class="{active: eventType=='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
+                  <li ng-class="{active: eventType=='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
+                </ul>
+              </section>
             </section>
         </div>
         <div class="span9">
@@ -42,7 +42,7 @@
 
               <section id="activity-stream">
                 <div class="row-fluid"
-                     ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20"
+                     ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByEventType | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-row">
