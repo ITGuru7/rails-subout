@@ -11,7 +11,11 @@
 
   collection = model.collection_name
   puts "importing #{collection}.json"
-  puts `mongoimport --db subout_development --collection #{collection} --upsert --file db/seeds/#{collection}.json`
+  if Rails.env.production?
+    puts `mongoimport --db subout -u heroku -p sub0utd3v -h alex.mongohq.com:10029 --collection #{collection} --upsert --file db/seeds/#{collection}.json`
+  else
+    puts `mongoimport --db subout_development --collection #{collection} --upsert --file db/seeds/#{collection}.json`
+  end
 end
 
 demo_companies = {
@@ -25,5 +29,5 @@ demo_companies = {
 User.all.destroy_all
 demo_companies.each do |company_name, user_email|
   company = Company.where(:name => company_name).first
-  FactoryGirl.create(:user, :email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
+  User.create(:email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
 end
