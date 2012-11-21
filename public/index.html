@@ -26,7 +26,22 @@
 
   <body ng-controller="AppCtrl">
     <div id="pageWrapper" class="container">
-      <div ng-view="content"></div>
+      <div id="subout-navbar" class="navbar" ui-if="userSignedIn()">
+        <div class="navbar-inner">
+          <a class="brand" href="#">SubOut</a>
+          <ul class="nav">
+            <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
+            <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+            <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
+            <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
+          </ul>
+          <div class="btn-group pull-right navbar-buttons">
+            <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
+            <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
+          </div>
+        </div>
+      </div>
+      <div id="content" ng-view="content"></div>
       <div id="modal" class="modal hide fade">
          <div ng-include="modal"></div>
       </div>

@@ -34,6 +34,15 @@ var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBid
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User) {
   var token, _ref;
+  $rootScope.currentPath = function() {
+    return $location.path();
+  };
+  $rootScope.userSignedIn = function() {
+    var _ref;
+    if (((_ref = $rootScope.user) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
+      return true;
+    }
+  };
   $rootScope.signedInSuccess = function(token) {
     $rootScope.pusher = new Pusher(token.pusher_key);
     $rootScope.company = Company.get({

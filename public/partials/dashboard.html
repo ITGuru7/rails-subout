@@ -1,105 +1,87 @@
-<div id="subout-navbar" class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#">SubOut</a>
-    <ul class="nav">
-      <li class="active"><a href="#/dashboard">Home</a></li>
-      <li><a href="#/bids">My Bids</a></li>
-      <li><a href="#/opportunities">My Opportunities</a></li>
-      <li><a href="#">Favorites</a></li>
-    </ul>
-    <div class="btn-group pull-right navbar-buttons">
-      <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
-      <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-    </div>
-  </div>
-</div>
-
-<div id="content">
-  <div id="dashboard">
-        <div class="row-fluid">
-          <div id="sidebar" class="span3">
-              <section id="filters">
-                  <section class="title"><h5>Opportunity Type</h5></section>
-                  <section class="content">
-                      <ul>
-                          <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
-                              <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
-                          </li>
-                      </ul>
-                  </section>
-              </section>
-              <section id="event_types">
-                  <section class="title"><h5>Event Type</h5></section>
-                  <section class="content">
-                      <ul>
-                        <li><a href='#'>Created</a></li>
-                        <li><a href='#'>New Bid</a></li>
-                        <li><a href='#'>Bidding Won</a></li>
-                        <li><a href='#'>Cancelled</a></li>
-                      </ul>
-                  </section>
-              </section>
-          </div>
-          <div class="span9">
-             <section id="activities">
-                <div id="toolbar">
-                    <div class="row-fluid">
-                        <div class="pull-left span4">
-                          <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
-                        </div>
-                        <div class='pull-right span8 toolbar-buttons'>
-                          <div id="search" class="pull-right span6">
-                              <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
-                              <div class="icon-search"></div>
-                          </div>
-                          <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setModal('partials/opportunity-form.html')">New Opportunity</a>
-                        </div>
-                    </div>
-                </div>
-
-                <section id="activity-stream">
-                  <div class="row-fluid"
-                       ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20"
-                       ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-
-                    <div class="event-row">
-                      <span class="span3">
-                        <i class="{{opportunity.icon}}" style="margin-right: 10px;"></i>
-                        <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
-                      </span>
-                      <span class="span9">
-                        <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
-                        <span>
-                          {{actionDescription(action)}}
-                        </span>
-                        <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
-
-                        <div class="pull-right" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')">
-                          <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>
-                        </div>
-                      </span>
-                    </div>
-                    <div class="eventable-expanded" ng-show="event.selected" class="action-buttons">
-                      <dl class="dl-horizontal">
-                        <dt>Description:</dt>
-                        <dd>{{event.eventable.description}}</dd>
-                        <dt>Bidding Ends</dt>
-                        <dd>{{event.eventable.bidding_ends|date}}</dd>
-                        <div ng-show="event.eventable.quick_winnable">
-                          <dt>Buy now:</dt>
-                          <dd><strong>${{event.eventable.win_it_now_price}}</strong></dd>
-                        </div>
-                      </dl>
-                      <div class="pull-right">
-                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
-                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated') && opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
-                      </div>
-                      <div class="clearfix"></div>
-                    </div>
-                  </div>
+<div id="dashboard">
+      <div class="row-fluid">
+        <div id="sidebar" class="span3">
+            <section id="filters">
+                <section class="title"><h5>Opportunity Type</h5></section>
+                <section class="content">
+                    <ul>
+                        <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
+                            <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
+                        </li>
+                    </ul>
                 </section>
             </section>
-          </div>
+            <section id="event_types">
+                <section class="title"><h5>Event Type</h5></section>
+                <section class="content">
+                    <ul>
+                      <li><a href='#'>Created</a></li>
+                      <li><a href='#'>New Bid</a></li>
+                      <li><a href='#'>Bidding Won</a></li>
+                      <li><a href='#'>Cancelled</a></li>
+                    </ul>
+                </section>
+            </section>
         </div>
-  </div>
+        <div class="span9">
+           <section id="activities">
+              <div id="toolbar">
+                  <div class="row-fluid">
+                      <div class="pull-left span4">
+                        <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
+                      </div>
+                      <div class='pull-right span8 toolbar-buttons'>
+                        <div id="search" class="pull-right span6">
+                            <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
+                            <div class="icon-search"></div>
+                        </div>
+                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setModal('partials/opportunity-form.html')">New Opportunity</a>
+                      </div>
+                  </div>
+              </div>
+
+              <section id="activity-stream">
+                <div class="row-fluid"
+                     ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByTag | limitTo:20"
+                     ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
+
+                  <div class="event-row">
+                    <span class="span3">
+                      <i class="{{opportunity.icon}}" style="margin-right: 10px;"></i>
+                      <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
+                    </span>
+                    <span class="span9">
+                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
+                      <span>
+                        {{actionDescription(action)}}
+                      </span>
+                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
+
+                      <div class="pull-right" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')">
+                        <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="eventable-expanded" ng-show="event.selected" class="action-buttons">
+                    <dl class="dl-horizontal">
+                      <dt>Description:</dt>
+                      <dd>{{event.eventable.description}}</dd>
+                      <dt>Bidding Ends</dt>
+                      <dd>{{event.eventable.bidding_ends|date}}</dd>
+                      <div ng-show="event.eventable.quick_winnable">
+                        <dt>Buy now:</dt>
+                        <dd><strong>${{event.eventable.win_it_now_price}}</strong></dd>
+                      </div>
+                    </dl>
+                    <div class="pull-right">
+                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated')" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
+                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="(action.type=='opportunity_created' || action.type=='opportunity_updated') && opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </section>
+          </section>
+        </div>
+      </div>
 </div>
