@@ -19,6 +19,9 @@ window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices
     }).when("/opportunities/:opportunityId", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
+    }).when("/favorites", {
+      templateUrl: "partials/favorites.html",
+      controller: FavoritesCtrl
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -153,14 +156,15 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
   };
 };
 
-NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company, FavoriteInvitation) {
+NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, FavoriteInvitation) {
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      $route.reload();
+      return $rootScope.closeModal();
     });
   };
   return $scope.findSupplier = function() {
@@ -186,7 +190,7 @@ NewFavoriteCtrl = function($scope, $rootScope, Favorite, Company, FavoriteInvita
         favorite_invitation: $scope.invitation,
         api_token: $rootScope.token.api_token
       }, function() {
-        return jQuery("#modal").modal("hide");
+        return $rootScope.closeModal();
       });
     };
   };

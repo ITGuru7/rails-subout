@@ -1,22 +1,31 @@
-<div id="bid-new" ng-controller="FavoritesCtrl">
-  <div class="modal-header">
-    <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Your Favorite Companies</h3>
+<div id="favorites">
+  <div>
+    <a href="#modal" data-toggle="modal" ng-click="setModal('partials/add-new-favorite.html')" class="btn btn-primary add-new-favorite">Add new Favorite</a>
   </div>
-  <div class="modal-body">
-    <a data-target="#modal" ng-click="setModal('partials/add-new-favorite.html')" class="btn btn-primary add-new-favorite">Add new Favorite</a>
-    <section class="section-content">
-      <table class="table">
-        <tr>
-          <th>Name</th>
-        </tr>  
-        <tr ng-repeat="company in favoriteCompanies" >
-          <td>
-            {{company.name}}
-            <a ng-click="removeFavorite(company)">Remove</a>
-          </td>
-        </tr>
-      </table>
-    </section>
-  </div>
+  <table class="table">
+    <tr>
+      <th colspan="2">Company</th>
+      <th>Bids</th>
+      <th>Opportunities</th>
+    </tr>  
+    <tr ng-repeat="company in favoriteCompanies" >
+      <td>
+        <span class="span2">
+          <img src="{{company.logo}}" />
+        </span>
+      </td>
+      <td>
+        <span class="span6">
+          {{company.name}}
+          <a ng-click="removeFavorite(company)">Remove</a>
+        </span>
+      </td>
+      <td>
+        <span class="span2">{{company.bids_count}}</span>
+      </td>
+      <td>
+        <span class="span2">{{company.opportunities_count}}</span>
+      </td>
+    </tr>
+  </table>
 </div>
