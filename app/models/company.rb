@@ -30,8 +30,9 @@ class Company
   field :created_from_invitation_id
 
   belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
+  has_one :gateway_subscription
 
-  attr_accessor :password, :password_confirmation
+  attr_accessor :password, :password_confirmation, :gateway_subscription_id
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
@@ -44,9 +45,12 @@ class Company
   accepts_nested_attributes_for :users
 
   validates_presence_of :name, :on => :create
-  validates_presence_of :created_from_invitation_id, :on => :create
   validates_uniqueness_of :email
   validates_confirmation_of :password
+
+  validates_presence_of :created_from_inviation_id, :on => :create, unless: 'gateway_subscription_id.present?'
+  validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
+  validate :validate_subscription, :on => :create, if: "gateway_subscription_id.present?"
 
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
@@ -72,21 +76,8 @@ class Company
     supplier.save
   end
 
-  def needs
-    self.opportunities
-  end
-
-  def interested_in_event?(event)
-  	true
-  end
-
   def guest? 
     !member?
-  end
-
-  def send_event(event, associated_object)
-    #Rails.logger.info "Queing event to be sent to path #{company_msg_path}"
-    #event.delay.send_msg(company_msg_path, associated_object)
   end
 
   def create_initial_user!
@@ -94,16 +85,30 @@ class Company
     users.create!(email: email, password: password)
   end
 
-  #def logo
-    #"img/company/#{self.id}.png"
-  #end
-
-  #def as_json(options={})
-    #options[:methods] = :logo
-    #super
-  #end
-
   def inviter
     self.created_from_invitation.buyer
+  end
+
+  def confirm_reference
+    self.created_from_invitation.accept! if self.created_from_invitation_id.present?
+
+    if self.gateway_subscription_id.present?
+      GatewaySubscription.where(id: self.gateway_subscription_id)
+                         .update(company_id: self.id)
+    end
+  end
+
+  private
+
+  def validate_invitation
+    return if self.created_from_invitation && self.created_from_invitation.pending?
+
+    errors.add(:created_from_invitation_id, "Invalid invitation")
+  end
+
+  def validate_subscription
+    unless GatewaySubscription.pending.where(id: self.gateway_subscription_id).exists?
+      errors.add(:base, "Invalid subscription")
+    end
   end
 end

@@ -18,7 +18,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   def create
     company = Company.new(params[:company])
     if company.save
-      company.created_from_invitation.accept!
+      company.confirm_reference
 
       respond_with(company)
     else

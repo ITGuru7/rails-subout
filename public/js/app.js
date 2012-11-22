@@ -381,8 +381,8 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
       password: $scope.password
     }, function(token) {
       $rootScope.token = token;
-      $cookieStore.put('token', token);
       if (token.authorized) {
+        $cookieStore.put('token', token);
         $rootScope.signedInSuccess(token);
         return $location.path("dashboard");
       } else {
@@ -392,18 +392,32 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
   };
 };
 
-SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation) {
+SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
   $scope.company = {};
   $scope.user = {};
-  FavoriteInvitation.get({
-    invitationId: $routeParams.invitation_id
-  }, function(invitation) {
-    $scope.company.email = invitation.supplier_email;
-    $scope.company.name = invitation.supplier_name;
-    return $scope.company.created_from_invitation_id = invitation._id;
-  }, function() {
-    return $location.path("/sign_in").search({});
-  });
+  if ($routeParams.invitation_id) {
+    FavoriteInvitation.get({
+      invitationId: $routeParams.invitation_id
+    }, function(invitation) {
+      $scope.company.email = invitation.supplier_email;
+      $scope.company.name = invitation.supplier_name;
+      return $scope.company.created_from_invitation_id = invitation._id;
+    }, function() {
+      return $location.path("/sign_in").search({});
+    });
+  } else if ($routeParams.subscription_id) {
+    GatewaySubscription.get({
+      subscriptionId: $routeParams.subscription_id
+    }, function(subscription) {
+      $scope.company.email = subscription.email;
+      $scope.company.name = subscription.organization;
+      return $scope.company.gateway_subscription_id = subscription._id;
+    }, function() {
+      return $location.path("/sign_in").search({});
+    });
+  } else {
+    $location.path("/sign_in");
+  }
   return $scope.signUp = function() {
     $scope.user.email = $scope.company.email;
     $scope.company.users_attributes = {
@@ -583,4 +597,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/favorites/:favoriteId", {}, {});
 }).factory("FavoriteInvitation", function($resource) {
   return $resource("" + api_path + "/favorite_invitations/:invitationId", {}, {});
+}).factory("GatewaySubscription", function($resource) {
+  return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 });

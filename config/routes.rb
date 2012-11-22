@@ -10,6 +10,10 @@ Subout::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
+      resources :gateway_subscriptions do
+        get :test_form, on: :collection
+      end
+
       resources :tokens
       resources :users  do 
         collection do 
