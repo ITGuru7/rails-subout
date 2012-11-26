@@ -2,14 +2,16 @@ require 'sidekiq/web'
 
 Subout::Application.routes.draw do
 
-  mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
-
   devise_for :users
 
   mount Sidekiq::Web => '/sidekiq'
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
+      resources :gateway_subscriptions do
+        get :test_form, on: :collection
+      end
+
       resources :tokens
       resources :users  do 
         collection do 
@@ -47,40 +49,4 @@ Subout::Application.routes.draw do
       end
     end
   end
-
-  resources :contacts, :employees, 
-            :locations, :opportunity_types, 
-            :profiles, :regions, :region_types, 
-            :events,  :favorites
-
-  resources :opportunities  do
-    resources :bids
-  end
-
-  resources :auctions
-
-  resources :favorite_invitations do
-    collection do
-      post :create_for_unknown_supplier, :create_for_known_supplier
-    end
-
-    member do
-      get :accept
-    end
-  end
-
-  resources :companies do
-    member do
-      get :new_supplier
-    end
-  end
-
-  get 'dashboard', to: 'companies#dashboard'
-
-  #TODO ask thomas about this
-  match 'companies/events/:id' => 'companies#events'
-
-  match 'companies/opportunities/:id' => 'companies#opportunities'
-  match 'opportunities/bids/:id' => 'opportunities#bids'
-  match 'api_login' => 'tokens#create'
 end

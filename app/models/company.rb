@@ -29,9 +29,13 @@ class Company
 
   field :created_from_invitation_id
 
-  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
+  field :subscription_plan, default: 'free'
+  field :regions, type: Array
 
-  attr_accessor :password, :password_confirmation
+  attr_accessor :password, :password_confirmation, :gateway_subscription_id
+
+  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
+  belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
@@ -44,9 +48,16 @@ class Company
   accepts_nested_attributes_for :users
 
   validates_presence_of :name, :on => :create
-  validates_presence_of :created_from_invitation_id, :on => :create
   validates_uniqueness_of :email
   validates_confirmation_of :password
+
+  validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
+  validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
+  validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
+
+  before_create :set_subscription_info, if: "created_from_subscription_id.present?"
+  after_create :accept_invitation!, if: "created_from_invitation_id.present?"
+  after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
@@ -72,21 +83,12 @@ class Company
     supplier.save
   end
 
-  def needs
-    self.opportunities
-  end
-
-  def interested_in_event?(event)
-  	true
-  end
-
   def guest? 
-    !member?
+    subscription_plan == 'free'
   end
 
-  def send_event(event, associated_object)
-    #Rails.logger.info "Queing event to be sent to path #{company_msg_path}"
-    #event.delay.send_msg(company_msg_path, associated_object)
+  def state_by_state_subscriber? 
+    subscription_plan == 'state-by-state-service'
   end
 
   def create_initial_user!
@@ -94,16 +96,35 @@ class Company
     users.create!(email: email, password: password)
   end
 
-  #def logo
-    #"img/company/#{self.id}.png"
-  #end
-
-  #def as_json(options={})
-    #options[:methods] = :logo
-    #super
-  #end
-
   def inviter
     self.created_from_invitation.buyer
   end
+
+  private
+
+  def validate_invitation
+    return if self.created_from_invitation && self.created_from_invitation.pending?
+
+    errors.add(:created_from_invitation_id, "Invalid invitation")
+  end
+
+  def validate_subscription
+    return if self.created_from_subscription && self.created_from_subscription.pending?
+
+    errors.add(:created_from_subscription_id, "Invalid subscription")
+  end
+
+  def set_subscription_info
+    self.regions = created_from_subscription.regions
+    self.subscription_plan = created_from_subscription.product_handle
+  end
+
+  def accept_invitation!
+    self.created_from_invitation.accept! 
+  end
+
+  def confirm_subscription!
+    self.created_from_subscription.confirm! 
+  end
 end
+

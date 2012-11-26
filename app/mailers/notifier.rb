@@ -39,4 +39,10 @@ class Notifier < ActionMailer::Base
 
     mail(subject: "Your auction #{@auction.name} is expired", to: @auction.buyer.email)
   end
+
+  def subscription_confirmation(subscription_id)
+    @subscription = GatewaySubscription.find(subscription_id)
+
+    mail(subject: "SUBOUT: confirm your subscription", to: @subscription.email)
+  end
 end
