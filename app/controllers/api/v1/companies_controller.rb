@@ -18,8 +18,6 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   def create
     company = Company.new(params[:company])
     if company.save
-      company.confirm_reference
-
       respond_with(company)
     else
       render json: { errors: company.errors.full_messages }, status: 422

@@ -29,10 +29,13 @@ class Company
 
   field :created_from_invitation_id
 
-  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
-  has_one :gateway_subscription
+  field :subscription_plan, default: 'free'
+  field :regions, type: Array
 
   attr_accessor :password, :password_confirmation, :gateway_subscription_id
+
+  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
+  belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
@@ -48,9 +51,13 @@ class Company
   validates_uniqueness_of :email
   validates_confirmation_of :password
 
-  validates_presence_of :created_from_inviation_id, :on => :create, unless: 'gateway_subscription_id.present?'
+  validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
   validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
-  validate :validate_subscription, :on => :create, if: "gateway_subscription_id.present?"
+  validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
+
+  before_create :set_subscription_info, if: "created_from_subscription_id.present?"
+  after_create :accept_invitation!, if: "created_from_invitation_id.present?"
+  after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
@@ -77,7 +84,11 @@ class Company
   end
 
   def guest? 
-    !member?
+    subscription_plan == 'free'
+  end
+
+  def state_by_state_subscriber? 
+    subscription_plan == 'state-by-state-service'
   end
 
   def create_initial_user!
@@ -89,15 +100,6 @@ class Company
     self.created_from_invitation.buyer
   end
 
-  def confirm_reference
-    self.created_from_invitation.accept! if self.created_from_invitation_id.present?
-
-    if self.gateway_subscription_id.present?
-      GatewaySubscription.where(id: self.gateway_subscription_id)
-                         .update(company_id: self.id)
-    end
-  end
-
   private
 
   def validate_invitation
@@ -107,8 +109,22 @@ class Company
   end
 
   def validate_subscription
-    unless GatewaySubscription.pending.where(id: self.gateway_subscription_id).exists?
-      errors.add(:base, "Invalid subscription")
-    end
+    return if self.created_from_subscription && self.created_from_subscription.pending?
+
+    errors.add(:created_from_subscription_id, "Invalid subscription")
+  end
+
+  def set_subscription_info
+    self.regions = created_from_subscription.regions
+    self.subscription_plan = created_from_subscription.product_handle
+  end
+
+  def accept_invitation!
+    self.created_from_invitation.accept! 
+  end
+
+  def confirm_subscription!
+    self.created_from_subscription.confirm! 
   end
 end
+

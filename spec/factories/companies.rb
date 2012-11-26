@@ -4,10 +4,18 @@ FactoryGirl.define do
     sequence(:email) {|n| "company#{n}@example.com" }
     zip_code '02634'
     street_address '33 Comm Ave'
-    created_from_invitation_id 'invitation_id'
+    created_from_subscription {FactoryGirl.create(:gateway_subscription)}
 
     factory :buyer, aliases: [:member_supplier] do
       member true
+    end
+
+    factory :ca_company do
+      after :create do |company|
+        company.regions = ['CA']
+        company.subscription_plan = 'state-by-state-service' 
+        company.save(callbacks: false)
+      end
     end
   end
 end

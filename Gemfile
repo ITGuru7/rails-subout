@@ -5,28 +5,26 @@ gem 'rails', '3.2.3'
 
 gem "mongoid", "~> 3.0.0.rc"
 gem 'haml-rails'
-gem 'jquery-rails'
 gem 'pusher'
 gem 'thin'
 gem "devise"
-gem 'simple_form'
 gem 'sidekiq'
-gem 'sinatra', :require => nil
-gem 'slim'
-gem 'rails_admin'
+gem 'sinatra', require: nil
+gem 'slim', require: nil
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'kiqstand'
 gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
+gem 'httparty'
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem "therubyracer"
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
-end
+#group :assets do
+  #gem "therubyracer"
+  #gem 'sass-rails',   '~> 3.2.3'
+  #gem 'coffee-rails', '~> 3.2.1'
+  #gem 'uglifier', '>= 1.0.3'
+#end
 
 group :development, :test do
   gem "pry"
@@ -39,10 +37,10 @@ group :test do
   gem "rspec-rails"
   gem "cucumber-rails", :require => false
   gem "database_cleaner"
-  #gem "capybara-webkit"
-  #gem 'poltergeist'
   gem 'fivemat'
   gem 'email_spec'
   gem 'timecop'
   #gem 'capybara-screenshot'
+  #gem "capybara-webkit"
+  #gem 'poltergeist'
 end
