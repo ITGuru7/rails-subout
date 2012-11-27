@@ -19,7 +19,7 @@ class Api::V1::BaseController < ActionController::Base
     render :json => {:error => "not-found"}.to_json, :status => 404
   end
 
-  def respond_with_namespace(resource)
-    respond_with(:api, :v1, resource)
+  def respond_with_namespace(*resource)
+    respond_with(:api, :v1, *resource)
   end
 end

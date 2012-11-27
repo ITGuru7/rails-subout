@@ -2,14 +2,13 @@ class Event
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  # To filter events by regions
-  field :regions, type: Array
+  field :region
 
   belongs_to :actor, :class_name => "Company"
   embeds_one :action, class_name: "EventAction"
   belongs_to :eventable, :polymorphic => true
 
-  before_create :set_regions
+  before_create :set_region
 
   def self.recent
     order_by(:updated_at => :desc).includes(:actor).limit(100)
@@ -21,7 +20,7 @@ class Event
 
   private
 
-  def set_regions
-    self.regions = eventable.regions
+  def set_region
+    self.region = eventable.region
   end
 end

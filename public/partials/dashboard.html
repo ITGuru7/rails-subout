@@ -22,6 +22,16 @@
                 </ul>
               </section>
             </section>
+            <section id="regions">
+              <section class="title"><h5>Region</h5></section>
+              <section class="content">
+                <ul>
+                  <li>
+                    <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
+                  </li>
+                </ul>
+              </section>
+            </section>
         </div>
         <div class="span9">
            <section id="activities">
@@ -42,7 +52,7 @@
 
               <section id="activity-stream">
                 <div class="row-fluid"
-                     ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByEventType | limitTo:20"
+                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-row">
@@ -56,6 +66,7 @@
                         {{actionDescription(action)}}
                       </span>
                       <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
+                      in {{event.eventable.region}}
 
                       <div class="pull-right">
                         <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>

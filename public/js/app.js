@@ -76,6 +76,14 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $cookieStore.remove('token');
     return window.location.reload();
   };
+  $rootScope.allRegions = function() {
+    var regions;
+    regions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+    if ($rootScope.company.regions !== 'all') {
+      regions = $rootScope.company.regions.slice(0);
+    }
+    return regions;
+  };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
@@ -95,10 +103,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
-  $scope.regions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-  if ($rootScope.company.regions !== 'all') {
-    $scope.regions = $rootScope.company.regions;
-  }
+  $scope.regions = $rootScope.allRegions();
   return $scope.save = function() {
     var opportunity;
     opportunity = $scope.opportunity;
@@ -230,11 +235,12 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction)
 
 DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunity) {
   $scope.filters = Filter.query();
-  $scope.tags = Tag.query();
   $scope.query = "";
   $scope.filter = null;
-  $scope.tag = null;
+  $scope.regionFilter = "All My Regions";
   $scope.opportunity = null;
+  $scope.regions = $rootScope.allRegions();
+  $scope.regions.unshift("All My Regions");
   $scope.winOpportunityNow = function(opportunity) {
     var bid;
     bid = {
@@ -271,13 +277,20 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
       return true;
     }
     reg = new RegExp($scope.query.toLowerCase());
-    return reg.test(input.name.toLowerCase()) || reg.test(input.seats);
+    return reg.test(input.eventable.name.toLowerCase());
   };
   $scope.searchByEventType = function(event) {
     if (!$scope.eventType) {
       return true;
     }
     return event.action.type === $scope.eventType;
+  };
+  $scope.searchByRegion = function(event) {
+    if ($scope.regionFilter === "All My Regions") {
+      return true;
+    }
+    console.log(event.region);
+    return event.eventable.region === $scope.regionFilter;
   };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {
@@ -303,27 +316,10 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     }
     return $scope.query = "";
   };
-  $scope.setTag = function(tag) {
-    var i;
-    i = 0;
-    while (i < $scope.tags.length) {
-      if ($scope.tags[i] !== tag) {
-        $scope.tags[i].active = false;
-      }
-      i++;
-    }
-    tag.active = !tag.active;
-    if (tag.active) {
-      $scope.tag = tag;
-    } else {
-      $scope.tag = null;
-    }
-    return $scope.query = "";
-  };
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "bidded $" + action.details.amount + " by";
+        return "recieved bid $" + action.details.amount + " from";
       default:
         return "" + (action.type.split('_').pop()) + " by";
     }
