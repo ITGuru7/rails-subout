@@ -51,11 +51,11 @@
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
-                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
+                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
                       <span>
                         {{actionDescription(action)}}
                       </span>
-                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
+                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
 
                       <div class="pull-right">
                         <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>
