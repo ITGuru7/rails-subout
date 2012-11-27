@@ -1,5 +1,5 @@
 class CompanySerializer < ActiveModel::Serializer
-  attributes :_id, :name, :email, :logo, :regions, 
+  attributes :_id, :name, :email, :logo, :regions, :website,
     :fleet_size, :since, :owner, :contact_name, :tpa,
     :bids_count, :opportunities_count, :state_by_state_subscriber?
 

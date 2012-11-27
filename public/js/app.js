@@ -459,11 +459,23 @@ subout.directive("relativeTime", function() {
     }
   };
 });
-var Evaluators, evaluation;
+var Evaluators, evaluation, module;
 
-angular.module("suboutFilters", []).filter("timestamp", function() {
+module = angular.module("suboutFilters", []);
+
+module.filter("timestamp", function() {
   return function(input) {
     return new Date(input).getTime();
+  };
+});
+
+module.filter("websiteUrl", function() {
+  return function(url) {
+    if (/^https?/i.test(url)) {
+      return url;
+    } else {
+      return "http://" + url;
+    }
   };
 });
 

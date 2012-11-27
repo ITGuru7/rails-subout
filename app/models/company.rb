@@ -30,6 +30,7 @@ class Company
 
   field :subscription_plan, default: 'free'
   field :regions, type: Array
+  field :website
 
   attr_accessor :password, :password_confirmation, :gateway_subscription_id
 
