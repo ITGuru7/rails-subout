@@ -95,6 +95,10 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
+  $scope.regions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+  if ($rootScope.company.regions !== 'all') {
+    $scope.regions = $rootScope.company.regions;
+  }
   return $scope.save = function() {
     var opportunity;
     opportunity = $scope.opportunity;
@@ -248,8 +252,10 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     var channel;
     channel = $rootScope.pusher.subscribe('event');
     channel.bind('created', function(event) {
-      $scope.events.unshift(event);
-      return $scope.$apply();
+      if ($rootScope.company.hasSubscribedRegion(event.eventable.region)) {
+        $scope.events.unshift(event);
+        return $scope.$apply();
+      }
     });
     return jQuery("time.relative-time").timeago();
   });
@@ -518,7 +524,8 @@ Evaluators.like = function(input, evaluation) {
     return true;
   }
 };
-var api_path;
+var api_path,
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 api_path = "/api/v1";
 
@@ -548,7 +555,8 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
 }).factory("Event", function($resource) {
   return $resource("" + api_path + "/events/:eventId", {}, {});
 }).factory("Company", function($resource) {
-  return $resource("" + api_path + "/companies/:companyId/:action", {
+  var Company;
+  Company = $resource("" + api_path + "/companies/:companyId/:action", {
     companyId: '@companyId',
     action: '@action'
   }, {
@@ -567,6 +575,17 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       action: "search"
     }
   });
+  Company.prototype.regionNames = function() {
+    if (this.state_by_state_subscriber) {
+      return this.regions.join(', ');
+    } else {
+      return "Nationwide";
+    }
+  };
+  Company.prototype.hasSubscribedRegion = function(region) {
+    return !this.state_by_state_subscriber || __indexOf.call(this.regions, region) >= 0;
+  };
+  return Company;
 }).factory("Token", function($resource) {
   return $resource("" + api_path + "/tokens", {}, {});
 }).factory("User", function($resource) {

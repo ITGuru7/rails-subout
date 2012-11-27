@@ -75,6 +75,14 @@
                   </div>
 
                   <div class="control-group">
+                    <label for="opportunity_region" class="control-label">Region</label>
+                    <div class="controls">
+                      <select id="opportunity_region" ng-model="opportunity.region" ng-options="r for r in regions">
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="control-group">
                     <label for="opportunity_starting_location_id" class="control-label">Starting location</label>
                     <div class="controls">
                         <input id="opportunity_starting_location_id" type="text" ng-model="opportunity.starting_location_id" size="30" class="input-xlarge">

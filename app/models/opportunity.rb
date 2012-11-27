@@ -6,7 +6,7 @@ class Opportunity
   field :description, type: String
   field :starting_location, type: String
   field :ending_location, type: String
-  field :regions, type: Array
+  field :regions, type: Array, default: []
   field :start_date, type: Date
   field :start_time, type: String
   field :end_date, type: Date
@@ -79,7 +79,11 @@ class Opportunity
     not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
   end
 
-  def set_regions
-    self.regions = ["Alabama", "Alaska"]
+  def region=(value)
+    self.regions = [value]
+  end
+
+  def region
+    self.regions.first
   end
 end

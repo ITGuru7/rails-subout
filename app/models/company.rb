@@ -9,7 +9,6 @@ class Company
   field :city, type: String
   field :state, type: String
 
-  field :region, type: String
   field :fleet_size, type: String
   field :since, type: String
   field :owner, type: String

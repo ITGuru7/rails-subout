@@ -1,6 +1,6 @@
 class Api::V1::BidsController < Api::V1::BaseController
   def index
-    respond_with current_company.bids
+    respond_with_namespace current_company.bids
   end
 
   def create
@@ -8,7 +8,7 @@ class Api::V1::BidsController < Api::V1::BaseController
     bid.bidder = current_company
     bid.save
 
-    respond_with(bid.opportunity, bid)
+    respond_with_namespace(bid.opportunity, bid)
   end
 
   private

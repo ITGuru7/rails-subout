@@ -1,7 +1,7 @@
 class OpportunitySerializer < ActiveModel::Serializer
   attributes :_id, :name, :description, :start_date, :start_time, :for_favorites_only,
     :end_date, :end_time, :bidding_ends, :bidding_done, :quick_winnable, :bidable?,
-    :winning_bid_id, :win_it_now_price, :type, :canceled, :forward_auction, :winner
+    :winning_bid_id, :win_it_now_price, :type, :canceled, :forward_auction, :winner, :region
 
   has_one :buyer, serializer: ActorSerializer
 

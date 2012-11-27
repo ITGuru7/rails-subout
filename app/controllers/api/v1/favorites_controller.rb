@@ -2,7 +2,7 @@ class Api::V1::FavoritesController < Api::V1::BaseController
   def index
     @favorites = current_company.favorite_suppliers
 
-    respond_with(@favorites)
+    respond_with_namespace(@favorites)
   end
 
   def create
