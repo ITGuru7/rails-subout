@@ -5,7 +5,7 @@ production:
       username: heroku
       password: sub0utd3v
       hosts: 
-        - alex.mongohq.com:10029
+        - alex.mongohq.com:10054
 
 development:
   # Configure available database sessions. (required)
