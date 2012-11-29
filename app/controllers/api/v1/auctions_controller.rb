@@ -1,7 +1,7 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
   def index
     @auctions = current_company.auctions.active
-    respond_with(@auctions)
+    respond_with_namespace(@auctions)
   end
 
   def create
@@ -10,7 +10,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
     @auction.save
 
-    respond_with(@auction)
+    respond_with_namespace(@auction)
   end
 
   def update
@@ -18,12 +18,12 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
     @auction.update!(params[:opportunity])
 
-    respond_with(@auction)
+    respond_with_namespace(@auction)
   end
 
   def show
     @auction = current_company.auctions.find(params[:id])
-    respond_with(@auction)
+    respond_with_namespace(@auction)
   end
   
   def select_winner

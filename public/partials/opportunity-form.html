@@ -1,116 +1,129 @@
 <div id="opportunity-form">
-    <div class="modal-header">
-            <button data-dismiss="modal" class="close" type="button">x</button>
-            <h3>Opportunity Form</h3>
-    </div>
-    <div class="modal-body">
+  <div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">x</button>
+    <h3>Opportunity Form</h3>
+  </div>
+  <div class="modal-body">
 
-            <form name="newOpportunity" class="form-horizontal" ng-controller="OpportunityFormCtrl">
+    <form name="newOpportunity" class="form-horizontal" ng-controller="OpportunityFormCtrl">
+      <input class="cloudinary-fileupload" data-cloudinary-field="image_id" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+      <input type="hidden" id="opportunity_image_id" ng-model="opportunity.image_id">
+      <div id="progress">
+        <div class="bar" style="width: 0%;"></div>
+      </div>
+      <img class="image-preview" ng-src="{{opportunity.image_url}}"/>
+      <div class="control-group">
+        <label for="opportunity_name" class="control-label">Title</label>
+        <div class="controls">
+          <input type="text" id="opportunity_name" ng-model="opportunity.name" size="30" class="input-xlarge">
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_name" class="control-label">Title</label>
-                    <div class="controls">
-                        <input type="text" id="opportunity_name" ng-model="opportunity.name" size="30" class="input-xlarge">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_type" class="control-label">Type</label>
+        <div class="controls">
+          <select id="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types">
+          </select>
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_type" class="control-label">Type</label>
-                    <div class="controls">
-                      <select id="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types">
-                      </select>
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_description" class="control-label">Description</label>
+        <div class="controls">
+          <textarea id="opportunity_description" rows="5" ng-model="opportunity.description" cols="40" class="input-xlarge"></textarea>
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_description" class="control-label">Description</label>
-                    <div class="controls">
-                        <textarea id="opportunity_description" rows="5" ng-model="opportunity.description" cols="40" class="input-xlarge"></textarea>
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_ends" class="control-label">Bidding ends</label>
 
-                  <div class="control-group">
-                    <label for="opportunity_ends" class="control-label">Bidding ends</label>
-
-                    <div class="controls">
-                      <input id="opportunity_ends" type="text" ui-date="dateOptions" ui-date-format ng-model="opportunity.bidding_ends" size="10" maxlength="10" class="input-small" >
-                       <span class="add-on"><i class="icon-calendar"></i></span>
-                    </div>
+        <div class="controls">
+          <input id="opportunity_ends" type="text" ui-date="dateOptions" ui-date-format ng-model="opportunity.bidding_ends" size="10" maxlength="10" class="input-small" >
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
 
 
-                  </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_quick_winnable" class="checkbox">
-                        <div class="controls">
-                            <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
-                            Quick Winnable?
-                        </div>
-                    </label>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_quick_winnable" class="checkbox">
+          <div class="controls">
+            <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
+            Quick Winnable?
+          </div>
+        </label>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_for_favorites_only" class="checkbox">
-                        <div class="controls">
-                            <input id="opportunity_for_favorites_only" type="checkbox" ng-model="opportunity.for_favorites_only" value="1">
-                            For Favorites Only?
-                        </div>
-                    </label>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_for_favorites_only" class="checkbox">
+          <div class="controls">
+            <input id="opportunity_for_favorites_only" type="checkbox" ng-model="opportunity.for_favorites_only" value="1">
+            For Favorites Only?
+          </div>
+        </label>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_forward_auction" class="checkbox">
-                        <div class="controls">
-                            <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1">
-                            Sell?
-                        </div>
-                    </label>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_forward_auction" class="checkbox">
+          <div class="controls">
+            <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1">
+            Sell?
+          </div>
+        </label>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_win_it_now_price" class="control-label">Win it now price</label>
-                    <div class="controls">
-                        <input id="opportunity_win_it_now_price" type="text" ng-model="opportunity.win_it_now_price" size="30" class="input-small">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_win_it_now_price" class="control-label">Win it now price</label>
+        <div class="controls">
+          <input id="opportunity_win_it_now_price" type="text" ng-model="opportunity.win_it_now_price" size="30" class="input-small">
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_starting_location_id" class="control-label">Starting location</label>
-                    <div class="controls">
-                        <input id="opportunity_starting_location_id" type="text" ng-model="opportunity.starting_location_id" size="30" class="input-xlarge">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_region" class="control-label">Region</label>
+        <div class="controls">
+          <select id="opportunity_region" ng-model="opportunity.region" ng-options="r for r in regions">
+          </select>
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_ending_location_id" class="control-label">Ending location</label>
-                    <div class="controls">
-                        <input id="opportunity_ending_location_id" type="text" ng-model="opportunity.ending_location_id" size="30" class="input-xlarge">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_starting_location_id" class="control-label">Starting location</label>
+        <div class="controls">
+          <input id="opportunity_starting_location_id" type="text" ng-model="opportunity.starting_location_id" size="30" class="input-xlarge">
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_start_date" class="control-label">Start date</label>
-                    <div class="controls">
-                        <input id="opportunity_start_date" type="text" ng-model="opportunity.start_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format>
-                        <span class="add-on"><i class="icon-calendar"></i></span>
-                        <input type="text" class="input-small" ng-model="opportunity.start_time">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_ending_location_id" class="control-label">Ending location</label>
+        <div class="controls">
+          <input id="opportunity_ending_location_id" type="text" ng-model="opportunity.ending_location_id" size="30" class="input-xlarge">
+        </div>
+      </div>
 
-                  <div class="control-group">
-                    <label for="opportunity_end_date" class="control-label">End date</label>
-                    <div class="controls">
-                        <input id="opportunity_end_date" type="text" ng-model="opportunity.end_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format>
-                        <span class="add-on"><i class="icon-calendar"></i></span>
-                        <input type="text" class="input-small" ng-model="opportunity.end_time">
-                    </div>
-                  </div>
+      <div class="control-group">
+        <label for="opportunity_start_date" class="control-label">Start date</label>
+        <div class="controls">
+          <input id="opportunity_start_date" type="text" ng-model="opportunity.start_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format>
+          <span class="add-on"><i class="icon-calendar"></i></span>
+          <input type="text" class="input-small" ng-model="opportunity.start_time">
+        </div>
+      </div>
 
-                  <div class="form-actions">
-                    <button ng-click="save()" class="btn btn-primary">
-                      Save Opportunity
-                    </button>
-                  </div>
-        </form>
-    </div>
+      <div class="control-group">
+        <label for="opportunity_end_date" class="control-label">End date</label>
+        <div class="controls">
+          <input id="opportunity_end_date" type="text" ng-model="opportunity.end_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format>
+          <span class="add-on"><i class="icon-calendar"></i></span>
+          <input type="text" class="input-small" ng-model="opportunity.end_time">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button ng-click="save()" class="btn btn-primary">
+          Save Opportunity
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

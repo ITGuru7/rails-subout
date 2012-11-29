@@ -22,6 +22,16 @@
                 </ul>
               </section>
             </section>
+            <section id="regions">
+              <section class="title"><h5>Region</h5></section>
+              <section class="content">
+                <ul>
+                  <li>
+                    <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
+                  </li>
+                </ul>
+              </section>
+            </section>
         </div>
         <div class="span9">
            <section id="activities">
@@ -35,14 +45,14 @@
                             <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
-                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setModal('partials/opportunity-form.html')">New Opportunity</a>
+                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
               </div>
 
               <section id="activity-stream">
                 <div class="row-fluid"
-                     ng-repeat="event in events | filter:query |filter:searchByFilter | filter:searchByEventType | limitTo:20"
+                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-row">
@@ -51,11 +61,12 @@
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
-                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
+                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
                       <span>
                         {{actionDescription(action)}}
                       </span>
-                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
+                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
+                      in {{event.eventable.region}}
 
                       <div class="pull-right">
                         <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>

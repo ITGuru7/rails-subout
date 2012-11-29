@@ -1,6 +1,6 @@
 class OpportunityShortSerializer < ActiveModel::Serializer
   attributes :_id, :created_at, :name, :icon, :type, 
-    :quick_winnable, :bidable?, :buyer_id
+    :quick_winnable, :bidable?, :buyer_id, :region
 
   def icon
     "icon-#{opportunity_short.type.parameterize}"

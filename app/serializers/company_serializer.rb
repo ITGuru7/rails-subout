@@ -1,7 +1,7 @@
 class CompanySerializer < ActiveModel::Serializer
-  attributes :_id, :name, :email, :logo, :region, 
+  attributes :_id, :name, :email, :logo, :regions, :website,
     :fleet_size, :since, :owner, :contact_name, :tpa,
-    :bids_count, :opportunities_count
+    :bids_count, :opportunities_count, :state_by_state_subscriber?
 
   def logo
     "img/company/#{company.id}.png"

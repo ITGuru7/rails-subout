@@ -76,18 +76,7 @@
             <fieldset>
                 <p class="alert alert-success" ng:show="companyProfileMessage">{{companyProfileMessage}}</p>
                 <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
-                <div class="control-group">
-                    <label for="region" class="control-label">Region:</label>
-                    <div class="controls">
-                      
-                      <input id="region" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.region"
-                            />
-                    </div>
-                </div>
-                
+
                 <div class="control-group">
                     <label for="fleet-size" class="control-label">Fleet Size:</label>
                     <div class="controls">
@@ -148,6 +137,17 @@
                     </div>
                 </div>
                 
+                <div class="control-group">
+                    <label for="website" class="control-label">Website:</label>
+                    <div class="controls">
+                      <input id="website" 
+                            type="text"
+                            class="input-xlarge"
+                            ng:model="companyProfile.website"
+                            />
+                    </div>
+                </div>
+
                 <div class="control-group">
                     <label for="tpa" class="control-label">TPA:</label>
                     <div class="controls">

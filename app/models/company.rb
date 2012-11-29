@@ -9,7 +9,6 @@ class Company
   field :city, type: String
   field :state, type: String
 
-  field :region, type: String
   field :fleet_size, type: String
   field :since, type: String
   field :owner, type: String
@@ -31,6 +30,7 @@ class Company
 
   field :subscription_plan, default: 'free'
   field :regions, type: Array
+  field :website
 
   attr_accessor :password, :password_confirmation, :gateway_subscription_id
 

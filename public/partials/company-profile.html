@@ -19,8 +19,8 @@
             </div>
            
             <div class="row-fluid">
-                <div class="span3">Region:</div>
-                <div class="span9">{{other_company.region}}</div>
+                <div class="span3">Regions:</div>
+                <div class="span9">{{other_company.regionNames()}}</div>
             </div>
 
             <div class="row-fluid">
@@ -42,6 +42,13 @@
                 <div class="span3">Contact:</div>
                 <div class="span9">
                     <a href="mailto:{{other_company.email}}">{{other_company.contact}}</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Website:</div>
+                <div class="span9">
+                    <a href="{{other_company.website | websiteUrl}}" target="_blank">{{other_company.website}}</a>
                 </div>
             </div>
 
