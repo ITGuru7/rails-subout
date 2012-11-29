@@ -22,6 +22,7 @@ class Opportunity
   field :forward_auction, type: Boolean, default: false
   field :expired_notification_sent, type: Boolean, default: false
   field :for_favorites_only, type: Boolean, default: false
+  field :image_id
 
   scope :active, where(:canceled => false)
 

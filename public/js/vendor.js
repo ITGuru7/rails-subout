@@ -9417,12 +9417,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );
 ;
 
-/*! jQuery UI - v1.9.1 - 2012-10-26
+/*! jQuery UI - v1.9.2 - 2012-11-28
 * http://jqueryui.com
-* Includes: jquery.ui.core.js, jquery.ui.datepicker.js
+* Includes: jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.datepicker.js
 * Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */
 
-(function(e,t){function i(t,n){var r,i,o,u=t.nodeName.toLowerCase();return"area"===u?(r=t.parentNode,i=r.name,!t.href||!i||r.nodeName.toLowerCase()!=="map"?!1:(o=e("img[usemap=#"+i+"]")[0],!!o&&s(o))):(/input|select|textarea|button|object/.test(u)?!t.disabled:"a"===u?t.href||n:n)&&s(t)}function s(t){return e.expr.filters.visible(t)&&!e(t).parents().andSelf().filter(function(){return e.css(this,"visibility")==="hidden"}).length}var n=0,r=/^ui-id-\d+$/;e.ui=e.ui||{};if(e.ui.version)return;e.extend(e.ui,{version:"1.9.1",keyCode:{BACKSPACE:8,COMMA:188,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,LEFT:37,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SPACE:32,TAB:9,UP:38}}),e.fn.extend({_focus:e.fn.focus,focus:function(t,n){return typeof t=="number"?this.each(function(){var r=this;setTimeout(function(){e(r).focus(),n&&n.call(r)},t)}):this._focus.apply(this,arguments)},scrollParent:function(){var t;return e.ui.ie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?t=this.parents().filter(function(){return/(relative|absolute|fixed)/.test(e.css(this,"position"))&&/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0):t=this.parents().filter(function(){return/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0),/fixed/.test(this.css("position"))||!t.length?e(document):t},zIndex:function(n){if(n!==t)return this.css("zIndex",n);if(this.length){var r=e(this[0]),i,s;while(r.length&&r[0]!==document){i=r.css("position");if(i==="absolute"||i==="relative"||i==="fixed"){s=parseInt(r.css("zIndex"),10);if(!isNaN(s)&&s!==0)return s}r=r.parent()}}return 0},uniqueId:function(){return this.each(function(){this.id||(this.id="ui-id-"+ ++n)})},removeUniqueId:function(){return this.each(function(){r.test(this.id)&&e(this).removeAttr("id")})}}),e("<a>").outerWidth(1).jquery||e.each(["Width","Height"],function(n,r){function u(t,n,r,s){return e.each(i,function(){n-=parseFloat(e.css(t,"padding"+this))||0,r&&(n-=parseFloat(e.css(t,"border"+this+"Width"))||0),s&&(n-=parseFloat(e.css(t,"margin"+this))||0)}),n}var i=r==="Width"?["Left","Right"]:["Top","Bottom"],s=r.toLowerCase(),o={innerWidth:e.fn.innerWidth,innerHeight:e.fn.innerHeight,outerWidth:e.fn.outerWidth,outerHeight:e.fn.outerHeight};e.fn["inner"+r]=function(n){return n===t?o["inner"+r].call(this):this.each(function(){e(this).css(s,u(this,n)+"px")})},e.fn["outer"+r]=function(t,n){return typeof t!="number"?o["outer"+r].call(this,t):this.each(function(){e(this).css(s,u(this,t,!0,n)+"px")})}}),e.extend(e.expr[":"],{data:e.expr.createPseudo?e.expr.createPseudo(function(t){return function(n){return!!e.data(n,t)}}):function(t,n,r){return!!e.data(t,r[3])},focusable:function(t){return i(t,!isNaN(e.attr(t,"tabindex")))},tabbable:function(t){var n=e.attr(t,"tabindex"),r=isNaN(n);return(r||n>=0)&&i(t,!r)}}),e(function(){var t=document.body,n=t.appendChild(n=document.createElement("div"));n.offsetHeight,e.extend(n.style,{minHeight:"100px",height:"auto",padding:0,borderWidth:0}),e.support.minHeight=n.offsetHeight===100,e.support.selectstart="onselectstart"in n,t.removeChild(n).style.display="none"}),function(){var t=/msie ([\w.]+)/.exec(navigator.userAgent.toLowerCase())||[];e.ui.ie=t.length?!0:!1,e.ui.ie6=parseFloat(t[1],10)===6}(),e.fn.extend({disableSelection:function(){return this.bind((e.support.selectstart?"selectstart":"mousedown")+".ui-disableSelection",function(e){e.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}}),e.extend(e.ui,{plugin:{add:function(t,n,r){var i,s=e.ui[t].prototype;for(i in r)s.plugins[i]=s.plugins[i]||[],s.plugins[i].push([n,r[i]])},call:function(e,t,n){var r,i=e.plugins[t];if(!i||!e.element[0].parentNode||e.element[0].parentNode.nodeType===11)return;for(r=0;r<i.length;r++)e.options[i[r][0]]&&i[r][1].apply(e.element,n)}},contains:e.contains,hasScroll:function(t,n){if(e(t).css("overflow")==="hidden")return!1;var r=n&&n==="left"?"scrollLeft":"scrollTop",i=!1;return t[r]>0?!0:(t[r]=1,i=t[r]>0,t[r]=0,i)},isOverAxis:function(e,t,n){return e>t&&e<t+n},isOver:function(t,n,r,i,s,o){return e.ui.isOverAxis(t,r,s)&&e.ui.isOverAxis(n,i,o)}})})(jQuery);(function($,undefined){function Datepicker(){this.debug=!1,this._curInst=null,this._keyEvent=!1,this._disabledInputs=[],this._datepickerShowing=!1,this._inDialog=!1,this._mainDivId="ui-datepicker-div",this._inlineClass="ui-datepicker-inline",this._appendClass="ui-datepicker-append",this._triggerClass="ui-datepicker-trigger",this._dialogClass="ui-datepicker-dialog",this._disableClass="ui-datepicker-disabled",this._unselectableClass="ui-datepicker-unselectable",this._currentClass="ui-datepicker-current-day",this._dayOverClass="ui-datepicker-days-cell-over",this.regional=[],this.regional[""]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"mm/dd/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},this._defaults={showOn:"focus",showAnim:"fadeIn",showOptions:{},defaultDate:null,appendText:"",buttonText:"...",buttonImage:"",buttonImageOnly:!1,hideIfNoPrevNext:!1,navigationAsDateFormat:!1,gotoCurrent:!1,changeMonth:!1,changeYear:!1,yearRange:"c-10:c+10",showOtherMonths:!1,selectOtherMonths:!1,showWeek:!1,calculateWeek:this.iso8601Week,shortYearCutoff:"+10",minDate:null,maxDate:null,duration:"fast",beforeShowDay:null,beforeShow:null,onSelect:null,onChangeMonthYear:null,onClose:null,numberOfMonths:1,showCurrentAtPos:0,stepMonths:1,stepBigMonths:12,altField:"",altFormat:"",constrainInput:!0,showButtonPanel:!1,autoSize:!1,disabled:!1},$.extend(this._defaults,this.regional[""]),this.dpDiv=bindHover($('<div id="'+this._mainDivId+'" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>'))}function bindHover(e){var t="button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";return e.delegate(t,"mouseout",function(){$(this).removeClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!=-1&&$(this).removeClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!=-1&&$(this).removeClass("ui-datepicker-next-hover")}).delegate(t,"mouseover",function(){$.datepicker._isDisabledDatepicker(instActive.inline?e.parent()[0]:instActive.input[0])||($(this).parents(".ui-datepicker-calendar").find("a").removeClass("ui-state-hover"),$(this).addClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!=-1&&$(this).addClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!=-1&&$(this).addClass("ui-datepicker-next-hover"))})}function extendRemove(e,t){$.extend(e,t);for(var n in t)if(t[n]==null||t[n]==undefined)e[n]=t[n];return e}$.extend($.ui,{datepicker:{version:"1.9.1"}});var PROP_NAME="datepicker",dpuuid=(new Date).getTime(),instActive;$.extend(Datepicker.prototype,{markerClassName:"hasDatepicker",maxRows:4,log:function(){this.debug&&console.log.apply("",arguments)},_widgetDatepicker:function(){return this.dpDiv},setDefaults:function(e){return extendRemove(this._defaults,e||{}),this},_attachDatepicker:function(target,settings){var inlineSettings=null;for(var attrName in this._defaults){var attrValue=target.getAttribute("date:"+attrName);if(attrValue){inlineSettings=inlineSettings||{};try{inlineSettings[attrName]=eval(attrValue)}catch(err){inlineSettings[attrName]=attrValue}}}var nodeName=target.nodeName.toLowerCase(),inline=nodeName=="div"||nodeName=="span";target.id||(this.uuid+=1,target.id="dp"+this.uuid);var inst=this._newInst($(target),inline);inst.settings=$.extend({},settings||{},inlineSettings||{}),nodeName=="input"?this._connectDatepicker(target,inst):inline&&this._inlineDatepicker(target,inst)},_newInst:function(e,t){var n=e[0].id.replace(/([^A-Za-z0-9_-])/g,"\\\\$1");return{id:n,input:e,selectedDay:0,selectedMonth:0,selectedYear:0,drawMonth:0,drawYear:0,inline:t,dpDiv:t?bindHover($('<div class="'+this._inlineClass+' ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>')):this.dpDiv}},_connectDatepicker:function(e,t){var n=$(e);t.append=$([]),t.trigger=$([]);if(n.hasClass(this.markerClassName))return;this._attachments(n,t),n.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).keyup(this._doKeyUp).bind("setData.datepicker",function(e,n,r){t.settings[n]=r}).bind("getData.datepicker",function(e,n){return this._get(t,n)}),this._autoSize(t),$.data(e,PROP_NAME,t),t.settings.disabled&&this._disableDatepicker(e)},_attachments:function(e,t){var n=this._get(t,"appendText"),r=this._get(t,"isRTL");t.append&&t.append.remove(),n&&(t.append=$('<span class="'+this._appendClass+'">'+n+"</span>"),e[r?"before":"after"](t.append)),e.unbind("focus",this._showDatepicker),t.trigger&&t.trigger.remove();var i=this._get(t,"showOn");(i=="focus"||i=="both")&&e.focus(this._showDatepicker);if(i=="button"||i=="both"){var s=this._get(t,"buttonText"),o=this._get(t,"buttonImage");t.trigger=$(this._get(t,"buttonImageOnly")?$("<img/>").addClass(this._triggerClass).attr({src:o,alt:s,title:s}):$('<button type="button"></button>').addClass(this._triggerClass).html(o==""?s:$("<img/>").attr({src:o,alt:s,title:s}))),e[r?"before":"after"](t.trigger),t.trigger.click(function(){return $.datepicker._datepickerShowing&&$.datepicker._lastInput==e[0]?$.datepicker._hideDatepicker():$.datepicker._datepickerShowing&&$.datepicker._lastInput!=e[0]?($.datepicker._hideDatepicker(),$.datepicker._showDatepicker(e[0])):$.datepicker._showDatepicker(e[0]),!1})}},_autoSize:function(e){if(this._get(e,"autoSize")&&!e.inline){var t=new Date(2009,11,20),n=this._get(e,"dateFormat");if(n.match(/[DM]/)){var r=function(e){var t=0,n=0;for(var r=0;r<e.length;r++)e[r].length>t&&(t=e[r].length,n=r);return n};t.setMonth(r(this._get(e,n.match(/MM/)?"monthNames":"monthNamesShort"))),t.setDate(r(this._get(e,n.match(/DD/)?"dayNames":"dayNamesShort"))+20-t.getDay())}e.input.attr("size",this._formatDate(e,t).length)}},_inlineDatepicker:function(e,t){var n=$(e);if(n.hasClass(this.markerClassName))return;n.addClass(this.markerClassName).append(t.dpDiv).bind("setData.datepicker",function(e,n,r){t.settings[n]=r}).bind("getData.datepicker",function(e,n){return this._get(t,n)}),$.data(e,PROP_NAME,t),this._setDate(t,this._getDefaultDate(t),!0),this._updateDatepicker(t),this._updateAlternate(t),t.settings.disabled&&this._disableDatepicker(e),t.dpDiv.css("display","block")},_dialogDatepicker:function(e,t,n,r,i){var s=this._dialogInst;if(!s){this.uuid+=1;var o="dp"+this.uuid;this._dialogInput=$('<input type="text" id="'+o+'" style="position: absolute; top: -100px; width: 0px;"/>'),this._dialogInput.keydown(this._doKeyDown),$("body").append(this._dialogInput),s=this._dialogInst=this._newInst(this._dialogInput,!1),s.settings={},$.data(this._dialogInput[0],PROP_NAME,s)}extendRemove(s.settings,r||{}),t=t&&t.constructor==Date?this._formatDate(s,t):t,this._dialogInput.val(t),this._pos=i?i.length?i:[i.pageX,i.pageY]:null;if(!this._pos){var u=document.documentElement.clientWidth,a=document.documentElement.clientHeight,f=document.documentElement.scrollLeft||document.body.scrollLeft,l=document.documentElement.scrollTop||document.body.scrollTop;this._pos=[u/2-100+f,a/2-150+l]}return this._dialogInput.css("left",this._pos[0]+20+"px").css("top",this._pos[1]+"px"),s.settings.onSelect=n,this._inDialog=!0,this.dpDiv.addClass(this._dialogClass),this._showDatepicker(this._dialogInput[0]),$.blockUI&&$.blockUI(this.dpDiv),$.data(this._dialogInput[0],PROP_NAME,s),this},_destroyDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();$.removeData(e,PROP_NAME),r=="input"?(n.append.remove(),n.trigger.remove(),t.removeClass(this.markerClassName).unbind("focus",this._showDatepicker).unbind("keydown",this._doKeyDown).unbind("keypress",this._doKeyPress).unbind("keyup",this._doKeyUp)):(r=="div"||r=="span")&&t.removeClass(this.markerClassName).empty()},_enableDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();if(r=="input")e.disabled=!1,n.trigger.filter("button").each(function(){this.disabled=!1}).end().filter("img").css({opacity:"1.0",cursor:""});else if(r=="div"||r=="span"){var i=t.children("."+this._inlineClass);i.children().removeClass("ui-state-disabled"),i.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!1)}this._disabledInputs=$.map(this._disabledInputs,function(t){return t==e?null:t})},_disableDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();if(r=="input")e.disabled=!0,n.trigger.filter("button").each(function(){this.disabled=!0}).end().filter("img").css({opacity:"0.5",cursor:"default"});else if(r=="div"||r=="span"){var i=t.children("."+this._inlineClass);i.children().addClass("ui-state-disabled"),i.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!0)}this._disabledInputs=$.map(this._disabledInputs,function(t){return t==e?null:t}),this._disabledInputs[this._disabledInputs.length]=e},_isDisabledDatepicker:function(e){if(!e)return!1;for(var t=0;t<this._disabledInputs.length;t++)if(this._disabledInputs[t]==e)return!0;return!1},_getInst:function(e){try{return $.data(e,PROP_NAME)}catch(t){throw"Missing instance data for this datepicker"}},_optionDatepicker:function(e,t,n){var r=this._getInst(e);if(arguments.length==2&&typeof t=="string")return t=="defaults"?$.extend({},$.datepicker._defaults):r?t=="all"?$.extend({},r.settings):this._get(r,t):null;var i=t||{};typeof t=="string"&&(i={},i[t]=n);if(r){this._curInst==r&&this._hideDatepicker();var s=this._getDateDatepicker(e,!0),o=this._getMinMaxDate(r,"min"),u=this._getMinMaxDate(r,"max");extendRemove(r.settings,i),o!==null&&i.dateFormat!==undefined&&i.minDate===undefined&&(r.settings.minDate=this._formatDate(r,o)),u!==null&&i.dateFormat!==undefined&&i.maxDate===undefined&&(r.settings.maxDate=this._formatDate(r,u)),this._attachments($(e),r),this._autoSize(r),this._setDate(r,s),this._updateAlternate(r),this._updateDatepicker(r)}},_changeDatepicker:function(e,t,n){this._optionDatepicker(e,t,n)},_refreshDatepicker:function(e){var t=this._getInst(e);t&&this._updateDatepicker(t)},_setDateDatepicker:function(e,t){var n=this._getInst(e);n&&(this._setDate(n,t),this._updateDatepicker(n),this._updateAlternate(n))},_getDateDatepicker:function(e,t){var n=this._getInst(e);return n&&!n.inline&&this._setDateFromField(n,t),n?this._getDate(n):null},_doKeyDown:function(e){var t=$.datepicker._getInst(e.target),n=!0,r=t.dpDiv.is(".ui-datepicker-rtl");t._keyEvent=!0;if($.datepicker._datepickerShowing)switch(e.keyCode){case 9:$.datepicker._hideDatepicker(),n=!1;break;case 13:var i=$("td."+$.datepicker._dayOverClass+":not(."+$.datepicker._currentClass+")",t.dpDiv);i[0]&&$.datepicker._selectDay(e.target,t.selectedMonth,t.selectedYear,i[0]);var s=$.datepicker._get(t,"onSelect");if(s){var o=$.datepicker._formatDate(t);s.apply(t.input?t.input[0]:null,[o,t])}else $.datepicker._hideDatepicker();return!1;case 27:$.datepicker._hideDatepicker();break;case 33:$.datepicker._adjustDate(e.target,e.ctrlKey?-$.datepicker._get(t,"stepBigMonths"):-$.datepicker._get(t,"stepMonths"),"M");break;case 34:$.datepicker._adjustDate(e.target,e.ctrlKey?+$.datepicker._get(t,"stepBigMonths"):+$.datepicker._get(t,"stepMonths"),"M");break;case 35:(e.ctrlKey||e.metaKey)&&$.datepicker._clearDate(e.target),n=e.ctrlKey||e.metaKey;break;case 36:(e.ctrlKey||e.metaKey)&&$.datepicker._gotoToday(e.target),n=e.ctrlKey||e.metaKey;break;case 37:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,r?1:-1,"D"),n=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&$.datepicker._adjustDate(e.target,e.ctrlKey?-$.datepicker._get(t,"stepBigMonths"):-$.datepicker._get(t,"stepMonths"),"M");break;case 38:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,-7,"D"),n=e.ctrlKey||e.metaKey;break;case 39:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,r?-1:1,"D"),n=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&$.datepicker._adjustDate(e.target,e.ctrlKey?+$.datepicker._get(t,"stepBigMonths"):+$.datepicker._get(t,"stepMonths"),"M");break;case 40:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,7,"D"),n=e.ctrlKey||e.metaKey;break;default:n=!1}else e.keyCode==36&&e.ctrlKey?$.datepicker._showDatepicker(this):n=!1;n&&(e.preventDefault(),e.stopPropagation())},_doKeyPress:function(e){var t=$.datepicker._getInst(e.target);if($.datepicker._get(t,"constrainInput")){var n=$.datepicker._possibleChars($.datepicker._get(t,"dateFormat")),r=String.fromCharCode(e.charCode==undefined?e.keyCode:e.charCode);return e.ctrlKey||e.metaKey||r<" "||!n||n.indexOf(r)>-1}},_doKeyUp:function(e){var t=$.datepicker._getInst(e.target);if(t.input.val()!=t.lastVal)try{var n=$.datepicker.parseDate($.datepicker._get(t,"dateFormat"),t.input?t.input.val():null,$.datepicker._getFormatConfig(t));n&&($.datepicker._setDateFromField(t),$.datepicker._updateAlternate(t),$.datepicker._updateDatepicker(t))}catch(r){$.datepicker.log(r)}return!0},_showDatepicker:function(e){e=e.target||e,e.nodeName.toLowerCase()!="input"&&(e=$("input",e.parentNode)[0]);if($.datepicker._isDisabledDatepicker(e)||$.datepicker._lastInput==e)return;var t=$.datepicker._getInst(e);$.datepicker._curInst&&$.datepicker._curInst!=t&&($.datepicker._curInst.dpDiv.stop(!0,!0),t&&$.datepicker._datepickerShowing&&$.datepicker._hideDatepicker($.datepicker._curInst.input[0]));var n=$.datepicker._get(t,"beforeShow"),r=n?n.apply(e,[e,t]):{};if(r===!1)return;extendRemove(t.settings,r),t.lastVal=null,$.datepicker._lastInput=e,$.datepicker._setDateFromField(t),$.datepicker._inDialog&&(e.value=""),$.datepicker._pos||($.datepicker._pos=$.datepicker._findPos(e),$.datepicker._pos[1]+=e.offsetHeight);var i=!1;$(e).parents().each(function(){return i|=$(this).css("position")=="fixed",!i});var s={left:$.datepicker._pos[0],top:$.datepicker._pos[1]};$.datepicker._pos=null,t.dpDiv.empty(),t.dpDiv.css({position:"absolute",display:"block",top:"-1000px"}),$.datepicker._updateDatepicker(t),s=$.datepicker._checkOffset(t,s,i),t.dpDiv.css({position:$.datepicker._inDialog&&$.blockUI?"static":i?"fixed":"absolute",display:"none",left:s.left+"px",top:s.top+"px"});if(!t.inline){var o=$.datepicker._get(t,"showAnim"),u=$.datepicker._get(t,"duration"),a=function(){var e=t.dpDiv.find("iframe.ui-datepicker-cover");if(!!e.length){var n=$.datepicker._getBorders(t.dpDiv);e.css({left:-n[0],top:-n[1],width:t.dpDiv.outerWidth(),height:t.dpDiv.outerHeight()})}};t.dpDiv.zIndex($(e).zIndex()+1),$.datepicker._datepickerShowing=!0,$.effects&&($.effects.effect[o]||$.effects[o])?t.dpDiv.show(o,$.datepicker._get(t,"showOptions"),u,a):t.dpDiv[o||"show"](o?u:null,a),(!o||!u)&&a(),t.input.is(":visible")&&!t.input.is(":disabled")&&t.input.focus(),$.datepicker._curInst=t}},_updateDatepicker:function(e){this.maxRows=4;var t=$.datepicker._getBorders(e.dpDiv);instActive=e,e.dpDiv.empty().append(this._generateHTML(e)),this._attachHandlers(e);var n=e.dpDiv.find("iframe.ui-datepicker-cover");!n.length||n.css({left:-t[0],top:-t[1],width:e.dpDiv.outerWidth(),height:e.dpDiv.outerHeight()}),e.dpDiv.find("."+this._dayOverClass+" a").mouseover();var r=this._getNumberOfMonths(e),i=r[1],s=17;e.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width(""),i>1&&e.dpDiv.addClass("ui-datepicker-multi-"+i).css("width",s*i+"em"),e.dpDiv[(r[0]!=1||r[1]!=1?"add":"remove")+"Class"]("ui-datepicker-multi"),e.dpDiv[(this._get(e,"isRTL")?"add":"remove")+"Class"]("ui-datepicker-rtl"),e==$.datepicker._curInst&&$.datepicker._datepickerShowing&&e.input&&e.input.is(":visible")&&!e.input.is(":disabled")&&e.input[0]!=document.activeElement&&e.input.focus();if(e.yearshtml){var o=e.yearshtml;setTimeout(function(){o===e.yearshtml&&e.yearshtml&&e.dpDiv.find("select.ui-datepicker-year:first").replaceWith(e.yearshtml),o=e.yearshtml=null},0)}},_getBorders:function(e){var t=function(e){return{thin:1,medium:2,thick:3}[e]||e};return[parseFloat(t(e.css("border-left-width"))),parseFloat(t(e.css("border-top-width")))]},_checkOffset:function(e,t,n){var r=e.dpDiv.outerWidth(),i=e.dpDiv.outerHeight(),s=e.input?e.input.outerWidth():0,o=e.input?e.input.outerHeight():0,u=document.documentElement.clientWidth+(n?0:$(document).scrollLeft()),a=document.documentElement.clientHeight+(n?0:$(document).scrollTop());return t.left-=this._get(e,"isRTL")?r-s:0,t.left-=n&&t.left==e.input.offset().left?$(document).scrollLeft():0,t.top-=n&&t.top==e.input.offset().top+o?$(document).scrollTop():0,t.left-=Math.min(t.left,t.left+r>u&&u>r?Math.abs(t.left+r-u):0),t.top-=Math.min(t.top,t.top+i>a&&a>i?Math.abs(i+o):0),t},_findPos:function(e){var t=this._getInst(e),n=this._get(t,"isRTL");while(e&&(e.type=="hidden"||e.nodeType!=1||$.expr.filters.hidden(e)))e=e[n?"previousSibling":"nextSibling"];var r=$(e).offset();return[r.left,r.top]},_hideDatepicker:function(e){var t=this._curInst;if(!t||e&&t!=$.data(e,PROP_NAME))return;if(this._datepickerShowing){var n=this._get(t,"showAnim"),r=this._get(t,"duration"),i=function(){$.datepicker._tidyDialog(t)};$.effects&&($.effects.effect[n]||$.effects[n])?t.dpDiv.hide(n,$.datepicker._get(t,"showOptions"),r,i):t.dpDiv[n=="slideDown"?"slideUp":n=="fadeIn"?"fadeOut":"hide"](n?r:null,i),n||i(),this._datepickerShowing=!1;var s=this._get(t,"onClose");s&&s.apply(t.input?t.input[0]:null,[t.input?t.input.val():"",t]),this._lastInput=null,this._inDialog&&(this._dialogInput.css({position:"absolute",left:"0",top:"-100px"}),$.blockUI&&($.unblockUI(),$("body").append(this.dpDiv))),this._inDialog=!1}},_tidyDialog:function(e){e.dpDiv.removeClass(this._dialogClass).unbind(".ui-datepicker-calendar")},_checkExternalClick:function(e){if(!$.datepicker._curInst)return;var t=$(e.target),n=$.datepicker._getInst(t[0]);(t[0].id!=$.datepicker._mainDivId&&t.parents("#"+$.datepicker._mainDivId).length==0&&!t.hasClass($.datepicker.markerClassName)&&!t.closest("."+$.datepicker._triggerClass).length&&$.datepicker._datepickerShowing&&(!$.datepicker._inDialog||!$.blockUI)||t.hasClass($.datepicker.markerClassName)&&$.datepicker._curInst!=n)&&$.datepicker._hideDatepicker()},_adjustDate:function(e,t,n){var r=$(e),i=this._getInst(r[0]);if(this._isDisabledDatepicker(r[0]))return;this._adjustInstDate(i,t+(n=="M"?this._get(i,"showCurrentAtPos"):0),n),this._updateDatepicker(i)},_gotoToday:function(e){var t=$(e),n=this._getInst(t[0]);if(this._get(n,"gotoCurrent")&&n.currentDay)n.selectedDay=n.currentDay,n.drawMonth=n.selectedMonth=n.currentMonth,n.drawYear=n.selectedYear=n.currentYear;else{var r=new Date;n.selectedDay=r.getDate(),n.drawMonth=n.selectedMonth=r.getMonth(),n.drawYear=n.selectedYear=r.getFullYear()}this._notifyChange(n),this._adjustDate(t)},_selectMonthYear:function(e,t,n){var r=$(e),i=this._getInst(r[0]);i["selected"+(n=="M"?"Month":"Year")]=i["draw"+(n=="M"?"Month":"Year")]=parseInt(t.options[t.selectedIndex].value,10),this._notifyChange(i),this._adjustDate(r)},_selectDay:function(e,t,n,r){var i=$(e);if($(r).hasClass(this._unselectableClass)||this._isDisabledDatepicker(i[0]))return;var s=this._getInst(i[0]);s.selectedDay=s.currentDay=$("a",r).html(),s.selectedMonth=s.currentMonth=t,s.selectedYear=s.currentYear=n,this._selectDate(e,this._formatDate(s,s.currentDay,s.currentMonth,s.currentYear))},_clearDate:function(e){var t=$(e),n=this._getInst(t[0]);this._selectDate(t,"")},_selectDate:function(e,t){var n=$(e),r=this._getInst(n[0]);t=t!=null?t:this._formatDate(r),r.input&&r.input.val(t),this._updateAlternate(r);var i=this._get(r,"onSelect");i?i.apply(r.input?r.input[0]:null,[t,r]):r.input&&r.input.trigger("change"),r.inline?this._updateDatepicker(r):(this._hideDatepicker(),this._lastInput=r.input[0],typeof r.input[0]!="object"&&r.input.focus(),this._lastInput=null)},_updateAlternate:function(e){var t=this._get(e,"altField");if(t){var n=this._get(e,"altFormat")||this._get(e,"dateFormat"),r=this._getDate(e),i=this.formatDate(n,r,this._getFormatConfig(e));$(t).each(function(){$(this).val(i)})}},noWeekends:function(e){var t=e.getDay();return[t>0&&t<6,""]},iso8601Week:function(e){var t=new Date(e.getTime());t.setDate(t.getDate()+4-(t.getDay()||7));var n=t.getTime();return t.setMonth(0),t.setDate(1),Math.floor(Math.round((n-t)/864e5)/7)+1},parseDate:function(e,t,n){if(e==null||t==null)throw"Invalid arguments";t=typeof t=="object"?t.toString():t+"";if(t=="")return null;var r=(n?n.shortYearCutoff:null)||this._defaults.shortYearCutoff;r=typeof r!="string"?r:(new Date).getFullYear()%100+parseInt(r,10);var i=(n?n.dayNamesShort:null)||this._defaults.dayNamesShort,s=(n?n.dayNames:null)||this._defaults.dayNames,o=(n?n.monthNamesShort:null)||this._defaults.monthNamesShort,u=(n?n.monthNames:null)||this._defaults.monthNames,a=-1,f=-1,l=-1,c=-1,h=!1,p=function(t){var n=y+1<e.length&&e.charAt(y+1)==t;return n&&y++,n},d=function(e){var n=p(e),r=e=="@"?14:e=="!"?20:e=="y"&&n?4:e=="o"?3:2,i=new RegExp("^\\d{1,"+r+"}"),s=t.substring(g).match(i);if(!s)throw"Missing number at position "+g;return g+=s[0].length,parseInt(s[0],10)},v=function(e,n,r){var i=$.map(p(e)?r:n,function(e,t){return[[t,e]]}).sort(function(e,t){return-(e[1].length-t[1].length)}),s=-1;$.each(i,function(e,n){var r=n[1];if(t.substr(g,r.length).toLowerCase()==r.toLowerCase())return s=n[0],g+=r.length,!1});if(s!=-1)return s+1;throw"Unknown name at position "+g},m=function(){if(t.charAt(g)!=e.charAt(y))throw"Unexpected literal at position "+g;g++},g=0;for(var y=0;y<e.length;y++)if(h)e.charAt(y)=="'"&&!p("'")?h=!1:m();else switch(e.charAt(y)){case"d":l=d("d");break;case"D":v("D",i,s);break;case"o":c=d("o");break;case"m":f=d("m");break;case"M":f=v("M",o,u);break;case"y":a=d("y");break;case"@":var b=new Date(d("@"));a=b.getFullYear(),f=b.getMonth()+1,l=b.getDate();break;case"!":var b=new Date((d("!")-this._ticksTo1970)/1e4);a=b.getFullYear(),f=b.getMonth()+1,l=b.getDate();break;case"'":p("'")?m():h=!0;break;default:m()}if(g<t.length){var w=t.substr(g);if(!/^\s+/.test(w))throw"Extra/unparsed characters found in date: "+w}a==-1?a=(new Date).getFullYear():a<100&&(a+=(new Date).getFullYear()-(new Date).getFullYear()%100+(a<=r?0:-100));if(c>-1){f=1,l=c;do{var E=this._getDaysInMonth(a,f-1);if(l<=E)break;f++,l-=E}while(!0)}var b=this._daylightSavingAdjust(new Date(a,f-1,l));if(b.getFullYear()!=a||b.getMonth()+1!=f||b.getDate()!=l)throw"Invalid date";return b},ATOM:"yy-mm-dd",COOKIE:"D, dd M yy",ISO_8601:"yy-mm-dd",RFC_822:"D, d M y",RFC_850:"DD, dd-M-y",RFC_1036:"D, d M y",RFC_1123:"D, d M yy",RFC_2822:"D, d M yy",RSS:"D, d M y",TICKS:"!",TIMESTAMP:"@",W3C:"yy-mm-dd",_ticksTo1970:(718685+Math.floor(492.5)-Math.floor(19.7)+Math.floor(4.925))*24*60*60*1e7,formatDate:function(e,t,n){if(!t)return"";var r=(n?n.dayNamesShort:null)||this._defaults.dayNamesShort,i=(n?n.dayNames:null)||this._defaults.dayNames,s=(n?n.monthNamesShort:null)||this._defaults.monthNamesShort,o=(n?n.monthNames:null)||this._defaults.monthNames,u=function(t){var n=h+1<e.length&&e.charAt(h+1)==t;return n&&h++,n},a=function(e,t,n){var r=""+t;if(u(e))while(r.length<n)r="0"+r;return r},f=function(e,t,n,r){return u(e)?r[t]:n[t]},l="",c=!1;if(t)for(var h=0;h<e.length;h++)if(c)e.charAt(h)=="'"&&!u("'")?c=!1:l+=e.charAt(h);else switch(e.charAt(h)){case"d":l+=a("d",t.getDate(),2);break;case"D":l+=f("D",t.getDay(),r,i);break;case"o":l+=a("o",Math.round(((new Date(t.getFullYear(),t.getMonth(),t.getDate())).getTime()-(new Date(t.getFullYear(),0,0)).getTime())/864e5),3);break;case"m":l+=a("m",t.getMonth()+1,2);break;case"M":l+=f("M",t.getMonth(),s,o);break;case"y":l+=u("y")?t.getFullYear():(t.getYear()%100<10?"0":"")+t.getYear()%100;break;case"@":l+=t.getTime();break;case"!":l+=t.getTime()*1e4+this._ticksTo1970;break;case"'":u("'")?l+="'":c=!0;break;default:l+=e.charAt(h)}return l},_possibleChars:function(e){var t="",n=!1,r=function(t){var n=i+1<e.length&&e.charAt(i+1)==t;return n&&i++,n};for(var i=0;i<e.length;i++)if(n)e.charAt(i)=="'"&&!r("'")?n=!1:t+=e.charAt(i);else switch(e.charAt(i)){case"d":case"m":case"y":case"@":t+="0123456789";break;case"D":case"M":return null;case"'":r("'")?t+="'":n=!0;break;default:t+=e.charAt(i)}return t},_get:function(e,t){return e.settings[t]!==undefined?e.settings[t]:this._defaults[t]},_setDateFromField:function(e,t){if(e.input.val()==e.lastVal)return;var n=this._get(e,"dateFormat"),r=e.lastVal=e.input?e.input.val():null,i,s;i=s=this._getDefaultDate(e);var o=this._getFormatConfig(e);try{i=this.parseDate(n,r,o)||s}catch(u){this.log(u),r=t?"":r}e.selectedDay=i.getDate(),e.drawMonth=e.selectedMonth=i.getMonth(),e.drawYear=e.selectedYear=i.getFullYear(),e.currentDay=r?i.getDate():0,e.currentMonth=r?i.getMonth():0,e.currentYear=r?i.getFullYear():0,this._adjustInstDate(e)},_getDefaultDate:function(e){return this._restrictMinMax(e,this._determineDate(e,this._get(e,"defaultDate"),new Date))},_determineDate:function(e,t,n){var r=function(e){var t=new Date;return t.setDate(t.getDate()+e),t},i=function(t){try{return $.datepicker.parseDate($.datepicker._get(e,"dateFormat"),t,$.datepicker._getFormatConfig(e))}catch(n){}var r=(t.toLowerCase().match(/^c/)?$.datepicker._getDate(e):null)||new Date,i=r.getFullYear(),s=r.getMonth(),o=r.getDate(),u=/([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g,a=u.exec(t);while(a){switch(a[2]||"d"){case"d":case"D":o+=parseInt(a[1],10);break;case"w":case"W":o+=parseInt(a[1],10)*7;break;case"m":case"M":s+=parseInt(a[1],10),o=Math.min(o,$.datepicker._getDaysInMonth(i,s));break;case"y":case"Y":i+=parseInt(a[1],10),o=Math.min(o,$.datepicker._getDaysInMonth(i,s))}a=u.exec(t)}return new Date(i,s,o)},s=t==null||t===""?n:typeof t=="string"?i(t):typeof t=="number"?isNaN(t)?n:r(t):new Date(t.getTime());return s=s&&s.toString()=="Invalid Date"?n:s,s&&(s.setHours(0),s.setMinutes(0),s.setSeconds(0),s.setMilliseconds(0)),this._daylightSavingAdjust(s)},_daylightSavingAdjust:function(e){return e?(e.setHours(e.getHours()>12?e.getHours()+2:0),e):null},_setDate:function(e,t,n){var r=!t,i=e.selectedMonth,s=e.selectedYear,o=this._restrictMinMax(e,this._determineDate(e,t,new Date));e.selectedDay=e.currentDay=o.getDate(),e.drawMonth=e.selectedMonth=e.currentMonth=o.getMonth(),e.drawYear=e.selectedYear=e.currentYear=o.getFullYear(),(i!=e.selectedMonth||s!=e.selectedYear)&&!n&&this._notifyChange(e),this._adjustInstDate(e),e.input&&e.input.val(r?"":this._formatDate(e))},_getDate:function(e){var t=!e.currentYear||e.input&&e.input.val()==""?null:this._daylightSavingAdjust(new Date(e.currentYear,e.currentMonth,e.currentDay));return t},_attachHandlers:function(e){var t=this._get(e,"stepMonths"),n="#"+e.id.replace(/\\\\/g,"\\");e.dpDiv.find("[data-handler]").map(function(){var e={prev:function(){window["DP_jQuery_"+dpuuid].datepicker._adjustDate(n,-t,"M")},next:function(){window["DP_jQuery_"+dpuuid].datepicker._adjustDate(n,+t,"M")},hide:function(){window["DP_jQuery_"+dpuuid].datepicker._hideDatepicker()},today:function(){window["DP_jQuery_"+dpuuid].datepicker._gotoToday(n)},selectDay:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectDay(n,+this.getAttribute("data-month"),+this.getAttribute("data-year"),this),!1},selectMonth:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectMonthYear(n,this,"M"),!1},selectYear:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectMonthYear(n,this,"Y"),!1}};$(this).bind(this.getAttribute("data-event"),e[this.getAttribute("data-handler")])})},_generateHTML:function(e){var t=new Date;t=this._daylightSavingAdjust(new Date(t.getFullYear(),t.getMonth(),t.getDate()));var n=this._get(e,"isRTL"),r=this._get(e,"showButtonPanel"),i=this._get(e,"hideIfNoPrevNext"),s=this._get(e,"navigationAsDateFormat"),o=this._getNumberOfMonths(e),u=this._get(e,"showCurrentAtPos"),a=this._get(e,"stepMonths"),f=o[0]!=1||o[1]!=1,l=this._daylightSavingAdjust(e.currentDay?new Date(e.currentYear,e.currentMonth,e.currentDay):new Date(9999,9,9)),c=this._getMinMaxDate(e,"min"),h=this._getMinMaxDate(e,"max"),p=e.drawMonth-u,d=e.drawYear;p<0&&(p+=12,d--);if(h){var v=this._daylightSavingAdjust(new Date(h.getFullYear(),h.getMonth()-o[0]*o[1]+1,h.getDate()));v=c&&v<c?c:v;while(this._daylightSavingAdjust(new Date(d,p,1))>v)p--,p<0&&(p=11,d--)}e.drawMonth=p,e.drawYear=d;var m=this._get(e,"prevText");m=s?this.formatDate(m,this._daylightSavingAdjust(new Date(d,p-a,1)),this._getFormatConfig(e)):m;var g=this._canAdjustMonth(e,-1,d,p)?'<a class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click" title="'+m+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"e":"w")+'">'+m+"</span></a>":i?"":'<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+m+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"e":"w")+'">'+m+"</span></a>",y=this._get(e,"nextText");y=s?this.formatDate(y,this._daylightSavingAdjust(new Date(d,p+a,1)),this._getFormatConfig(e)):y;var b=this._canAdjustMonth(e,1,d,p)?'<a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click" title="'+y+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"w":"e")+'">'+y+"</span></a>":i?"":'<a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="'+y+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"w":"e")+'">'+y+"</span></a>",w=this._get(e,"currentText"),E=this._get(e,"gotoCurrent")&&e.currentDay?l:t;w=s?this.formatDate(w,E,this._getFormatConfig(e)):w;var S=e.inline?"":'<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" data-handler="hide" data-event="click">'+this._get(e,"closeText")+"</button>",x=r?'<div class="ui-datepicker-buttonpane ui-widget-content">'+(n?S:"")+(this._isInRange(e,E)?'<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" data-handler="today" data-event="click">'+w+"</button>":"")+(n?"":S)+"</div>":"",T=parseInt(this._get(e,"firstDay"),10);T=isNaN(T)?0:T;var N=this._get(e,"showWeek"),C=this._get(e,"dayNames"),k=this._get(e,"dayNamesShort"),L=this._get(e,"dayNamesMin"),A=this._get(e,"monthNames"),O=this._get(e,"monthNamesShort"),M=this._get(e,"beforeShowDay"),_=this._get(e,"showOtherMonths"),D=this._get(e,"selectOtherMonths"),P=this._get(e,"calculateWeek")||this.iso8601Week,H=this._getDefaultDate(e),B="";for(var j=0;j<o[0];j++){var F="";this.maxRows=4;for(var I=0;I<o[1];I++){var q=this._daylightSavingAdjust(new Date(d,p,e.selectedDay)),R=" ui-corner-all",U="";if(f){U+='<div class="ui-datepicker-group';if(o[1]>1)switch(I){case 0:U+=" ui-datepicker-group-first",R=" ui-corner-"+(n?"right":"left");break;case o[1]-1:U+=" ui-datepicker-group-last",R=" ui-corner-"+(n?"left":"right");break;default:U+=" ui-datepicker-group-middle",R=""}U+='">'}U+='<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix'+R+'">'+(/all|left/.test(R)&&j==0?n?b:g:"")+(/all|right/.test(R)&&j==0?n?g:b:"")+this._generateMonthYearHeader(e,p,d,c,h,j>0||I>0,A,O)+'</div><table class="ui-datepicker-calendar"><thead>'+"<tr>";var z=N?'<th class="ui-datepicker-week-col">'+this._get(e,"weekHeader")+"</th>":"";for(var W=0;W<7;W++){var X=(W+T)%7;z+="<th"+((W+T+6)%7>=5?' class="ui-datepicker-week-end"':"")+">"+'<span title="'+C[X]+'">'+L[X]+"</span></th>"}U+=z+"</tr></thead><tbody>";var V=this._getDaysInMonth(d,p);d==e.selectedYear&&p==e.selectedMonth&&(e.selectedDay=Math.min(e.selectedDay,V));var J=(this._getFirstDayOfMonth(d,p)-T+7)%7,K=Math.ceil((J+V)/7),Q=f?this.maxRows>K?this.maxRows:K:K;this.maxRows=Q;var G=this._daylightSavingAdjust(new Date(d,p,1-J));for(var Y=0;Y<Q;Y++){U+="<tr>";var Z=N?'<td class="ui-datepicker-week-col">'+this._get(e,"calculateWeek")(G)+"</td>":"";for(var W=0;W<7;W++){var et=M?M.apply(e.input?e.input[0]:null,[G]):[!0,""],tt=G.getMonth()!=p,nt=tt&&!D||!et[0]||c&&G<c||h&&G>h;Z+='<td class="'+((W+T+6)%7>=5?" ui-datepicker-week-end":"")+(tt?" ui-datepicker-other-month":"")+(G.getTime()==q.getTime()&&p==e.selectedMonth&&e._keyEvent||H.getTime()==G.getTime()&&H.getTime()==q.getTime()?" "+this._dayOverClass:"")+(nt?" "+this._unselectableClass+" ui-state-disabled":"")+(tt&&!_?"":" "+et[1]+(G.getTime()==l.getTime()?" "+this._currentClass:"")+(G.getTime()==t.getTime()?" ui-datepicker-today":""))+'"'+((!tt||_)&&et[2]?' title="'+et[2]+'"':"")+(nt?"":' data-handler="selectDay" data-event="click" data-month="'+G.getMonth()+'" data-year="'+G.getFullYear()+'"')+">"+(tt&&!_?"&#xa0;":nt?'<span class="ui-state-default">'+G.getDate()+"</span>":'<a class="ui-state-default'+(G.getTime()==t.getTime()?" ui-state-highlight":"")+(G.getTime()==l.getTime()?" ui-state-active":"")+(tt?" ui-priority-secondary":"")+'" href="#">'+G.getDate()+"</a>")+"</td>",G.setDate(G.getDate()+1),G=this._daylightSavingAdjust(G)}U+=Z+"</tr>"}p++,p>11&&(p=0,d++),U+="</tbody></table>"+(f?"</div>"+(o[0]>0&&I==o[1]-1?'<div class="ui-datepicker-row-break"></div>':""):""),F+=U}B+=F}return B+=x+($.ui.ie6&&!e.inline?'<iframe src="javascript:false;" class="ui-datepicker-cover" frameborder="0"></iframe>':""),e._keyEvent=!1,B},_generateMonthYearHeader:function(e,t,n,r,i,s,o,u){var a=this._get(e,"changeMonth"),f=this._get(e,"changeYear"),l=this._get(e,"showMonthAfterYear"),c='<div class="ui-datepicker-title">',h="";if(s||!a)h+='<span class="ui-datepicker-month">'+o[t]+"</span>";else{var p=r&&r.getFullYear()==n,d=i&&i.getFullYear()==n;h+='<select class="ui-datepicker-month" data-handler="selectMonth" data-event="change">';for(var v=0;v<12;v++)(!p||v>=r.getMonth())&&(!d||v<=i.getMonth())&&(h+='<option value="'+v+'"'+(v==t?' selected="selected"':"")+">"+u[v]+"</option>");h+="</select>"}l||(c+=h+(s||!a||!f?"&#xa0;":""));if(!e.yearshtml){e.yearshtml="";if(s||!f)c+='<span class="ui-datepicker-year">'+n+"</span>";else{var m=this._get(e,"yearRange").split(":"),g=(new Date).getFullYear(),y=function(e){var t=e.match(/c[+-].*/)?n+parseInt(e.substring(1),10):e.match(/[+-].*/)?g+parseInt(e,10):parseInt(e,10);return isNaN(t)?g:t},b=y(m[0]),w=Math.max(b,y(m[1]||""));b=r?Math.max(b,r.getFullYear()):b,w=i?Math.min(w,i.getFullYear()):w,e.yearshtml+='<select class="ui-datepicker-year" data-handler="selectYear" data-event="change">';for(;b<=w;b++)e.yearshtml+='<option value="'+b+'"'+(b==n?' selected="selected"':"")+">"+b+"</option>";e.yearshtml+="</select>",c+=e.yearshtml,e.yearshtml=null}}return c+=this._get(e,"yearSuffix"),l&&(c+=(s||!a||!f?"&#xa0;":"")+h),c+="</div>",c},_adjustInstDate:function(e,t,n){var r=e.drawYear+(n=="Y"?t:0),i=e.drawMonth+(n=="M"?t:0),s=Math.min(e.selectedDay,this._getDaysInMonth(r,i))+(n=="D"?t:0),o=this._restrictMinMax(e,this._daylightSavingAdjust(new Date(r,i,s)));e.selectedDay=o.getDate(),e.drawMonth=e.selectedMonth=o.getMonth(),e.drawYear=e.selectedYear=o.getFullYear(),(n=="M"||n=="Y")&&this._notifyChange(e)},_restrictMinMax:function(e,t){var n=this._getMinMaxDate(e,"min"),r=this._getMinMaxDate(e,"max"),i=n&&t<n?n:t;return i=r&&i>r?r:i,i},_notifyChange:function(e){var t=this._get(e,"onChangeMonthYear");t&&t.apply(e.input?e.input[0]:null,[e.selectedYear,e.selectedMonth+1,e])},_getNumberOfMonths:function(e){var t=this._get(e,"numberOfMonths");return t==null?[1,1]:typeof t=="number"?[1,t]:t},_getMinMaxDate:function(e,t){return this._determineDate(e,this._get(e,t+"Date"),null)},_getDaysInMonth:function(e,t){return 32-this._daylightSavingAdjust(new Date(e,t,32)).getDate()},_getFirstDayOfMonth:function(e,t){return(new Date(e,t,1)).getDay()},_canAdjustMonth:function(e,t,n,r){var i=this._getNumberOfMonths(e),s=this._daylightSavingAdjust(new Date(n,r+(t<0?t:i[0]*i[1]),1));return t<0&&s.setDate(this._getDaysInMonth(s.getFullYear(),s.getMonth())),this._isInRange(e,s)},_isInRange:function(e,t){var n=this._getMinMaxDate(e,"min"),r=this._getMinMaxDate(e,"max");return(!n||t.getTime()>=n.getTime())&&(!r||t.getTime()<=r.getTime())},_getFormatConfig:function(e){var t=this._get(e,"shortYearCutoff");return t=typeof t!="string"?t:(new Date).getFullYear()%100+parseInt(t,10),{shortYearCutoff:t,dayNamesShort:this._get(e,"dayNamesShort"),dayNames:this._get(e,"dayNames"),monthNamesShort:this._get(e,"monthNamesShort"),monthNames:this._get(e,"monthNames")}},_formatDate:function(e,t,n,r){t||(e.currentDay=e.selectedDay,e.currentMonth=e.selectedMonth,e.currentYear=e.selectedYear);var i=t?typeof t=="object"?t:this._daylightSavingAdjust(new Date(r,n,t)):this._daylightSavingAdjust(new Date(e.currentYear,e.currentMonth,e.currentDay));return this.formatDate(this._get(e,"dateFormat"),i,this._getFormatConfig(e))}}),$.fn.datepicker=function(e){if(!this.length)return this;$.datepicker.initialized||($(document).mousedown($.datepicker._checkExternalClick).find(document.body).append($.datepicker.dpDiv),$.datepicker.initialized=!0);var t=Array.prototype.slice.call(arguments,1);return typeof e!="string"||e!="isDisabled"&&e!="getDate"&&e!="widget"?e=="option"&&arguments.length==2&&typeof arguments[1]=="string"?$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this[0]].concat(t)):this.each(function(){typeof e=="string"?$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this].concat(t)):$.datepicker._attachDatepicker(this,e)}):$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this[0]].concat(t))},$.datepicker=new Datepicker,$.datepicker.initialized=!1,$.datepicker.uuid=(new Date).getTime(),$.datepicker.version="1.9.1",window["DP_jQuery_"+dpuuid]=$})(jQuery);;
+(function(e,t){function i(t,n){var r,i,o,u=t.nodeName.toLowerCase();return"area"===u?(r=t.parentNode,i=r.name,!t.href||!i||r.nodeName.toLowerCase()!=="map"?!1:(o=e("img[usemap=#"+i+"]")[0],!!o&&s(o))):(/input|select|textarea|button|object/.test(u)?!t.disabled:"a"===u?t.href||n:n)&&s(t)}function s(t){return e.expr.filters.visible(t)&&!e(t).parents().andSelf().filter(function(){return e.css(this,"visibility")==="hidden"}).length}var n=0,r=/^ui-id-\d+$/;e.ui=e.ui||{};if(e.ui.version)return;e.extend(e.ui,{version:"1.9.2",keyCode:{BACKSPACE:8,COMMA:188,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,LEFT:37,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SPACE:32,TAB:9,UP:38}}),e.fn.extend({_focus:e.fn.focus,focus:function(t,n){return typeof t=="number"?this.each(function(){var r=this;setTimeout(function(){e(r).focus(),n&&n.call(r)},t)}):this._focus.apply(this,arguments)},scrollParent:function(){var t;return e.ui.ie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?t=this.parents().filter(function(){return/(relative|absolute|fixed)/.test(e.css(this,"position"))&&/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0):t=this.parents().filter(function(){return/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0),/fixed/.test(this.css("position"))||!t.length?e(document):t},zIndex:function(n){if(n!==t)return this.css("zIndex",n);if(this.length){var r=e(this[0]),i,s;while(r.length&&r[0]!==document){i=r.css("position");if(i==="absolute"||i==="relative"||i==="fixed"){s=parseInt(r.css("zIndex"),10);if(!isNaN(s)&&s!==0)return s}r=r.parent()}}return 0},uniqueId:function(){return this.each(function(){this.id||(this.id="ui-id-"+ ++n)})},removeUniqueId:function(){return this.each(function(){r.test(this.id)&&e(this).removeAttr("id")})}}),e.extend(e.expr[":"],{data:e.expr.createPseudo?e.expr.createPseudo(function(t){return function(n){return!!e.data(n,t)}}):function(t,n,r){return!!e.data(t,r[3])},focusable:function(t){return i(t,!isNaN(e.attr(t,"tabindex")))},tabbable:function(t){var n=e.attr(t,"tabindex"),r=isNaN(n);return(r||n>=0)&&i(t,!r)}}),e(function(){var t=document.body,n=t.appendChild(n=document.createElement("div"));n.offsetHeight,e.extend(n.style,{minHeight:"100px",height:"auto",padding:0,borderWidth:0}),e.support.minHeight=n.offsetHeight===100,e.support.selectstart="onselectstart"in n,t.removeChild(n).style.display="none"}),e("<a>").outerWidth(1).jquery||e.each(["Width","Height"],function(n,r){function u(t,n,r,s){return e.each(i,function(){n-=parseFloat(e.css(t,"padding"+this))||0,r&&(n-=parseFloat(e.css(t,"border"+this+"Width"))||0),s&&(n-=parseFloat(e.css(t,"margin"+this))||0)}),n}var i=r==="Width"?["Left","Right"]:["Top","Bottom"],s=r.toLowerCase(),o={innerWidth:e.fn.innerWidth,innerHeight:e.fn.innerHeight,outerWidth:e.fn.outerWidth,outerHeight:e.fn.outerHeight};e.fn["inner"+r]=function(n){return n===t?o["inner"+r].call(this):this.each(function(){e(this).css(s,u(this,n)+"px")})},e.fn["outer"+r]=function(t,n){return typeof t!="number"?o["outer"+r].call(this,t):this.each(function(){e(this).css(s,u(this,t,!0,n)+"px")})}}),e("<a>").data("a-b","a").removeData("a-b").data("a-b")&&(e.fn.removeData=function(t){return function(n){return arguments.length?t.call(this,e.camelCase(n)):t.call(this)}}(e.fn.removeData)),function(){var t=/msie ([\w.]+)/.exec(navigator.userAgent.toLowerCase())||[];e.ui.ie=t.length?!0:!1,e.ui.ie6=parseFloat(t[1],10)===6}(),e.fn.extend({disableSelection:function(){return this.bind((e.support.selectstart?"selectstart":"mousedown")+".ui-disableSelection",function(e){e.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}}),e.extend(e.ui,{plugin:{add:function(t,n,r){var i,s=e.ui[t].prototype;for(i in r)s.plugins[i]=s.plugins[i]||[],s.plugins[i].push([n,r[i]])},call:function(e,t,n){var r,i=e.plugins[t];if(!i||!e.element[0].parentNode||e.element[0].parentNode.nodeType===11)return;for(r=0;r<i.length;r++)e.options[i[r][0]]&&i[r][1].apply(e.element,n)}},contains:e.contains,hasScroll:function(t,n){if(e(t).css("overflow")==="hidden")return!1;var r=n&&n==="left"?"scrollLeft":"scrollTop",i=!1;return t[r]>0?!0:(t[r]=1,i=t[r]>0,t[r]=0,i)},isOverAxis:function(e,t,n){return e>t&&e<t+n},isOver:function(t,n,r,i,s,o){return e.ui.isOverAxis(t,r,s)&&e.ui.isOverAxis(n,i,o)}})})(jQuery);(function(e,t){var n=0,r=Array.prototype.slice,i=e.cleanData;e.cleanData=function(t){for(var n=0,r;(r=t[n])!=null;n++)try{e(r).triggerHandler("remove")}catch(s){}i(t)},e.widget=function(t,n,r){var i,s,o,u,a=t.split(".")[0];t=t.split(".")[1],i=a+"-"+t,r||(r=n,n=e.Widget),e.expr[":"][i.toLowerCase()]=function(t){return!!e.data(t,i)},e[a]=e[a]||{},s=e[a][t],o=e[a][t]=function(e,t){if(!this._createWidget)return new o(e,t);arguments.length&&this._createWidget(e,t)},e.extend(o,s,{version:r.version,_proto:e.extend({},r),_childConstructors:[]}),u=new n,u.options=e.widget.extend({},u.options),e.each(r,function(t,i){e.isFunction(i)&&(r[t]=function(){var e=function(){return n.prototype[t].apply(this,arguments)},r=function(e){return n.prototype[t].apply(this,e)};return function(){var t=this._super,n=this._superApply,s;return this._super=e,this._superApply=r,s=i.apply(this,arguments),this._super=t,this._superApply=n,s}}())}),o.prototype=e.widget.extend(u,{widgetEventPrefix:s?u.widgetEventPrefix:t},r,{constructor:o,namespace:a,widgetName:t,widgetBaseClass:i,widgetFullName:i}),s?(e.each(s._childConstructors,function(t,n){var r=n.prototype;e.widget(r.namespace+"."+r.widgetName,o,n._proto)}),delete s._childConstructors):n._childConstructors.push(o),e.widget.bridge(t,o)},e.widget.extend=function(n){var i=r.call(arguments,1),s=0,o=i.length,u,a;for(;s<o;s++)for(u in i[s])a=i[s][u],i[s].hasOwnProperty(u)&&a!==t&&(e.isPlainObject(a)?n[u]=e.isPlainObject(n[u])?e.widget.extend({},n[u],a):e.widget.extend({},a):n[u]=a);return n},e.widget.bridge=function(n,i){var s=i.prototype.widgetFullName||n;e.fn[n]=function(o){var u=typeof o=="string",a=r.call(arguments,1),f=this;return o=!u&&a.length?e.widget.extend.apply(null,[o].concat(a)):o,u?this.each(function(){var r,i=e.data(this,s);if(!i)return e.error("cannot call methods on "+n+" prior to initialization; "+"attempted to call method '"+o+"'");if(!e.isFunction(i[o])||o.charAt(0)==="_")return e.error("no such method '"+o+"' for "+n+" widget instance");r=i[o].apply(i,a);if(r!==i&&r!==t)return f=r&&r.jquery?f.pushStack(r.get()):r,!1}):this.each(function(){var t=e.data(this,s);t?t.option(o||{})._init():e.data(this,s,new i(o,this))}),f}},e.Widget=function(){},e.Widget._childConstructors=[],e.Widget.prototype={widgetName:"widget",widgetEventPrefix:"",defaultElement:"<div>",options:{disabled:!1,create:null},_createWidget:function(t,r){r=e(r||this.defaultElement||this)[0],this.element=e(r),this.uuid=n++,this.eventNamespace="."+this.widgetName+this.uuid,this.options=e.widget.extend({},this.options,this._getCreateOptions(),t),this.bindings=e(),this.hoverable=e(),this.focusable=e(),r!==this&&(e.data(r,this.widgetName,this),e.data(r,this.widgetFullName,this),this._on(!0,this.element,{remove:function(e){e.target===r&&this.destroy()}}),this.document=e(r.style?r.ownerDocument:r.document||r),this.window=e(this.document[0].defaultView||this.document[0].parentWindow)),this._create(),this._trigger("create",null,this._getCreateEventData()),this._init()},_getCreateOptions:e.noop,_getCreateEventData:e.noop,_create:e.noop,_init:e.noop,destroy:function(){this._destroy(),this.element.unbind(this.eventNamespace).removeData(this.widgetName).removeData(this.widgetFullName).removeData(e.camelCase(this.widgetFullName)),this.widget().unbind(this.eventNamespace).removeAttr("aria-disabled").removeClass(this.widgetFullName+"-disabled "+"ui-state-disabled"),this.bindings.unbind(this.eventNamespace),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")},_destroy:e.noop,widget:function(){return this.element},option:function(n,r){var i=n,s,o,u;if(arguments.length===0)return e.widget.extend({},this.options);if(typeof n=="string"){i={},s=n.split("."),n=s.shift();if(s.length){o=i[n]=e.widget.extend({},this.options[n]);for(u=0;u<s.length-1;u++)o[s[u]]=o[s[u]]||{},o=o[s[u]];n=s.pop();if(r===t)return o[n]===t?null:o[n];o[n]=r}else{if(r===t)return this.options[n]===t?null:this.options[n];i[n]=r}}return this._setOptions(i),this},_setOptions:function(e){var t;for(t in e)this._setOption(t,e[t]);return this},_setOption:function(e,t){return this.options[e]=t,e==="disabled"&&(this.widget().toggleClass(this.widgetFullName+"-disabled ui-state-disabled",!!t).attr("aria-disabled",t),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")),this},enable:function(){return this._setOption("disabled",!1)},disable:function(){return this._setOption("disabled",!0)},_on:function(t,n,r){var i,s=this;typeof t!="boolean"&&(r=n,n=t,t=!1),r?(n=i=e(n),this.bindings=this.bindings.add(n)):(r=n,n=this.element,i=this.widget()),e.each(r,function(r,o){function u(){if(!t&&(s.options.disabled===!0||e(this).hasClass("ui-state-disabled")))return;return(typeof o=="string"?s[o]:o).apply(s,arguments)}typeof o!="string"&&(u.guid=o.guid=o.guid||u.guid||e.guid++);var a=r.match(/^(\w+)\s*(.*)$/),f=a[1]+s.eventNamespace,l=a[2];l?i.delegate(l,f,u):n.bind(f,u)})},_off:function(e,t){t=(t||"").split(" ").join(this.eventNamespace+" ")+this.eventNamespace,e.unbind(t).undelegate(t)},_delay:function(e,t){function n(){return(typeof e=="string"?r[e]:e).apply(r,arguments)}var r=this;return setTimeout(n,t||0)},_hoverable:function(t){this.hoverable=this.hoverable.add(t),this._on(t,{mouseenter:function(t){e(t.currentTarget).addClass("ui-state-hover")},mouseleave:function(t){e(t.currentTarget).removeClass("ui-state-hover")}})},_focusable:function(t){this.focusable=this.focusable.add(t),this._on(t,{focusin:function(t){e(t.currentTarget).addClass("ui-state-focus")},focusout:function(t){e(t.currentTarget).removeClass("ui-state-focus")}})},_trigger:function(t,n,r){var i,s,o=this.options[t];r=r||{},n=e.Event(n),n.type=(t===this.widgetEventPrefix?t:this.widgetEventPrefix+t).toLowerCase(),n.target=this.element[0],s=n.originalEvent;if(s)for(i in s)i in n||(n[i]=s[i]);return this.element.trigger(n,r),!(e.isFunction(o)&&o.apply(this.element[0],[n].concat(r))===!1||n.isDefaultPrevented())}},e.each({show:"fadeIn",hide:"fadeOut"},function(t,n){e.Widget.prototype["_"+t]=function(r,i,s){typeof i=="string"&&(i={effect:i});var o,u=i?i===!0||typeof i=="number"?n:i.effect||n:t;i=i||{},typeof i=="number"&&(i={duration:i}),o=!e.isEmptyObject(i),i.complete=s,i.delay&&r.delay(i.delay),o&&e.effects&&(e.effects.effect[u]||e.uiBackCompat!==!1&&e.effects[u])?r[t](i):u!==t&&r[u]?r[u](i.duration,i.easing,s):r.queue(function(n){e(this)[t](),s&&s.call(r[0]),n()})}}),e.uiBackCompat!==!1&&(e.Widget.prototype._getCreateOptions=function(){return e.metadata&&e.metadata.get(this.element[0])[this.widgetName]})})(jQuery);(function($,undefined){function Datepicker(){this.debug=!1,this._curInst=null,this._keyEvent=!1,this._disabledInputs=[],this._datepickerShowing=!1,this._inDialog=!1,this._mainDivId="ui-datepicker-div",this._inlineClass="ui-datepicker-inline",this._appendClass="ui-datepicker-append",this._triggerClass="ui-datepicker-trigger",this._dialogClass="ui-datepicker-dialog",this._disableClass="ui-datepicker-disabled",this._unselectableClass="ui-datepicker-unselectable",this._currentClass="ui-datepicker-current-day",this._dayOverClass="ui-datepicker-days-cell-over",this.regional=[],this.regional[""]={closeText:"Done",prevText:"Prev",nextText:"Next",currentText:"Today",monthNames:["January","February","March","April","May","June","July","August","September","October","November","December"],monthNamesShort:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],dayNames:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],dayNamesShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],dayNamesMin:["Su","Mo","Tu","We","Th","Fr","Sa"],weekHeader:"Wk",dateFormat:"mm/dd/yy",firstDay:0,isRTL:!1,showMonthAfterYear:!1,yearSuffix:""},this._defaults={showOn:"focus",showAnim:"fadeIn",showOptions:{},defaultDate:null,appendText:"",buttonText:"...",buttonImage:"",buttonImageOnly:!1,hideIfNoPrevNext:!1,navigationAsDateFormat:!1,gotoCurrent:!1,changeMonth:!1,changeYear:!1,yearRange:"c-10:c+10",showOtherMonths:!1,selectOtherMonths:!1,showWeek:!1,calculateWeek:this.iso8601Week,shortYearCutoff:"+10",minDate:null,maxDate:null,duration:"fast",beforeShowDay:null,beforeShow:null,onSelect:null,onChangeMonthYear:null,onClose:null,numberOfMonths:1,showCurrentAtPos:0,stepMonths:1,stepBigMonths:12,altField:"",altFormat:"",constrainInput:!0,showButtonPanel:!1,autoSize:!1,disabled:!1},$.extend(this._defaults,this.regional[""]),this.dpDiv=bindHover($('<div id="'+this._mainDivId+'" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>'))}function bindHover(e){var t="button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a";return e.delegate(t,"mouseout",function(){$(this).removeClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!=-1&&$(this).removeClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!=-1&&$(this).removeClass("ui-datepicker-next-hover")}).delegate(t,"mouseover",function(){$.datepicker._isDisabledDatepicker(instActive.inline?e.parent()[0]:instActive.input[0])||($(this).parents(".ui-datepicker-calendar").find("a").removeClass("ui-state-hover"),$(this).addClass("ui-state-hover"),this.className.indexOf("ui-datepicker-prev")!=-1&&$(this).addClass("ui-datepicker-prev-hover"),this.className.indexOf("ui-datepicker-next")!=-1&&$(this).addClass("ui-datepicker-next-hover"))})}function extendRemove(e,t){$.extend(e,t);for(var n in t)if(t[n]==null||t[n]==undefined)e[n]=t[n];return e}$.extend($.ui,{datepicker:{version:"1.9.2"}});var PROP_NAME="datepicker",dpuuid=(new Date).getTime(),instActive;$.extend(Datepicker.prototype,{markerClassName:"hasDatepicker",maxRows:4,log:function(){this.debug&&console.log.apply("",arguments)},_widgetDatepicker:function(){return this.dpDiv},setDefaults:function(e){return extendRemove(this._defaults,e||{}),this},_attachDatepicker:function(target,settings){var inlineSettings=null;for(var attrName in this._defaults){var attrValue=target.getAttribute("date:"+attrName);if(attrValue){inlineSettings=inlineSettings||{};try{inlineSettings[attrName]=eval(attrValue)}catch(err){inlineSettings[attrName]=attrValue}}}var nodeName=target.nodeName.toLowerCase(),inline=nodeName=="div"||nodeName=="span";target.id||(this.uuid+=1,target.id="dp"+this.uuid);var inst=this._newInst($(target),inline);inst.settings=$.extend({},settings||{},inlineSettings||{}),nodeName=="input"?this._connectDatepicker(target,inst):inline&&this._inlineDatepicker(target,inst)},_newInst:function(e,t){var n=e[0].id.replace(/([^A-Za-z0-9_-])/g,"\\\\$1");return{id:n,input:e,selectedDay:0,selectedMonth:0,selectedYear:0,drawMonth:0,drawYear:0,inline:t,dpDiv:t?bindHover($('<div class="'+this._inlineClass+' ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>')):this.dpDiv}},_connectDatepicker:function(e,t){var n=$(e);t.append=$([]),t.trigger=$([]);if(n.hasClass(this.markerClassName))return;this._attachments(n,t),n.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).keyup(this._doKeyUp).bind("setData.datepicker",function(e,n,r){t.settings[n]=r}).bind("getData.datepicker",function(e,n){return this._get(t,n)}),this._autoSize(t),$.data(e,PROP_NAME,t),t.settings.disabled&&this._disableDatepicker(e)},_attachments:function(e,t){var n=this._get(t,"appendText"),r=this._get(t,"isRTL");t.append&&t.append.remove(),n&&(t.append=$('<span class="'+this._appendClass+'">'+n+"</span>"),e[r?"before":"after"](t.append)),e.unbind("focus",this._showDatepicker),t.trigger&&t.trigger.remove();var i=this._get(t,"showOn");(i=="focus"||i=="both")&&e.focus(this._showDatepicker);if(i=="button"||i=="both"){var s=this._get(t,"buttonText"),o=this._get(t,"buttonImage");t.trigger=$(this._get(t,"buttonImageOnly")?$("<img/>").addClass(this._triggerClass).attr({src:o,alt:s,title:s}):$('<button type="button"></button>').addClass(this._triggerClass).html(o==""?s:$("<img/>").attr({src:o,alt:s,title:s}))),e[r?"before":"after"](t.trigger),t.trigger.click(function(){return $.datepicker._datepickerShowing&&$.datepicker._lastInput==e[0]?$.datepicker._hideDatepicker():$.datepicker._datepickerShowing&&$.datepicker._lastInput!=e[0]?($.datepicker._hideDatepicker(),$.datepicker._showDatepicker(e[0])):$.datepicker._showDatepicker(e[0]),!1})}},_autoSize:function(e){if(this._get(e,"autoSize")&&!e.inline){var t=new Date(2009,11,20),n=this._get(e,"dateFormat");if(n.match(/[DM]/)){var r=function(e){var t=0,n=0;for(var r=0;r<e.length;r++)e[r].length>t&&(t=e[r].length,n=r);return n};t.setMonth(r(this._get(e,n.match(/MM/)?"monthNames":"monthNamesShort"))),t.setDate(r(this._get(e,n.match(/DD/)?"dayNames":"dayNamesShort"))+20-t.getDay())}e.input.attr("size",this._formatDate(e,t).length)}},_inlineDatepicker:function(e,t){var n=$(e);if(n.hasClass(this.markerClassName))return;n.addClass(this.markerClassName).append(t.dpDiv).bind("setData.datepicker",function(e,n,r){t.settings[n]=r}).bind("getData.datepicker",function(e,n){return this._get(t,n)}),$.data(e,PROP_NAME,t),this._setDate(t,this._getDefaultDate(t),!0),this._updateDatepicker(t),this._updateAlternate(t),t.settings.disabled&&this._disableDatepicker(e),t.dpDiv.css("display","block")},_dialogDatepicker:function(e,t,n,r,i){var s=this._dialogInst;if(!s){this.uuid+=1;var o="dp"+this.uuid;this._dialogInput=$('<input type="text" id="'+o+'" style="position: absolute; top: -100px; width: 0px;"/>'),this._dialogInput.keydown(this._doKeyDown),$("body").append(this._dialogInput),s=this._dialogInst=this._newInst(this._dialogInput,!1),s.settings={},$.data(this._dialogInput[0],PROP_NAME,s)}extendRemove(s.settings,r||{}),t=t&&t.constructor==Date?this._formatDate(s,t):t,this._dialogInput.val(t),this._pos=i?i.length?i:[i.pageX,i.pageY]:null;if(!this._pos){var u=document.documentElement.clientWidth,a=document.documentElement.clientHeight,f=document.documentElement.scrollLeft||document.body.scrollLeft,l=document.documentElement.scrollTop||document.body.scrollTop;this._pos=[u/2-100+f,a/2-150+l]}return this._dialogInput.css("left",this._pos[0]+20+"px").css("top",this._pos[1]+"px"),s.settings.onSelect=n,this._inDialog=!0,this.dpDiv.addClass(this._dialogClass),this._showDatepicker(this._dialogInput[0]),$.blockUI&&$.blockUI(this.dpDiv),$.data(this._dialogInput[0],PROP_NAME,s),this},_destroyDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();$.removeData(e,PROP_NAME),r=="input"?(n.append.remove(),n.trigger.remove(),t.removeClass(this.markerClassName).unbind("focus",this._showDatepicker).unbind("keydown",this._doKeyDown).unbind("keypress",this._doKeyPress).unbind("keyup",this._doKeyUp)):(r=="div"||r=="span")&&t.removeClass(this.markerClassName).empty()},_enableDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();if(r=="input")e.disabled=!1,n.trigger.filter("button").each(function(){this.disabled=!1}).end().filter("img").css({opacity:"1.0",cursor:""});else if(r=="div"||r=="span"){var i=t.children("."+this._inlineClass);i.children().removeClass("ui-state-disabled"),i.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!1)}this._disabledInputs=$.map(this._disabledInputs,function(t){return t==e?null:t})},_disableDatepicker:function(e){var t=$(e),n=$.data(e,PROP_NAME);if(!t.hasClass(this.markerClassName))return;var r=e.nodeName.toLowerCase();if(r=="input")e.disabled=!0,n.trigger.filter("button").each(function(){this.disabled=!0}).end().filter("img").css({opacity:"0.5",cursor:"default"});else if(r=="div"||r=="span"){var i=t.children("."+this._inlineClass);i.children().addClass("ui-state-disabled"),i.find("select.ui-datepicker-month, select.ui-datepicker-year").prop("disabled",!0)}this._disabledInputs=$.map(this._disabledInputs,function(t){return t==e?null:t}),this._disabledInputs[this._disabledInputs.length]=e},_isDisabledDatepicker:function(e){if(!e)return!1;for(var t=0;t<this._disabledInputs.length;t++)if(this._disabledInputs[t]==e)return!0;return!1},_getInst:function(e){try{return $.data(e,PROP_NAME)}catch(t){throw"Missing instance data for this datepicker"}},_optionDatepicker:function(e,t,n){var r=this._getInst(e);if(arguments.length==2&&typeof t=="string")return t=="defaults"?$.extend({},$.datepicker._defaults):r?t=="all"?$.extend({},r.settings):this._get(r,t):null;var i=t||{};typeof t=="string"&&(i={},i[t]=n);if(r){this._curInst==r&&this._hideDatepicker();var s=this._getDateDatepicker(e,!0),o=this._getMinMaxDate(r,"min"),u=this._getMinMaxDate(r,"max");extendRemove(r.settings,i),o!==null&&i.dateFormat!==undefined&&i.minDate===undefined&&(r.settings.minDate=this._formatDate(r,o)),u!==null&&i.dateFormat!==undefined&&i.maxDate===undefined&&(r.settings.maxDate=this._formatDate(r,u)),this._attachments($(e),r),this._autoSize(r),this._setDate(r,s),this._updateAlternate(r),this._updateDatepicker(r)}},_changeDatepicker:function(e,t,n){this._optionDatepicker(e,t,n)},_refreshDatepicker:function(e){var t=this._getInst(e);t&&this._updateDatepicker(t)},_setDateDatepicker:function(e,t){var n=this._getInst(e);n&&(this._setDate(n,t),this._updateDatepicker(n),this._updateAlternate(n))},_getDateDatepicker:function(e,t){var n=this._getInst(e);return n&&!n.inline&&this._setDateFromField(n,t),n?this._getDate(n):null},_doKeyDown:function(e){var t=$.datepicker._getInst(e.target),n=!0,r=t.dpDiv.is(".ui-datepicker-rtl");t._keyEvent=!0;if($.datepicker._datepickerShowing)switch(e.keyCode){case 9:$.datepicker._hideDatepicker(),n=!1;break;case 13:var i=$("td."+$.datepicker._dayOverClass+":not(."+$.datepicker._currentClass+")",t.dpDiv);i[0]&&$.datepicker._selectDay(e.target,t.selectedMonth,t.selectedYear,i[0]);var s=$.datepicker._get(t,"onSelect");if(s){var o=$.datepicker._formatDate(t);s.apply(t.input?t.input[0]:null,[o,t])}else $.datepicker._hideDatepicker();return!1;case 27:$.datepicker._hideDatepicker();break;case 33:$.datepicker._adjustDate(e.target,e.ctrlKey?-$.datepicker._get(t,"stepBigMonths"):-$.datepicker._get(t,"stepMonths"),"M");break;case 34:$.datepicker._adjustDate(e.target,e.ctrlKey?+$.datepicker._get(t,"stepBigMonths"):+$.datepicker._get(t,"stepMonths"),"M");break;case 35:(e.ctrlKey||e.metaKey)&&$.datepicker._clearDate(e.target),n=e.ctrlKey||e.metaKey;break;case 36:(e.ctrlKey||e.metaKey)&&$.datepicker._gotoToday(e.target),n=e.ctrlKey||e.metaKey;break;case 37:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,r?1:-1,"D"),n=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&$.datepicker._adjustDate(e.target,e.ctrlKey?-$.datepicker._get(t,"stepBigMonths"):-$.datepicker._get(t,"stepMonths"),"M");break;case 38:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,-7,"D"),n=e.ctrlKey||e.metaKey;break;case 39:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,r?-1:1,"D"),n=e.ctrlKey||e.metaKey,e.originalEvent.altKey&&$.datepicker._adjustDate(e.target,e.ctrlKey?+$.datepicker._get(t,"stepBigMonths"):+$.datepicker._get(t,"stepMonths"),"M");break;case 40:(e.ctrlKey||e.metaKey)&&$.datepicker._adjustDate(e.target,7,"D"),n=e.ctrlKey||e.metaKey;break;default:n=!1}else e.keyCode==36&&e.ctrlKey?$.datepicker._showDatepicker(this):n=!1;n&&(e.preventDefault(),e.stopPropagation())},_doKeyPress:function(e){var t=$.datepicker._getInst(e.target);if($.datepicker._get(t,"constrainInput")){var n=$.datepicker._possibleChars($.datepicker._get(t,"dateFormat")),r=String.fromCharCode(e.charCode==undefined?e.keyCode:e.charCode);return e.ctrlKey||e.metaKey||r<" "||!n||n.indexOf(r)>-1}},_doKeyUp:function(e){var t=$.datepicker._getInst(e.target);if(t.input.val()!=t.lastVal)try{var n=$.datepicker.parseDate($.datepicker._get(t,"dateFormat"),t.input?t.input.val():null,$.datepicker._getFormatConfig(t));n&&($.datepicker._setDateFromField(t),$.datepicker._updateAlternate(t),$.datepicker._updateDatepicker(t))}catch(r){$.datepicker.log(r)}return!0},_showDatepicker:function(e){e=e.target||e,e.nodeName.toLowerCase()!="input"&&(e=$("input",e.parentNode)[0]);if($.datepicker._isDisabledDatepicker(e)||$.datepicker._lastInput==e)return;var t=$.datepicker._getInst(e);$.datepicker._curInst&&$.datepicker._curInst!=t&&($.datepicker._curInst.dpDiv.stop(!0,!0),t&&$.datepicker._datepickerShowing&&$.datepicker._hideDatepicker($.datepicker._curInst.input[0]));var n=$.datepicker._get(t,"beforeShow"),r=n?n.apply(e,[e,t]):{};if(r===!1)return;extendRemove(t.settings,r),t.lastVal=null,$.datepicker._lastInput=e,$.datepicker._setDateFromField(t),$.datepicker._inDialog&&(e.value=""),$.datepicker._pos||($.datepicker._pos=$.datepicker._findPos(e),$.datepicker._pos[1]+=e.offsetHeight);var i=!1;$(e).parents().each(function(){return i|=$(this).css("position")=="fixed",!i});var s={left:$.datepicker._pos[0],top:$.datepicker._pos[1]};$.datepicker._pos=null,t.dpDiv.empty(),t.dpDiv.css({position:"absolute",display:"block",top:"-1000px"}),$.datepicker._updateDatepicker(t),s=$.datepicker._checkOffset(t,s,i),t.dpDiv.css({position:$.datepicker._inDialog&&$.blockUI?"static":i?"fixed":"absolute",display:"none",left:s.left+"px",top:s.top+"px"});if(!t.inline){var o=$.datepicker._get(t,"showAnim"),u=$.datepicker._get(t,"duration"),a=function(){var e=t.dpDiv.find("iframe.ui-datepicker-cover");if(!!e.length){var n=$.datepicker._getBorders(t.dpDiv);e.css({left:-n[0],top:-n[1],width:t.dpDiv.outerWidth(),height:t.dpDiv.outerHeight()})}};t.dpDiv.zIndex($(e).zIndex()+1),$.datepicker._datepickerShowing=!0,$.effects&&($.effects.effect[o]||$.effects[o])?t.dpDiv.show(o,$.datepicker._get(t,"showOptions"),u,a):t.dpDiv[o||"show"](o?u:null,a),(!o||!u)&&a(),t.input.is(":visible")&&!t.input.is(":disabled")&&t.input.focus(),$.datepicker._curInst=t}},_updateDatepicker:function(e){this.maxRows=4;var t=$.datepicker._getBorders(e.dpDiv);instActive=e,e.dpDiv.empty().append(this._generateHTML(e)),this._attachHandlers(e);var n=e.dpDiv.find("iframe.ui-datepicker-cover");!n.length||n.css({left:-t[0],top:-t[1],width:e.dpDiv.outerWidth(),height:e.dpDiv.outerHeight()}),e.dpDiv.find("."+this._dayOverClass+" a").mouseover();var r=this._getNumberOfMonths(e),i=r[1],s=17;e.dpDiv.removeClass("ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4").width(""),i>1&&e.dpDiv.addClass("ui-datepicker-multi-"+i).css("width",s*i+"em"),e.dpDiv[(r[0]!=1||r[1]!=1?"add":"remove")+"Class"]("ui-datepicker-multi"),e.dpDiv[(this._get(e,"isRTL")?"add":"remove")+"Class"]("ui-datepicker-rtl"),e==$.datepicker._curInst&&$.datepicker._datepickerShowing&&e.input&&e.input.is(":visible")&&!e.input.is(":disabled")&&e.input[0]!=document.activeElement&&e.input.focus();if(e.yearshtml){var o=e.yearshtml;setTimeout(function(){o===e.yearshtml&&e.yearshtml&&e.dpDiv.find("select.ui-datepicker-year:first").replaceWith(e.yearshtml),o=e.yearshtml=null},0)}},_getBorders:function(e){var t=function(e){return{thin:1,medium:2,thick:3}[e]||e};return[parseFloat(t(e.css("border-left-width"))),parseFloat(t(e.css("border-top-width")))]},_checkOffset:function(e,t,n){var r=e.dpDiv.outerWidth(),i=e.dpDiv.outerHeight(),s=e.input?e.input.outerWidth():0,o=e.input?e.input.outerHeight():0,u=document.documentElement.clientWidth+(n?0:$(document).scrollLeft()),a=document.documentElement.clientHeight+(n?0:$(document).scrollTop());return t.left-=this._get(e,"isRTL")?r-s:0,t.left-=n&&t.left==e.input.offset().left?$(document).scrollLeft():0,t.top-=n&&t.top==e.input.offset().top+o?$(document).scrollTop():0,t.left-=Math.min(t.left,t.left+r>u&&u>r?Math.abs(t.left+r-u):0),t.top-=Math.min(t.top,t.top+i>a&&a>i?Math.abs(i+o):0),t},_findPos:function(e){var t=this._getInst(e),n=this._get(t,"isRTL");while(e&&(e.type=="hidden"||e.nodeType!=1||$.expr.filters.hidden(e)))e=e[n?"previousSibling":"nextSibling"];var r=$(e).offset();return[r.left,r.top]},_hideDatepicker:function(e){var t=this._curInst;if(!t||e&&t!=$.data(e,PROP_NAME))return;if(this._datepickerShowing){var n=this._get(t,"showAnim"),r=this._get(t,"duration"),i=function(){$.datepicker._tidyDialog(t)};$.effects&&($.effects.effect[n]||$.effects[n])?t.dpDiv.hide(n,$.datepicker._get(t,"showOptions"),r,i):t.dpDiv[n=="slideDown"?"slideUp":n=="fadeIn"?"fadeOut":"hide"](n?r:null,i),n||i(),this._datepickerShowing=!1;var s=this._get(t,"onClose");s&&s.apply(t.input?t.input[0]:null,[t.input?t.input.val():"",t]),this._lastInput=null,this._inDialog&&(this._dialogInput.css({position:"absolute",left:"0",top:"-100px"}),$.blockUI&&($.unblockUI(),$("body").append(this.dpDiv))),this._inDialog=!1}},_tidyDialog:function(e){e.dpDiv.removeClass(this._dialogClass).unbind(".ui-datepicker-calendar")},_checkExternalClick:function(e){if(!$.datepicker._curInst)return;var t=$(e.target),n=$.datepicker._getInst(t[0]);(t[0].id!=$.datepicker._mainDivId&&t.parents("#"+$.datepicker._mainDivId).length==0&&!t.hasClass($.datepicker.markerClassName)&&!t.closest("."+$.datepicker._triggerClass).length&&$.datepicker._datepickerShowing&&(!$.datepicker._inDialog||!$.blockUI)||t.hasClass($.datepicker.markerClassName)&&$.datepicker._curInst!=n)&&$.datepicker._hideDatepicker()},_adjustDate:function(e,t,n){var r=$(e),i=this._getInst(r[0]);if(this._isDisabledDatepicker(r[0]))return;this._adjustInstDate(i,t+(n=="M"?this._get(i,"showCurrentAtPos"):0),n),this._updateDatepicker(i)},_gotoToday:function(e){var t=$(e),n=this._getInst(t[0]);if(this._get(n,"gotoCurrent")&&n.currentDay)n.selectedDay=n.currentDay,n.drawMonth=n.selectedMonth=n.currentMonth,n.drawYear=n.selectedYear=n.currentYear;else{var r=new Date;n.selectedDay=r.getDate(),n.drawMonth=n.selectedMonth=r.getMonth(),n.drawYear=n.selectedYear=r.getFullYear()}this._notifyChange(n),this._adjustDate(t)},_selectMonthYear:function(e,t,n){var r=$(e),i=this._getInst(r[0]);i["selected"+(n=="M"?"Month":"Year")]=i["draw"+(n=="M"?"Month":"Year")]=parseInt(t.options[t.selectedIndex].value,10),this._notifyChange(i),this._adjustDate(r)},_selectDay:function(e,t,n,r){var i=$(e);if($(r).hasClass(this._unselectableClass)||this._isDisabledDatepicker(i[0]))return;var s=this._getInst(i[0]);s.selectedDay=s.currentDay=$("a",r).html(),s.selectedMonth=s.currentMonth=t,s.selectedYear=s.currentYear=n,this._selectDate(e,this._formatDate(s,s.currentDay,s.currentMonth,s.currentYear))},_clearDate:function(e){var t=$(e),n=this._getInst(t[0]);this._selectDate(t,"")},_selectDate:function(e,t){var n=$(e),r=this._getInst(n[0]);t=t!=null?t:this._formatDate(r),r.input&&r.input.val(t),this._updateAlternate(r);var i=this._get(r,"onSelect");i?i.apply(r.input?r.input[0]:null,[t,r]):r.input&&r.input.trigger("change"),r.inline?this._updateDatepicker(r):(this._hideDatepicker(),this._lastInput=r.input[0],typeof r.input[0]!="object"&&r.input.focus(),this._lastInput=null)},_updateAlternate:function(e){var t=this._get(e,"altField");if(t){var n=this._get(e,"altFormat")||this._get(e,"dateFormat"),r=this._getDate(e),i=this.formatDate(n,r,this._getFormatConfig(e));$(t).each(function(){$(this).val(i)})}},noWeekends:function(e){var t=e.getDay();return[t>0&&t<6,""]},iso8601Week:function(e){var t=new Date(e.getTime());t.setDate(t.getDate()+4-(t.getDay()||7));var n=t.getTime();return t.setMonth(0),t.setDate(1),Math.floor(Math.round((n-t)/864e5)/7)+1},parseDate:function(e,t,n){if(e==null||t==null)throw"Invalid arguments";t=typeof t=="object"?t.toString():t+"";if(t=="")return null;var r=(n?n.shortYearCutoff:null)||this._defaults.shortYearCutoff;r=typeof r!="string"?r:(new Date).getFullYear()%100+parseInt(r,10);var i=(n?n.dayNamesShort:null)||this._defaults.dayNamesShort,s=(n?n.dayNames:null)||this._defaults.dayNames,o=(n?n.monthNamesShort:null)||this._defaults.monthNamesShort,u=(n?n.monthNames:null)||this._defaults.monthNames,a=-1,f=-1,l=-1,c=-1,h=!1,p=function(t){var n=y+1<e.length&&e.charAt(y+1)==t;return n&&y++,n},d=function(e){var n=p(e),r=e=="@"?14:e=="!"?20:e=="y"&&n?4:e=="o"?3:2,i=new RegExp("^\\d{1,"+r+"}"),s=t.substring(g).match(i);if(!s)throw"Missing number at position "+g;return g+=s[0].length,parseInt(s[0],10)},v=function(e,n,r){var i=$.map(p(e)?r:n,function(e,t){return[[t,e]]}).sort(function(e,t){return-(e[1].length-t[1].length)}),s=-1;$.each(i,function(e,n){var r=n[1];if(t.substr(g,r.length).toLowerCase()==r.toLowerCase())return s=n[0],g+=r.length,!1});if(s!=-1)return s+1;throw"Unknown name at position "+g},m=function(){if(t.charAt(g)!=e.charAt(y))throw"Unexpected literal at position "+g;g++},g=0;for(var y=0;y<e.length;y++)if(h)e.charAt(y)=="'"&&!p("'")?h=!1:m();else switch(e.charAt(y)){case"d":l=d("d");break;case"D":v("D",i,s);break;case"o":c=d("o");break;case"m":f=d("m");break;case"M":f=v("M",o,u);break;case"y":a=d("y");break;case"@":var b=new Date(d("@"));a=b.getFullYear(),f=b.getMonth()+1,l=b.getDate();break;case"!":var b=new Date((d("!")-this._ticksTo1970)/1e4);a=b.getFullYear(),f=b.getMonth()+1,l=b.getDate();break;case"'":p("'")?m():h=!0;break;default:m()}if(g<t.length){var w=t.substr(g);if(!/^\s+/.test(w))throw"Extra/unparsed characters found in date: "+w}a==-1?a=(new Date).getFullYear():a<100&&(a+=(new Date).getFullYear()-(new Date).getFullYear()%100+(a<=r?0:-100));if(c>-1){f=1,l=c;do{var E=this._getDaysInMonth(a,f-1);if(l<=E)break;f++,l-=E}while(!0)}var b=this._daylightSavingAdjust(new Date(a,f-1,l));if(b.getFullYear()!=a||b.getMonth()+1!=f||b.getDate()!=l)throw"Invalid date";return b},ATOM:"yy-mm-dd",COOKIE:"D, dd M yy",ISO_8601:"yy-mm-dd",RFC_822:"D, d M y",RFC_850:"DD, dd-M-y",RFC_1036:"D, d M y",RFC_1123:"D, d M yy",RFC_2822:"D, d M yy",RSS:"D, d M y",TICKS:"!",TIMESTAMP:"@",W3C:"yy-mm-dd",_ticksTo1970:(718685+Math.floor(492.5)-Math.floor(19.7)+Math.floor(4.925))*24*60*60*1e7,formatDate:function(e,t,n){if(!t)return"";var r=(n?n.dayNamesShort:null)||this._defaults.dayNamesShort,i=(n?n.dayNames:null)||this._defaults.dayNames,s=(n?n.monthNamesShort:null)||this._defaults.monthNamesShort,o=(n?n.monthNames:null)||this._defaults.monthNames,u=function(t){var n=h+1<e.length&&e.charAt(h+1)==t;return n&&h++,n},a=function(e,t,n){var r=""+t;if(u(e))while(r.length<n)r="0"+r;return r},f=function(e,t,n,r){return u(e)?r[t]:n[t]},l="",c=!1;if(t)for(var h=0;h<e.length;h++)if(c)e.charAt(h)=="'"&&!u("'")?c=!1:l+=e.charAt(h);else switch(e.charAt(h)){case"d":l+=a("d",t.getDate(),2);break;case"D":l+=f("D",t.getDay(),r,i);break;case"o":l+=a("o",Math.round(((new Date(t.getFullYear(),t.getMonth(),t.getDate())).getTime()-(new Date(t.getFullYear(),0,0)).getTime())/864e5),3);break;case"m":l+=a("m",t.getMonth()+1,2);break;case"M":l+=f("M",t.getMonth(),s,o);break;case"y":l+=u("y")?t.getFullYear():(t.getYear()%100<10?"0":"")+t.getYear()%100;break;case"@":l+=t.getTime();break;case"!":l+=t.getTime()*1e4+this._ticksTo1970;break;case"'":u("'")?l+="'":c=!0;break;default:l+=e.charAt(h)}return l},_possibleChars:function(e){var t="",n=!1,r=function(t){var n=i+1<e.length&&e.charAt(i+1)==t;return n&&i++,n};for(var i=0;i<e.length;i++)if(n)e.charAt(i)=="'"&&!r("'")?n=!1:t+=e.charAt(i);else switch(e.charAt(i)){case"d":case"m":case"y":case"@":t+="0123456789";break;case"D":case"M":return null;case"'":r("'")?t+="'":n=!0;break;default:t+=e.charAt(i)}return t},_get:function(e,t){return e.settings[t]!==undefined?e.settings[t]:this._defaults[t]},_setDateFromField:function(e,t){if(e.input.val()==e.lastVal)return;var n=this._get(e,"dateFormat"),r=e.lastVal=e.input?e.input.val():null,i,s;i=s=this._getDefaultDate(e);var o=this._getFormatConfig(e);try{i=this.parseDate(n,r,o)||s}catch(u){this.log(u),r=t?"":r}e.selectedDay=i.getDate(),e.drawMonth=e.selectedMonth=i.getMonth(),e.drawYear=e.selectedYear=i.getFullYear(),e.currentDay=r?i.getDate():0,e.currentMonth=r?i.getMonth():0,e.currentYear=r?i.getFullYear():0,this._adjustInstDate(e)},_getDefaultDate:function(e){return this._restrictMinMax(e,this._determineDate(e,this._get(e,"defaultDate"),new Date))},_determineDate:function(e,t,n){var r=function(e){var t=new Date;return t.setDate(t.getDate()+e),t},i=function(t){try{return $.datepicker.parseDate($.datepicker._get(e,"dateFormat"),t,$.datepicker._getFormatConfig(e))}catch(n){}var r=(t.toLowerCase().match(/^c/)?$.datepicker._getDate(e):null)||new Date,i=r.getFullYear(),s=r.getMonth(),o=r.getDate(),u=/([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g,a=u.exec(t);while(a){switch(a[2]||"d"){case"d":case"D":o+=parseInt(a[1],10);break;case"w":case"W":o+=parseInt(a[1],10)*7;break;case"m":case"M":s+=parseInt(a[1],10),o=Math.min(o,$.datepicker._getDaysInMonth(i,s));break;case"y":case"Y":i+=parseInt(a[1],10),o=Math.min(o,$.datepicker._getDaysInMonth(i,s))}a=u.exec(t)}return new Date(i,s,o)},s=t==null||t===""?n:typeof t=="string"?i(t):typeof t=="number"?isNaN(t)?n:r(t):new Date(t.getTime());return s=s&&s.toString()=="Invalid Date"?n:s,s&&(s.setHours(0),s.setMinutes(0),s.setSeconds(0),s.setMilliseconds(0)),this._daylightSavingAdjust(s)},_daylightSavingAdjust:function(e){return e?(e.setHours(e.getHours()>12?e.getHours()+2:0),e):null},_setDate:function(e,t,n){var r=!t,i=e.selectedMonth,s=e.selectedYear,o=this._restrictMinMax(e,this._determineDate(e,t,new Date));e.selectedDay=e.currentDay=o.getDate(),e.drawMonth=e.selectedMonth=e.currentMonth=o.getMonth(),e.drawYear=e.selectedYear=e.currentYear=o.getFullYear(),(i!=e.selectedMonth||s!=e.selectedYear)&&!n&&this._notifyChange(e),this._adjustInstDate(e),e.input&&e.input.val(r?"":this._formatDate(e))},_getDate:function(e){var t=!e.currentYear||e.input&&e.input.val()==""?null:this._daylightSavingAdjust(new Date(e.currentYear,e.currentMonth,e.currentDay));return t},_attachHandlers:function(e){var t=this._get(e,"stepMonths"),n="#"+e.id.replace(/\\\\/g,"\\");e.dpDiv.find("[data-handler]").map(function(){var e={prev:function(){window["DP_jQuery_"+dpuuid].datepicker._adjustDate(n,-t,"M")},next:function(){window["DP_jQuery_"+dpuuid].datepicker._adjustDate(n,+t,"M")},hide:function(){window["DP_jQuery_"+dpuuid].datepicker._hideDatepicker()},today:function(){window["DP_jQuery_"+dpuuid].datepicker._gotoToday(n)},selectDay:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectDay(n,+this.getAttribute("data-month"),+this.getAttribute("data-year"),this),!1},selectMonth:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectMonthYear(n,this,"M"),!1},selectYear:function(){return window["DP_jQuery_"+dpuuid].datepicker._selectMonthYear(n,this,"Y"),!1}};$(this).bind(this.getAttribute("data-event"),e[this.getAttribute("data-handler")])})},_generateHTML:function(e){var t=new Date;t=this._daylightSavingAdjust(new Date(t.getFullYear(),t.getMonth(),t.getDate()));var n=this._get(e,"isRTL"),r=this._get(e,"showButtonPanel"),i=this._get(e,"hideIfNoPrevNext"),s=this._get(e,"navigationAsDateFormat"),o=this._getNumberOfMonths(e),u=this._get(e,"showCurrentAtPos"),a=this._get(e,"stepMonths"),f=o[0]!=1||o[1]!=1,l=this._daylightSavingAdjust(e.currentDay?new Date(e.currentYear,e.currentMonth,e.currentDay):new Date(9999,9,9)),c=this._getMinMaxDate(e,"min"),h=this._getMinMaxDate(e,"max"),p=e.drawMonth-u,d=e.drawYear;p<0&&(p+=12,d--);if(h){var v=this._daylightSavingAdjust(new Date(h.getFullYear(),h.getMonth()-o[0]*o[1]+1,h.getDate()));v=c&&v<c?c:v;while(this._daylightSavingAdjust(new Date(d,p,1))>v)p--,p<0&&(p=11,d--)}e.drawMonth=p,e.drawYear=d;var m=this._get(e,"prevText");m=s?this.formatDate(m,this._daylightSavingAdjust(new Date(d,p-a,1)),this._getFormatConfig(e)):m;var g=this._canAdjustMonth(e,-1,d,p)?'<a class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click" title="'+m+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"e":"w")+'">'+m+"</span></a>":i?"":'<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+m+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"e":"w")+'">'+m+"</span></a>",y=this._get(e,"nextText");y=s?this.formatDate(y,this._daylightSavingAdjust(new Date(d,p+a,1)),this._getFormatConfig(e)):y;var b=this._canAdjustMonth(e,1,d,p)?'<a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click" title="'+y+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"w":"e")+'">'+y+"</span></a>":i?"":'<a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="'+y+'"><span class="ui-icon ui-icon-circle-triangle-'+(n?"w":"e")+'">'+y+"</span></a>",w=this._get(e,"currentText"),E=this._get(e,"gotoCurrent")&&e.currentDay?l:t;w=s?this.formatDate(w,E,this._getFormatConfig(e)):w;var S=e.inline?"":'<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" data-handler="hide" data-event="click">'+this._get(e,"closeText")+"</button>",x=r?'<div class="ui-datepicker-buttonpane ui-widget-content">'+(n?S:"")+(this._isInRange(e,E)?'<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" data-handler="today" data-event="click">'+w+"</button>":"")+(n?"":S)+"</div>":"",T=parseInt(this._get(e,"firstDay"),10);T=isNaN(T)?0:T;var N=this._get(e,"showWeek"),C=this._get(e,"dayNames"),k=this._get(e,"dayNamesShort"),L=this._get(e,"dayNamesMin"),A=this._get(e,"monthNames"),O=this._get(e,"monthNamesShort"),M=this._get(e,"beforeShowDay"),_=this._get(e,"showOtherMonths"),D=this._get(e,"selectOtherMonths"),P=this._get(e,"calculateWeek")||this.iso8601Week,H=this._getDefaultDate(e),B="";for(var j=0;j<o[0];j++){var F="";this.maxRows=4;for(var I=0;I<o[1];I++){var q=this._daylightSavingAdjust(new Date(d,p,e.selectedDay)),R=" ui-corner-all",U="";if(f){U+='<div class="ui-datepicker-group';if(o[1]>1)switch(I){case 0:U+=" ui-datepicker-group-first",R=" ui-corner-"+(n?"right":"left");break;case o[1]-1:U+=" ui-datepicker-group-last",R=" ui-corner-"+(n?"left":"right");break;default:U+=" ui-datepicker-group-middle",R=""}U+='">'}U+='<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix'+R+'">'+(/all|left/.test(R)&&j==0?n?b:g:"")+(/all|right/.test(R)&&j==0?n?g:b:"")+this._generateMonthYearHeader(e,p,d,c,h,j>0||I>0,A,O)+'</div><table class="ui-datepicker-calendar"><thead>'+"<tr>";var z=N?'<th class="ui-datepicker-week-col">'+this._get(e,"weekHeader")+"</th>":"";for(var W=0;W<7;W++){var X=(W+T)%7;z+="<th"+((W+T+6)%7>=5?' class="ui-datepicker-week-end"':"")+">"+'<span title="'+C[X]+'">'+L[X]+"</span></th>"}U+=z+"</tr></thead><tbody>";var V=this._getDaysInMonth(d,p);d==e.selectedYear&&p==e.selectedMonth&&(e.selectedDay=Math.min(e.selectedDay,V));var J=(this._getFirstDayOfMonth(d,p)-T+7)%7,K=Math.ceil((J+V)/7),Q=f?this.maxRows>K?this.maxRows:K:K;this.maxRows=Q;var G=this._daylightSavingAdjust(new Date(d,p,1-J));for(var Y=0;Y<Q;Y++){U+="<tr>";var Z=N?'<td class="ui-datepicker-week-col">'+this._get(e,"calculateWeek")(G)+"</td>":"";for(var W=0;W<7;W++){var et=M?M.apply(e.input?e.input[0]:null,[G]):[!0,""],tt=G.getMonth()!=p,nt=tt&&!D||!et[0]||c&&G<c||h&&G>h;Z+='<td class="'+((W+T+6)%7>=5?" ui-datepicker-week-end":"")+(tt?" ui-datepicker-other-month":"")+(G.getTime()==q.getTime()&&p==e.selectedMonth&&e._keyEvent||H.getTime()==G.getTime()&&H.getTime()==q.getTime()?" "+this._dayOverClass:"")+(nt?" "+this._unselectableClass+" ui-state-disabled":"")+(tt&&!_?"":" "+et[1]+(G.getTime()==l.getTime()?" "+this._currentClass:"")+(G.getTime()==t.getTime()?" ui-datepicker-today":""))+'"'+((!tt||_)&&et[2]?' title="'+et[2]+'"':"")+(nt?"":' data-handler="selectDay" data-event="click" data-month="'+G.getMonth()+'" data-year="'+G.getFullYear()+'"')+">"+(tt&&!_?"&#xa0;":nt?'<span class="ui-state-default">'+G.getDate()+"</span>":'<a class="ui-state-default'+(G.getTime()==t.getTime()?" ui-state-highlight":"")+(G.getTime()==l.getTime()?" ui-state-active":"")+(tt?" ui-priority-secondary":"")+'" href="#">'+G.getDate()+"</a>")+"</td>",G.setDate(G.getDate()+1),G=this._daylightSavingAdjust(G)}U+=Z+"</tr>"}p++,p>11&&(p=0,d++),U+="</tbody></table>"+(f?"</div>"+(o[0]>0&&I==o[1]-1?'<div class="ui-datepicker-row-break"></div>':""):""),F+=U}B+=F}return B+=x+($.ui.ie6&&!e.inline?'<iframe src="javascript:false;" class="ui-datepicker-cover" frameborder="0"></iframe>':""),e._keyEvent=!1,B},_generateMonthYearHeader:function(e,t,n,r,i,s,o,u){var a=this._get(e,"changeMonth"),f=this._get(e,"changeYear"),l=this._get(e,"showMonthAfterYear"),c='<div class="ui-datepicker-title">',h="";if(s||!a)h+='<span class="ui-datepicker-month">'+o[t]+"</span>";else{var p=r&&r.getFullYear()==n,d=i&&i.getFullYear()==n;h+='<select class="ui-datepicker-month" data-handler="selectMonth" data-event="change">';for(var v=0;v<12;v++)(!p||v>=r.getMonth())&&(!d||v<=i.getMonth())&&(h+='<option value="'+v+'"'+(v==t?' selected="selected"':"")+">"+u[v]+"</option>");h+="</select>"}l||(c+=h+(s||!a||!f?"&#xa0;":""));if(!e.yearshtml){e.yearshtml="";if(s||!f)c+='<span class="ui-datepicker-year">'+n+"</span>";else{var m=this._get(e,"yearRange").split(":"),g=(new Date).getFullYear(),y=function(e){var t=e.match(/c[+-].*/)?n+parseInt(e.substring(1),10):e.match(/[+-].*/)?g+parseInt(e,10):parseInt(e,10);return isNaN(t)?g:t},b=y(m[0]),w=Math.max(b,y(m[1]||""));b=r?Math.max(b,r.getFullYear()):b,w=i?Math.min(w,i.getFullYear()):w,e.yearshtml+='<select class="ui-datepicker-year" data-handler="selectYear" data-event="change">';for(;b<=w;b++)e.yearshtml+='<option value="'+b+'"'+(b==n?' selected="selected"':"")+">"+b+"</option>";e.yearshtml+="</select>",c+=e.yearshtml,e.yearshtml=null}}return c+=this._get(e,"yearSuffix"),l&&(c+=(s||!a||!f?"&#xa0;":"")+h),c+="</div>",c},_adjustInstDate:function(e,t,n){var r=e.drawYear+(n=="Y"?t:0),i=e.drawMonth+(n=="M"?t:0),s=Math.min(e.selectedDay,this._getDaysInMonth(r,i))+(n=="D"?t:0),o=this._restrictMinMax(e,this._daylightSavingAdjust(new Date(r,i,s)));e.selectedDay=o.getDate(),e.drawMonth=e.selectedMonth=o.getMonth(),e.drawYear=e.selectedYear=o.getFullYear(),(n=="M"||n=="Y")&&this._notifyChange(e)},_restrictMinMax:function(e,t){var n=this._getMinMaxDate(e,"min"),r=this._getMinMaxDate(e,"max"),i=n&&t<n?n:t;return i=r&&i>r?r:i,i},_notifyChange:function(e){var t=this._get(e,"onChangeMonthYear");t&&t.apply(e.input?e.input[0]:null,[e.selectedYear,e.selectedMonth+1,e])},_getNumberOfMonths:function(e){var t=this._get(e,"numberOfMonths");return t==null?[1,1]:typeof t=="number"?[1,t]:t},_getMinMaxDate:function(e,t){return this._determineDate(e,this._get(e,t+"Date"),null)},_getDaysInMonth:function(e,t){return 32-this._daylightSavingAdjust(new Date(e,t,32)).getDate()},_getFirstDayOfMonth:function(e,t){return(new Date(e,t,1)).getDay()},_canAdjustMonth:function(e,t,n,r){var i=this._getNumberOfMonths(e),s=this._daylightSavingAdjust(new Date(n,r+(t<0?t:i[0]*i[1]),1));return t<0&&s.setDate(this._getDaysInMonth(s.getFullYear(),s.getMonth())),this._isInRange(e,s)},_isInRange:function(e,t){var n=this._getMinMaxDate(e,"min"),r=this._getMinMaxDate(e,"max");return(!n||t.getTime()>=n.getTime())&&(!r||t.getTime()<=r.getTime())},_getFormatConfig:function(e){var t=this._get(e,"shortYearCutoff");return t=typeof t!="string"?t:(new Date).getFullYear()%100+parseInt(t,10),{shortYearCutoff:t,dayNamesShort:this._get(e,"dayNamesShort"),dayNames:this._get(e,"dayNames"),monthNamesShort:this._get(e,"monthNamesShort"),monthNames:this._get(e,"monthNames")}},_formatDate:function(e,t,n,r){t||(e.currentDay=e.selectedDay,e.currentMonth=e.selectedMonth,e.currentYear=e.selectedYear);var i=t?typeof t=="object"?t:this._daylightSavingAdjust(new Date(r,n,t)):this._daylightSavingAdjust(new Date(e.currentYear,e.currentMonth,e.currentDay));return this.formatDate(this._get(e,"dateFormat"),i,this._getFormatConfig(e))}}),$.fn.datepicker=function(e){if(!this.length)return this;$.datepicker.initialized||($(document).mousedown($.datepicker._checkExternalClick).find(document.body).append($.datepicker.dpDiv),$.datepicker.initialized=!0);var t=Array.prototype.slice.call(arguments,1);return typeof e!="string"||e!="isDisabled"&&e!="getDate"&&e!="widget"?e=="option"&&arguments.length==2&&typeof arguments[1]=="string"?$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this[0]].concat(t)):this.each(function(){typeof e=="string"?$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this].concat(t)):$.datepicker._attachDatepicker(this,e)}):$.datepicker["_"+e+"Datepicker"].apply($.datepicker,[this[0]].concat(t))},$.datepicker=new Datepicker,$.datepicker.initialized=!1,$.datepicker.uuid=(new Date).getTime(),$.datepicker.version="1.9.2",window["DP_jQuery_"+dpuuid]=$})(jQuery);
+;
 
 /**
  * Timeago is a jQuery plugin that makes it easy to support automatically
@@ -10555,6 +10556,1635 @@ $.fn.timeEntry = function(options) {
 $.timeEntry = new TimeEntry(); // Singleton instance
 
 })(jQuery);
+;
+
+/*
+ * jQuery Iframe Transport Plugin 1.5
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2011, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+/*jslint unparam: true, nomen: true */
+/*global define, window, document */
+
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define(['jquery'], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function ($) {
+    'use strict';
+
+    // Helper variable to create unique names for the transport iframes:
+    var counter = 0;
+
+    // The iframe transport accepts three additional options:
+    // options.fileInput: a jQuery collection of file input fields
+    // options.paramName: the parameter name for the file form data,
+    //  overrides the name property of the file input field(s),
+    //  can be a string or an array of strings.
+    // options.formData: an array of objects with name and value properties,
+    //  equivalent to the return data of .serializeArray(), e.g.:
+    //  [{name: 'a', value: 1}, {name: 'b', value: 2}]
+    $.ajaxTransport('iframe', function (options) {
+        if (options.async && (options.type === 'POST' || options.type === 'GET')) {
+            var form,
+                iframe;
+            return {
+                send: function (_, completeCallback) {
+                    form = $('<form style="display:none;"></form>');
+                    form.attr('accept-charset', options.formAcceptCharset);
+                    // javascript:false as initial iframe src
+                    // prevents warning popups on HTTPS in IE6.
+                    // IE versions below IE8 cannot set the name property of
+                    // elements that have already been added to the DOM,
+                    // so we set the name along with the iframe HTML markup:
+                    iframe = $(
+                        '<iframe src="javascript:false;" name="iframe-transport-' +
+                            (counter += 1) + '"></iframe>'
+                    ).bind('load', function () {
+                        var fileInputClones,
+                            paramNames = $.isArray(options.paramName) ?
+                                    options.paramName : [options.paramName];
+                        iframe
+                            .unbind('load')
+                            .bind('load', function () {
+                                var response;
+                                // Wrap in a try/catch block to catch exceptions thrown
+                                // when trying to access cross-domain iframe contents:
+                                try {
+                                    response = iframe.contents();
+                                    // Google Chrome and Firefox do not throw an
+                                    // exception when calling iframe.contents() on
+                                    // cross-domain requests, so we unify the response:
+                                    if (!response.length || !response[0].firstChild) {
+                                        throw new Error();
+                                    }
+                                } catch (e) {
+                                    response = undefined;
+                                }
+                                // The complete callback returns the
+                                // iframe content document as response object:
+                                completeCallback(
+                                    200,
+                                    'success',
+                                    {'iframe': response}
+                                );
+                                // Fix for IE endless progress bar activity bug
+                                // (happens on form submits to iframe targets):
+                                $('<iframe src="javascript:false;"></iframe>')
+                                    .appendTo(form);
+                                form.remove();
+                            });
+                        form
+                            .prop('target', iframe.prop('name'))
+                            .prop('action', options.url)
+                            .prop('method', options.type);
+                        if (options.formData) {
+                            $.each(options.formData, function (index, field) {
+                                $('<input type="hidden"/>')
+                                    .prop('name', field.name)
+                                    .val(field.value)
+                                    .appendTo(form);
+                            });
+                        }
+                        if (options.fileInput && options.fileInput.length &&
+                                options.type === 'POST') {
+                            fileInputClones = options.fileInput.clone();
+                            // Insert a clone for each file input field:
+                            options.fileInput.after(function (index) {
+                                return fileInputClones[index];
+                            });
+                            if (options.paramName) {
+                                options.fileInput.each(function (index) {
+                                    $(this).prop(
+                                        'name',
+                                        paramNames[index] || options.paramName
+                                    );
+                                });
+                            }
+                            // Appending the file input fields to the hidden form
+                            // removes them from their original location:
+                            form
+                                .append(options.fileInput)
+                                .prop('enctype', 'multipart/form-data')
+                                // enctype must be set as encoding for IE:
+                                .prop('encoding', 'multipart/form-data');
+                        }
+                        form.submit();
+                        // Insert the file input fields at their original location
+                        // by replacing the clones with the originals:
+                        if (fileInputClones && fileInputClones.length) {
+                            options.fileInput.each(function (index, input) {
+                                var clone = $(fileInputClones[index]);
+                                $(input).prop('name', clone.prop('name'));
+                                clone.replaceWith(input);
+                            });
+                        }
+                    });
+                    form.append(iframe).appendTo(document.body);
+                },
+                abort: function () {
+                    if (iframe) {
+                        // javascript:false as iframe src aborts the request
+                        // and prevents warning popups on HTTPS in IE6.
+                        // concat is used to avoid the "Script URL" JSLint error:
+                        iframe
+                            .unbind('load')
+                            .prop('src', 'javascript'.concat(':false;'));
+                    }
+                    if (form) {
+                        form.remove();
+                    }
+                }
+            };
+        }
+    });
+
+    // The iframe transport returns the iframe content document as response.
+    // The following adds converters from iframe to text, json, html, and script:
+    $.ajaxSetup({
+        converters: {
+            'iframe text': function (iframe) {
+                return $(iframe[0].body).text();
+            },
+            'iframe json': function (iframe) {
+                return $.parseJSON($(iframe[0].body).text());
+            },
+            'iframe html': function (iframe) {
+                return $(iframe[0].body).html();
+            },
+            'iframe script': function (iframe) {
+                return $.globalEval($(iframe[0].body).text());
+            }
+        }
+    });
+
+}));
+;
+
+/*
+ * jQuery File Upload Plugin 5.19.4
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+/*jslint nomen: true, unparam: true, regexp: true */
+/*global define, window, document, File, Blob, FormData, location */
+
+(function (factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery',
+            'jquery.ui.widget'
+        ], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function ($) {
+    'use strict';
+
+    // The FileReader API is not actually used, but works as feature detection,
+    // as e.g. Safari supports XHR file uploads via the FormData API,
+    // but not non-multipart XHR file uploads:
+    $.support.xhrFileUpload = !!(window.XMLHttpRequestUpload && window.FileReader);
+    $.support.xhrFormDataFileUpload = !!window.FormData;
+
+    // The fileupload widget listens for change events on file input fields defined
+    // via fileInput setting and paste or drop events of the given dropZone.
+    // In addition to the default jQuery Widget methods, the fileupload widget
+    // exposes the "add" and "send" methods, to add or directly send files using
+    // the fileupload API.
+    // By default, files added via file input selection, paste, drag & drop or
+    // "add" method are uploaded immediately, but it is possible to override
+    // the "add" callback option to queue file uploads.
+    $.widget('blueimp.fileupload', {
+
+        options: {
+            // The drop target element(s), by the default the complete document.
+            // Set to null to disable drag & drop support:
+            dropZone: $(document),
+            // The paste target element(s), by the default the complete document.
+            // Set to null to disable paste support:
+            pasteZone: $(document),
+            // The file input field(s), that are listened to for change events.
+            // If undefined, it is set to the file input fields inside
+            // of the widget element on plugin initialization.
+            // Set to null to disable the change listener.
+            fileInput: undefined,
+            // By default, the file input field is replaced with a clone after
+            // each input field change event. This is required for iframe transport
+            // queues and allows change events to be fired for the same file
+            // selection, but can be disabled by setting the following option to false:
+            replaceFileInput: true,
+            // The parameter name for the file form data (the request argument name).
+            // If undefined or empty, the name property of the file input field is
+            // used, or "files[]" if the file input name property is also empty,
+            // can be a string or an array of strings:
+            paramName: undefined,
+            // By default, each file of a selection is uploaded using an individual
+            // request for XHR type uploads. Set to false to upload file
+            // selections in one request each:
+            singleFileUploads: true,
+            // To limit the number of files uploaded with one XHR request,
+            // set the following option to an integer greater than 0:
+            limitMultiFileUploads: undefined,
+            // Set the following option to true to issue all file upload requests
+            // in a sequential order:
+            sequentialUploads: false,
+            // To limit the number of concurrent uploads,
+            // set the following option to an integer greater than 0:
+            limitConcurrentUploads: undefined,
+            // Set the following option to true to force iframe transport uploads:
+            forceIframeTransport: false,
+            // Set the following option to the location of a redirect url on the
+            // origin server, for cross-domain iframe transport uploads:
+            redirect: undefined,
+            // The parameter name for the redirect url, sent as part of the form
+            // data and set to 'redirect' if this option is empty:
+            redirectParamName: undefined,
+            // Set the following option to the location of a postMessage window,
+            // to enable postMessage transport uploads:
+            postMessage: undefined,
+            // By default, XHR file uploads are sent as multipart/form-data.
+            // The iframe transport is always using multipart/form-data.
+            // Set to false to enable non-multipart XHR uploads:
+            multipart: true,
+            // To upload large files in smaller chunks, set the following option
+            // to a preferred maximum chunk size. If set to 0, null or undefined,
+            // or the browser does not support the required Blob API, files will
+            // be uploaded as a whole.
+            maxChunkSize: undefined,
+            // When a non-multipart upload or a chunked multipart upload has been
+            // aborted, this option can be used to resume the upload by setting
+            // it to the size of the already uploaded bytes. This option is most
+            // useful when modifying the options object inside of the "add" or
+            // "send" callbacks, as the options are cloned for each file upload.
+            uploadedBytes: undefined,
+            // By default, failed (abort or error) file uploads are removed from the
+            // global progress calculation. Set the following option to false to
+            // prevent recalculating the global progress data:
+            recalculateProgress: true,
+            // Interval in milliseconds to calculate and trigger progress events:
+            progressInterval: 100,
+            // Interval in milliseconds to calculate progress bitrate:
+            bitrateInterval: 500,
+
+            // Additional form data to be sent along with the file uploads can be set
+            // using this option, which accepts an array of objects with name and
+            // value properties, a function returning such an array, a FormData
+            // object (for XHR file uploads), or a simple object.
+            // The form of the first fileInput is given as parameter to the function:
+            formData: function (form) {
+                return form.serializeArray();
+            },
+
+            // The add callback is invoked as soon as files are added to the fileupload
+            // widget (via file input selection, drag & drop, paste or add API call).
+            // If the singleFileUploads option is enabled, this callback will be
+            // called once for each file in the selection for XHR file uplaods, else
+            // once for each file selection.
+            // The upload starts when the submit method is invoked on the data parameter.
+            // The data object contains a files property holding the added files
+            // and allows to override plugin options as well as define ajax settings.
+            // Listeners for this callback can also be bound the following way:
+            // .bind('fileuploadadd', func);
+            // data.submit() returns a Promise object and allows to attach additional
+            // handlers using jQuery's Deferred callbacks:
+            // data.submit().done(func).fail(func).always(func);
+            add: function (e, data) {
+                data.submit();
+            },
+
+            // Other callbacks:
+            // Callback for the submit event of each file upload:
+            // submit: function (e, data) {}, // .bind('fileuploadsubmit', func);
+            // Callback for the start of each file upload request:
+            // send: function (e, data) {}, // .bind('fileuploadsend', func);
+            // Callback for successful uploads:
+            // done: function (e, data) {}, // .bind('fileuploaddone', func);
+            // Callback for failed (abort or error) uploads:
+            // fail: function (e, data) {}, // .bind('fileuploadfail', func);
+            // Callback for completed (success, abort or error) requests:
+            // always: function (e, data) {}, // .bind('fileuploadalways', func);
+            // Callback for upload progress events:
+            // progress: function (e, data) {}, // .bind('fileuploadprogress', func);
+            // Callback for global upload progress events:
+            // progressall: function (e, data) {}, // .bind('fileuploadprogressall', func);
+            // Callback for uploads start, equivalent to the global ajaxStart event:
+            // start: function (e) {}, // .bind('fileuploadstart', func);
+            // Callback for uploads stop, equivalent to the global ajaxStop event:
+            // stop: function (e) {}, // .bind('fileuploadstop', func);
+            // Callback for change events of the fileInput(s):
+            // change: function (e, data) {}, // .bind('fileuploadchange', func);
+            // Callback for paste events to the pasteZone(s):
+            // paste: function (e, data) {}, // .bind('fileuploadpaste', func);
+            // Callback for drop events of the dropZone(s):
+            // drop: function (e, data) {}, // .bind('fileuploaddrop', func);
+            // Callback for dragover events of the dropZone(s):
+            // dragover: function (e) {}, // .bind('fileuploaddragover', func);
+
+            // The plugin options are used as settings object for the ajax calls.
+            // The following are jQuery ajax settings required for the file uploads:
+            processData: false,
+            contentType: false,
+            cache: false
+        },
+
+        // A list of options that require a refresh after assigning a new value:
+        _refreshOptionsList: [
+            'fileInput',
+            'dropZone',
+            'pasteZone',
+            'multipart',
+            'forceIframeTransport'
+        ],
+
+        _BitrateTimer: function () {
+            this.timestamp = +(new Date());
+            this.loaded = 0;
+            this.bitrate = 0;
+            this.getBitrate = function (now, loaded, interval) {
+                var timeDiff = now - this.timestamp;
+                if (!this.bitrate || !interval || timeDiff > interval) {
+                    this.bitrate = (loaded - this.loaded) * (1000 / timeDiff) * 8;
+                    this.loaded = loaded;
+                    this.timestamp = now;
+                }
+                return this.bitrate;
+            };
+        },
+
+        _isXHRUpload: function (options) {
+            return !options.forceIframeTransport &&
+                ((!options.multipart && $.support.xhrFileUpload) ||
+                $.support.xhrFormDataFileUpload);
+        },
+
+        _getFormData: function (options) {
+            var formData;
+            if (typeof options.formData === 'function') {
+                return options.formData(options.form);
+            }
+            if ($.isArray(options.formData)) {
+                return options.formData;
+            }
+            if (options.formData) {
+                formData = [];
+                $.each(options.formData, function (name, value) {
+                    formData.push({name: name, value: value});
+                });
+                return formData;
+            }
+            return [];
+        },
+
+        _getTotal: function (files) {
+            var total = 0;
+            $.each(files, function (index, file) {
+                total += file.size || 1;
+            });
+            return total;
+        },
+
+        _onProgress: function (e, data) {
+            if (e.lengthComputable) {
+                var now = +(new Date()),
+                    total,
+                    loaded;
+                if (data._time && data.progressInterval &&
+                        (now - data._time < data.progressInterval) &&
+                        e.loaded !== e.total) {
+                    return;
+                }
+                data._time = now;
+                total = data.total || this._getTotal(data.files);
+                loaded = parseInt(
+                    e.loaded / e.total * (data.chunkSize || total),
+                    10
+                ) + (data.uploadedBytes || 0);
+                this._loaded += loaded - (data.loaded || data.uploadedBytes || 0);
+                data.lengthComputable = true;
+                data.loaded = loaded;
+                data.total = total;
+                data.bitrate = data._bitrateTimer.getBitrate(
+                    now,
+                    loaded,
+                    data.bitrateInterval
+                );
+                // Trigger a custom progress event with a total data property set
+                // to the file size(s) of the current upload and a loaded data
+                // property calculated accordingly:
+                this._trigger('progress', e, data);
+                // Trigger a global progress event for all current file uploads,
+                // including ajax calls queued for sequential file uploads:
+                this._trigger('progressall', e, {
+                    lengthComputable: true,
+                    loaded: this._loaded,
+                    total: this._total,
+                    bitrate: this._bitrateTimer.getBitrate(
+                        now,
+                        this._loaded,
+                        data.bitrateInterval
+                    )
+                });
+            }
+        },
+
+        _initProgressListener: function (options) {
+            var that = this,
+                xhr = options.xhr ? options.xhr() : $.ajaxSettings.xhr();
+            // Accesss to the native XHR object is required to add event listeners
+            // for the upload progress event:
+            if (xhr.upload) {
+                $(xhr.upload).bind('progress', function (e) {
+                    var oe = e.originalEvent;
+                    // Make sure the progress event properties get copied over:
+                    e.lengthComputable = oe.lengthComputable;
+                    e.loaded = oe.loaded;
+                    e.total = oe.total;
+                    that._onProgress(e, options);
+                });
+                options.xhr = function () {
+                    return xhr;
+                };
+            }
+        },
+
+        _initXHRData: function (options) {
+            var formData,
+                file = options.files[0],
+                // Ignore non-multipart setting if not supported:
+                multipart = options.multipart || !$.support.xhrFileUpload,
+                paramName = options.paramName[0];
+            options.headers = options.headers || {};
+            if (options.contentRange) {
+                options.headers['Content-Range'] = options.contentRange;
+            }
+            if (!multipart) {
+                options.headers['Content-Disposition'] = 'attachment; filename="' +
+                    encodeURI(file.name) + '"';
+                options.contentType = file.type;
+                options.data = options.blob || file;
+            } else if ($.support.xhrFormDataFileUpload) {
+                if (options.postMessage) {
+                    // window.postMessage does not allow sending FormData
+                    // objects, so we just add the File/Blob objects to
+                    // the formData array and let the postMessage window
+                    // create the FormData object out of this array:
+                    formData = this._getFormData(options);
+                    if (options.blob) {
+                        formData.push({
+                            name: paramName,
+                            value: options.blob
+                        });
+                    } else {
+                        $.each(options.files, function (index, file) {
+                            formData.push({
+                                name: options.paramName[index] || paramName,
+                                value: file
+                            });
+                        });
+                    }
+                } else {
+                    if (options.formData instanceof FormData) {
+                        formData = options.formData;
+                    } else {
+                        formData = new FormData();
+                        $.each(this._getFormData(options), function (index, field) {
+                            formData.append(field.name, field.value);
+                        });
+                    }
+                    if (options.blob) {
+                        options.headers['Content-Disposition'] = 'attachment; filename="' +
+                            encodeURI(file.name) + '"';
+                        options.headers['Content-Description'] = encodeURI(file.type);
+                        formData.append(paramName, options.blob, file.name);
+                    } else {
+                        $.each(options.files, function (index, file) {
+                            // Files are also Blob instances, but some browsers
+                            // (Firefox 3.6) support the File API but not Blobs.
+                            // This check allows the tests to run with
+                            // dummy objects:
+                            if ((window.Blob && file instanceof Blob) ||
+                                    (window.File && file instanceof File)) {
+                                formData.append(
+                                    options.paramName[index] || paramName,
+                                    file,
+                                    file.name
+                                );
+                            }
+                        });
+                    }
+                }
+                options.data = formData;
+            }
+            // Blob reference is not needed anymore, free memory:
+            options.blob = null;
+        },
+
+        _initIframeSettings: function (options) {
+            // Setting the dataType to iframe enables the iframe transport:
+            options.dataType = 'iframe ' + (options.dataType || '');
+            // The iframe transport accepts a serialized array as form data:
+            options.formData = this._getFormData(options);
+            // Add redirect url to form data on cross-domain uploads:
+            if (options.redirect && $('<a></a>').prop('href', options.url)
+                    .prop('host') !== location.host) {
+                options.formData.push({
+                    name: options.redirectParamName || 'redirect',
+                    value: options.redirect
+                });
+            }
+        },
+
+        _initDataSettings: function (options) {
+            if (this._isXHRUpload(options)) {
+                if (!this._chunkedUpload(options, true)) {
+                    if (!options.data) {
+                        this._initXHRData(options);
+                    }
+                    this._initProgressListener(options);
+                }
+                if (options.postMessage) {
+                    // Setting the dataType to postmessage enables the
+                    // postMessage transport:
+                    options.dataType = 'postmessage ' + (options.dataType || '');
+                }
+            } else {
+                this._initIframeSettings(options, 'iframe');
+            }
+        },
+
+        _getParamName: function (options) {
+            var fileInput = $(options.fileInput),
+                paramName = options.paramName;
+            if (!paramName) {
+                paramName = [];
+                fileInput.each(function () {
+                    var input = $(this),
+                        name = input.prop('name') || 'files[]',
+                        i = (input.prop('files') || [1]).length;
+                    while (i) {
+                        paramName.push(name);
+                        i -= 1;
+                    }
+                });
+                if (!paramName.length) {
+                    paramName = [fileInput.prop('name') || 'files[]'];
+                }
+            } else if (!$.isArray(paramName)) {
+                paramName = [paramName];
+            }
+            return paramName;
+        },
+
+        _initFormSettings: function (options) {
+            // Retrieve missing options from the input field and the
+            // associated form, if available:
+            if (!options.form || !options.form.length) {
+                options.form = $(options.fileInput.prop('form'));
+                // If the given file input doesn't have an associated form,
+                // use the default widget file input's form:
+                if (!options.form.length) {
+                    options.form = $(this.options.fileInput.prop('form'));
+                }
+            }
+            options.paramName = this._getParamName(options);
+            if (!options.url) {
+                options.url = options.form.prop('action') || location.href;
+            }
+            // The HTTP request method must be "POST" or "PUT":
+            options.type = (options.type || options.form.prop('method') || '')
+                .toUpperCase();
+            if (options.type !== 'POST' && options.type !== 'PUT') {
+                options.type = 'POST';
+            }
+            if (!options.formAcceptCharset) {
+                options.formAcceptCharset = options.form.attr('accept-charset');
+            }
+        },
+
+        _getAJAXSettings: function (data) {
+            var options = $.extend({}, this.options, data);
+            this._initFormSettings(options);
+            this._initDataSettings(options);
+            return options;
+        },
+
+        // Maps jqXHR callbacks to the equivalent
+        // methods of the given Promise object:
+        _enhancePromise: function (promise) {
+            promise.success = promise.done;
+            promise.error = promise.fail;
+            promise.complete = promise.always;
+            return promise;
+        },
+
+        // Creates and returns a Promise object enhanced with
+        // the jqXHR methods abort, success, error and complete:
+        _getXHRPromise: function (resolveOrReject, context, args) {
+            var dfd = $.Deferred(),
+                promise = dfd.promise();
+            context = context || this.options.context || promise;
+            if (resolveOrReject === true) {
+                dfd.resolveWith(context, args);
+            } else if (resolveOrReject === false) {
+                dfd.rejectWith(context, args);
+            }
+            promise.abort = dfd.promise;
+            return this._enhancePromise(promise);
+        },
+
+        // Parses the Range header from the server response
+        // and returns the uploaded bytes:
+        _getUploadedBytes: function (jqXHR) {
+            var range = jqXHR.getResponseHeader('Range'),
+                parts = range && range.split('-'),
+                upperBytesPos = parts && parts.length > 1 &&
+                    parseInt(parts[1], 10);
+            return upperBytesPos && upperBytesPos + 1;
+        },
+
+        // Uploads a file in multiple, sequential requests
+        // by splitting the file up in multiple blob chunks.
+        // If the second parameter is true, only tests if the file
+        // should be uploaded in chunks, but does not invoke any
+        // upload requests:
+        _chunkedUpload: function (options, testOnly) {
+            var that = this,
+                file = options.files[0],
+                fs = file.size,
+                ub = options.uploadedBytes = options.uploadedBytes || 0,
+                mcs = options.maxChunkSize || fs,
+                slice = file.slice || file.webkitSlice || file.mozSlice,
+                dfd = $.Deferred(),
+                promise = dfd.promise(),
+                jqXHR,
+                upload;
+            if (!(this._isXHRUpload(options) && slice && (ub || mcs < fs)) ||
+                    options.data) {
+                return false;
+            }
+            if (testOnly) {
+                return true;
+            }
+            if (ub >= fs) {
+                file.error = 'Uploaded bytes exceed file size';
+                return this._getXHRPromise(
+                    false,
+                    options.context,
+                    [null, 'error', file.error]
+                );
+            }
+            // The chunk upload method:
+            upload = function (i) {
+                // Clone the options object for each chunk upload:
+                var o = $.extend({}, options);
+                o.blob = slice.call(
+                    file,
+                    ub,
+                    ub + mcs
+                );
+                // Store the current chunk size, as the blob itself
+                // will be dereferenced after data processing:
+                o.chunkSize = o.blob.size;
+                // Expose the chunk bytes position range:
+                o.contentRange = 'bytes ' + ub + '-' +
+                    (ub + o.chunkSize - 1) + '/' + fs;
+                // Process the upload data (the blob and potential form data):
+                that._initXHRData(o);
+                // Add progress listeners for this chunk upload:
+                that._initProgressListener(o);
+                jqXHR = ($.ajax(o) || that._getXHRPromise(false, o.context))
+                    .done(function (result, textStatus, jqXHR) {
+                        ub = that._getUploadedBytes(jqXHR) ||
+                            (ub + o.chunkSize);
+                        // Create a progress event if upload is done and
+                        // no progress event has been invoked for this chunk:
+                        if (!o.loaded) {
+                            that._onProgress($.Event('progress', {
+                                lengthComputable: true,
+                                loaded: ub - o.uploadedBytes,
+                                total: ub - o.uploadedBytes
+                            }), o);
+                        }
+                        options.uploadedBytes = o.uploadedBytes = ub;
+                        if (ub < fs) {
+                            // File upload not yet complete,
+                            // continue with the next chunk:
+                            upload();
+                        } else {
+                            dfd.resolveWith(
+                                o.context,
+                                [result, textStatus, jqXHR]
+                            );
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        dfd.rejectWith(
+                            o.context,
+                            [jqXHR, textStatus, errorThrown]
+                        );
+                    });
+            };
+            this._enhancePromise(promise);
+            promise.abort = function () {
+                return jqXHR.abort();
+            };
+            upload();
+            return promise;
+        },
+
+        _beforeSend: function (e, data) {
+            if (this._active === 0) {
+                // the start callback is triggered when an upload starts
+                // and no other uploads are currently running,
+                // equivalent to the global ajaxStart event:
+                this._trigger('start');
+                // Set timer for global bitrate progress calculation:
+                this._bitrateTimer = new this._BitrateTimer();
+            }
+            this._active += 1;
+            // Initialize the global progress values:
+            this._loaded += data.uploadedBytes || 0;
+            this._total += this._getTotal(data.files);
+        },
+
+        _onDone: function (result, textStatus, jqXHR, options) {
+            if (!this._isXHRUpload(options)) {
+                // Create a progress event for each iframe load:
+                this._onProgress($.Event('progress', {
+                    lengthComputable: true,
+                    loaded: 1,
+                    total: 1
+                }), options);
+            }
+            options.result = result;
+            options.textStatus = textStatus;
+            options.jqXHR = jqXHR;
+            this._trigger('done', null, options);
+        },
+
+        _onFail: function (jqXHR, textStatus, errorThrown, options) {
+            options.jqXHR = jqXHR;
+            options.textStatus = textStatus;
+            options.errorThrown = errorThrown;
+            this._trigger('fail', null, options);
+            if (options.recalculateProgress) {
+                // Remove the failed (error or abort) file upload from
+                // the global progress calculation:
+                this._loaded -= options.loaded || options.uploadedBytes || 0;
+                this._total -= options.total || this._getTotal(options.files);
+            }
+        },
+
+        _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
+            this._active -= 1;
+            options.textStatus = textStatus;
+            if (jqXHRorError && jqXHRorError.always) {
+                options.jqXHR = jqXHRorError;
+                options.result = jqXHRorResult;
+            } else {
+                options.jqXHR = jqXHRorResult;
+                options.errorThrown = jqXHRorError;
+            }
+            this._trigger('always', null, options);
+            if (this._active === 0) {
+                // The stop callback is triggered when all uploads have
+                // been completed, equivalent to the global ajaxStop event:
+                this._trigger('stop');
+                // Reset the global progress values:
+                this._loaded = this._total = 0;
+                this._bitrateTimer = null;
+            }
+        },
+
+        _onSend: function (e, data) {
+            var that = this,
+                jqXHR,
+                aborted,
+                slot,
+                pipe,
+                options = that._getAJAXSettings(data),
+                send = function () {
+                    that._sending += 1;
+                    // Set timer for bitrate progress calculation:
+                    options._bitrateTimer = new that._BitrateTimer();
+                    jqXHR = jqXHR || (
+                        ((aborted || that._trigger('send', e, options) === false) &&
+                        that._getXHRPromise(false, options.context, aborted)) ||
+                        that._chunkedUpload(options) || $.ajax(options)
+                    ).done(function (result, textStatus, jqXHR) {
+                        that._onDone(result, textStatus, jqXHR, options);
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        that._onFail(jqXHR, textStatus, errorThrown, options);
+                    }).always(function (jqXHRorResult, textStatus, jqXHRorError) {
+                        that._sending -= 1;
+                        that._onAlways(
+                            jqXHRorResult,
+                            textStatus,
+                            jqXHRorError,
+                            options
+                        );
+                        if (options.limitConcurrentUploads &&
+                                options.limitConcurrentUploads > that._sending) {
+                            // Start the next queued upload,
+                            // that has not been aborted:
+                            var nextSlot = that._slots.shift(),
+                                isPending;
+                            while (nextSlot) {
+                                // jQuery 1.6 doesn't provide .state(),
+                                // while jQuery 1.8+ removed .isRejected():
+                                isPending = nextSlot.state ?
+                                        nextSlot.state() === 'pending' :
+                                        !nextSlot.isRejected();
+                                if (isPending) {
+                                    nextSlot.resolve();
+                                    break;
+                                }
+                                nextSlot = that._slots.shift();
+                            }
+                        }
+                    });
+                    return jqXHR;
+                };
+            this._beforeSend(e, options);
+            if (this.options.sequentialUploads ||
+                    (this.options.limitConcurrentUploads &&
+                    this.options.limitConcurrentUploads <= this._sending)) {
+                if (this.options.limitConcurrentUploads > 1) {
+                    slot = $.Deferred();
+                    this._slots.push(slot);
+                    pipe = slot.pipe(send);
+                } else {
+                    pipe = (this._sequence = this._sequence.pipe(send, send));
+                }
+                // Return the piped Promise object, enhanced with an abort method,
+                // which is delegated to the jqXHR object of the current upload,
+                // and jqXHR callbacks mapped to the equivalent Promise methods:
+                pipe.abort = function () {
+                    aborted = [undefined, 'abort', 'abort'];
+                    if (!jqXHR) {
+                        if (slot) {
+                            slot.rejectWith(options.context, aborted);
+                        }
+                        return send();
+                    }
+                    return jqXHR.abort();
+                };
+                return this._enhancePromise(pipe);
+            }
+            return send();
+        },
+
+        _onAdd: function (e, data) {
+            var that = this,
+                result = true,
+                options = $.extend({}, this.options, data),
+                limit = options.limitMultiFileUploads,
+                paramName = this._getParamName(options),
+                paramNameSet,
+                paramNameSlice,
+                fileSet,
+                i;
+            if (!(options.singleFileUploads || limit) ||
+                    !this._isXHRUpload(options)) {
+                fileSet = [data.files];
+                paramNameSet = [paramName];
+            } else if (!options.singleFileUploads && limit) {
+                fileSet = [];
+                paramNameSet = [];
+                for (i = 0; i < data.files.length; i += limit) {
+                    fileSet.push(data.files.slice(i, i + limit));
+                    paramNameSlice = paramName.slice(i, i + limit);
+                    if (!paramNameSlice.length) {
+                        paramNameSlice = paramName;
+                    }
+                    paramNameSet.push(paramNameSlice);
+                }
+            } else {
+                paramNameSet = paramName;
+            }
+            data.originalFiles = data.files;
+            $.each(fileSet || data.files, function (index, element) {
+                var newData = $.extend({}, data);
+                newData.files = fileSet ? element : [element];
+                newData.paramName = paramNameSet[index];
+                newData.submit = function () {
+                    newData.jqXHR = this.jqXHR =
+                        (that._trigger('submit', e, this) !== false) &&
+                        that._onSend(e, this);
+                    return this.jqXHR;
+                };
+                result = that._trigger('add', e, newData);
+                return result;
+            });
+            return result;
+        },
+
+        _replaceFileInput: function (input) {
+            var inputClone = input.clone(true);
+            $('<form></form>').append(inputClone)[0].reset();
+            // Detaching allows to insert the fileInput on another form
+            // without loosing the file input value:
+            input.after(inputClone).detach();
+            // Avoid memory leaks with the detached file input:
+            $.cleanData(input.unbind('remove'));
+            // Replace the original file input element in the fileInput
+            // elements set with the clone, which has been copied including
+            // event handlers:
+            this.options.fileInput = this.options.fileInput.map(function (i, el) {
+                if (el === input[0]) {
+                    return inputClone[0];
+                }
+                return el;
+            });
+            // If the widget has been initialized on the file input itself,
+            // override this.element with the file input clone:
+            if (input[0] === this.element[0]) {
+                this.element = inputClone;
+            }
+        },
+
+        _handleFileTreeEntry: function (entry, path) {
+            var that = this,
+                dfd = $.Deferred(),
+                errorHandler = function (e) {
+                    if (e && !e.entry) {
+                        e.entry = entry;
+                    }
+                    // Since $.when returns immediately if one
+                    // Deferred is rejected, we use resolve instead.
+                    // This allows valid files and invalid items
+                    // to be returned together in one set:
+                    dfd.resolve([e]);
+                },
+                dirReader;
+            path = path || '';
+            if (entry.isFile) {
+                if (entry._file) {
+                    // Workaround for Chrome bug #149735
+                    entry._file.relativePath = path;
+                    dfd.resolve(entry._file);
+                } else {
+                    entry.file(function (file) {
+                        file.relativePath = path;
+                        dfd.resolve(file);
+                    }, errorHandler);
+                }
+            } else if (entry.isDirectory) {
+                dirReader = entry.createReader();
+                dirReader.readEntries(function (entries) {
+                    that._handleFileTreeEntries(
+                        entries,
+                        path + entry.name + '/'
+                    ).done(function (files) {
+                        dfd.resolve(files);
+                    }).fail(errorHandler);
+                }, errorHandler);
+            } else {
+                // Return an empy list for file system items
+                // other than files or directories:
+                dfd.resolve([]);
+            }
+            return dfd.promise();
+        },
+
+        _handleFileTreeEntries: function (entries, path) {
+            var that = this;
+            return $.when.apply(
+                $,
+                $.map(entries, function (entry) {
+                    return that._handleFileTreeEntry(entry, path);
+                })
+            ).pipe(function () {
+                return Array.prototype.concat.apply(
+                    [],
+                    arguments
+                );
+            });
+        },
+
+        _getDroppedFiles: function (dataTransfer) {
+            dataTransfer = dataTransfer || {};
+            var items = dataTransfer.items;
+            if (items && items.length && (items[0].webkitGetAsEntry ||
+                    items[0].getAsEntry)) {
+                return this._handleFileTreeEntries(
+                    $.map(items, function (item) {
+                        var entry;
+                        if (item.webkitGetAsEntry) {
+                            entry = item.webkitGetAsEntry();
+                            if (entry) {
+                                // Workaround for Chrome bug #149735:
+                                entry._file = item.getAsFile();
+                            }
+                            return entry;
+                        }
+                        return item.getAsEntry();
+                    })
+                );
+            }
+            return $.Deferred().resolve(
+                $.makeArray(dataTransfer.files)
+            ).promise();
+        },
+
+        _getSingleFileInputFiles: function (fileInput) {
+            fileInput = $(fileInput);
+            var entries = fileInput.prop('webkitEntries') ||
+                    fileInput.prop('entries'),
+                files,
+                value;
+            if (entries && entries.length) {
+                return this._handleFileTreeEntries(entries);
+            }
+            files = $.makeArray(fileInput.prop('files'));
+            if (!files.length) {
+                value = fileInput.prop('value');
+                if (!value) {
+                    return $.Deferred().resolve([]).promise();
+                }
+                // If the files property is not available, the browser does not
+                // support the File API and we add a pseudo File object with
+                // the input value as name with path information removed:
+                files = [{name: value.replace(/^.*\\/, '')}];
+            } else if (files[0].name === undefined && files[0].fileName) {
+                // File normalization for Safari 4 and Firefox 3:
+                $.each(files, function (index, file) {
+                    file.name = file.fileName;
+                    file.size = file.fileSize;
+                });
+            }
+            return $.Deferred().resolve(files).promise();
+        },
+
+        _getFileInputFiles: function (fileInput) {
+            if (!(fileInput instanceof $) || fileInput.length === 1) {
+                return this._getSingleFileInputFiles(fileInput);
+            }
+            return $.when.apply(
+                $,
+                $.map(fileInput, this._getSingleFileInputFiles)
+            ).pipe(function () {
+                return Array.prototype.concat.apply(
+                    [],
+                    arguments
+                );
+            });
+        },
+
+        _onChange: function (e) {
+            var that = this,
+                data = {
+                    fileInput: $(e.target),
+                    form: $(e.target.form)
+                };
+            this._getFileInputFiles(data.fileInput).always(function (files) {
+                data.files = files;
+                if (that.options.replaceFileInput) {
+                    that._replaceFileInput(data.fileInput);
+                }
+                if (that._trigger('change', e, data) !== false) {
+                    that._onAdd(e, data);
+                }
+            });
+        },
+
+        _onPaste: function (e) {
+            var cbd = e.originalEvent.clipboardData,
+                items = (cbd && cbd.items) || [],
+                data = {files: []};
+            $.each(items, function (index, item) {
+                var file = item.getAsFile && item.getAsFile();
+                if (file) {
+                    data.files.push(file);
+                }
+            });
+            if (this._trigger('paste', e, data) === false ||
+                    this._onAdd(e, data) === false) {
+                return false;
+            }
+        },
+
+        _onDrop: function (e) {
+            e.preventDefault();
+            var that = this,
+                dataTransfer = e.dataTransfer = e.originalEvent.dataTransfer,
+                data = {};
+            this._getDroppedFiles(dataTransfer).always(function (files) {
+                data.files = files;
+                if (that._trigger('drop', e, data) !== false) {
+                    that._onAdd(e, data);
+                }
+            });
+        },
+
+        _onDragOver: function (e) {
+            var dataTransfer = e.dataTransfer = e.originalEvent.dataTransfer;
+            if (this._trigger('dragover', e) === false) {
+                return false;
+            }
+            if (dataTransfer) {
+                dataTransfer.dropEffect = 'copy';
+            }
+            e.preventDefault();
+        },
+
+        _initEventHandlers: function () {
+            if (this._isXHRUpload(this.options)) {
+                this._on(this.options.dropZone, {
+                    dragover: this._onDragOver,
+                    drop: this._onDrop
+                });
+                this._on(this.options.pasteZone, {
+                    paste: this._onPaste
+                });
+            }
+            this._on(this.options.fileInput, {
+                change: this._onChange
+            });
+        },
+
+        _destroyEventHandlers: function () {
+            this._off(this.options.dropZone, 'dragover drop');
+            this._off(this.options.pasteZone, 'paste');
+            this._off(this.options.fileInput, 'change');
+        },
+
+        _setOption: function (key, value) {
+            var refresh = $.inArray(key, this._refreshOptionsList) !== -1;
+            if (refresh) {
+                this._destroyEventHandlers();
+            }
+            this._super(key, value);
+            if (refresh) {
+                this._initSpecialOptions();
+                this._initEventHandlers();
+            }
+        },
+
+        _initSpecialOptions: function () {
+            var options = this.options;
+            if (options.fileInput === undefined) {
+                options.fileInput = this.element.is('input[type="file"]') ?
+                        this.element : this.element.find('input[type="file"]');
+            } else if (!(options.fileInput instanceof $)) {
+                options.fileInput = $(options.fileInput);
+            }
+            if (!(options.dropZone instanceof $)) {
+                options.dropZone = $(options.dropZone);
+            }
+            if (!(options.pasteZone instanceof $)) {
+                options.pasteZone = $(options.pasteZone);
+            }
+        },
+
+        _create: function () {
+            var options = this.options;
+            // Initialize options set via HTML5 data-attributes:
+            $.extend(options, $(this.element[0].cloneNode(false)).data());
+            this._initSpecialOptions();
+            this._slots = [];
+            this._sequence = this._getXHRPromise(true);
+            this._sending = this._active = this._loaded = this._total = 0;
+            this._initEventHandlers();
+        },
+
+        _destroy: function () {
+            this._destroyEventHandlers();
+        },
+
+        // This method is exposed to the widget API and allows adding files
+        // using the fileupload API. The data parameter accepts an object which
+        // must have a files property and can contain additional options:
+        // .fileupload('add', {files: filesList});
+        add: function (data) {
+            var that = this;
+            if (!data || this.options.disabled) {
+                return;
+            }
+            if (data.fileInput && !data.files) {
+                this._getFileInputFiles(data.fileInput).always(function (files) {
+                    data.files = files;
+                    that._onAdd(null, data);
+                });
+            } else {
+                data.files = $.makeArray(data.files);
+                this._onAdd(null, data);
+            }
+        },
+
+        // This method is exposed to the widget API and allows sending files
+        // using the fileupload API. The data parameter accepts an object which
+        // must have a files or fileInput property and can contain additional options:
+        // .fileupload('send', {files: filesList});
+        // The method returns a Promise object for the file upload call.
+        send: function (data) {
+            if (data && !this.options.disabled) {
+                if (data.fileInput && !data.files) {
+                    var that = this,
+                        dfd = $.Deferred(),
+                        promise = dfd.promise(),
+                        jqXHR,
+                        aborted;
+                    promise.abort = function () {
+                        aborted = true;
+                        if (jqXHR) {
+                            return jqXHR.abort();
+                        }
+                        dfd.reject(null, 'abort', 'abort');
+                        return promise;
+                    };
+                    this._getFileInputFiles(data.fileInput).always(
+                        function (files) {
+                            if (aborted) {
+                                return;
+                            }
+                            data.files = files;
+                            jqXHR = that._onSend(null, data).then(
+                                function (result, textStatus, jqXHR) {
+                                    dfd.resolve(result, textStatus, jqXHR);
+                                },
+                                function (jqXHR, textStatus, errorThrown) {
+                                    dfd.reject(jqXHR, textStatus, errorThrown);
+                                }
+                            );
+                        }
+                    );
+                    return this._enhancePromise(promise);
+                }
+                data.files = $.makeArray(data.files);
+                if (data.files.length) {
+                    return this._onSend(null, data);
+                }
+            }
+            return this._getXHRPromise(false, data && data.context);
+        }
+
+    });
+
+}));
+;
+
+/*
+ * Cloudinary's jQuery library - v1.0.2 
+ * Copyright Cloudinary
+ * see https://github.com/cloudinary/cloudinary_js
+ */
+
+(function( $ ) {
+  var SHARED_CDN = "d3jpl91pxevbkh.cloudfront.net";
+  function option_consume(options, option_name, default_value) {
+    var result = options[option_name];
+    delete options[option_name];
+    return typeof(result) == 'undefined' ? default_value : result;
+  }
+  function build_array(arg) {
+    return $.isArray(arg) ? arg : [arg];
+  }
+  function present(value) {
+    return typeof value != 'undefined' && ("" + value).length > 0;
+  } 
+  function generate_transformation_string(options) {
+    var width = options['width'];
+    var height = options['height'];
+    var size = option_consume(options, 'size');
+    if (size) {
+      var split_size = size.split("x");
+      options['width'] = width = split_size[0];
+      options['height'] = height = split_size[1];  
+    }       
+    var has_layer = options.overlay || options.underlay;
+     
+    var crop = option_consume(options, 'crop');
+    var angle = build_array(option_consume(options, 'angle')).join(".");
+
+    var no_html_sizes = has_layer || present(angle) || crop == "fit" || crop == "limit";
+     
+    if (width && (no_html_sizes || parseFloat(width) < 1)) delete options['width'];
+    if (height && (no_html_sizes || parseFloat(height) < 1)) delete options['height'];
+    if (!crop && !has_layer) width = height = undefined;
+
+    var background = option_consume(options, 'background');
+    background = background && background.replace(/^#/, 'rgb:');
+
+    var base_transformations = build_array(option_consume(options, 'transformation', []));
+    var named_transformation = [];
+    if ($.grep(base_transformations, function(bs) {return typeof(bs) == 'object';}).length > 0) {
+      base_transformations = $.map(base_transformations, function(base_transformation) {
+        return typeof(base_transformation) == 'object' ? generate_transformation_string($.extend({}, base_transformation)) : generate_transformation_string({transformation: base_transformation});
+      });
+    } else {
+      named_transformation = base_transformations.join(".");
+      base_transformations = [];
+    }
+    var effect = option_consume(options, "effect");
+    if ($.isArray(effect)) effect = effect.join(":");
+    
+    var border = option_consume(options, "border")
+    if ($.isPlainObject(border)) { 
+      var border_width = "" + (border.width || 2);
+      var border_color = (border.color || "black").replace(/^#/, 'rgb:');
+      border = border_width + "px_solid_" + border_color;
+    }
+    
+    var flags = build_array(option_consume(options, 'flags')).join(".");
+
+    var params = [['c', crop], ['t', named_transformation], ['w', width], ['h', height], ['b', background], ['e', effect], ['a', angle], ['bo', border], ['fl', flags]];
+    var simple_params = {
+      x: 'x',
+      y: 'y',
+      radius: 'r',
+      gravity: 'g',
+      quality: 'q',
+      prefix: 'p',
+      default_image: 'd',
+      underlay: 'u',
+      overlay: 'l',
+      fetch_format: 'f',
+      density: 'dn',
+      page: 'pg',
+      color_space: 'cl',
+      delay: 'dl'
+    };
+    for (var param in simple_params) {
+      params.push([simple_params[param], option_consume(options, param)]);
+    }
+    params.sort(function(a, b){return a[0]<b[0] ? -1  : (a[0]>b[0] ? 1 : 0);});
+    params.push([option_consume(options, 'raw_transformation')]);
+    var transformation = $.map($.grep(params, function(param) {
+      var value = param[param.length-1];
+      return present(value);
+    }), function(param) {
+      return param.join("_");
+    }).join(",");
+    base_transformations.push(transformation);
+    return $.grep(base_transformations, present).join("/");
+  }
+  var dummyImg = undefined;
+  function absolutize(url) {
+    if (!dummyImg) dummyImg = document.createElement("img");
+    dummyImg.src = url;
+    url = dummyImg.src;
+    dummyImg.src = null;
+    return url;
+  }
+  function cloudinary_url(public_id, options) { 
+    options = options || {};
+    var type = option_consume(options, 'type', 'upload');
+    if (type == 'fetch') {
+      options.fetch_format = options.fetch_format || option_consume(options, 'format');
+    }
+    var transformation = generate_transformation_string(options);
+    var resource_type = option_consume(options, 'resource_type', "image");
+    var version = option_consume(options, 'version');
+    var format = option_consume(options, 'format');
+    var cloud_name = option_consume(options, 'cloud_name', $.cloudinary.config().cloud_name);
+    if (!cloud_name) throw "Unknown cloud_name";
+    var private_cdn = option_consume(options, 'private_cdn', $.cloudinary.config().private_cdn);    
+    var secure_distribution = option_consume(options, 'secure_distribution', $.cloudinary.config().secure_distribution);    
+    var cname = option_consume(options, 'cname', $.cloudinary.config().cname);
+    var cdn_subdomain = option_consume(options, 'cdn_subdomain', $.cloudinary.config().cdn_subdomain);
+    var secure = window.location.protocol == 'https:'; 
+    if (secure && !secure_distribution) {
+      if (private_cdn) {
+        throw "secure_distribution not defined";
+      } else {
+        secure_distribution = SHARED_CDN; 
+      }
+    }
+
+    if (type == 'fetch') {
+      public_id = absolutize(public_id); 
+    }
+    
+    if (public_id.match(/^https?:/)) {
+      if (type == "upload" || type == "asset") return public_id;
+      public_id = encodeURIComponent(public_id).replace(/%3A/g, ":").replace(/%2F/g, "/"); 
+    } else if (format) {
+      public_id += "." + format;
+    }
+
+    prefix = window.location.protocol + "//";
+    var subdomain = cdn_subdomain ? "a" + ((crc32(public_id) % 5) + 1) + "." : "";
+    
+    if (secure) {
+      prefix += secure_distribution;
+    } else {
+      host = cname || (private_cdn ? cloud_name + "-res.cloudinary.com" : "res.cloudinary.com" );
+      prefix += subdomain + host;
+    }
+    if (!private_cdn) prefix += "/" + cloud_name;
+    var url = [prefix, resource_type, type, transformation, version ? "v" + version : "",
+               public_id].join("/").replace(/([^:])\/+/g, '$1/');
+    return url;
+  }
+  function html_only_attributes(options) {
+    var width = option_consume(options, 'html_width');
+    var height = option_consume(options, 'html_height');
+    if (width) options['width'] = width;
+    if (height) options['height'] = height;    
+  }
+  var cloudinary_config = undefined;
+  $.cloudinary = {
+    config: function(new_config, new_value) {
+      if (!cloudinary_config) {
+        cloudinary_config = {};
+        $('meta[name^="cloudinary_"]').each(function() {
+          cloudinary_config[$(this).attr('name').replace("cloudinary_", '')] = $(this).attr('content');
+        });
+      }
+      if (typeof(new_value) != 'undefined') {
+        cloudinary_config[new_config] = new_value;
+      } else if (typeof(new_config) == 'string') {
+        return cloudinary_config[new_config];
+      } else if (new_config) {
+        cloudinary_config = new_config;
+      }
+      return cloudinary_config;
+    },
+    url: function(public_id, options) {
+      options = $.extend({}, options);
+      return cloudinary_url(public_id, options);    
+    },    
+    url_internal: cloudinary_url,
+    image: function(public_id, options) {
+      options = $.extend({}, options);
+      var url = cloudinary_url(public_id, options);
+      html_only_attributes(options);
+      return $('<img/>').attr(options).attr('src', url);      
+    },
+    facebook_profile_image: function(public_id, options) {
+      return $.cloudinary.image(public_id, $.extend({type: 'facebook'}, options));
+    },
+    twitter_profile_image: function(public_id, options) {
+      return $.cloudinary.image(public_id, $.extend({type: 'twitter'}, options));
+    },
+    twitter_name_profile_image: function(public_id, options) {
+      return $.cloudinary.image(public_id, $.extend({type: 'twitter_name'}, options));
+    },
+    gravatar_image: function(public_id, options) {
+      return $.cloudinary.image(public_id, $.extend({type: 'gravatar'}, options));
+    },
+    fetch_image: function(public_id, options) {
+      return $.cloudinary.image(public_id, $.extend({type: 'fetch'}, options));
+    }
+  };
+  $.fn.cloudinary = function(options) {
+    this.filter('img').each(function() {
+      var img_options = $.extend({width: $(this).attr('width'), height: $(this).attr('height'),
+                          src: $(this).attr('src')},
+                         $.extend($(this).data(), options));
+      var public_id = option_consume(img_options, 'source', option_consume(img_options, 'src')); 
+      var url = cloudinary_url(public_id, img_options);
+      html_only_attributes(img_options);
+      $(this).attr({src: url, width: img_options['width'], height: img_options['height']});
+    });
+    return this;
+  };
+  $.fn.fetchify = function(options) {
+    return this.cloudinary($.extend(options, {'type': 'fetch'}));
+  };
+})( jQuery );
+
+
+function utf8_encode (argString) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: sowberry
+    // +    tweaked by: Jack
+    // +   bugfixed by: Onno Marsman
+    // +   improved by: Yves Sucaet
+    // +   bugfixed by: Onno Marsman
+    // +   bugfixed by: Ulrich
+    // +   bugfixed by: Rafal Kukawski
+    // +   improved by: kirilloid
+    // *     example 1: utf8_encode('Kevin van Zonneveld');
+    // *     returns 1: 'Kevin van Zonneveld'
+
+    if (argString === null || typeof argString === "undefined") {
+        return "";
+    }
+
+    var string = (argString + ''); // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    var utftext = '',
+        start, end, stringl = 0;
+
+    start = end = 0;
+    stringl = string.length;
+    for (var n = 0; n < stringl; n++) {
+        var c1 = string.charCodeAt(n);
+        var enc = null;
+
+        if (c1 < 128) {
+            end++;
+        } else if (c1 > 127 && c1 < 2048) {
+            enc = String.fromCharCode((c1 >> 6) | 192, (c1 & 63) | 128);
+        } else {
+            enc = String.fromCharCode((c1 >> 12) | 224, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
+        }
+        if (enc !== null) {
+            if (end > start) {
+                utftext += string.slice(start, end);
+            }
+            utftext += enc;
+            start = end = n + 1;
+        }
+    }
+
+    if (end > start) {
+        utftext += string.slice(start, stringl);
+    }
+
+    return utftext;
+}
+
+function crc32 (str) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
+    // +   improved by: T0bsn
+    // +   improved by: http://stackoverflow.com/questions/2647935/javascript-crc32-function-and-php-crc32-not-matching
+    // -    depends on: utf8_encode
+    // *     example 1: crc32('Kevin van Zonneveld');
+    // *     returns 1: 1249991249
+    str = utf8_encode(str);
+    var table = "00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F 63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC 51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E 7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D 806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA 11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F 30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D";
+
+    var crc = 0;
+    var x = 0;
+    var y = 0;
+
+    crc = crc ^ (-1);
+    for (var i = 0, iTop = str.length; i < iTop; i++) {
+        y = (crc ^ str.charCodeAt(i)) & 0xFF;
+        x = "0x" + table.substr(y * 9, 8);
+        crc = (crc >>> 8) ^ x;
+    }
+
+    crc = crc ^ (-1);
+    //convert to unsigned 32-bit int if needed
+    if (crc < 0) {crc += 4294967296}
+    return crc;
+}
+
+(function( $ ) {
+  if (!$.fn.fileupload) {
+    return;
+  }
+  $.fn.cloudinary_fileupload = function(options) {
+    options = $.extend({
+      maxFileSize: 10000000,
+      dataType: 'json',
+      acceptFileTypes: /(\.|\/)(gif|jpe?g|png|bmp|ico)$/i,
+      headers: {"X-Requested-With": "XMLHttpRequest"}
+    }, options);
+    this.fileupload(options).bind("fileuploaddone", function(e, data) {
+      if (data.result.error) return;      
+      data.result.path = ["v", data.result.version, "/", data.result.public_id, 
+                          data.result.format ? "." + data.result.format : ""].join("");
+  
+      if (data.cloudinaryField && data.form.length > 0) {
+        var upload_info = [data.result.resource_type, "upload", data.result.path].join("/") + "#" + data.result.signature;  
+        var field = $(data.form).find('input[name="' + data.cloudinaryField + '"]');
+        if (field.length > 0) {
+          field.val(upload_info);
+        } else {
+          $('<input></input>').attr({type: "hidden", name: data.cloudinaryField}).val(upload_info).appendTo(data.form);
+        }
+      }
+      $(e.target).trigger('cloudinarydone', data);
+    });
+    if (!this.fileupload('option').url) {
+      var upload_url = "https://api.cloudinary.com/v1_1/" + $.cloudinary.config().cloud_name + "/upload";
+      this.fileupload('option', 'url', upload_url);
+    }
+    return this;
+  };
+  
+  $(function() {
+    $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+  });
+})( jQuery );
 ;
 
 /* ===================================================

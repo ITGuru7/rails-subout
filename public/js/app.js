@@ -1,5 +1,8 @@
+var subout;
 
-window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]).config([
+subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
+
+subout.config([
   "$routeProvider", function($routeProvider) {
     return $routeProvider.when("/sign_in", {
       templateUrl: "partials/sign_in.html",
@@ -28,14 +31,24 @@ window.subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices
   }
 ]);
 
-jQuery.timeago.settings.allowFuture = true;
+subout.run(function($templateCache, $http) {
+  return $http.get('partials/opportunity-form.html', {
+    cache: $templateCache
+  });
+});
+
+$.timeago.settings.allowFuture = true;
+
+$.cloudinary.config({
+  "cloud_name": "subout"
+});
 
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
 
-AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User) {
+AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
   var token, _ref;
   $rootScope.currentPath = function() {
     return $location.path();
@@ -51,6 +64,10 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $rootScope.company = Company.get({
       companyId: token.company_id,
       api_token: token.api_token
+    }, function(company) {
+      if (company.regions !== 'all') {
+        return $rootScope.allRegions = company.regions;
+      }
     });
     return $rootScope.user = User.get({
       userId: token.user_id,
@@ -76,13 +93,50 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $cookieStore.remove('token');
     return window.location.reload();
   };
-  $rootScope.allRegions = function() {
-    var regions;
-    regions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-    if ($rootScope.company.regions !== 'all') {
-      regions = $rootScope.company.regions.slice(0);
-    }
-    return regions;
+  $rootScope.allRegions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+  $rootScope.displayNewOpportunityForm = function() {
+    $rootScope.setModal('partials/opportunity-form.html');
+    return FileUploaderSignature.get({
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
+      $.cloudinary.config({
+        "cloud_name": "subout"
+      });
+      $fileProgressBar = $('#progress .bar');
+      $fileUploader = $("input.cloudinary-fileupload[type=file]");
+      $fileUploader.attr('data-form-data', JSON.stringify(data));
+      $fileUploader.cloudinary_fileupload({
+        progress: function(e, data) {
+          var progress;
+          progress = parseInt(data.loaded / data.total * 100, 10);
+          return $fileProgressBar.css('width', progress + '%');
+        }
+      });
+      previewUrl = function(data) {
+        return $.cloudinary.url(data.result.public_id, {
+          format: data.result.format,
+          crop: 'scale',
+          width: 200
+        });
+      };
+      setImageUpload = function(data) {
+        $("#modal form .image-preview").attr('src', previewUrl(data));
+        return $("#modal form #opportunity_image_id").val(data.result.public_id);
+      };
+      progressImageUpload = function(element, progressing) {
+        $('#modal form btn-primary').prop('disabled', !progressing);
+        $fileProgressBar.toggle(progressing);
+        return $(element).toggle(!progressing);
+      };
+      $fileUploader.bind('fileuploadstart', function(e, data) {
+        return progressImageUpload(this, true);
+      });
+      return $fileUploader.bind('cloudinarydone', function(e, data) {
+        progressImageUpload(this, false);
+        return setImageUpload(data);
+      });
+    });
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
@@ -103,13 +157,14 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
-  $scope.regions = $rootScope.allRegions();
+  $scope.regions = $rootScope.allRegions;
   return $scope.save = function() {
     var opportunity;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
     opportunity.end_date = $('#opportunity_end_date').val();
+    opportunity.image_id = $('#opportunity_image_id').val();
     if (opportunity._id) {
       return Auction.update({
         opportunityId: opportunity._id,
@@ -234,13 +289,18 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction)
 };
 
 DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunity) {
+  var updateRegionSelectBox;
   $scope.filters = Filter.query();
   $scope.query = "";
   $scope.filter = null;
   $scope.regionFilter = "All My Regions";
   $scope.opportunity = null;
-  $scope.regions = $rootScope.allRegions();
-  $scope.regions.unshift("All My Regions");
+  updateRegionSelectBox = function() {
+    $scope.regions = $rootScope.allRegions.slice(0);
+    return $scope.regions.unshift("All My Regions");
+  };
+  $scope.regions = updateRegionSelectBox();
+  $rootScope.$watch("allRegions", updateRegionSelectBox);
   $scope.winOpportunityNow = function(opportunity) {
     var bid;
     bid = {
@@ -289,7 +349,6 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     if ($scope.regionFilter === "All My Regions") {
       return true;
     }
-    console.log(event.region);
     return event.eventable.region === $scope.regionFilter;
   };
   $scope.setEventType = function(eventType) {
@@ -626,4 +685,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/favorite_invitations/:invitationId", {}, {});
 }).factory("GatewaySubscription", function($resource) {
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
+}).factory("FileUploaderSignature", function($resource) {
+  return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
 });

@@ -7431,3 +7431,7 @@ table.bid-history {
 .eventable-expanded dl {
   margin-bottom: 0;
 }
+.bar {
+  height: 18px;
+  background: green;
+}

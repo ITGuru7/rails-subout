@@ -12,6 +12,8 @@ Subout::Application.routes.draw do
         get :test_form, on: :collection
       end
 
+      resources :file_uploader_signatures, only: :new
+
       resources :tokens
       resources :users  do 
         collection do 

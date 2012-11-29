@@ -15,7 +15,7 @@ class Event
   end
 
   def self.for(company)
-    company.state_by_state_subscriber? ? self.in(regions: company.regions) : self.scoped
+    company.state_by_state_subscriber? ? self.in(region: company.regions) : self.scoped
   end
 
   private
