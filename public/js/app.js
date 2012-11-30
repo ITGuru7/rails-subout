@@ -152,7 +152,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     });
   };
   return $rootScope.dateOptions = {
-    dateFormat: 'mm/dd/yy'
+    dateFormat: 'dd/mm/yy'
   };
 };
 
