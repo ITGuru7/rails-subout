@@ -17,6 +17,7 @@ gem 'kiqstand'
 gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
 gem 'httparty'
 gem 'cloudinary'
+gem 'american_date'
 
 group :development, :test do
   gem "pry"
