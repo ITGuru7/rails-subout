@@ -4,7 +4,7 @@
     <h3>Opportunity - {{opportunity.name}}</h3>
   </div>
   <div class="modal-body">
-    <div class="actions" ng-show="opportunity.bids.length == 0">
+    <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
       <a data-target="#modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
       <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel</a>
     </div>
@@ -14,6 +14,10 @@
       <div class="control-label">(Closed)</div>
     </div>
     <dl class="dl-horizontal pull-left">
+      <div ng-show="opportunity.buyer._id == company._id">
+        <dt>Tracking ID:</dt>
+        <dd>{{opportunity.tracking_id}}</dd>
+      </div>
       <dt>Type:</dt>
       <dd>{{opportunity.type}}</dd>
       <dt>Description:</dt>

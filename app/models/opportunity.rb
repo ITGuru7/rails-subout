@@ -23,6 +23,7 @@ class Opportunity
   field :expired_notification_sent, type: Boolean, default: false
   field :for_favorites_only, type: Boolean, default: false
   field :image_id
+  field :tracking_id
 
   scope :active, where(:canceled => false)
 
