@@ -3,25 +3,17 @@ class Company
   field :name, type: String
   field :email, type: String
 
-  #address stuff TODO ask Tom about this
-  field :street_address, type: String
-  field :zip_code, type: String
-  field :city, type: String
-  field :state, type: String
 
   field :fleet_size, type: String
   field :since, type: String
   field :owner, type: String
   field :contact_name, type: String
+  field :contact_phone, type: String
   field :tpa, type: String
-
-  field :hq_location_id, type: String
-
-  #TODO remove this once we figure out where it's being used
-  field :active, type: Boolean
-
-  field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
-  field :member, type: Boolean, default: false
+  field :website
+  field :prelaunch, type: Boolean
+  field :logo_id
+  field :abbreviated_name
 
   field :favorite_supplier_ids, type: Array, default: []
   field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
@@ -30,7 +22,16 @@ class Company
 
   field :subscription_plan, default: 'free'
   field :regions, type: Array
-  field :website
+
+  #address stuff TODO ask Tom about this
+  field :street_address, type: String
+  field :zip_code, type: String
+  field :city, type: String
+  field :state, type: String
+  field :active, type: Boolean
+  field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
+  field :member, type: Boolean, default: false
+  field :hq_location_id, type: String
 
   attr_accessor :password, :password_confirmation, :gateway_subscription_id
 
@@ -47,8 +48,9 @@ class Company
 
   accepts_nested_attributes_for :users
 
-  validates_presence_of :name, :on => :create
-  validates_uniqueness_of :email
+  validates :name, presence: true
+  validates :abbreviated_name, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true
   validates_confirmation_of :password
 
   validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'

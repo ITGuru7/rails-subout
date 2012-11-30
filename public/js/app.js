@@ -25,6 +25,8 @@ subout.config([
     }).when("/favorites", {
       templateUrl: "partials/favorites.html",
       controller: FavoritesCtrl
+    }).when("/welcome-prelaunch", {
+      templateUrl: "partials/welcome-prelaunch.html"
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -49,7 +51,7 @@ angular.element(document).ready(function() {
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var token, _ref;
+  var publicPages, token, _ref;
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -74,12 +76,13 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       api_token: token.api_token
     });
   };
+  publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
     if ($cookieStore.get('token')) {
       token = $cookieStore.get('token');
       $rootScope.token = token;
       $rootScope.signedInSuccess(token);
-    } else if (["/sign_up", "/sign_in"].indexOf($location.path()) === -1) {
+    } else if (publicPages.indexOf($location.path()) === -1) {
       $location.path("/sign_in");
     }
   }
@@ -94,15 +97,9 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return window.location.reload();
   };
   $rootScope.allRegions = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-  $rootScope.displayNewOpportunityForm = function() {
-    $rootScope.setModal('partials/opportunity-form.html');
-    return FileUploaderSignature.get({
-      api_token: $rootScope.token.api_token
-    }, function(data) {
+  $rootScope.setupFileUploader = function() {
+    return FileUploaderSignature.get({}, function(data) {
       var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
-      $.cloudinary.config({
-        "cloud_name": "subout"
-      });
       $fileProgressBar = $('#progress .bar');
       $fileUploader = $("input.cloudinary-fileupload[type=file]");
       $fileUploader.attr('data-form-data', JSON.stringify(data));
@@ -121,11 +118,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
         });
       };
       setImageUpload = function(data) {
-        $("#modal form .image-preview").attr('src', previewUrl(data));
-        return $("#modal form #opportunity_image_id").val(data.result.public_id);
+        $("form .image-preview").attr('src', previewUrl(data));
+        return $("form .file-upload-public-id").val(data.result.public_id);
       };
       progressImageUpload = function(element, progressing) {
-        $('#modal form btn-primary').prop('disabled', !progressing);
+        $('form btn-primary').prop('disabled', !progressing);
         $fileProgressBar.toggle(progressing);
         return $(element).toggle(!progressing);
       };
@@ -137,6 +134,10 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
         return setImageUpload(data);
       });
     });
+  };
+  $rootScope.displayNewOpportunityForm = function() {
+    $rootScope.setModal('partials/opportunity-form.html');
+    return $rootScope.setupFileUploader();
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
@@ -447,7 +448,7 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
         $rootScope.signedInSuccess(token);
         return $location.path("dashboard");
       } else {
-        return $scope.message = "Invalid username or password!";
+        return $scope.message = token.message;
       }
     });
   };
@@ -456,10 +457,12 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
   $scope.company = {};
   $scope.user = {};
+  $rootScope.setupFileUploader();
   if ($routeParams.invitation_id) {
     FavoriteInvitation.get({
       invitationId: $routeParams.invitation_id
     }, function(invitation) {
+      $scope.user.email = invitation.supplier_email;
       $scope.company.email = invitation.supplier_email;
       $scope.company.name = invitation.supplier_name;
       return $scope.company.created_from_invitation_id = invitation._id;
@@ -470,6 +473,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
     GatewaySubscription.get({
       subscriptionId: $routeParams.subscription_id
     }, function(subscription) {
+      $scope.user.email = subscription.email;
       $scope.company.email = subscription.email;
       $scope.company.name = subscription.organization;
       return $scope.company.gateway_subscription_id = subscription._id;
@@ -480,14 +484,14 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
     $location.path("/sign_in");
   }
   return $scope.signUp = function() {
-    $scope.user.email = $scope.company.email;
     $scope.company.users_attributes = {
       "0": $scope.user
     };
+    $scope.company.logo_id = $("#company_logo_id").val();
     return Company.save({
       company: $scope.company
     }, function() {
-      return $location.path("/sign_in").search({});
+      return $location.path("/welcome-prelaunch").search({});
     }, function(response) {
       return $scope.errorMessage = response.data.errors.join("<br />");
     });

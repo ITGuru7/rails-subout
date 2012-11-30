@@ -14,34 +14,20 @@
 			Sign Up
 		</legend>
 		<p class="alert alert-error" ng:show="errorMessage">{{errorMessage}}</p>
-		<div class="control-group">
-            <label for="email" class="control-label">Email</label>
+        <div class="control-group">
+            <label for="email" class="control-label">Login Email</label>
             <div class="controls">
               
               <input id="email" 
                     type="text"
                     class="input-xlarge"
-                    ng:model="company.email"
+                    ng:model="user.email"
                     required
                     autofocus
                     />
             </div>
         </div>
 
-        <div class="control-group">
-            <label for="name" class="control-label">Company Name</label>
-            <div class="controls">
-              
-              <input id="name"
-                    type="text"
-                    class="input-xlarge"
-                    ng:model="company.name"
-                    required
-                    autofocus
-                    />
-            </div>
-        </div>
-        
         <div class="control-group">
             <label for="password" class="control-label">Password</label>
             <div class="controls">
@@ -70,14 +56,16 @@
             </div>
         </div>
 
+        <hr />
+
         <div class="control-group">
-            <label for="street_address" class="control-label">Street Address</label>
+            <label for="name" class="control-label">Company Name</label>
             <div class="controls">
               
-              <input id="street_address"
+              <input id="name"
                     type="text"
                     class="input-xlarge"
-                    ng:model="company.street_address"
+                    ng:model="company.name"
                     required
                     autofocus
                     />
@@ -85,13 +73,13 @@
         </div>
 
         <div class="control-group">
-            <label for="zip_code" class="control-label">Zip Code</label>
+            <label for="abbreviated_name" class="control-label">Company Abbreviated Name</label>
             <div class="controls">
               
-              <input id="zip_code"
+              <input id="abbreviated_name"
                     type="text"
                     class="input-xlarge"
-                    ng:model="company.zip_code"
+                    ng:model="company.abbreviated_name"
                     required
                     autofocus
                     />
@@ -99,27 +87,120 @@
         </div>
 
         <div class="control-group">
-            <label for="city" class="control-label">City</label>
+            <label for="logo_id" class="control-label">Company Logo</label>
+
             <div class="controls">
-              
-              <input id="city"
-                    type="text"
-                    class="input-xlarge"
-                    ng:model="company.city"
-                    required
-                    autofocus
-                    />
+              <input class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+              <input type="hidden" id="company_logo_id" class="file-upload-public-id" ng-model="company.logo_id">
+              <div id="progress">
+                <div class="bar" style="width: 0%;"></div>
+              </div>
+              <img class="image-preview" ng-src="{{company.logo_url}}"/>
             </div>
         </div>
         
         <div class="control-group">
-            <label for="state" class="control-label">State</label>
+            <label for="fleet_size" class="control-label">Fleet Size</label>
             <div class="controls">
               
-              <input id="state"
+              <input id="fleet_size"
                     type="text"
                     class="input-xlarge"
-                    ng:model="company.state"
+                    ng:model="company.fleet_size"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="since" class="control-label">Since</label>
+            <div class="controls">
+              
+              <input id="since"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.since"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="owner" class="control-label">Owner</label>
+            <div class="controls">
+              
+              <input id="owner"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.owner"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="contact_name" class="control-label">Contact Name</label>
+            <div class="controls">
+              
+              <input id="contact_name"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.contact_name"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="contact_phone" class="control-label">Contact Phone</label>
+            <div class="controls">
+              
+              <input id="contact_phone"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.contact_phone"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="company_email" class="control-label">Contact Email</label>
+            <div class="controls">
+              
+              <input id="conpany_email" 
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.email"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="website" class="control-label">Website</label>
+            <div class="controls">
+              
+              <input id="website"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.website"
+                    required
+                    autofocus
+                    />
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="tpa" class="control-label">TPA</label>
+            <div class="controls">
+              
+              <input id="website"
+                    type="text"
+                    class="input-xlarge"
+                    ng:model="company.tpa"
                     required
                     autofocus
                     />

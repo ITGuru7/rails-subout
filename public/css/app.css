@@ -7435,3 +7435,6 @@ table.bid-history {
   height: 18px;
   background: green;
 }
+#welcome-prelaunch-message h2 {
+  color: #666550;
+}

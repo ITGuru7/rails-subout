@@ -17,6 +17,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def create
     company = Company.new(params[:company])
+    company.prelaunch = true
     if company.save
       respond_with_namespace(company)
     else
