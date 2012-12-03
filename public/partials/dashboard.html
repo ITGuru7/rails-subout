@@ -84,7 +84,7 @@
                         <dd><strong>${{event.eventable.win_it_now_price}}</strong></dd>
                       </div>
                     </dl>
-                    <div class="pull-right" ng-show="opportunity.bidable && opportunity.buyer_id != company._id">
+                    <div class="pull-right" ng-show="company.canBidOn(opportunity)">
                       <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
                       <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                     </div>

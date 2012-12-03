@@ -37,9 +37,10 @@ class Opportunity
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
-  validates_presence_of :start_date, :on => :create, :message => "can't be blank"
-  validates_presence_of :end_date, :on => :create, :message => "can't be blank"
-  validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
+  validates_presence_of :start_date
+  validates_presence_of :end_date
+  validates_presence_of :bidding_ends
+  validate :validate_buyer_region
 
   def self.send_expired_notification
     where(:bidding_ends.lte => Date.today, :expired_notification_sent => false).each do |auction|
@@ -87,5 +88,11 @@ class Opportunity
 
   def region
     self.regions.first
+  end
+
+  def validate_buyer_region
+    unless buyer.subscribed?(self.region)
+      errors.add :buyer_id, "cannot create an opportunity within this region"
+    end
   end
 end
