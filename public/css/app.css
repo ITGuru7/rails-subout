@@ -7422,14 +7422,18 @@ table.bid-history {
 .icon-part:before {
   content: "\f013";
 }
-.event-row {
+#activity-stream .event.expanded {
+  background: #e0f1db;
+  margin-bottom: 5px;
+}
+#activity-stream .event .event-summary {
   line-height: 30px;
 }
-.eventable-expanded {
-  margin-bottom: 20px;
+#activity-stream .event .event-summary .expand-collapse i {
+  cursor: pointer;
 }
-.eventable-expanded dl {
-  margin-bottom: 0;
+#activity-stream .event .eventable-details {
+  margin-bottom: 20px;
 }
 .bar {
   height: 18px;

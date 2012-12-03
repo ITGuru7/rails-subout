@@ -51,11 +51,12 @@
               </div>
 
               <section id="activity-stream">
-                <div class="row-fluid"
+                <div class="event row-fluid"
+                     ng-class="{expanded: event.selected}"
                      ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
-                  <div class="event-row">
+                  <div class="event-summary">
                     <span class="span3">
                       <i class="{{opportunity.icon}}" style="margin-right: 10px;"></i>
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
@@ -68,25 +69,38 @@
                       <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.name}}</a>
                       in {{event.eventable.region}}
 
-                      <div class="pull-right">
-                        <a ng-click="toggleEvent(event)">{{{true: 'Collapse'}[event.selected] || 'Expand'}}</a>
+                      <div class="pull-right expand-collapse">
+                        <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
                       </div>
                     </span>
                   </div>
-                  <div class="eventable-expanded" ng-show="event.selected" class="action-buttons">
-                    <dl class="dl-horizontal">
-                      <dt>Description:</dt>
-                      <dd>{{event.eventable.description}}</dd>
-                      <dt>Bidding Ends</dt>
-                      <dd>{{event.eventable.bidding_ends|date}}</dd>
-                      <div ng-show="event.eventable.quick_winnable">
-                        <dt>Buy now:</dt>
-                        <dd><strong>${{event.eventable.win_it_now_price}}</strong></dd>
+                  <div class="eventable-details" ng-show="event.selected" class="action-buttons">
+                    <div class="offset3 span9">
+                      <p>
+                        {{event.eventable.description}}
+                      </p>
+
+                      <p>
+                        <span>Departs:<span> {{event.eventable.start_date|date}} </br>
+                        <span>Arrives:<span> {{event.eventable.end_date|date}}
+                      </p>
+
+                      <p>
+                        <span>Created by:<span> {{event.actor.name}} </br>
+                        <span>Created on:<span> {{event.created_at|date}}
+                      </p>
+
+                      <p>
+                        <span>Bidding Ends:<span> {{event.eventable.bidding_ends|date}} </br>
+                        <div ng-show="event.eventable.quick_winnable">
+                          <span>Buy now:<span> ${{event.eventable.win_it_now_price}}
+                        </div>
+                      </p>
+
+                      <div class="pull-right" ng-show="company.canBidOn(opportunity)">
+                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
+                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                       </div>
-                    </dl>
-                    <div class="pull-right" ng-show="company.canBidOn(opportunity)">
-                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
-                      <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                     </div>
                     <div class="clearfix"></div>
                   </div>
