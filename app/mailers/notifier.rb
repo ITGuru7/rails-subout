@@ -1,4 +1,5 @@
 class Notifier < ActionMailer::Base
+  default :from => "noreply@subout.com"
   def send_known_favorite_invitation(buyer_id, supplier_id)
     @buyer = Company.find(buyer_id)
     @supplier = Company.find(supplier_id)

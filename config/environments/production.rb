@@ -65,5 +65,5 @@ Subout::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
-  DEFAULT_HOST_WITH_PORT = "suboutdev.herokuapp.com"
+  DEFAULT_HOST_WITH_PORT = "suboutapp.com"
 end
