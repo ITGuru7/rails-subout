@@ -7,11 +7,11 @@ class Chargify
   basic_auth 'FsikQqr_iR0tcokkv8db', 'x'
 
   def self.get_subscription(subscription_id)
-    self.class.get("/subscriptions/#{subscription_id}.json")
+    self.get("/subscriptions/#{subscription_id}.json")
   end
 
   def self.get_components(subscription_id)
-    self.class.get("/subscriptions/#{subscription_id}/components.json")
+    self.get("/subscriptions/#{subscription_id}/components.json")
   end
 end
 
