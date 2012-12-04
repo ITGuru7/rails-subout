@@ -403,6 +403,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $scope.userProfile = $rootScope.user;
   $scope.companyProfile = $rootScope.company;
+  $rootScope.setupFileUploader();
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
     $scope.userProfileMessage = "";
@@ -426,6 +427,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   return $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";
     $scope.companyProfileMessage = "";
+    $scope.companyProfile.logo_id = $("#company_logo_id").val();
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,

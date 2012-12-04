@@ -1,10 +1,10 @@
 class CompanySerializer < ActiveModel::Serializer
-  attributes :_id, :name, :email, :logo, :regions, :visible_regions, :website,
-    :fleet_size, :since, :owner, :contact_name, :tpa,
+  attributes :_id, :name, :email, :logo_url, :regions, :visible_regions, :website,
+    :fleet_size, :since, :owner, :contact_name, :tpa, :abbreviated_name, :contact_phone,
     :bids_count, :opportunities_count, :state_by_state_subscriber?
 
-  def logo
-    "img/company/#{company.id}.png"
+  def logo_url
+    Cloudinary::Utils.cloudinary_url(company.logo_id, width: 200, crop: :scale, format: 'png')
   end
 
   def bids_count

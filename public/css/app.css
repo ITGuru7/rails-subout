@@ -7427,13 +7427,32 @@ table.bid-history {
   margin-bottom: 5px;
 }
 #activity-stream .event .event-summary {
+  padding: 0 10px;
   line-height: 30px;
+}
+#activity-stream .event .event-summary span i {
+  margin-right: 5px;
+}
+#activity-stream .event .event-summary .event-action,
+#activity-stream .event .event-summary .event-region {
+  font-weight: bold;
 }
 #activity-stream .event .event-summary .expand-collapse i {
   cursor: pointer;
 }
 #activity-stream .event .eventable-details {
+  padding: 0 10px;
   margin-bottom: 20px;
+  color: #666550;
+}
+#activity-stream .event .eventable-details .description {
+  font-style: italic;
+}
+#activity-stream .event .eventable-details div span {
+  font-weight: bold;
+}
+#activity-stream .event .eventable-details div img {
+  margin-top: 6px;
 }
 .bar {
   height: 18px;
