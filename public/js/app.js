@@ -140,9 +140,21 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       });
     });
   };
-  $rootScope.displayNewOpportunityForm = function() {
+  $rootScope.displayNewBidForm = function(opportunity) {
+    $rootScope.bid = {};
+    $rootScope.setOpportunity(opportunity);
+    return $rootScope.setModal('partials/bid-new.html');
+  };
+  $rootScope.displayNewOpportunityForm = function(opportunity) {
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
+  };
+  $rootScope.displayNewFavoriteForm = function() {
+    $rootScope.$broadcast('clearNewFavoriteForm');
+    return $rootScope.setModal('partials/add-new-favorite.html');
+  };
+  $rootScope.clearOpportunity = function() {
+    return $rootScope.opportunity = {};
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
@@ -227,6 +239,12 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
 };
 
 NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, FavoriteInvitation) {
+  $scope.$on('clearNewFavoriteForm', function() {
+    $scope.supplierEmail = '';
+    $scope.showCompany = false;
+    $scope.showInvitation = false;
+    return $scope.companyNotFound = false;
+  });
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({

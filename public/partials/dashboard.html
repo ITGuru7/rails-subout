@@ -45,7 +45,7 @@
                             <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
-                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
               </div>
@@ -99,8 +99,8 @@
                       </div>
 
                       <div ng-show="company.canBidOn(opportunity)">
-                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/bid-new.html')">Bid</a>
-                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                        <a class="btn btn-primary btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                       </div>
                     </div>
                     <div class="span4">
