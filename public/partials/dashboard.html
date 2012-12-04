@@ -70,7 +70,7 @@
                       in <span class="event-region">{{event.eventable.region}}</span>
 
                       <div class="pull-right expand-collapse">
-                        <span class="reference-number" ng-show="event.selected">#268328A</span>
+                        <span class="reference-number" ng-show="event.selected">#{{event.eventable.reference_number}}</span>
                         <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
                       </div>
                     </span>

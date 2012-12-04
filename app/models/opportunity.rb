@@ -1,6 +1,9 @@
 class Opportunity
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Token
+
+  token field_name: :reference_number, retry: 5, length: 7, contains: :upper_alphanumeric
 
   field :name, type: String
   field :description, type: String

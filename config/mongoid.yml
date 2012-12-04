@@ -6,6 +6,8 @@ production:
       password: sub0utd3v
       hosts: 
         - alex.mongohq.com:10054
+      options:
+        safe: true
 
 development:
   # Configure available database sessions. (required)
