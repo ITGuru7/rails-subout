@@ -52,7 +52,7 @@ var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBid
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var ALL_REGIONS, publicPages, token, _ref;
+  var REGION_NAMES, p, publicPages, token, _ref;
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -68,7 +68,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       companyId: token.company_id,
       api_token: token.api_token
     }, function(company) {
-      if (company.regions !== 'all') {
+      if (company.state_by_state_subscriber) {
         return $rootScope.regions = company.regions;
       }
     });
@@ -97,8 +97,68 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $cookieStore.remove('token');
     return window.location.reload();
   };
-  ALL_REGIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-  $rootScope.regions = ALL_REGIONS.slice(0);
+  $rootScope.ALL_REGIONS = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "District of Columbia": "DC",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Missouri": "MO",
+    "Mississippi": "MS",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY"
+  };
+  REGION_NAMES = (function() {
+    var _results;
+    _results = [];
+    for (p in $rootScope.ALL_REGIONS) {
+      _results.push(p);
+    }
+    return _results;
+  })();
+  $rootScope.regions = REGION_NAMES.slice(0);
   $rootScope.setupFileUploader = function() {
     return FileUploaderSignature.get({}, function(data) {
       var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
@@ -173,7 +233,6 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
-  $scope.regions = $rootScope.regions;
   return $scope.save = function() {
     var opportunity;
     opportunity = $scope.opportunity;

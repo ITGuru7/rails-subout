@@ -67,7 +67,7 @@
                         {{actionDescription(action)}}
                       </span>
                       <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.abbreviated_name}}</a>
-                      in <span class="event-region">{{event.eventable.region}}</span>
+                      <span class="event-region">{{ALL_REGIONS[event.eventable.start_region]}}->{{ALL_REGIONS[event.eventable.end_region]}}</span>
 
                       <div class="pull-right expand-collapse">
                         <span class="reference-number" ng-show="event.selected">#{{event.eventable.reference_number}}</span>
