@@ -68,10 +68,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       api_token: token.api_token
     }, function(company) {
       if (company.regions !== 'all') {
-        $rootScope.paidRegions = company.regions;
-      }
-      if (company.visible_regions !== 'all') {
-        return $rootScope.visibleRegions = company.visible_regions;
+        return $rootScope.regions = company.regions;
       }
     });
     return $rootScope.user = User.get({
@@ -100,8 +97,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return window.location.reload();
   };
   ALL_REGIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
-  $rootScope.visibleRegions = ALL_REGIONS.slice(0);
-  $rootScope.paidRegions = ALL_REGIONS.slice(0);
+  $rootScope.regions = ALL_REGIONS.slice(0);
   $rootScope.setupFileUploader = function() {
     return FileUploaderSignature.get({}, function(data) {
       var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
@@ -175,7 +171,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
-  $scope.regions = $rootScope.paidRegions;
+  $scope.regions = $rootScope.regions;
   return $scope.save = function() {
     var opportunity;
     opportunity = $scope.opportunity;
@@ -320,11 +316,11 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
   $scope.regionFilter = "All My Regions";
   $scope.opportunity = null;
   updateRegionSelectBox = function() {
-    $scope.regions = $rootScope.visibleRegions.slice(0);
+    $scope.regions = $rootScope.regions.slice(0);
     return $scope.regions.unshift("All My Regions");
   };
   $scope.regions = updateRegionSelectBox();
-  $rootScope.$watch("visibleRegions", updateRegionSelectBox);
+  $rootScope.$watch("regions", updateRegionSelectBox);
   $scope.winOpportunityNow = function(opportunity) {
     var bid;
     bid = {
@@ -679,7 +675,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     }
   };
   Company.prototype.canSeeRegion = function(region) {
-    return this.visible_regions === "all" || __indexOf.call(this.visible_regions, region) >= 0;
+    return this.regions === "all" || __indexOf.call(this.regions, region) >= 0;
   };
   Company.prototype.canBidOn = function(opportunity) {
     var _ref;

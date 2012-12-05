@@ -15,7 +15,8 @@ class Event
   end
 
   def self.for(company)
-    company.visible_regions == "all" ? self.scoped : self.in(region: company.visible_regions)
+    # FIXME: Add events from favorite companies
+    company.regions == "all" ? self.scoped : self.in(region: company.regions)
   end
 
   private

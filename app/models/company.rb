@@ -22,7 +22,6 @@ class Company
 
   field :subscription_plan, default: 'free'
   field :regions, type: Array
-  field :visible_regions, type: Array
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
@@ -70,23 +69,11 @@ class Company
     Company.where(:id.in => self.favoriting_buyer_ids)
   end
 
-  def set_visible_regions
-    self.visible_regions = 'all'
-
-    return unless state_by_state_subscriber?
-
-    favorites_regions = favoriting_buyers.only(:regions).map(&:regions)
-    unless favorites_regions.include? 'all'
-      self.visible_regions = (self.regions + favorites_regions.flatten).uniq
-    end
-  end
-
   def add_favorite_supplier!(supplier)
     self.favorite_supplier_ids << supplier.id
     self.save
 
     supplier.favoriting_buyer_ids << self.id
-    supplier.set_visible_regions
     supplier.save
   end
 
@@ -95,7 +82,6 @@ class Company
     self.save
 
     supplier.favoriting_buyer_ids.delete( self.id )
-    supplier.set_visible_regions
     supplier.save
   end
 
@@ -140,13 +126,11 @@ class Company
 
   def set_subscription_info
     self.regions = created_from_subscription.regions
-    self.visible_regions = self.regions
     self.subscription_plan = created_from_subscription.product_handle
   end
 
   def accept_invitation!
     self.created_from_invitation.accept! 
-    self.visible_regions = created_from_invitation.buyer.regions
   end
 
   def confirm_subscription!
