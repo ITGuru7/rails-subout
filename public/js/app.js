@@ -48,7 +48,8 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl;
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl,
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
   var ALL_REGIONS, publicPages, token, _ref;
@@ -150,6 +151,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $rootScope.setModal('partials/add-new-favorite.html');
   };
   $rootScope.clearOpportunity = function() {
+    $("form .image-preview").attr('src', '');
     return $rootScope.opportunity = {};
   };
   $rootScope.setOpportunity = function(opportunity) {
@@ -366,10 +368,11 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     return event.action.type === $scope.eventType;
   };
   $scope.searchByRegion = function(event) {
+    var _ref;
     if ($scope.regionFilter === "All My Regions") {
       return true;
     }
-    return event.eventable.region === $scope.regionFilter;
+    return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
   };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {

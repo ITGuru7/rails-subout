@@ -19,6 +19,7 @@ gem 'httparty'
 gem 'cloudinary'
 gem 'american_date'
 gem 'mongoid_token', github: 'samnang/mongoid_token'
+gem 'geocoder'
 
 group :development, :test do
   gem "pry"

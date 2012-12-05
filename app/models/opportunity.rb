@@ -7,8 +7,8 @@ class Opportunity
 
   field :name, type: String
   field :description, type: String
-  field :starting_location, type: String
-  field :ending_location, type: String
+  field :start_location, type: String
+  field :end_location, type: String
   field :start_region
   field :end_region
   field :start_date, type: Date
@@ -34,8 +34,6 @@ class Opportunity
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
 
   has_one :event, :as => :eventable
-  has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
-  has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
   has_many :bids
 
   validates_presence_of :buyer_id
@@ -44,6 +42,8 @@ class Opportunity
   validates_presence_of :start_date
   validates_presence_of :end_date
   validates_presence_of :bidding_ends
+  validates_presence_of :start_location
+  validate :validate_locations
   validate :validate_buyer_region
 
   def self.send_expired_notification
@@ -88,6 +88,19 @@ class Opportunity
 
   def bidable?
     not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
+  end
+
+  def validate_locations
+    self.start_region = Geocoder.search(start_location).first.try(:state)
+
+    if end_location.blank?
+      self.end_region = self.start_region
+    else
+      self.end_region = Geocoder.search(end_location).first.try(:state)
+      errors.add :end_location, "is invalid" unless self.end_region
+    end
+
+    errors.add :start_location, "is invalid" unless self.start_region
   end
 
   def validate_buyer_region
