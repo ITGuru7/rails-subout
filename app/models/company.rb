@@ -106,8 +106,8 @@ class Company
     self.created_from_invitation.buyer
   end
 
-  def subscribed?(region)
-    self.national_subscriber? || self.regions.include?(region)
+  def subscribed?(regions)
+    self.national_subscriber? || (regions - self.regions).blank?
   end
 
   private

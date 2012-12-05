@@ -87,9 +87,9 @@
       </div>
 
       <div class="control-group">
-        <label for="opportunity_region" class="control-label">Region</label>
+        <label for="opportunity_start_region" class="control-label">Start Region</label>
         <div class="controls">
-          <select id="opportunity_region" ng-model="opportunity.region" ng-options="r for r in regions">
+          <select id="opportunity_start_region" ng-model="opportunity.start_region" ng-options="r for r in regions">
           </select>
         </div>
       </div>
@@ -98,6 +98,14 @@
         <label for="opportunity_starting_location_id" class="control-label">Starting location</label>
         <div class="controls">
           <input id="opportunity_starting_location_id" type="text" ng-model="opportunity.starting_location_id" size="30" class="input-xlarge">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="opportunity_end_region" class="control-label">End Region</label>
+        <div class="controls">
+          <select id="opportunity_end_region" ng-model="opportunity.end_region" ng-options="r for r in regions">
+          </select>
         </div>
       </div>
 

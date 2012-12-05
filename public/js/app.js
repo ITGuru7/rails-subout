@@ -338,7 +338,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     var channel;
     channel = $rootScope.pusher.subscribe('event');
     channel.bind('created', function(event) {
-      if ($rootScope.company.canSeeRegion(event.eventable.region)) {
+      if ($rootScope.company.canSeeEvent(event)) {
         $scope.events.unshift(event);
         return $scope.$apply();
       }
@@ -674,12 +674,32 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return "Nationwide";
     }
   };
-  Company.prototype.canSeeRegion = function(region) {
-    return this.regions === "all" || __indexOf.call(this.regions, region) >= 0;
+  Company.prototype.canSeeEvent = function(event) {
+    var _ref;
+    if (this.subscribedRegions(event.regions)) {
+      return true;
+    }
+    return _ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
+  };
+  Company.prototype.subscribedRegions = function(regions) {
+    var region;
+    if (this.regions === "all") {
+      return true;
+    }
+    return ((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = regions.length; _i < _len; _i++) {
+        region = regions[_i];
+        if (__indexOf.call(this.regions, region) >= 0) {
+          _results.push(region);
+        }
+      }
+      return _results;
+    }).call(this)).length > 0;
   };
   Company.prototype.canBidOn = function(opportunity) {
-    var _ref;
-    return opportunity.bidable && opportunity.buyer_id !== this._id && (!this.state_by_state_subscriber || (_ref = opportunity.region, __indexOf.call(this.regions, _ref) >= 0));
+    return opportunity.bidable && opportunity.buyer_id !== this._id;
   };
   return Company;
 }).factory("Token", function($resource) {

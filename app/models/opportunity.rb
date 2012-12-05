@@ -9,7 +9,8 @@ class Opportunity
   field :description, type: String
   field :starting_location, type: String
   field :ending_location, type: String
-  field :regions, type: Array, default: []
+  field :start_region
+  field :end_region
   field :start_date, type: Date
   field :start_time, type: String
   field :end_date, type: Date
@@ -52,6 +53,10 @@ class Opportunity
     end
   end
 
+  def regions
+    [self.start_region, self.end_region]
+  end
+
   def cancel!
     self.update_attributes(:canceled => true)
   end
@@ -85,16 +90,8 @@ class Opportunity
     not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
   end
 
-  def region=(value)
-    self.regions = [value]
-  end
-
-  def region
-    self.regions.first
-  end
-
   def validate_buyer_region
-    unless buyer.subscribed?(self.region)
+    unless buyer.subscribed?(regions)
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end
   end
