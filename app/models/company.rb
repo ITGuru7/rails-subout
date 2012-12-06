@@ -93,6 +93,10 @@ class Company
     subscription_plan == 'state-by-state-service'
   end
 
+  def national_subscriber? 
+    subscription_plan == 'national-service'
+  end
+
   def create_initial_user!
     return unless users.empty?
     users.create!(email: email, password: password)
@@ -100,6 +104,10 @@ class Company
 
   def inviter
     self.created_from_invitation.buyer
+  end
+
+  def subscribed?(regions)
+    self.national_subscriber? || (regions - self.regions).blank?
   end
 
   private

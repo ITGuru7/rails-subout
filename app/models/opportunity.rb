@@ -1,12 +1,16 @@
 class Opportunity
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Token
+
+  token field_name: :reference_number, retry: 5, length: 7, contains: :upper_alphanumeric
 
   field :name, type: String
   field :description, type: String
-  field :starting_location, type: String
-  field :ending_location, type: String
-  field :regions, type: Array, default: []
+  field :start_location, type: String
+  field :end_location, type: String
+  field :start_region
+  field :end_region
   field :start_date, type: Date
   field :start_time, type: String
   field :end_date, type: Date
@@ -30,22 +34,27 @@ class Opportunity
   belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
 
   has_one :event, :as => :eventable
-  has_one :starting_location, :class_name => "Location", :foreign_key => "starting_location_id"
-  has_one :ending_location, :class_name => "Location", :foreign_key => "ending_location_id"
   has_many :bids
 
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
-  validates_presence_of :start_date, :on => :create, :message => "can't be blank"
-  validates_presence_of :end_date, :on => :create, :message => "can't be blank"
-  validates_presence_of :bidding_ends, :on => :create, :message => "can't be blank"
+  validates_presence_of :start_date
+  validates_presence_of :end_date
+  validates_presence_of :bidding_ends
+  validates_presence_of :start_location
+  validate :validate_locations
+  validate :validate_buyer_region
 
   def self.send_expired_notification
     where(:bidding_ends.lte => Date.today, :expired_notification_sent => false).each do |auction|
       Notifier.delay.expired_auction_notification(auction.id)
       auction.update_attribute(:expired_notification_sent, true)
     end
+  end
+
+  def regions
+    [self.start_region, self.end_region]
   end
 
   def cancel!
@@ -81,11 +90,22 @@ class Opportunity
     not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
   end
 
-  def region=(value)
-    self.regions = [value]
+  def validate_locations
+    self.start_region = Geocoder.search(start_location).first.try(:state)
+
+    if end_location.blank?
+      self.end_region = self.start_region
+    else
+      self.end_region = Geocoder.search(end_location).first.try(:state)
+      errors.add :end_location, "is invalid" unless self.end_region
+    end
+
+    errors.add :start_location, "is invalid" unless self.start_region
   end
 
-  def region
-    self.regions.first
+  def validate_buyer_region
+    unless buyer.subscribed?(regions)
+      errors.add :buyer_id, "cannot create an opportunity within this region"
+    end
   end
 end
