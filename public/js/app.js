@@ -465,6 +465,10 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
       return event.eventable = Opportunity.get({
         api_token: $rootScope.token.api_token,
         opportunityId: event.eventable._id
+      }, function() {
+        return setTimeout((function() {
+          return $(".relative_time").timeago();
+        }), 1);
       });
     }
   };
