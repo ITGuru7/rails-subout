@@ -1,212 +1,212 @@
 <div id="page-settings" ng-controller="SettingCtrl">
-    <div class="modal-header">
-            <button data-dismiss="modal" class="close" type="button">x</button>
-            <h3>Settings</h3>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#user-login" data-toggle="tab">User Login</a></li>
+    <li><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
+    <li class="btn-close pull-right"><button data-dismiss="modal" class="close" type="button">x</button></li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="user-login">
+      <form ng:submit="saveUserProfile()" class="form-horizontal">
+          <fieldset>
+              <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
+              
+              <div class="control-group">
+                  <label for="email" class="control-label">Email</label>
+                  <div class="controls">
+                    
+                    <input id="email" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="userProfile.email"
+                          required
+                          autofocus
+                          />
+                  </div>
+              </div>
+              
+              <div class="control-group">
+                  <label for="current_password" class="control-label">Current Password</label>
+                  <div class="controls">
+                    
+                    <input id="current_password"
+                          type="password"
+                          class="input-xlarge"
+                          ng:model="userProfile.current_password"
+                          required
+                          autofocus
+                          />
+                  </div>
+              </div>
+              
+              <div class="control-group">
+                  <label for="password" class="control-label">New Password</label>
+                  <div class="controls">
+                    
+                    <input id="password"
+                          type="password"
+                          class="input-xlarge"
+                          ng:model="userProfile.password"
+                          autofocus
+                          />
+                  </div>
+              </div>
+
+              <div class="control-group">
+                  <label for="password_confirmation" class="control-label">Password Confirmation</label>
+                  <div class="controls">
+                    
+                    <input id="password_confirmation"
+                          type="password"
+                          class="input-xlarge"
+                          ng:model="userProfile.password_confirmation"
+                          autofocus
+                          />
+                  </div>
+              </div>
+
+              <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Save</button>
+              </div>
+      
+          </fieldset>
+      </form>
     </div>
-    <div class="modal-body">
-        <h3>{{company.name}}</h3>
-        <form ng:submit="saveUserProfile()" class="form-horizontal">
-            <fieldset>
-                <p class="alert alert-success" ng:show="userProfileMessage">{{userProfileMessage}}</p>
-                <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
-                
-                <div class="control-group">
-                    <label for="email" class="control-label">Email</label>
-                    <div class="controls">
-                      
-                      <input id="email" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="userProfile.email"
-                            required
-                            autofocus
-                            />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="current_password" class="control-label">Current Password</label>
-                    <div class="controls">
-                      
-                      <input id="current_password"
-                            type="password"
-                            class="input-xlarge"
-                            ng:model="userProfile.current_password"
-                            required
-                            autofocus
-                            />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="password" class="control-label">New Password</label>
-                    <div class="controls">
-                      
-                      <input id="password"
-                            type="password"
-                            class="input-xlarge"
-                            ng:model="userProfile.password"
-                            autofocus
-                            />
-                    </div>
-                </div>
+    <div class="tab-pane" id="company-profile">
+      <form ng:submit="saveCompanyProfile()" class="form-horizontal">
+          <fieldset>
+              <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
 
-                <div class="control-group">
-                    <label for="password_confirmation" class="control-label">Password Confirmation</label>
-                    <div class="controls">
-                      
-                      <input id="password_confirmation"
-                            type="password"
-                            class="input-xlarge"
-                            ng:model="userProfile.password_confirmation"
-                            autofocus
-                            />
-                    </div>
-                </div>
+              <div class="control-group">
+                  <label for="abbreviated_name" class="control-label">Company Abbreviated Name</label>
+                  <div class="controls">
+                    
+                    <input id="abbreviated_name"
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.abbreviated_name"
+                          required
+                          />
+                  </div>
+              </div>
 
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">Save</button>
-                    <button class="btn btn-info" type="button" ng-click="closeModal()">Cancel</button>
-                </div>
-        
-            </fieldset>
-        </form>
-        
-        <form ng:submit="saveCompanyProfile()" class="form-horizontal">
-            <fieldset>
-                <p class="alert alert-success" ng:show="companyProfileMessage">{{companyProfileMessage}}</p>
-                <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+              <div class="control-group">
+                  <label for="logo_id" class="control-label">Company Logo</label>
 
-                <div class="control-group">
-                    <label for="abbreviated_name" class="control-label">Company Abbreviated Name</label>
-                    <div class="controls">
-                      
-                      <input id="abbreviated_name"
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.abbreviated_name"
-                            required
-                            />
+                  <div class="controls">
+                    <input class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+                    <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+                    <div id="progress">
+                      <div class="bar" style="width: 0%;"></div>
                     </div>
-                </div>
+                    <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
+                  </div>
+              </div>
 
-                <div class="control-group">
-                    <label for="logo_id" class="control-label">Company Logo</label>
+              <div class="control-group">
+                  <label for="fleet-size" class="control-label">Fleet Size:</label>
+                  <div class="controls">
+                    
+                    <input id="fleet-size" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.fleet_size"
+                          />
+                  </div>
+              </div>
 
-                    <div class="controls">
-                      <input class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
-                      <input type="hidden" id="company_logo_id" class="file-upload-public-id" ng-model="company.logo_id">
-                      <div id="progress">
-                        <div class="bar" style="width: 0%;"></div>
-                      </div>
-                      <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
-                    </div>
-                </div>
+              
+              <div class="control-group">
+                  <label for="since" class="control-label">Since:</label>
+                  <div class="controls">
+                    
+                    <input id="since" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.since"
+                          />
+                  </div>
+              </div>
+     
+              <div class="control-group">
+                  <label for="owner" class="control-label">Owner:</label>
+                  <div class="controls">
+                    
+                    <input id="owner" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.owner"
+                          />
+                  </div>
+              </div>
+              
+              <div class="control-group">
+                  <label for="owner" class="control-label">Contact Name:</label>
+                  <div class="controls">
+                    
+                    <input id="contact" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.contact_name"
+                          />
+                  </div>
+              </div>
+              
+              <div class="control-group">
+                  <label for="contact_phone" class="control-label">Contact Phone</label>
+                  <div class="controls">
+                    
+                    <input id="contact_phone"
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.contact_phone"
+                          required
+                          autofocus
+                          />
+                  </div>
+              </div>
 
-                <div class="control-group">
-                    <label for="fleet-size" class="control-label">Fleet Size:</label>
-                    <div class="controls">
-                      
-                      <input id="fleet-size" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.fleet_size"
-                            />
-                    </div>
-                </div>
+              <div class="control-group">
+                  <label for="owner" class="control-label">Contact Email:</label>
+                  <div class="controls">
+                    
+                    <input id="contact" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.email"
+                          />
+                  </div>
+              </div>
+              
+              <div class="control-group">
+                  <label for="website" class="control-label">Website:</label>
+                  <div class="controls">
+                    <input id="website" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.website"
+                          />
+                  </div>
+              </div>
 
-                
-                <div class="control-group">
-                    <label for="since" class="control-label">Since:</label>
-                    <div class="controls">
-                      
-                      <input id="since" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.since"
-                            />
-                    </div>
-                </div>
-       
-                <div class="control-group">
-                    <label for="owner" class="control-label">Owner:</label>
-                    <div class="controls">
-                      
-                      <input id="owner" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.owner"
-                            />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="owner" class="control-label">Contact Name:</label>
-                    <div class="controls">
-                      
-                      <input id="contact" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.contact"
-                            />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="contact_phone" class="control-label">Contact Phone</label>
-                    <div class="controls">
-                      
-                      <input id="contact_phone"
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.contact_phone"
-                            required
-                            autofocus
-                            />
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="owner" class="control-label">Contact Email:</label>
-                    <div class="controls">
-                      
-                      <input id="contact" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.email"
-                            />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label for="website" class="control-label">Website:</label>
-                    <div class="controls">
-                      <input id="website" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.website"
-                            />
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="tpa" class="control-label">TPA:</label>
-                    <div class="controls">
-                      
-                      <input id="tpa" 
-                            type="text"
-                            class="input-xlarge"
-                            ng:model="companyProfile.tpa"
-                            />
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">Save</button>
-                    <button class="btn btn-info" type="button" ng-click="closeModal()">Cancel</button>
-                </div>
-        
-            </fieldset>
-        </form>
+              <div class="control-group">
+                  <label for="tpa" class="control-label">TPA:</label>
+                  <div class="controls">
+                    
+                    <input id="tpa" 
+                          type="text"
+                          class="input-xlarge"
+                          ng:model="companyProfile.tpa"
+                          />
+                  </div>
+              </div>
+              
+              <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Save</button>
+              </div>
+      
+          </fieldset>
+      </form>
     </div>
+  </div>
 </div>
