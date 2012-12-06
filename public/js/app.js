@@ -734,10 +734,13 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   };
   Company.prototype.canSeeEvent = function(event) {
     var _ref;
-    if (this.subscribedRegions(event.regions)) {
+    if (event.eventable_company_id === this._id) {
       return true;
     }
-    return _ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
+    if (_ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0) {
+      return true;
+    }
+    return !event.eventable.for_favorites_only && this.subscribedRegions(event.regions);
   };
   Company.prototype.subscribedRegions = function(regions) {
     var region;
