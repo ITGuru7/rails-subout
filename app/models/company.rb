@@ -31,7 +31,6 @@ class Company
   field :active, type: Boolean
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
-  field :hq_location_id, type: String
 
   attr_accessor :password, :password_confirmation, :gateway_subscription_id
 
@@ -42,8 +41,6 @@ class Company
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :opportunities
 
-  has_many :contacts
-  has_many :locations
   has_many :bids, foreign_key: 'bidder_id'
 
   accepts_nested_attributes_for :users
