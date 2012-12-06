@@ -42,14 +42,16 @@
       </div>
 
       <div class="control-group">
-        <label for="opportunity_ends" class="control-label">Bidding ends</label>
+        <label for="opportunity_bidding_ends" class="control-label">Bidding ends</label>
 
         <div class="controls">
-          <input id="opportunity_ends" type="text" ui-date="dateOptions" ui-date-format ng-model="opportunity.bidding_ends" size="10" maxlength="10" class="input-small" >
-          <span class="add-on"><i class="icon-calendar"></i></span>
+          <select id="opportunity_bidding_ends" ng-model="opportunity.bidding_duration_hrs">
+            <option value="6">in 6 hours</option>
+            <option value="12">in 12 hours</option>
+            <option value="24">in 1 day</option>
+            <option value="48">in 2 days</option>
+          </select>
         </div>
-
-
       </div>
 
       <div class="control-group">

@@ -38,7 +38,7 @@
               <div id="toolbar">
                   <div class="row-fluid">
                       <div class="pull-left span4">
-                        <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
+                        <h5 class="filter-title">{{filter.name || "All Listings"}}</h5>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
@@ -63,7 +63,7 @@
                     </span>
                     <span class="span9">
                       <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
-                      <span class="event-region">{{ALL_REGIONS[event.eventable.start_region]}}->{{ALL_REGIONS[event.eventable.end_region]}}</span>
+                      <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
                       <span class="event-action">
                         {{actionDescription(action)}}
                       </span>
@@ -92,7 +92,9 @@
                       </div>
 
                       <div>
-                        <span>Bidding Ends:</span> {{event.eventable.bidding_ends|date}} </br>
+                        <span>Bidding Ends:</span> 
+                        <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
+                        </br>
                         <div ng-show="event.eventable.quick_winnable">
                           <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
                         </div>
