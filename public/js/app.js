@@ -33,12 +33,6 @@ subout.config([
   }
 ]);
 
-subout.run(function($templateCache, $http) {
-  return $http.get('partials/opportunity-form.html', {
-    cache: $templateCache
-  });
-});
-
 $.timeago.settings.allowFuture = true;
 
 $.cloudinary.config({
@@ -482,7 +476,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $rootScope.setupFileUploader();
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
-    $scope.userProfileMessage = "";
     if ($scope.userProfile.password === $scope.userProfile.password_confirmation) {
       return User.update({
         userId: $rootScope.user._id,
@@ -492,7 +485,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
         $scope.userProfile.password = '';
         $scope.userProfile.current_password = '';
         $rootScope.user = $scope.userProfile;
-        return $scope.userProfileMessage = "Saved successfully";
+        return $rootScope.closeModal();
       }, function(error) {
         return $scope.userProfileError = "Invalid password or email!";
       });
@@ -502,7 +495,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
   return $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";
-    $scope.companyProfileMessage = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
     return Company.update({
       companyId: $rootScope.company._id,
@@ -510,7 +502,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
       api_token: $rootScope.token.api_token
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $scope.companyProfileMessage = "Saved successfully";
+      return $rootScope.closeModal();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });

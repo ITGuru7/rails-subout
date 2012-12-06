@@ -7463,3 +7463,13 @@ table.bid-history {
 #welcome-prelaunch-message h2 {
   color: #666550;
 }
+#page-settings ul.nav-tabs li {
+  font-size: 18px;
+}
+#page-settings .tab-content {
+  padding: 15px;
+}
+#page-settings li.btn-close {
+  margin-top: 5px;
+  margin-right: 10px;
+}
