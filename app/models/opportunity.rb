@@ -29,6 +29,7 @@ class Opportunity
   field :for_favorites_only, type: Boolean, default: false
   field :image_id
   field :tracking_id
+  field :contact_phone, type: String
 
   scope :active, where(:canceled => false)
 

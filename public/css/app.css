@@ -7473,3 +7473,33 @@ table.bid-history {
   margin-top: 5px;
   margin-right: 10px;
 }
+#opportunity-form .modal-header {
+  background-color: #378bac;
+}
+#opportunity-form .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#opportunity-form .control-group {
+  color: #666550;
+  margin-bottom: 14px;
+}
+#opportunity-form .control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
+#opportunity-form .control-group label .help-block {
+  margin-top: 0;
+  text-style: italic;
+}
+#opportunity-form .control-group label.checkbox {
+  margin-bottom: 10px;
+}
+#opportunity-form .control-group.two-lines .controls {
+  margin-top: 7px;
+}
+#opportunity-form .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+}
