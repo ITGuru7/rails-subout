@@ -7502,4 +7502,24 @@ table.bid-history {
   border: 0;
   background-color: white;
   margin: 0;
+  padding-top: 5px;
+}
+#bid-new .modal-header {
+  background-color: #69b645;
+}
+#bid-new .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#bid-new .control-group {
+  margin-bottom: 14px;
+}
+#bid-new .control-group .opportunity-name h4 {
+  margin: 5px 0;
+}
+#bid-new .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 5px;
 }
