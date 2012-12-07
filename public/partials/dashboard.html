@@ -22,6 +22,11 @@
                 </ul>
               </section>
             </section>
+            <section id="companies">
+              <section class="content">
+                <input class="span10" ng-model="companyNameFilter" placeholder="By Company Name"/>
+              </section>
+            </section>
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
               <section class="content">
@@ -53,7 +58,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | limitTo:20"
+                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | filter:searchByCompanyName | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">

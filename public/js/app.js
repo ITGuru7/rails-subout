@@ -429,6 +429,17 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     }
     return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
   };
+  $scope.searchByCompanyName = function(input) {
+    var reg;
+    if (!$scope.companyNameFilter) {
+      return true;
+    }
+    if (!(input.eventable.buyer_name && input.eventable.buyer_abbreviated_name)) {
+      return false;
+    }
+    reg = new RegExp($scope.companyNameFilter.toLowerCase());
+    return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+  };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {
       return $scope.eventType = null;
