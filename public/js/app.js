@@ -46,7 +46,7 @@ var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBid
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var REGION_NAMES, p, publicPages, token, _ref;
+  var REGION_NAMES, p, publicPages, token, _ref, _ref1;
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -73,11 +73,13 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
-    if ($cookieStore.get('token')) {
+    if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
+      $cookieStore.remove('token');
+    } else if ($cookieStore.get('token')) {
       token = $cookieStore.get('token');
       $rootScope.token = token;
       $rootScope.signedInSuccess(token);
-    } else if (publicPages.indexOf($location.path()) === -1) {
+    } else {
       $location.path("/sign_in");
     }
   }
