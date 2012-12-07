@@ -15,7 +15,8 @@ class Opportunity
   field :start_time, type: String
   field :end_date, type: Date
   field :end_time, type: String
-  field :bidding_ends, type: Date
+  field :bidding_duration_hrs
+  #field :bidding_ends_at, type: DateTime
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal
@@ -28,6 +29,7 @@ class Opportunity
   field :for_favorites_only, type: Boolean, default: false
   field :image_id
   field :tracking_id
+  field :contact_phone, type: String
 
   scope :active, where(:canceled => false)
 
@@ -41,13 +43,13 @@ class Opportunity
   validates_presence_of :description
   validates_presence_of :start_date
   validates_presence_of :end_date
-  validates_presence_of :bidding_ends
+  validates_presence_of :bidding_duration_hrs
   validates_presence_of :start_location
   validate :validate_locations
   validate :validate_buyer_region
 
   def self.send_expired_notification
-    where(:bidding_ends.lte => Date.today, :expired_notification_sent => false).each do |auction|
+    where(:created_at.lte => (Time.now - bidding_duration_hrs.to_i.hours), :expired_notification_sent => false).each do |auction|
       Notifier.delay.expired_auction_notification(auction.id)
       auction.update_attribute(:expired_notification_sent, true)
     end
@@ -83,7 +85,7 @@ class Opportunity
   end
 
   def bidding_ended?
-    self.bidding_ends <= Date.today
+    self.bidding_ends_at <= Date.today
   end
 
   def bidable?
@@ -107,5 +109,9 @@ class Opportunity
     unless buyer.subscribed?(regions)
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end
+  end
+
+  def bidding_ends_at
+    created_at + bidding_duration_hrs.to_i.hours
   end
 end

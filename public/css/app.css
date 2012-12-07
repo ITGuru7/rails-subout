@@ -7433,7 +7433,6 @@ table.bid-history {
 #activity-stream .event .event-summary span i {
   margin-right: 5px;
 }
-#activity-stream .event .event-summary .event-action,
 #activity-stream .event .event-summary .event-region {
   font-weight: bold;
 }
@@ -7454,10 +7453,98 @@ table.bid-history {
 #activity-stream .event .eventable-details div img {
   margin-top: 6px;
 }
+#activity-stream .event .eventable-details .actions {
+  margin: 10px;
+}
 .bar {
   height: 18px;
   background: green;
 }
 #welcome-prelaunch-message h2 {
   color: #666550;
+}
+#page-settings ul.nav-tabs li {
+  font-size: 18px;
+}
+#page-settings .tab-content {
+  padding: 15px;
+}
+#page-settings li.btn-close {
+  margin-top: 5px;
+  margin-right: 10px;
+}
+#opportunity-form .modal-header {
+  background-color: #378bac;
+}
+#opportunity-form .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#opportunity-form .modal-body {
+  color: #666550;
+}
+#opportunity-form .modal-body .control-group {
+  margin-bottom: 14px;
+}
+#opportunity-form .modal-body .control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
+#opportunity-form .modal-body .control-group label .help-block {
+  margin-top: 0;
+  text-style: italic;
+}
+#opportunity-form .modal-body .control-group label.checkbox {
+  margin-bottom: 10px;
+}
+#opportunity-form .modal-body .control-group.two-lines .controls {
+  margin-top: 7px;
+}
+#opportunity-form .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 5px;
+}
+#bid-new .modal-header {
+  background-color: #69b645;
+}
+#bid-new .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#bid-new .modal-body {
+  color: #666550;
+}
+#bid-new .control-group {
+  margin-bottom: 14px;
+}
+#bid-new .control-group .opportunity-name h4 {
+  margin: 5px 0;
+}
+#bid-new .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 5px;
+}
+#page-settings .modal-header {
+  background-color: #69b645;
+}
+#page-settings .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#page-settings .modal-body {
+  max-height: 600px;
+  color: #666550;
+}
+#page-settings .modal-body .control-group.two-lines .controls {
+  margin-top: 7px;
+}
+#page-settings .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 5px;
 }

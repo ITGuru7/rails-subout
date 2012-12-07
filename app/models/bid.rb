@@ -12,7 +12,6 @@ class Bid
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
   validate :validate_opportunity_bidable
   validate :validate_bidable_by_bidder
-  validate :validate_bidable_by_bidder_region
   validate :validate_multiple_bids_on_the_same_opportunity
 
   scope :recent, desc(:created_at)
@@ -46,11 +45,15 @@ class Bid
     unless opportunity.buyer_id != bidder_id
       errors.add :bidder_id, "cannot bid on your own opportunity"
     end
-  end
 
-  def validate_bidable_by_bidder_region
-    unless bidder.subscribed?(opportunity.region)
-      errors.add :bidder_id, "cannot bid on an opportunity within this region"
+    if opportunity.for_favorites_only?
+      unless opportunity.buyer.favoriting_buyer_ids.include?(bidder.id)
+        errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
+      end
+    else
+      unless bidder.subscribed?(opportunity.regions)
+        errors.add :bidder_id, "cannot bid on an opportunity within this region"
+      end
     end
   end
 

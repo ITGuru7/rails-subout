@@ -19,7 +19,7 @@ subout.config([
     }).when("/opportunities", {
       templateUrl: "partials/opportunities.html",
       controller: OpportunityCtrl
-    }).when("/opportunities/:opportunityId", {
+    }).when("/opportunities/:opportunity_reference_number", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
     }).when("/favorites", {
@@ -32,12 +32,6 @@ subout.config([
     });
   }
 ]);
-
-subout.run(function($templateCache, $http) {
-  return $http.get('partials/opportunity-form.html', {
-    cache: $templateCache
-  });
-});
 
 $.timeago.settings.allowFuture = true;
 
@@ -52,7 +46,7 @@ var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBid
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var REGION_NAMES, p, publicPages, token, _ref;
+  var REGION_NAMES, p, publicPages, token, _ref, _ref1;
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -79,11 +73,13 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
-    if ($cookieStore.get('token')) {
+    if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
+      $cookieStore.remove('token');
+    } else if ($cookieStore.get('token')) {
       token = $cookieStore.get('token');
       $rootScope.token = token;
       $rootScope.signedInSuccess(token);
-    } else if (publicPages.indexOf($location.path()) === -1) {
+    } else {
       $location.path("/sign_in");
     }
   }
@@ -203,6 +199,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $rootScope.setModal('partials/bid-new.html');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
+    console.log('here I am');
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
   };
@@ -246,6 +243,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         opportunity: opportunity,
         api_token: $rootScope.token.api_token
       }, function(data) {
+        $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
       });
     } else {
@@ -347,14 +345,22 @@ OpportunityCtrl = function($scope, $rootScope, Auction) {
   });
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+  $scope.opportunity = Opportunity.get({
+    api_token: $rootScope.token.api_token,
+    opportunityId: $routeParams.opportunity_reference_number
+  });
+  $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
+    console.log('fresh');
+    return $scope.opportunity = _opportunity;
+  });
   $scope.cancelOpportunity = function() {
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      return $location.path("dashboard");
     });
   };
   return $scope.selectWinner = function(bid) {
@@ -433,6 +439,17 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     }
     return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
   };
+  $scope.searchByCompanyName = function(input) {
+    var reg;
+    if (!$scope.companyNameFilter) {
+      return true;
+    }
+    if (!(input.eventable.buyer_name && input.eventable.buyer_abbreviated_name)) {
+      return false;
+    }
+    reg = new RegExp($scope.companyNameFilter.toLowerCase());
+    return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+  };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {
       return $scope.eventType = null;
@@ -471,6 +488,10 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
       return event.eventable = Opportunity.get({
         api_token: $rootScope.token.api_token,
         opportunityId: event.eventable._id
+      }, function() {
+        return setTimeout((function() {
+          return $(".relative_time").timeago();
+        }), 1);
       });
     }
   };
@@ -482,7 +503,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $rootScope.setupFileUploader();
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
-    $scope.userProfileMessage = "";
     if ($scope.userProfile.password === $scope.userProfile.password_confirmation) {
       return User.update({
         userId: $rootScope.user._id,
@@ -492,7 +512,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
         $scope.userProfile.password = '';
         $scope.userProfile.current_password = '';
         $rootScope.user = $scope.userProfile;
-        return $scope.userProfileMessage = "Saved successfully";
+        return $rootScope.closeModal();
       }, function(error) {
         return $scope.userProfileError = "Invalid password or email!";
       });
@@ -502,7 +522,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
   return $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";
-    $scope.companyProfileMessage = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
     return Company.update({
       companyId: $rootScope.company._id,
@@ -510,7 +529,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
       api_token: $rootScope.token.api_token
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $scope.companyProfileMessage = "Saved successfully";
+      return $rootScope.closeModal();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -738,10 +757,13 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   };
   Company.prototype.canSeeEvent = function(event) {
     var _ref;
-    if (this.subscribedRegions(event.regions)) {
+    if (event.eventable_company_id === this._id) {
       return true;
     }
-    return _ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
+    if (_ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0) {
+      return true;
+    }
+    return !event.eventable.for_favorites_only && this.subscribedRegions(event.regions);
   };
   Company.prototype.subscribedRegions = function(regions) {
     var region;

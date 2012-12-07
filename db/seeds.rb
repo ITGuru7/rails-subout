@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-[Company, Contact, Location, Opportunity, Bid, Event].each do |model|
+[Company, Opportunity, Bid, Event].each do |model|
   model.all.destroy_all
 end
 

@@ -18,6 +18,6 @@ class OpportunityObserver < Mongoid::Observer
   private
 
   def create_event(opportunity, type)
-    Event.create(actor_id: opportunity.buyer_id, action: {type: type}, eventable: opportunity)
+    Event.create!(actor_id: opportunity.buyer_id, action: {type: type}, eventable: opportunity)
   end
 end
