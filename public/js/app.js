@@ -19,7 +19,7 @@ subout.config([
     }).when("/opportunities", {
       templateUrl: "partials/opportunities.html",
       controller: OpportunityCtrl
-    }).when("/opportunities/:opportunityId", {
+    }).when("/opportunities/:opportunity_reference_number", {
       templateUrl: "partials/opportunity-detail.html",
       controller: OpportunityDetailCtrl
     }).when("/favorites", {
@@ -199,6 +199,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $rootScope.setModal('partials/bid-new.html');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
+    console.log('here I am');
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
   };
@@ -242,6 +243,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         opportunity: opportunity,
         api_token: $rootScope.token.api_token
       }, function(data) {
+        $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
       });
     } else {
@@ -343,14 +345,22 @@ OpportunityCtrl = function($scope, $rootScope, Auction) {
   });
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, Bid, Auction) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+  $scope.opportunity = Opportunity.get({
+    api_token: $rootScope.token.api_token,
+    opportunityId: $routeParams.opportunity_reference_number
+  });
+  $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
+    console.log('fresh');
+    return $scope.opportunity = _opportunity;
+  });
   $scope.cancelOpportunity = function() {
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      return $location.path("dashboard");
     });
   };
   return $scope.selectWinner = function(bid) {

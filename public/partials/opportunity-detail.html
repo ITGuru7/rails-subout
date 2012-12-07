@@ -1,12 +1,11 @@
-<div id="opportunity-detail" ng-controller="OpportunityDetailCtrl">
-  <div class="modal-header">
-    <button data-dismiss="modal" class="close" type="button">x</button>
+<div id="opportunity-detail">
+  <div>
     <h3>Opportunity - {{opportunity.name}}</h3>
   </div>
-  <div class="modal-body">
+  <div>
     <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
-      <a data-target="#modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
-      <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel</a>
+      <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
+      <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
     </div>
     <div class="control-group" ng-show="opportunity.bidding_done">
       <div class="control-label">Won By: {{opportunity.winner.name}}</div>

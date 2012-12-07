@@ -23,8 +23,9 @@
               </section>
             </section>
             <section id="companies">
+              <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <input class="span10" ng-model="companyNameFilter" placeholder="By Company Name"/>
+                <input class="span10" ng-model="companyNameFilter" placeholder="Enter Company Name ..."/>
               </section>
             </section>
             <section id="regions">
@@ -67,7 +68,9 @@
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
-                      <a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a>
+                      <a ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}">
+                        {{opportunity.name}}
+                      </a>
                       <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
                       <span class="event-action">
                         {{actionDescription(action)}}
@@ -106,9 +109,10 @@
                       </div>
 
                       <div class="actions" ng-show="company.canBidOn(opportunity)">
-                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-                        <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                        <a class="btn btn-primary btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                       </div>
+                      <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                     </div>
                     <div class="span4">
                       <img ng-src="{{event.eventable.image_url}}" />
