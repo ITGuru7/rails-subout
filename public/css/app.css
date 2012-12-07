@@ -7480,22 +7480,24 @@ table.bid-history {
   color: white;
   font-weight: normal;
 }
-#opportunity-form .control-group {
+#opportunity-form .modal-body {
   color: #666550;
+}
+#opportunity-form .modal-body .control-group {
   margin-bottom: 14px;
 }
-#opportunity-form .control-group .help-block {
+#opportunity-form .modal-body .control-group .help-block {
   font-size: 13px;
   color: #c7c6b3;
 }
-#opportunity-form .control-group label .help-block {
+#opportunity-form .modal-body .control-group label .help-block {
   margin-top: 0;
   text-style: italic;
 }
-#opportunity-form .control-group label.checkbox {
+#opportunity-form .modal-body .control-group label.checkbox {
   margin-bottom: 10px;
 }
-#opportunity-form .control-group.two-lines .controls {
+#opportunity-form .modal-body .control-group.two-lines .controls {
   margin-top: 7px;
 }
 #opportunity-form .form-actions {
@@ -7511,6 +7513,9 @@ table.bid-history {
   color: white;
   font-weight: normal;
 }
+#bid-new .modal-body {
+  color: #666550;
+}
 #bid-new .control-group {
   margin-bottom: 14px;
 }
@@ -7518,6 +7523,26 @@ table.bid-history {
   margin: 5px 0;
 }
 #bid-new .form-actions {
+  border: 0;
+  background-color: white;
+  margin: 0;
+  padding-top: 5px;
+}
+#page-settings .modal-header {
+  background-color: #69b645;
+}
+#page-settings .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#page-settings .modal-body {
+  max-height: 600px;
+  color: #666550;
+}
+#page-settings .modal-body .control-group.two-lines .controls {
+  margin-top: 7px;
+}
+#page-settings .form-actions {
   border: 0;
   background-color: white;
   margin: 0;
