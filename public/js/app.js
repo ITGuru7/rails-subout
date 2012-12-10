@@ -199,7 +199,6 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $rootScope.setModal('partials/bid-new.html');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
-    console.log('here I am');
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
   };
@@ -209,6 +208,8 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   $rootScope.clearOpportunity = function() {
     $("form .image-preview").attr('src', '');
+    $("form .alert-content").empty();
+    $("form .alert-error").hide();
     return $rootScope.opportunity = {};
   };
   $rootScope.setOpportunity = function(opportunity) {
@@ -223,8 +224,32 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       companyId: company_id
     });
   };
-  return $rootScope.dateOptions = {
+  $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
+  };
+  $rootScope.errorMessages = function(errors) {
+    var result;
+    result = [];
+    $.each(errors, function(key, errors) {
+      var field;
+      field = _.str.humanize(key);
+      return $.each(errors, function(i, error) {
+        return result.push("" + field + " " + error);
+      });
+    });
+    return result;
+  };
+  return $rootScope.alertError = function(errors) {
+    var $alertError, close, errorMessage, errorMessages, _i, _len;
+    errorMessages = $rootScope.errorMessages(errors);
+    $alertError = $("<div class='alert alert-error'></div>");
+    close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
+    $alertError.append(close);
+    for (_i = 0, _len = errorMessages.length; _i < _len; _i++) {
+      errorMessage = errorMessages[_i];
+      $alertError.append("<p>" + errorMessage + "</p>");
+    }
+    return $alertError;
   };
 };
 
@@ -245,6 +270,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(data) {
         $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
+      }, function(content) {
+        var $alertError;
+        $("#modal form .alert-error").remove();
+        $alertError = $rootScope.alertError(content.data.errors);
+        return $("#modal form").prepend($alertError);
       });
     } else {
       return Auction.save({
@@ -252,6 +282,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         api_token: $rootScope.token.api_token
       }, function(data) {
         return jQuery("#modal").modal("hide");
+      }, function(content) {
+        var $alertError;
+        $("#modal form .alert-error").remove();
+        $alertError = $rootScope.alertError(content.data.errors);
+        return $("#modal form").prepend($alertError);
       });
     }
   };
