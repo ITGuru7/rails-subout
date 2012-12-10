@@ -410,16 +410,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var updateRegionSelectBox;
   $scope.filters = Filter.query();
+  $scope.favoriteCompanies = Favorite.query({
+    api_token: $rootScope.token.api_token
+  });
   $scope.query = "";
   $scope.filter = null;
-  $scope.regionFilter = "All My Regions";
+  $scope.regionFilter = "All";
+  $scope.favoriteFilter = "";
   $scope.opportunity = null;
   updateRegionSelectBox = function() {
     $scope.regions = $rootScope.regions.slice(0);
-    return $scope.regions.unshift("All My Regions");
+    return $scope.regions.unshift("All");
   };
   $scope.regions = updateRegionSelectBox();
   $rootScope.$watch("regions", updateRegionSelectBox);
@@ -469,7 +473,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
   };
   $scope.searchByRegion = function(event) {
     var _ref;
-    if ($scope.regionFilter === "All My Regions") {
+    if ($scope.regionFilter === "All") {
       return true;
     }
     return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
@@ -484,6 +488,19 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     }
     reg = new RegExp($scope.companyNameFilter.toLowerCase());
     return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+  };
+  $scope.searchByFavorite = function(event) {
+    if ($scope.favoriteFilter === "") {
+      return true;
+    }
+    return $scope.favoriteFilter === event.eventable_company_id;
+  };
+  $scope.setFavoriteFilter = function(company_id) {
+    if ($scope.favoriteFilter === company_id) {
+      return $scope.favoriteFilter = "";
+    } else {
+      return $scope.favoriteFilter = company_id;
+    }
   };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {

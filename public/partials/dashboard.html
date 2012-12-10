@@ -22,12 +22,6 @@
                 </ul>
               </section>
             </section>
-            <section id="companies">
-              <section class="title"><h5>Company</h5></section>
-              <section class="content">
-                <input class="span10" ng-model="companyNameFilter" placeholder="Enter Company Name ..."/>
-              </section>
-            </section>
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
               <section class="content">
@@ -36,6 +30,29 @@
                     <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
                   </li>
                 </ul>
+              </section>
+            </section>
+            <section id="companies">
+              <section class="title"><h5>Company</h5></section>
+              <section class="content">
+                <input class="span10" ng-model="companyNameFilter" placeholder="Enter Company Name ..."/>
+              </section>
+            </section>
+            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0">
+              <section class="title"><h5>Favorites</h5></section>
+              <section class="content">
+                <ul ng-show="favoriteCompanies.length <= 5">
+                  <li ng-repeat="company in favoriteCompanies">
+                    <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
+                  </li>
+                </ul>
+
+                <select class="span10" ng-model="favoriteFilter" ng-show="favoriteCompanies.length > 5">
+                  <option value="">All</option>
+                  <option ng-repeat="c in favoriteCompanies" value="{{c._id}}">
+                    {{c.name}}
+                  </option>
+                </select>
               </section>
             </section>
         </div>
@@ -59,7 +76,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | filter:searchByCompanyName | limitTo:20"
+                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | filter:searchByFavorite | filter:searchByCompanyName | limitTo:20"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">
