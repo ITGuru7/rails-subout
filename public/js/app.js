@@ -75,11 +75,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
     if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
       $cookieStore.remove('token');
-    } else if ($cookieStore.get('token')) {
-      token = $cookieStore.get('token');
+    } else if (token = $cookieStore.get('token')) {
       $rootScope.token = token;
       $rootScope.signedInSuccess(token);
     } else {
+      $rootScope.redirectToPath = $location.path();
       $location.path("/sign_in");
     }
   }
@@ -339,7 +339,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-OpportunityCtrl = function($scope, $rootScope, Auction) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   return $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -548,7 +548,11 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
       if (token.authorized) {
         $cookieStore.put('token', token);
         $rootScope.signedInSuccess(token);
-        return $location.path("dashboard");
+        if ($rootScope.redirectToPath) {
+          return $location.path($rootScope.redirectToPath);
+        } else {
+          return $location.path("dashboard");
+        }
       } else {
         return $scope.message = token.message;
       }
