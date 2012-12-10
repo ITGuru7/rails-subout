@@ -109,13 +109,15 @@
                       </div>
 
                       <div class="actions" ng-show="company.canBidOn(opportunity)">
-                        <a href="#modal" class="btn btn-primary btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-                        <a class="btn btn-primary btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                        <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                       </div>
                       <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                     </div>
                     <div class="span4">
-                      <img ng-src="{{event.eventable.image_url}}" />
+                      <a rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
+                        <img ng-src="{{event.eventable.image_url}}" />
+                      </a>
                     </span>
                   </div>
                 </div>
