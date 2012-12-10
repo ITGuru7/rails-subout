@@ -1,8 +1,8 @@
 class OpportunitySerializer < ActiveModel::Serializer
   attributes :_id, :name, :description, :start_date, :start_time, :for_favorites_only, :start_region, :end_region,
-    :end_date, :end_time, :bidding_duration_hrs, :bidding_ends_at, :bidding_done, :quick_winnable, :bidable?, :image_id, :image_url,
+    :end_date, :end_time, :bidding_duration_hrs, :bidding_ends_at, :bidding_done, :quick_winnable, :bidable?, :image_id,
     :winning_bid_id, :win_it_now_price, :type, :canceled, :forward_auction, :winner, :tracking_id, :reference_number,
-    :buyer_name, :buyer_abbreviated_name
+    :buyer_name, :buyer_abbreviated_name, :image_url, :large_image_url
 
   has_one :buyer, serializer: ActorSerializer
 
@@ -17,6 +17,10 @@ class OpportunitySerializer < ActiveModel::Serializer
 
   def image_url
     Cloudinary::Utils.cloudinary_url(opportunity.image_id, width: 200, crop: :scale, format: 'png')
+  end
+
+  def large_image_url
+    Cloudinary::Utils.cloudinary_url(opportunity.image_id, width: 500, crop: :scale, format: 'png')
   end
 
   def buyer_name

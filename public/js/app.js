@@ -75,11 +75,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
     if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
       $cookieStore.remove('token');
-    } else if ($cookieStore.get('token')) {
-      token = $cookieStore.get('token');
+    } else if (token = $cookieStore.get('token')) {
       $rootScope.token = token;
       $rootScope.signedInSuccess(token);
     } else {
+      $rootScope.redirectToPath = $location.path();
       $location.path("/sign_in");
     }
   }
@@ -199,7 +199,6 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $rootScope.setModal('partials/bid-new.html');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
-    console.log('here I am');
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
   };
@@ -209,6 +208,8 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   $rootScope.clearOpportunity = function() {
     $("form .image-preview").attr('src', '');
+    $("form .alert-content").empty();
+    $("form .alert-error").hide();
     return $rootScope.opportunity = {};
   };
   $rootScope.setOpportunity = function(opportunity) {
@@ -223,8 +224,32 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       companyId: company_id
     });
   };
-  return $rootScope.dateOptions = {
+  $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
+  };
+  $rootScope.errorMessages = function(errors) {
+    var result;
+    result = [];
+    $.each(errors, function(key, errors) {
+      var field;
+      field = _.str.humanize(key);
+      return $.each(errors, function(i, error) {
+        return result.push("" + field + " " + error);
+      });
+    });
+    return result;
+  };
+  return $rootScope.alertError = function(errors) {
+    var $alertError, close, errorMessage, errorMessages, _i, _len;
+    errorMessages = $rootScope.errorMessages(errors);
+    $alertError = $("<div class='alert alert-error'></div>");
+    close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
+    $alertError.append(close);
+    for (_i = 0, _len = errorMessages.length; _i < _len; _i++) {
+      errorMessage = errorMessages[_i];
+      $alertError.append("<p>" + errorMessage + "</p>");
+    }
+    return $alertError;
   };
 };
 
@@ -245,6 +270,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(data) {
         $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
+      }, function(content) {
+        var $alertError;
+        $("#modal form .alert-error").remove();
+        $alertError = $rootScope.alertError(content.data.errors);
+        return $("#modal form").prepend($alertError);
       });
     } else {
       return Auction.save({
@@ -252,6 +282,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         api_token: $rootScope.token.api_token
       }, function(data) {
         return jQuery("#modal").modal("hide");
+      }, function(content) {
+        var $alertError;
+        $("#modal form .alert-error").remove();
+        $alertError = $rootScope.alertError(content.data.errors);
+        return $("#modal form").prepend($alertError);
       });
     }
   };
@@ -339,7 +374,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-OpportunityCtrl = function($scope, $rootScope, Auction) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   return $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -375,16 +410,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var updateRegionSelectBox;
   $scope.filters = Filter.query();
+  $scope.favoriteCompanies = Favorite.query({
+    api_token: $rootScope.token.api_token
+  });
   $scope.query = "";
   $scope.filter = null;
-  $scope.regionFilter = "All My Regions";
+  $scope.regionFilter = "All";
+  $scope.favoriteFilter = "";
   $scope.opportunity = null;
   updateRegionSelectBox = function() {
     $scope.regions = $rootScope.regions.slice(0);
-    return $scope.regions.unshift("All My Regions");
+    return $scope.regions.unshift("All");
   };
   $scope.regions = updateRegionSelectBox();
   $rootScope.$watch("regions", updateRegionSelectBox);
@@ -434,7 +473,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
   };
   $scope.searchByRegion = function(event) {
     var _ref;
-    if ($scope.regionFilter === "All My Regions") {
+    if ($scope.regionFilter === "All") {
       return true;
     }
     return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
@@ -449,6 +488,19 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Opportunit
     }
     reg = new RegExp($scope.companyNameFilter.toLowerCase());
     return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+  };
+  $scope.searchByFavorite = function(event) {
+    if ($scope.favoriteFilter === "") {
+      return true;
+    }
+    return $scope.favoriteFilter === event.eventable_company_id;
+  };
+  $scope.setFavoriteFilter = function(company_id) {
+    if ($scope.favoriteFilter === company_id) {
+      return $scope.favoriteFilter = "";
+    } else {
+      return $scope.favoriteFilter = company_id;
+    }
   };
   $scope.setEventType = function(eventType) {
     if ($scope.eventType === eventType) {
@@ -548,7 +600,11 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
       if (token.authorized) {
         $cookieStore.put('token', token);
         $rootScope.signedInSuccess(token);
-        return $location.path("dashboard");
+        if ($rootScope.redirectToPath) {
+          return $location.path($rootScope.redirectToPath);
+        } else {
+          return $location.path("dashboard");
+        }
       } else {
         return $scope.message = token.message;
       }

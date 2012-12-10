@@ -30,7 +30,12 @@
         <dd><strong>${{opportunity.win_it_now_price}}</strong></dd>
       </div>
     </dl>
-    <img ng-src="{{opportunity.image_url}}" class="pull-right" />
+
+    <div class="pull-right">
+      <a rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
+        <img ng-src="{{opportunity.image_url}}" />
+      </a>
+    </div>
     <div class="clearfix"></div>
 
     <hr />
