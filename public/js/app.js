@@ -400,12 +400,15 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
   return $scope.selectWinner = function(bid) {
     return Auction.select_winner({
-      opportunityId: $rootScope.opportunity._id,
+      opportunityId: $scope.opportunity._id,
       action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      return $scope.opportunity = Opportunity.get({
+        api_token: $rootScope.token.api_token,
+        opportunityId: $scope.opportunity._id
+      });
     });
   };
 };
