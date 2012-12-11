@@ -52,7 +52,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   $rootScope.userSignedIn = function() {
     var _ref;
-    if (((_ref = $rootScope.user) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
+    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
       return true;
     }
   };
@@ -72,7 +72,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     });
   };
   publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
-  if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
+  if (!((_ref = $rootScope.token) != null ? _ref.authorized : void 0)) {
     if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
       $cookieStore.remove('token');
     } else if (token = $cookieStore.get('token')) {
