@@ -2,6 +2,8 @@ class Event
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  paginates_per 30
+
   field :regions, type: Array
   field :eventable_company_id
   field :eventable_for_favorites_only
@@ -13,7 +15,7 @@ class Event
   before_create :copy_eventable_fields
 
   def self.recent
-    order_by(:updated_at => :desc).includes(:actor).limit(100)
+    order_by(:updated_at => :desc).includes(:actor)
   end
 
   def self.for(company)

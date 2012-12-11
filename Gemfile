@@ -13,6 +13,7 @@ gem 'sinatra', require: nil
 gem 'slim', require: nil
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
+gem 'kaminari'
 gem 'kiqstand'
 gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
 gem 'httparty'

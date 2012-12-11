@@ -57,7 +57,7 @@
             </section>
         </div>
         <div class="span9">
-           <section id="activities">
+           <section id="activities" when-scrolled="loadMoreEvents()">
               <div id="toolbar">
                   <div class="row-fluid">
                       <div class="pull-left span4">
@@ -139,6 +139,9 @@
                   </div>
                 </div>
               </section>
+            <div class="load-more" ng-hide="noMoreEvents">
+              Loading...
+            </div>
           </section>
         </div>
       </div>

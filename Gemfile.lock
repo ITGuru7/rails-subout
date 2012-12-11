@@ -119,6 +119,9 @@ GEM
     i18n (0.6.1)
     journey (1.0.4)
     json (1.7.5)
+    kaminari (0.14.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     kiqstand (1.0.0)
       mongoid (~> 3.0)
       moped (~> 1.2)
@@ -265,6 +268,7 @@ DEPENDENCIES
   haml-rails
   heroku
   httparty
+  kaminari
   kiqstand
   mongoid (~> 3.0.0.rc)
   mongoid_rails_migrations
