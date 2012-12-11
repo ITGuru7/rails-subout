@@ -529,9 +529,9 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "bid $" + action.details.amount;
+        return "recieved bid $" + action.details.amount + " from";
       default:
-        return "" + (action.type.split('_').pop());
+        return "" + (action.type.split('_').pop()) + " by";
     }
   };
   return $scope.toggleEvent = function(event) {

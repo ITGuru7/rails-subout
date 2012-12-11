@@ -3530,7 +3530,7 @@ ul.icons li .icon-large:before {
 .open {
   *z-index: 1000;
 }
-.open > .dropdown-menu {
+.open  > .dropdown-menu {
   display: block;
 }
 .pull-right > .dropdown-menu {
@@ -7034,6 +7034,7 @@ body {
   margin-left: 35px;
 }
 #search {
+  text-align: center;
   border: 1px solid #000000;
   height: 30px;
   background: #FFFFFF;
@@ -7340,6 +7341,7 @@ body {
   margin-left: 35px;
 }
 #search {
+  text-align: center;
   border: 1px solid #000000;
   height: 30px;
   background: #FFFFFF;
@@ -7509,8 +7511,11 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
-div#opportunity-detail dl dd {
-  min-height: 20px;
+div#opportunity-show #opportunity-detail h3 {
+  line-height: 24px;
+}
+div#opportunity-show #opportunity-detail .label-field {
+  font-weight: bold;
 }
 #modal dt {
   color: #666550;

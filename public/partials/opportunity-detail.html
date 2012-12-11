@@ -1,54 +1,68 @@
-<div id="opportunity-detail">
-  <div>
-    <h3>Opportunity - {{opportunity.name}}</h3>
-  </div>
-  <div>
-    <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
-      <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
-      <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
-    </div>
-    <div class="control-group" ng-show="opportunity.bidding_done">
-      <div class="control-label">Won By: {{opportunity.winner.name}}</div>
-      <div class="control-label">Winning Bid Amount: {{opportunity.winner.amount}}</div>
-      <div class="control-label">(Closed)</div>
-    </div>
-    <dl class="dl-horizontal pull-left">
-      <div ng-show="opportunity.buyer._id == company._id">
-        <dt>Tracking ID:</dt>
-        <dd>{{opportunity.tracking_id}}</dd>
+<div id="opportunity-show">
+  <div class="row-fluid">
+    <div id="sidebar" class="span3">
+      <h5>OFFERED BY</h5>
+      <div class="company-info">
+        <ul>
+          <li><img ng-src="{{opportunity.buyer.logo_url}}" /></li>
+          <li><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(opportunity.buyer._id); setModal('partials/company-profile.html')">{{opportunity.buyer.abbreviated_name}}</a></li>
+        </ul>
       </div>
-      <dt>Type:</dt>
-      <dd>{{opportunity.type}}</dd>
-      <dt>Description:</dt>
-      <dd>{{opportunity.description}}</dd>
-      <dt>Date range:</dt>
-      <dd>{{opportunity.start_date| date:'MM/dd/yy'}} to {{opportunity.end_date| date:'MM/dd/yy'}}</dd>
-      <dt>End location:</dt>
-      <dd>{{opportunity.end_location}}</dd>
-      <div ng-show="opportunity.quick_winnable">
-        <dt>Buy now:</dt>
-        <dd><strong>${{opportunity.win_it_now_price}}</strong></dd>
-      </div>
-    </dl>
-
-    <div class="pull-right">
-      <a rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
-        <img ng-src="{{opportunity.image_url}}" />
-      </a>
     </div>
-    <div class="clearfix"></div>
 
-    <hr />
+    <div id="opportunity-detail" class="span9">
+      <h3>{{opportunity.name}}</h3>
+      <div class="row-fluid">
+        <div class="span8">
+          <p>
+            <ul>
+              <li><span class="label-field">Origination Date: </span>{{opportunity.start_date| date:'MM/dd/yy'}}</li>
+              <li><span class="label-field">Origination Location: </span>{{opportunity.start_location}}</li>
+              <li><span class="label-field">Arrival Date: </span>{{opportunity.end_date| date:'MM/dd/yy'}}</li>
+              <li><span class="label-field">Arrival Location: </span>{{opportunity.end_location}}</li>
+            </ul>
+          </p>
 
-    <h4>Bid History</h4>
-    <table class="bid-history">
-      <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
-        <td><strong>${{bid.amount}}</strong></td>
-        <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
-        <td>by <a data-target="#modal" ng-click="setOtherCompanyViaId(bid.bidder._id); setModal('partials/company-profile.html')">{{bid.bidder.name}}</a></td>
-        <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
-      </tr>
-    </table>
+          <p>
+            {{opportunity.description}}
+          </p>
+          
+          <p>
+            <ul>
+              <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
+              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>${{opportunity.win_it_now_price}}</li>
+            </ul>
+          </p>
 
+          <p>
+            <ul>
+              <li><span class="label-field">SO#: </span>{{opportunity.reference_number}}</li>
+            </ul>
+          </p>
+
+          <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
+            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
+            <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
+          </div>
+        </div>
+        <div class="span4">
+          <a rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
+            <img ng-src="{{opportunity.image_url}}" />
+          </a>
+        </div>
+      </div>
+
+      <hr />
+
+      <h4>Bid History</h4>
+      <table class="bid-history">
+        <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
+          <td><strong>${{bid.amount}}</strong></td>
+          <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td>by <a data-target="#modal" ng-click="setOtherCompanyViaId(bid.bidder._id); setModal('partials/company-profile.html')">{{bid.bidder.name}}</a></td>
+          <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
