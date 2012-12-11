@@ -7406,6 +7406,10 @@ body {
 #activities .opportunity-title {
   color: #75b952;
 }
+#activities .load-more {
+  text-align: center;
+  margin: 20px 0;
+}
 #filters .filter {
   text-align: left;
   margin-bottom: 5px;
@@ -7662,6 +7666,9 @@ table.bid-history {
 }
 #opportunity-form .modal-body {
   color: #666550;
+}
+#opportunity-form .modal-body .alert-error p {
+  margin-bottom: 5px 0;
 }
 #opportunity-form .modal-body .control-group {
   margin-bottom: 14px;

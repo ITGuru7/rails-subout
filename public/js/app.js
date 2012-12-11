@@ -416,11 +416,14 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
+  $scope.currentPage = 1;
   $scope.query = "";
   $scope.filter = null;
   $scope.regionFilter = "All";
   $scope.favoriteFilter = "";
   $scope.opportunity = null;
+  $scope.loading = true;
+  $scope.noMoreEvents = false;
   updateRegionSelectBox = function() {
     $scope.regions = $rootScope.regions.slice(0);
     return $scope.regions.unshift("All");
@@ -442,14 +445,14 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
     api_token: $rootScope.token.api_token
   }, function(data) {
     var channel;
+    $scope.loading = false;
     channel = $rootScope.pusher.subscribe('event');
-    channel.bind('created', function(event) {
+    return channel.bind('created', function(event) {
       if ($rootScope.company.canSeeEvent(event)) {
         $scope.events.unshift(event);
         return $scope.$apply();
       }
     });
-    return jQuery("time.relative-time").timeago();
   });
   $scope.searchByFilter = function(input) {
     if (!$scope.filter) {
@@ -534,7 +537,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
         return "" + (action.type.split('_').pop()) + " by";
     }
   };
-  return $scope.toggleEvent = function(event) {
+  $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
     if (event.selected && event.eventable._id) {
       return event.eventable = Opportunity.get({
@@ -546,6 +549,26 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
         }), 1);
       });
     }
+  };
+  return $scope.loadMoreEvents = function() {
+    if ($scope.noMoreEvents || $scope.loading) {
+      return;
+    }
+    $scope.loading = true;
+    $scope.currentPage += 1;
+    return Event.query({
+      api_token: $rootScope.token.api_token,
+      page: $scope.currentPage
+    }, function(data) {
+      if (data.length === 0) {
+        return $scope.noMoreEvents = true;
+      } else {
+        angular.forEach(data, function(event) {
+          return $scope.events.push(event);
+        });
+        return $scope.loading = false;
+      }
+    });
   };
 };
 
@@ -674,6 +697,16 @@ subout.directive("relativeTime", function() {
         return $(element).timeago();
       });
     }
+  };
+});
+
+subout.directive("whenScrolled", function() {
+  return function(scope, element, attr) {
+    return $(window).scroll(function() {
+      if ($(window).scrollTop() > $(document).height() - $(window).height() - 50) {
+        return scope.$apply(attr.whenScrolled);
+      }
+    });
   };
 });
 var Evaluators, evaluation, module;
