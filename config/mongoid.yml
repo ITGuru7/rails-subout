@@ -1,7 +1,7 @@
 production:
   sessions:
     default:
-      database: suboutdemo
+      database: suboutprod
       username: heroku
       password: sub0utd3v
       hosts: 
