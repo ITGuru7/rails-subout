@@ -16,9 +16,9 @@
               <section class="content">
                 <ul>
                   <li ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
-                  <li ng-class="{active: eventType=='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
-                  <li ng-class="{active: eventType=='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
-                  <li ng-class="{active: eventType=='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
+                  <li ng-class="{active: $location.search().event_type =='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
+                  <li ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
+                  <li ng-class="{active: $location.search().event_type =='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
                 </ul>
               </section>
             </section>
@@ -76,7 +76,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | filter:searchByFavorite | filter:searchByCompanyName | limitTo:100"
+                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByFavorite | filter:searchByCompanyName | limitTo:100"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">

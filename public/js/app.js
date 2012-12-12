@@ -414,8 +414,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Filter, Tag, Bid, Favorite, Opportunity) {
-  var updateRegionSelectBox;
+DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+  var setRegionFilter, updateRegionSelectBox;
+  $scope.$location = $location;
   $scope.filters = Filter.query();
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
@@ -425,7 +426,6 @@ DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Fil
   $scope.regionFilter = "All";
   $scope.favoriteFilter = "";
   $scope.opportunity = null;
-  $scope.noMoreEvents = false;
   updateRegionSelectBox = function() {
     $scope.regions = $rootScope.regions.slice(0);
     return $scope.regions.unshift("All");
@@ -455,7 +455,8 @@ DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Fil
     queryOptions.page = $scope.currentPage;
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
-        return $scope.noMoreEvents = true;
+        $scope.noMoreEvents = true;
+        return $scope.loading = false;
       } else {
         angular.forEach(data, function(event) {
           return $scope.events.push(event);
@@ -467,6 +468,7 @@ DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Fil
   $scope.refreshEvents = function(callback) {
     $scope.events = [];
     $scope.currentPage = 0;
+    $scope.noMoreEvents = false;
     $scope.loadMoreEvents();
     if (callback) {
       return callback();
@@ -495,12 +497,6 @@ DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Fil
     }
     reg = new RegExp($scope.query.toLowerCase());
     return reg.test(input.eventable.name.toLowerCase());
-  };
-  $scope.searchByEventType = function(event) {
-    if (!$scope.eventType) {
-      return true;
-    }
-    return event.action.type === $scope.eventType;
   };
   $scope.searchByRegion = function(event) {
     var _ref;
@@ -533,13 +529,21 @@ DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Fil
       return $scope.favoriteFilter = company_id;
     }
   };
+  setRegionFilter = function() {
+    console.log($scope.regionFilter);
+    if ($location.search().region === $scope.regionFilter || $scope.regionFilter === 'All') {
+      $location.search('region', null);
+    } else {
+      $location.search('region', $scope.regionFilter);
+    }
+    return $scope.refreshEvents();
+  };
+  $scope.$watch("regionFilter", setRegionFilter);
   $scope.setEventType = function(eventType) {
     if ($location.search().event_type === eventType) {
       $location.search('event_type', null);
     } else {
-      $location.search({
-        event_type: eventType
-      });
+      $location.search('event_type', eventType);
     }
     return $scope.refreshEvents();
   };
