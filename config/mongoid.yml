@@ -5,7 +5,7 @@ production:
       username: heroku
       password: sub0utd3v
       hosts: 
-        - alex.mongohq.com:10054
+        - mars.mongohq.com:10089
       options:
         safe: true
 
