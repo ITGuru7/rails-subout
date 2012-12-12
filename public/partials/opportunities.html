@@ -8,7 +8,7 @@
       <th>Amount</th>
     </tr>
     <tr ng-repeat="opportunity in opportunities" >
-      <td><a href="#modal" data-toggle="modal" ng-click="setOpportunity(opportunity); setModal('partials/opportunity-detail.html')">{{opportunity.name}}</a></td>
+      <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
       <td>{{opportunity.description}}</td>
       <td>Tomorrow</td>
       <td>None</td>

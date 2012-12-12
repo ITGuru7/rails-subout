@@ -60,7 +60,7 @@
           <td><strong>${{bid.amount}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
           <td>by <a data-target="#modal" ng-click="setOtherCompanyViaId(bid.bidder._id); setModal('partials/company-profile.html')">{{bid.bidder.name}}</a></td>
-          <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+          <td><a class='btn btn-primary btn-mini pull-right'  ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>
     </div>

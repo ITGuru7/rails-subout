@@ -15,7 +15,7 @@
               <section class="title"><h5>Event Type</h5></section>
               <section class="content">
                 <ul>
-                  <li ng-class="{active: eventType=='opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
+                  <li ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
                   <li ng-class="{active: eventType=='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
                   <li ng-class="{active: eventType=='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
                   <li ng-class="{active: eventType=='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
@@ -140,7 +140,7 @@
                 </div>
               </section>
             <div class="load-more" ng-hide="noMoreEvents">
-              Loading...
+              <span ng-show="loading">Loading...</span>
             </div>
           </section>
         </div>

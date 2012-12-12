@@ -12,7 +12,8 @@ subout.config([
       controller: SignUpCtrl
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
-      controller: DashboardCtrl
+      controller: DashboardCtrl,
+      reloadOnSearch: false
     }).when("/bids", {
       templateUrl: "partials/bids.html",
       controller: MyBidCtrl
@@ -52,7 +53,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   $rootScope.userSignedIn = function() {
     var _ref;
-    if (((_ref = $rootScope.user) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
+    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
       return true;
     }
   };
@@ -72,7 +73,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     });
   };
   publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
-  if (!((_ref = $rootScope.user) != null ? _ref.authorized : void 0)) {
+  if (!((_ref = $rootScope.token) != null ? _ref.authorized : void 0)) {
     if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
       $cookieStore.remove('token');
     } else if (token = $cookieStore.get('token')) {
@@ -400,29 +401,30 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
   return $scope.selectWinner = function(bid) {
     return Auction.select_winner({
-      opportunityId: $rootScope.opportunity._id,
+      opportunityId: $scope.opportunity._id,
       action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      return $scope.opportunity = Opportunity.get({
+        api_token: $rootScope.token.api_token,
+        opportunityId: $scope.opportunity._id
+      });
     });
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, $routeParams, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var updateRegionSelectBox;
   $scope.filters = Filter.query();
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
-  $scope.currentPage = 1;
   $scope.query = "";
   $scope.filter = null;
   $scope.regionFilter = "All";
   $scope.favoriteFilter = "";
   $scope.opportunity = null;
-  $scope.loading = true;
   $scope.noMoreEvents = false;
   updateRegionSelectBox = function() {
     $scope.regions = $rootScope.regions.slice(0);
@@ -441,11 +443,37 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
       opportunityId: opportunity._id
     });
   };
-  $scope.events = Event.query({
-    api_token: $rootScope.token.api_token
-  }, function(data) {
+  $scope.loadMoreEvents = function() {
+    var queryOptions;
+    if ($scope.noMoreEvents || $scope.loading) {
+      return;
+    }
+    $scope.loading = true;
+    $scope.currentPage += 1;
+    queryOptions = angular.copy($location.search());
+    queryOptions.api_token = $rootScope.token.api_token;
+    queryOptions.page = $scope.currentPage;
+    return Event.query(queryOptions, function(data) {
+      if (data.length === 0) {
+        return $scope.noMoreEvents = true;
+      } else {
+        angular.forEach(data, function(event) {
+          return $scope.events.push(event);
+        });
+        return $scope.loading = false;
+      }
+    });
+  };
+  $scope.refreshEvents = function(callback) {
+    $scope.events = [];
+    $scope.currentPage = 0;
+    $scope.loadMoreEvents();
+    if (callback) {
+      return callback();
+    }
+  };
+  $scope.refreshEvents(function() {
     var channel;
-    $scope.loading = false;
     channel = $rootScope.pusher.subscribe('event');
     return channel.bind('created', function(event) {
       if ($rootScope.company.canSeeEvent(event)) {
@@ -506,11 +534,14 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
     }
   };
   $scope.setEventType = function(eventType) {
-    if ($scope.eventType === eventType) {
-      return $scope.eventType = null;
+    if ($location.search().event_type === eventType) {
+      $location.search('event_type', null);
     } else {
-      return $scope.eventType = eventType;
+      $location.search({
+        event_type: eventType
+      });
     }
+    return $scope.refreshEvents();
   };
   $scope.setFilter = function(filter) {
     var i;
@@ -537,7 +568,7 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
         return "" + (action.type.split('_').pop()) + " by";
     }
   };
-  $scope.toggleEvent = function(event) {
+  return $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
     if (event.selected && event.eventable._id) {
       return event.eventable = Opportunity.get({
@@ -549,26 +580,6 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
         }), 1);
       });
     }
-  };
-  return $scope.loadMoreEvents = function() {
-    if ($scope.noMoreEvents || $scope.loading) {
-      return;
-    }
-    $scope.loading = true;
-    $scope.currentPage += 1;
-    return Event.query({
-      api_token: $rootScope.token.api_token,
-      page: $scope.currentPage
-    }, function(data) {
-      if (data.length === 0) {
-        return $scope.noMoreEvents = true;
-      } else {
-        angular.forEach(data, function(event) {
-          return $scope.events.push(event);
-        });
-        return $scope.loading = false;
-      }
-    });
   };
 };
 
