@@ -1,11 +1,11 @@
 production:
   sessions:
     default:
-      database: ENV['MONGO_DB_NAME']
+      database: <%= ENV['MONGO_DB_NAME'] %>
       username: heroku
       password: sub0utd3v
       hosts: 
-        - ENV['MONGO_DB_HOST']
+        - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
 
