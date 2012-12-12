@@ -50,7 +50,7 @@ class Company
   validates :email, presence: true, uniqueness: true
   validates_confirmation_of :password
 
-  validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
+  # Thomas Total Hack validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
   validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
   validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
 
