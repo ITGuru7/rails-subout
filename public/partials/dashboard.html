@@ -5,8 +5,9 @@
               <section class="title"><h5>Opportunity Type</h5></section>
               <section class="content">
                 <ul>
-                  <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
-                  <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
+                  <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{noneactive: $location.search().opportunity_type != filter.name}"
+                     title="{{filter.name}}">
+                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter)">{{filter.name}}</a>
                   </li>
                 </ul>
               </section>
@@ -76,7 +77,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByFavorite | filter:searchByCompanyName | limitTo:100"
+                     ng-repeat="event in events | filter:searchByQuery | filter:searchByFavorite | filter:searchByCompanyName"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">

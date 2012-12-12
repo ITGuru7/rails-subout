@@ -530,7 +530,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
     }
   };
   setRegionFilter = function() {
-    console.log($scope.regionFilter);
     if ($location.search().region === $scope.regionFilter || $scope.regionFilter === 'All') {
       $location.search('region', null);
     } else {
@@ -539,6 +538,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
     return $scope.refreshEvents();
   };
   $scope.$watch("regionFilter", setRegionFilter);
+  $scope.setOpportunityTypeFilter = function(filter) {
+    if ($location.search().opportunity_type === filter.name) {
+      $location.search('opportunity_type', null);
+    } else {
+      $location.search('opportunity_type', filter.name);
+    }
+    return $scope.refreshEvents();
+  };
   $scope.setEventType = function(eventType) {
     if ($location.search().event_type === eventType) {
       $location.search('event_type', null);
@@ -546,23 +553,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
       $location.search('event_type', eventType);
     }
     return $scope.refreshEvents();
-  };
-  $scope.setFilter = function(filter) {
-    var i;
-    i = 0;
-    while (i < $scope.filters.length) {
-      if ($scope.filters[i] !== filter) {
-        $scope.filters[i].active = false;
-      }
-      i++;
-    }
-    filter.active = !filter.active;
-    if (filter.active) {
-      $scope.filter = filter;
-    } else {
-      $scope.filter = null;
-    }
-    return $scope.query = "";
   };
   $scope.actionDescription = function(action) {
     switch (action.type) {
