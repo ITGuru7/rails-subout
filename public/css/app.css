@@ -6970,6 +6970,11 @@ input.ng-dirty.ng-invalid {
     overflow: visible !important;
   }
 }
+/****************************************************************************************************************************
+ *
+ * current_file: app/styles/themes/custom/_overrides.less 
+ *
+ */
 /*
 Place custom styles here. Thes styles are ment to be loaded after
 bootstrap, so the may override it's behavior.
@@ -7285,6 +7290,11 @@ a:hover {
 [class*=" icon-"]:hover {
   background: none !important;
 }
+/****************************************************************************************************************************
+ *
+ * current_file: app/styles/themes/custom/_global.less 
+ *
+ */
 body {
   font-family: "myriad-pro";
   font-weight: 400;
@@ -7439,17 +7449,11 @@ body {
 #filters .filter .filter-name {
   color: #378bac;
 }
-#filters .filter.active .status {
-  background: url(../img/filters/active.png) no-repeat left center;
-}
-#filters .filter.noneactive {
-  background: none!important;
-}
-#event_types .content li.active {
+.filters .active {
   background-color: #69b645;
 }
-#event_types .content li.active a {
-  display: block;
+.filters .active a {
+  color: white;
 }
 #tags .tag {
   margin-bottom: 0.3em;
@@ -7734,4 +7738,13 @@ table.bid-history {
   background-color: white;
   margin: 0;
   padding-top: 5px;
+}
+.control-group .ng-invalid {
+  border: solid 1px red;
+}
+.control-group .ng-pristine {
+  border: solid 1px gray;
+}
+.control-group.error .ng-pristine {
+  border: solid 1px gray;
 }
