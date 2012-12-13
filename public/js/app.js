@@ -557,7 +557,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "recieved bid $" + action.details.amount + " from";
+        return "bid $" + action.details.amount + " from";
       default:
         return "" + (action.type.split('_').pop()) + " by";
     }
@@ -717,6 +717,8 @@ subout.directive("whenScrolled", function() {
 var Evaluators, evaluation, module;
 
 module = angular.module("suboutFilters", []);
+
+module.filter("timestamp", function() {});
 
 module.filter("timestamp", function() {
   return function(input) {

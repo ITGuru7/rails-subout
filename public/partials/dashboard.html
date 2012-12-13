@@ -86,9 +86,11 @@
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
-                      <a ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}">
-                        {{opportunity.name}}
-                      </a>
+                      <span class="opportunity-name">
+                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}">
+                          {{opportunity.name}}
+                        </a>
+                      </span>
                       <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
                       <span class="event-action">
                         {{actionDescription(action)}}

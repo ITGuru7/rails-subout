@@ -7627,6 +7627,13 @@ table.bid-history {
 #activity-stream .event .event-summary .expand-collapse i {
   cursor: pointer;
 }
+#activity-stream .event .event-summary .opportunity-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
+  width: 50%;
+}
 #activity-stream .event .eventable-details {
   padding: 0 10px;
   margin-bottom: 20px;
