@@ -36,9 +36,21 @@
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <input class="span10" ng-model="companyNameFilter" placeholder="Enter Company Name ..."/>
+                <input class="span10" ng-model="companyFilter" ui-keypress="{13:'setCompanyFilter($event)'}" placeholder="Enter Company Id ..."/>
               </section>
             </section>
+
+            <section id="companies2">
+              <section class="title"><h5>Company</h5></section>
+              <section class="content">
+                <select ui-select2 ng-model="selectedCompany" data-placeholder="-- Select Company --" style="width:200px">
+                  <option></option>
+                  <option ng-repeat="company in companies" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                </select>
+              </section>
+            </section>
+
+
             <section id="favorite_companies" ng-show="favoriteCompanies.length > 0">
               <section class="title"><h5>Favorites</h5></section>
               <section class="content">

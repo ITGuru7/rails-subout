@@ -1,4 +1,9 @@
 class Api::V1::CompaniesController < Api::V1::BaseController
+  def index
+    companies = Company.all
+    respond_with_namespace(companies)
+  end
+
   def show
     @company = Company.find(params[:id])
     respond_with_namespace(@company)

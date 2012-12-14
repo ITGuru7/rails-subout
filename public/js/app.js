@@ -414,7 +414,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var setRegionFilter, updateRegionSelectBox;
   $scope.$location = $location;
   $scope.filters = Filter.query();
@@ -432,6 +432,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
   };
   $scope.regions = updateRegionSelectBox();
   $rootScope.$watch("regions", updateRegionSelectBox);
+  $scope.companies = Company.query({
+    api_token: $rootScope.token.api_token
+  });
   $scope.winOpportunityNow = function(opportunity) {
     var bid;
     bid = {
@@ -557,7 +560,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Event, Filter, Tag, Bid,
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "bid $" + action.details.amount + " from";
+        return "recieved bid $" + action.details.amount + " from";
       default:
         return "" + (action.type.split('_').pop()) + " by";
     }
@@ -829,13 +832,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     companyId: '@companyId',
     action: '@action'
   }, {
-    query: {
-      method: "GET",
-      params: {
-        companyId: "all"
-      },
-      isArray: true
-    },
     update: {
       method: "PUT"
     },
