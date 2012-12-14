@@ -7,8 +7,6 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = events.where(:actor_id => params[:company_id]) if params[:company_id]
     events = events.full_text_search(params[:q])
 
-    binding.pry
-
     respond_with_namespace events
   end
 end
