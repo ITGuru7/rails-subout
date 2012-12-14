@@ -1,4 +1,6 @@
 class Api::V1::FavoriteInvitationsController < Api::V1::BaseController
+  skip_before_filter :restrict_access, only: :show
+
   def show
     favorite_invitation = FavoriteInvitation.pending.find(params[:id])
 

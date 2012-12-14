@@ -7338,10 +7338,10 @@ body {
   color: #ffffff;
 }
 #toolbar {
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
-#toolbar .toolbar-buttons {
-  margin: 5px 0;
+#toolbar .filter-title {
+  margin-bottom: 4px;
 }
 #btn_back,
 #btn_next {
@@ -7449,10 +7449,14 @@ body {
 #filters .filter .filter-name {
   color: #378bac;
 }
-.filters .active {
-  background-color: #69b645;
+.filters .filter {
+  padding: 0 3px;
 }
-.filters .active a {
+.filters .filter.active {
+  background-color: #69b645;
+  max-width: 200px;
+}
+.filters .filter.active a {
   color: white;
 }
 #tags .tag {
@@ -7551,14 +7555,20 @@ table.bid-history {
 #add-new-favorite .control-group.last {
   margin-bottom: 0;
 }
+#sidebar {
+  float: left;
+}
 #sidebar > section {
   padding-bottom: 15px;
+}
+#subout-navbar.navbar {
+  border-bottom: 8px solid #c7c6b3;
+  padding: 0 40px;
 }
 #subout-navbar.navbar .navbar-inner {
   height: 80px;
   padding: 0;
   border: 0;
-  border-bottom: 8px solid #c7c6b3;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -7569,12 +7579,14 @@ table.bid-history {
   background-image: none;
 }
 #subout-navbar.navbar .brand {
+  display: block;
+  float: left;
   background-image: url("/img/logo_medium.png");
   width: 200px;
   height: 60px;
   text-indent: -9999px;
   padding: 0;
-  margin: 15px 25px 0 35px;
+  margin: 15px 0 0 0;
 }
 #subout-navbar.navbar li {
   line-height: 40px;
@@ -7590,7 +7602,7 @@ table.bid-history {
   color: white;
 }
 #subout-navbar.navbar .navbar-buttons {
-  margin: 31px 35px 0 0;
+  margin: 31px 0 0 0;
 }
 #subout-navbar.navbar .navbar-buttons i {
   margin-right: 5px;
@@ -7615,7 +7627,7 @@ table.bid-history {
   margin-bottom: 5px;
 }
 #activity-stream .event .event-summary {
-  padding: 0 10px;
+  padding-left: 10px;
   line-height: 30px;
 }
 #activity-stream .event .event-summary span i {
@@ -7632,7 +7644,8 @@ table.bid-history {
   overflow: hidden;
   text-overflow: ellipsis;
   float: left;
-  width: 50%;
+  margin-right: 5px;
+  max-width: 50%;
 }
 #activity-stream .event .eventable-details {
   padding: 0 10px;

@@ -1,4 +1,6 @@
 class Api::V1::TokensController < Api::V1::BaseController
+  skip_before_filter :restrict_access
+
   def create
     user = User.where(:email => params[:email]).first
     if user && user.valid_password?(params[:password]) 

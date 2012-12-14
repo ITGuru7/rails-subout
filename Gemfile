@@ -22,6 +22,7 @@ gem 'american_date'
 gem 'ffaker'
 gem 'mongoid_token', github: 'samnang/mongoid_token'
 gem 'geocoder'
+gem 'mongoid_search'
 
 group :development, :test do
   gem "pry"

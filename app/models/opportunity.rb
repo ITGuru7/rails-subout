@@ -114,4 +114,8 @@ class Opportunity
   def bidding_ends_at
     created_at + bidding_duration_hrs.to_i.hours
   end
+
+  def fulltext
+    [name, description].join(' ')
+  end
 end

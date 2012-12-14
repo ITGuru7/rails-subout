@@ -1,8 +1,7 @@
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps
-
-  paginates_per 30
+  include Mongoid::Search
 
   field :regions, type: Array
   field :eventable_company_id
@@ -12,6 +11,9 @@ class Event
   belongs_to :actor, :class_name => "Company"
   embeds_one :action, class_name: "EventAction"
   belongs_to :eventable, :polymorphic => true
+  
+  paginates_per 30
+  search_in eventable: :fulltext
 
   before_create :copy_eventable_fields
 
