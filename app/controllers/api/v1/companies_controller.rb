@@ -1,7 +1,8 @@
 class Api::V1::CompaniesController < Api::V1::BaseController
+  skip_before_filter :restrict_access, only: :create
+
   def index
-    companies = Company.all
-    respond_with_namespace(companies)
+    render json: Company.all, each_serializer: ActorSerializer
   end
 
   def show
@@ -15,9 +16,8 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   end
 
   def update
-    company = Company.find(params[:id])
-    company.update_attributes(params[:company])
-    respond_with_namespace(company)
+    current_company.update_attributes(params[:company])
+    respond_with_namespace(current_company)
   end
 
   def create

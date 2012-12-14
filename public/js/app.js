@@ -417,7 +417,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var setRegionFilter, updateRegionSelectBox;
   $scope.$location = $location;
-  $scope.filters = Filter.query();
+  $scope.filters = Filter.query({
+    api_token: $rootScope.token.api_token
+  });
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
