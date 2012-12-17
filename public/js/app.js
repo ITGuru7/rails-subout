@@ -462,7 +462,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return;
     }
     $scope.loading = true;
-    $scope.currentPage += 1;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
     queryOptions.page = $scope.currentPage;
@@ -474,13 +473,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
         angular.forEach(data, function(event) {
           return $scope.events.push(event);
         });
-        return $scope.loading = false;
+        $scope.loading = false;
+        return $scope.currentPage += 1;
       }
     });
   };
   $scope.refreshEvents = function(callback) {
     $scope.events = [];
-    $scope.currentPage = 0;
+    $scope.currentPage = 1;
     $scope.noMoreEvents = false;
     $scope.loadMoreEvents();
     if (callback) {
@@ -568,9 +568,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.$watch("regions", function() {
     $scope.regionFilter = $location.search().region;
-    return $scope.$watch("regionFilter", setRegionFilter);
-  });
-  $scope.$watch("companies", function() {
+    $scope.$watch("regionFilter", setRegionFilter);
     $scope.companyFilter = $location.search().company_id;
     return $scope.$watch("companyFilter", setCompanyFilter);
   });
