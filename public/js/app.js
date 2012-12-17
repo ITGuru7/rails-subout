@@ -12,7 +12,8 @@ subout.config([
       controller: SignUpCtrl
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
-      controller: DashboardCtrl
+      controller: DashboardCtrl,
+      reloadOnSearch: false
     }).when("/bids", {
       templateUrl: "partials/bids.html",
       controller: MyBidCtrl
@@ -32,6 +33,18 @@ subout.config([
     });
   }
 ]);
+
+subout.value('ui.config', {
+  select2: {
+    allowClear: true,
+    formatSelection: function(option) {
+      if (!option) {
+        return;
+      }
+      return $(option.element).data('abbreviated_name');
+    }
+  }
+});
 
 $.timeago.settings.allowFuture = true;
 
@@ -91,6 +104,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
   $rootScope.signOut = function() {
     $cookieStore.remove('token');
+    window.location = "#/sign_in";
     return window.location.reload();
   };
   $rootScope.ALL_REGIONS = {
@@ -413,26 +427,24 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, Opportunity) {
-  var updateRegionSelectBox;
-  $scope.filters = Filter.query();
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+  var setCompanyFilter, setRegionFilter;
+  $scope.$location = $location;
+  $scope.filters = Filter.query({
+    api_token: $rootScope.token.api_token
+  });
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
-  $scope.currentPage = 1;
-  $scope.query = "";
+  $scope.query = $location.search().q;
   $scope.filter = null;
-  $scope.regionFilter = "All";
-  $scope.favoriteFilter = "";
   $scope.opportunity = null;
-  $scope.loading = true;
-  $scope.noMoreEvents = false;
-  updateRegionSelectBox = function() {
-    $scope.regions = $rootScope.regions.slice(0);
-    return $scope.regions.unshift("All");
-  };
-  $scope.regions = updateRegionSelectBox();
-  $rootScope.$watch("regions", updateRegionSelectBox);
+  $scope.regions = $rootScope.regions.slice(0);
+  Company.query({
+    api_token: $rootScope.token.api_token
+  }, function(data) {
+    return $scope.companies = data;
+  });
   $scope.winOpportunityNow = function(opportunity) {
     var bid;
     bid = {
@@ -444,62 +456,92 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
       opportunityId: opportunity._id
     });
   };
-  $scope.events = Event.query({
-    api_token: $rootScope.token.api_token
-  }, function(data) {
+  $scope.loadMoreEvents = function() {
+    var queryOptions;
+    if ($scope.noMoreEvents || $scope.loading) {
+      return;
+    }
+    $scope.loading = true;
+    queryOptions = angular.copy($location.search());
+    queryOptions.api_token = $rootScope.token.api_token;
+    queryOptions.page = $scope.currentPage;
+    return Event.query(queryOptions, function(data) {
+      if (data.length === 0) {
+        $scope.noMoreEvents = true;
+        return $scope.loading = false;
+      } else {
+        angular.forEach(data, function(event) {
+          return $scope.events.push(event);
+        });
+        $scope.loading = false;
+        return $scope.currentPage += 1;
+      }
+    });
+  };
+  $scope.refreshEvents = function(callback) {
+    $scope.events = [];
+    $scope.currentPage = 1;
+    $scope.noMoreEvents = false;
+    $scope.loadMoreEvents();
+    if (callback) {
+      return callback();
+    }
+  };
+  $scope.refreshEvents(function() {
     var channel;
-    $scope.loading = false;
     channel = $rootScope.pusher.subscribe('event');
     return channel.bind('created', function(event) {
-      if ($rootScope.company.canSeeEvent(event)) {
+      if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
         $scope.events.unshift(event);
         return $scope.$apply();
       }
     });
   });
-  $scope.searchByFilter = function(input) {
-    if (!$scope.filter) {
-      return true;
-    }
-    return evaluation(input.eventable, $scope.filter.evaluation);
+  $scope.matchFilters = function(event) {
+    return $scope.filterEventType(event) && $scope.filterRegion(event) && $scope.filterOpportunityType(event) && $scope.filterFullText(event) && $scope.filterCompany(event);
   };
-  $scope.searchByQuery = function(input) {
-    var reg;
-    if (!$scope.query) {
+  $scope.filterEventType = function(event) {
+    var event_type;
+    event_type = $location.search().event_type;
+    if (!event_type) {
       return true;
     }
-    reg = new RegExp($scope.query.toLowerCase());
-    return reg.test(input.eventable.name.toLowerCase());
+    return event.action.type === event_type;
   };
-  $scope.searchByEventType = function(event) {
-    if (!$scope.eventType) {
+  $scope.filterRegion = function(event) {
+    var region;
+    region = $location.search().region;
+    if (!region) {
       return true;
     }
-    return event.action.type === $scope.eventType;
+    return __indexOf.call(event.regions, region) >= 0;
   };
-  $scope.searchByRegion = function(event) {
-    var _ref;
-    if ($scope.regionFilter === "All") {
+  $scope.filterOpportunityType = function(event) {
+    var opportunity_type;
+    opportunity_type = $location.search().opportunity_type;
+    if (!opportunity_type) {
       return true;
     }
-    return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
+    return event.eventable.type === opportunity_type;
   };
-  $scope.searchByCompanyName = function(input) {
-    var reg;
-    if (!$scope.companyNameFilter) {
+  $scope.filterFullText = function(event) {
+    var eventable, query, reg, text;
+    query = $location.search().q;
+    if (!query) {
       return true;
     }
-    if (!(input.eventable.buyer_name && input.eventable.buyer_abbreviated_name)) {
-      return false;
-    }
-    reg = new RegExp($scope.companyNameFilter.toLowerCase());
-    return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+    reg = new RegExp(query);
+    eventable = event.eventable;
+    text = (eventable.name + ' ' + eventable.description).toLowerCase();
+    return reg.test(text);
   };
-  $scope.searchByFavorite = function(event) {
-    if ($scope.favoriteFilter === "") {
+  $scope.filterCompany = function(event) {
+    var actor_id;
+    actor_id = $location.search().company_id;
+    if (!actor_id) {
       return true;
     }
-    return $scope.favoriteFilter === event.eventable_company_id;
+    return event.actor._id === actor_id;
   };
   $scope.setFavoriteFilter = function(company_id) {
     if ($scope.favoriteFilter === company_id) {
@@ -508,29 +550,43 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
       return $scope.favoriteFilter = company_id;
     }
   };
-  $scope.setEventType = function(eventType) {
-    if ($scope.eventType === eventType) {
-      return $scope.eventType = null;
+  setRegionFilter = function() {
+    if ($scope.regionFilter) {
+      $location.search('region', $scope.regionFilter);
     } else {
-      return $scope.eventType = eventType;
+      $location.search('region', null);
     }
+    return $scope.refreshEvents();
   };
-  $scope.setFilter = function(filter) {
-    var i;
-    i = 0;
-    while (i < $scope.filters.length) {
-      if ($scope.filters[i] !== filter) {
-        $scope.filters[i].active = false;
-      }
-      i++;
-    }
-    filter.active = !filter.active;
-    if (filter.active) {
-      $scope.filter = filter;
+  setCompanyFilter = function() {
+    if ($scope.companyFilter) {
+      $location.search('company_id', $scope.companyFilter);
     } else {
-      $scope.filter = null;
+      $location.search('company_id', null);
     }
-    return $scope.query = "";
+    return $scope.refreshEvents();
+  };
+  $scope.$watch("regions", function() {
+    $scope.regionFilter = $location.search().region;
+    $scope.$watch("regionFilter", setRegionFilter);
+    $scope.companyFilter = $location.search().company_id;
+    return $scope.$watch("companyFilter", setCompanyFilter);
+  });
+  $scope.setOpportunityTypeFilter = function(filter) {
+    if ($location.search().opportunity_type === filter.name) {
+      $location.search('opportunity_type', null);
+    } else {
+      $location.search('opportunity_type', filter.name);
+    }
+    return $scope.refreshEvents();
+  };
+  $scope.setEventType = function(eventType) {
+    if ($location.search().event_type === eventType) {
+      $location.search('event_type', null);
+    } else {
+      $location.search('event_type', eventType);
+    }
+    return $scope.refreshEvents();
   };
   $scope.actionDescription = function(action) {
     switch (action.type) {
@@ -553,25 +609,9 @@ DashboardCtrl = function($scope, $rootScope, Event, Filter, Tag, Bid, Favorite, 
       });
     }
   };
-  return $scope.loadMoreEvents = function() {
-    if ($scope.noMoreEvents || $scope.loading) {
-      return;
-    }
-    $scope.loading = true;
-    $scope.currentPage += 1;
-    return Event.query({
-      api_token: $rootScope.token.api_token,
-      page: $scope.currentPage
-    }, function(data) {
-      if (data.length === 0) {
-        return $scope.noMoreEvents = true;
-      } else {
-        angular.forEach(data, function(event) {
-          return $scope.events.push(event);
-        });
-        return $scope.loading = false;
-      }
-    });
+  return $scope.fullTextSearch = function(event) {
+    $location.search('q', $scope.query);
+    return $scope.refreshEvents();
   };
 };
 
@@ -716,6 +756,8 @@ var Evaluators, evaluation, module;
 
 module = angular.module("suboutFilters", []);
 
+module.filter("timestamp", function() {});
+
 module.filter("timestamp", function() {
   return function(input) {
     return new Date(input).getTime();
@@ -825,13 +867,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     companyId: '@companyId',
     action: '@action'
   }, {
-    query: {
-      method: "GET",
-      params: {
-        companyId: "all"
-      },
-      isArray: true
-    },
     update: {
       method: "PUT"
     },

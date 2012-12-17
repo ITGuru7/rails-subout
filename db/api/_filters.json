@@ -1,7 +1,7 @@
 [{
     "_id":"503026b08859aed418000004",
     "active":false,
-    "name":"Vehicles Needed",
+    "name":"Vehicle Needed",
     "color":"#69b644",
     "icon": "icon-hand-up",
     
@@ -18,7 +18,7 @@
 {
     "_id":"503026b08859aed418000005",
     "active":false,
-    "name":"Vehicles for Hire",
+    "name":"Vehicle for Hire",
     "color":"#e1c212",
     "icon": "icon-road",
     
@@ -34,7 +34,7 @@
 {
     "_id":"503026b08859aed418000004",
     "active":false,
-    "name":"Specials",
+    "name":"Special",
     "color":"#f25a29",
     
     "icon": "icon-bullhorn",
@@ -52,7 +52,7 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"Emergencies",
+    "name":"Emergency",
     "color":"#f25a29",
 
     "icon": "icon-plus-sign",
@@ -69,7 +69,7 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"Parts",
+    "name":"Part",
     "color":"#f25a29",
 
     "icon": "icon-cog",

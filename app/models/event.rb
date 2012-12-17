@@ -1,16 +1,19 @@
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps
-
-  paginates_per 30
+  include Mongoid::Search
 
   field :regions, type: Array
   field :eventable_company_id
   field :eventable_for_favorites_only
+  field :cached_eventable_type
 
   belongs_to :actor, :class_name => "Company"
   embeds_one :action, class_name: "EventAction"
   belongs_to :eventable, :polymorphic => true
+  
+  paginates_per 30
+  search_in eventable: :fulltext
 
   before_create :copy_eventable_fields
 
@@ -35,6 +38,7 @@ class Event
 
   def copy_eventable_fields
     self.regions = eventable.regions
+    self.cached_eventable_type = eventable.type
     self.eventable_for_favorites_only = eventable.for_favorites_only
     self.eventable_company_id = eventable.buyer_id
   end

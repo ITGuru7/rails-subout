@@ -10,15 +10,16 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="user-login">
-        <form ng:submit="saveUserProfile()" class="form-horizontal">
+        <form name="settingsUserLogin" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
 
-            <div class="control-group">
-              <label for="email" class="control-label">Email</label>
+            <div class="control-group" ng-class="{error:settingsUserLogin.user_email.$invalid}">
+              <label for="user_email" class="control-label">Email *</label>
               <div class="controls">
 
-                <input id="email" 
+              <input id="user_email" 
+                name="user_email"
                 type="text"
                 class="input-xlarge"
                 ng:model="userProfile.email"
@@ -27,17 +28,17 @@
                 />
               </div>
             </div>
-
-            <div class="control-group">
-              <label for="current_password" class="control-label">Current Password</label>
+            
+            <div class="control-group" ng-class="{error:settingsUserLogin.current_password.$invalid}">
+              <label for="current_password" class="control-label">Current Password *</label>
               <div class="controls">
 
                 <input id="current_password"
+                name="current_password"
                 type="password"
                 class="input-xlarge"
                 ng:model="userProfile.current_password"
                 required
-                autofocus
                 />
               </div>
             </div>
@@ -50,7 +51,6 @@
                 type="password"
                 class="input-xlarge"
                 ng:model="userProfile.password"
-                autofocus
                 />
               </div>
             </div>
@@ -63,28 +63,29 @@
                 type="password"
                 class="input-xlarge"
                 ng:model="userProfile.password_confirmation"
-                autofocus
                 />
               </div>
             </div>
 
             <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Save</button>
+              <button class="btn btn-primary" ng:click="saveUserProfile()" ng-disabled="settingsUserLogin.$invalid">Save</button>
             </div>
 
           </fieldset>
         </form>
       </div>
+
       <div class="tab-pane" id="company-profile">
-        <form ng:submit="saveCompanyProfile()" class="form-horizontal">
+        <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
 
-            <div class="control-group two-lines">
-              <label for="abbreviated_name" class="control-label">Company Abbreviated Name</label>
+            <div class="control-group two-lines" ng-class="{error:settingsCompanyProfile.abbreviated_name.$invalid}">
+              <label for="abbreviated_name" class="control-label">Company Abbreviated Name *</label>
               <div class="controls">
 
                 <input id="abbreviated_name"
+                name="abbreviated_name"
                 type="text"
                 class="input-xlarge"
                 ng:model="companyProfile.abbreviated_name"
@@ -169,20 +170,22 @@
               </div>
             </div>
 
-            <div class="control-group">
-              <label for="owner" class="control-label">Contact Email:</label>
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_email.$invalid}">
+              <label for="contact_email" class="control-label">Contact Email *</label>
               <div class="controls">
 
-                <input id="contact" 
+                <input id="contact_email" 
+                name="contact_email"
                 type="text"
                 class="input-xlarge"
                 ng:model="companyProfile.email"
+                required
                 />
               </div>
             </div>
 
             <div class="control-group">
-              <label for="website" class="control-label">Website:</label>
+              <label for="website" class="control-label">Website</label>
               <div class="controls">
                 <input id="website" 
                 type="text"
@@ -193,7 +196,7 @@
             </div>
 
             <div class="control-group">
-              <label for="tpa" class="control-label">TPA:</label>
+              <label for="tpa" class="control-label">TPA</label>
               <div class="controls">
 
                 <input id="tpa" 
@@ -205,7 +208,7 @@
             </div>
 
             <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Save</button>
+              <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
             </div>
 
           </fieldset>

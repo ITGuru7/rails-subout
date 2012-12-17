@@ -7,6 +7,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
+#ORM.observers.disable :event_observer
+
 demo_companies = {
   'Diversified Transportation Ltd.' => 'suboutdev@gmail.com',
   'Valley Bus Coaches, Llc' => 'ed@valley_bus.com',

@@ -1,24 +1,25 @@
 <div id="dashboard">
       <div class="row-fluid">
         <div id="sidebar" class="span3">
-            <section id="filters">
+            <section id="filters" class="filters">
               <section class="title"><h5>Opportunity Type</h5></section>
               <section class="content">
                 <ul>
-                  <li ng-repeat="filter in filters" class="filter row-fluid" style="background:{{filter.color}}" ng-class="{active: filter.active==true,noneactive: filter.active==false}" title="{{filter.name}}">
-                  <i class="{{filter.icon}}"></i> <a ng-click="setFilter(filter)">{{filter.name}}</a>
+                  <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name}"
+                     title="{{filter.name}}">
+                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter)">{{filter.name}}</a>
                   </li>
                 </ul>
               </section>
             </section>
-            <section id="event_types">
+            <section id="event_types" class="filters">
               <section class="title"><h5>Event Type</h5></section>
               <section class="content">
                 <ul>
-                  <li ng-class="{active: eventType=='opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
-                  <li ng-class="{active: eventType=='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
-                  <li ng-class="{active: eventType=='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
-                  <li ng-class="{active: eventType=='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
+                  <li class="filter" ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">Created</a></li>
+                  <li class="filter" ng-class="{active: $location.search().event_type =='bid_created'}"><a ng-click="setEventType('bid_created')">New Bid</a></li>
+                  <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Bidding Won</a></li>
+                  <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Canceled</a></li>
                 </ul>
               </section>
             </section>
@@ -27,17 +28,26 @@
               <section class="content">
                 <ul>
                   <li>
-                    <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
+                    <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
+                      <option value=""></option>
+                      <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+                    </select>
                   </li>
                 </ul>
               </section>
             </section>
+
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <input class="span10" ng-model="companyNameFilter" placeholder="Enter Company Name ..."/>
+                <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
+                  <option value=""></option>
+                  <option ng-repeat="company in companies"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                </select>
               </section>
             </section>
+
+
             <section id="favorite_companies" ng-show="favoriteCompanies.length > 0">
               <section class="title"><h5>Favorites</h5></section>
               <section class="content">
@@ -65,7 +75,7 @@
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
-                            <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
+                          <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
                         <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
@@ -76,7 +86,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByRegion | filter:searchByQuery | filter:searchByFilter | filter:searchByEventType | filter:searchByFavorite | filter:searchByCompanyName | limitTo:100"
+                     ng-repeat="event in events"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">
@@ -85,9 +95,11 @@
                       <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
-                      <a ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}">
-                        {{opportunity.name}}
-                      </a>
+                      <span class="opportunity-name">
+                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}">
+                          {{opportunity.name}}
+                        </a>
+                      </span>
                       <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
                       <span class="event-action">
                         {{actionDescription(action)}}
@@ -140,7 +152,7 @@
                 </div>
               </section>
             <div class="load-more" ng-hide="noMoreEvents">
-              Loading...
+              <span ng-show="loading">Loading...</span>
             </div>
           </section>
         </div>
