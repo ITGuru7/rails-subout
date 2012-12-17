@@ -8133,6 +8133,9 @@ table.bid-history {
 #sidebar > section {
   padding-bottom: 15px;
 }
+#sidebar #regions ul {
+  padding-bottom: 20px;
+}
 #subout-navbar.navbar {
   border-bottom: 8px solid #c7c6b3;
   padding: 0 40px;
