@@ -34,6 +34,18 @@ subout.config([
   }
 ]);
 
+subout.value('ui.config', {
+  select2: {
+    allowClear: true,
+    formatSelection: function(company) {
+      if (!company) {
+        return;
+      }
+      return $(company.element).data('abbreviated_name');
+    }
+  }
+});
+
 $.timeago.settings.allowFuture = true;
 
 $.cloudinary.config({
@@ -415,7 +427,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
-  var setRegionFilter, updateRegionSelectBox;
+  var matchFilters, setCompanyFilter, setRegionFilter, updateRegionSelectBox;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -483,49 +495,45 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     var channel;
     channel = $rootScope.pusher.subscribe('event');
     return channel.bind('created', function(event) {
-      if ($rootScope.company.canSeeEvent(event)) {
+      if ($rootScope.company.canSeeEvent(event) && matchFilters(event)) {
         $scope.events.unshift(event);
         return $scope.$apply();
       }
     });
   });
-  $scope.searchByFilter = function(input) {
-    if (!$scope.filter) {
-      return true;
-    }
-    return evaluation(input.eventable, $scope.filter.evaluation);
+  matchFilters = function(event) {
+    return $scope.filterEventType(event) && $scope.filterRegion(event) && $scope.filterOpportunityType(event) && $scope.filterFullText(event) && $scope.filterCompany(event);
   };
-  $scope.searchByQuery = function(input) {
-    var reg;
-    if (!$scope.query) {
+  $scope.filterEventType = function(event) {
+    if (!$scope.eventType) {
       return true;
     }
-    reg = new RegExp($scope.query.toLowerCase());
-    return reg.test(input.eventable.name.toLowerCase());
+    return event.action.type === $location.search().company_id;
   };
-  $scope.searchByRegion = function(event) {
-    var _ref;
-    if ($scope.regionFilter === "All") {
+  $scope.filterRegion = function(event) {
+    var region;
+    region = $location.search().region;
+    if (!region) {
       return true;
     }
-    return _ref = $scope.regionFilter, __indexOf.call(event.regions, _ref) >= 0;
+    return __indexOf.call(event.regions, region) >= 0;
   };
-  $scope.searchByCompanyName = function(input) {
-    var reg;
-    if (!$scope.companyNameFilter) {
-      return true;
-    }
-    if (!(input.eventable.buyer_name && input.eventable.buyer_abbreviated_name)) {
-      return false;
-    }
-    reg = new RegExp($scope.companyNameFilter.toLowerCase());
-    return reg.test(input.eventable.buyer_name.toLowerCase()) || reg.test(input.eventable.buyer_abbreviated_name.toLowerCase());
+  $scope.filterOpportunityType = function(event) {
+    return event.eventable.type === $location.search().opportunity_type;
   };
-  $scope.searchByFavorite = function(event) {
-    if ($scope.favoriteFilter === "") {
+  $scope.filterFullText = function(event) {
+    var eventable, query, reg, text;
+    query = $location.search().q;
+    if (!query) {
       return true;
     }
-    return $scope.favoriteFilter === event.eventable_company_id;
+    reg = new RegExp(query);
+    eventable = event.eventable;
+    text = (eventable.name + ' ' + eventable.description).toLowerCase();
+    return reg.test(text);
+  };
+  $scope.filterCompany = function(event) {
+    return event.actor._id === $location.search().company_id;
   };
   $scope.setFavoriteFilter = function(company_id) {
     if ($scope.favoriteFilter === company_id) {
@@ -535,7 +543,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     }
   };
   setRegionFilter = function() {
-    if ($location.search().region === $scope.regionFilter || $scope.regionFilter === 'All') {
+    if ($scope.regionFilter === 'All') {
       $location.search('region', null);
     } else {
       $location.search('region', $scope.regionFilter);
@@ -543,6 +551,15 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   $scope.$watch("regionFilter", setRegionFilter);
+  setCompanyFilter = function() {
+    if ($scope.selectedCompany) {
+      $location.search('company_id', $scope.selectedCompany);
+    } else {
+      $location.search('company_id', null);
+    }
+    return $scope.refreshEvents();
+  };
+  $scope.$watch("selectedCompany", setCompanyFilter);
   $scope.setOpportunityTypeFilter = function(filter) {
     if ($location.search().opportunity_type === filter.name) {
       $location.search('opportunity_type', null);
@@ -567,7 +584,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
         return "" + (action.type.split('_').pop()) + " by";
     }
   };
-  return $scope.toggleEvent = function(event) {
+  $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
     if (event.selected && event.eventable._id) {
       return event.eventable = Opportunity.get({
@@ -579,6 +596,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
         }), 1);
       });
     }
+  };
+  return $scope.fullTextSearch = function(event) {
+    if ($location.search().q === '') {
+      $location.search('q', null);
+    } else {
+      $location.search('q', $scope.query);
+    }
+    return $scope.refreshEvents();
   };
 };
 

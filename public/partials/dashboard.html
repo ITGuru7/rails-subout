@@ -33,19 +33,13 @@
                 </ul>
               </section>
             </section>
+
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <input class="span10" ng-model="companyFilter" ui-keypress="{13:'setCompanyFilter($event)'}" placeholder="Enter Company Id ..."/>
-              </section>
-            </section>
-
-            <section id="companies2">
-              <section class="title"><h5>Company</h5></section>
-              <section class="content">
-                <select ui-select2 ng-model="selectedCompany" data-placeholder="-- Select Company --" style="width:200px">
+                <select ui-select2 ng-model="selectedCompany" data-placeholder="-- Select Company --" class="span10">
                   <option></option>
-                  <option ng-repeat="company in companies" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                  <option ng-repeat="company in companies" data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
                 </select>
               </section>
             </section>
@@ -78,7 +72,7 @@
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
-                            <input id="search-listing" class="span10" ng-model="query" placeholder="Search listings for..."/>
+                          <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
                         <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
@@ -89,7 +83,7 @@
               <section id="activity-stream">
                 <div class="event row-fluid"
                      ng-class="{expanded: event.selected}"
-                     ng-repeat="event in events | filter:searchByQuery | filter:searchByFavorite | filter:searchByCompanyName"
+                     ng-repeat="event in events"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
                   <div class="event-summary">
