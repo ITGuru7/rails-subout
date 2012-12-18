@@ -23,6 +23,8 @@ class Company
   field :subscription_plan, default: 'free'
   field :regions, type: Array
 
+  field :notification_type, default: 'None'
+
   #address stuff TODO ask Tom about this
   field :street_address, type: String
   field :zip_code, type: String
@@ -67,7 +69,7 @@ class Company
       options << {:regions.in => opportunity.regions}
     end
 
-    Company.any_of(*options).excludes(id: opportunity.buyer_id)
+    Company.any_of(*options).excludes(id: opportunity.buyer_id, notification_type: 'None')
   end
 
   def favorite_suppliers

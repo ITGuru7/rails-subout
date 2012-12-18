@@ -28,7 +28,10 @@
               <section class="content">
                 <ul>
                   <li>
-                    <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
+                    <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
+                      <option value=""></option>
+                      <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+                    </select>
                   </li>
                 </ul>
               </section>
@@ -37,9 +40,9 @@
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <select ui-select2 ng-model="selectedCompany" data-placeholder="-- Select Company --" class="span10">
-                  <option></option>
-                  <option ng-repeat="company in companies" data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
+                  <option value=""></option>
+                  <option ng-repeat="company in companies"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
                 </select>
               </section>
             </section>
