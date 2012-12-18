@@ -3,6 +3,7 @@ class OpportunityObserver < Mongoid::Observer
 
   def after_create(opportunity)
     create_event(opportunity, :opportunity_created)
+    send_notification_to_companies(opportunity)
   end
 
   def after_update(opportunity)
@@ -19,5 +20,13 @@ class OpportunityObserver < Mongoid::Observer
 
   def create_event(opportunity, type)
     Event.create!(actor_id: opportunity.buyer_id, action: {type: type}, eventable: opportunity)
+  end
+
+  def send_notification_to_companies(opportunity)
+    companies = Company.notified_recipients_by(opportunity)
+
+    companies.each do |company|
+      Notifier.delay_for(5.minutes).new_opportunity(opportunity.id, company.id)
+    end
   end
 end

@@ -46,4 +46,14 @@ class Notifier < ActionMailer::Base
 
     mail(subject: "SUBOUT: confirm your subscription", to: @subscription.email)
   end
+
+  def new_opportunity(opportunity_id, company_id)
+    @opportunity = Opportunity.find(opportunity_id)
+
+    return if @opportunity.canceled?
+
+    @company = Company.find(company_id)
+
+    mail(subject: "SUBOUT: new opportunity arrived", to: @company.email)
+  end
 end

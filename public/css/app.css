@@ -1,54 +1,3 @@
-/**
- * import components to builds angular-ui.css
- */
-
-/* ui-reset */
-
-.ui-resetwrap {
-  position: relative;
-  display: inline-block;
-}
-
-.ui-reset {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 2;
-  display: none;
-  height: 100%;
-  cursor: pointer;
-}
-
-.ui-resetwrap:hover .ui-reset {
-  display: block;
-}
-
-/* ui-currency */
-
-.ui-currency-pos {
-  color: green;
-}
-
-.ui-currency-neg {
-  color: red;
-}
-
-.ui-currency-zero {
-  color: blue;
-}
-
-.ui-currency-pos.ui-bignum,
-.ui-currency-neg.ui-smallnum {
-  font-size: 110%;
-}
-
-/* highlight */
-
-.ui-match {
-  background: yellow;
-}
-
-.ui-resetwrap{position:relative;display:inline-block}.ui-reset{position:absolute;top:0;right:0;z-index:2;display:none;height:100%;cursor:pointer}.ui-resetwrap:hover .ui-reset{display:block}.ui-currency-pos{color:green}.ui-currency-neg{color:red}.ui-currency-zero{color:blue}.ui-currency-pos.ui-bignum,.ui-currency-neg.ui-smallnum{font-size:110%}.ui-match{background:yellow}
 /*! jQuery UI - v1.9.1 - 2012-10-26
 * http://jqueryui.com
 * Includes: jquery.ui.core.css, jquery.ui.datepicker.css
@@ -1126,7 +1075,58 @@ disabled look for already selected choices in the results dropdown
   .select2-search input {
       background-position: 100% -21px !important;
   }
-}/*!
+}/**
+ * import components to builds angular-ui.css
+ */
+
+/* ui-reset */
+
+.ui-resetwrap {
+  position: relative;
+  display: inline-block;
+}
+
+.ui-reset {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: none;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ui-resetwrap:hover .ui-reset {
+  display: block;
+}
+
+/* ui-currency */
+
+.ui-currency-pos {
+  color: green;
+}
+
+.ui-currency-neg {
+  color: red;
+}
+
+.ui-currency-zero {
+  color: blue;
+}
+
+.ui-currency-pos.ui-bignum,
+.ui-currency-neg.ui-smallnum {
+  font-size: 110%;
+}
+
+/* highlight */
+
+.ui-match {
+  background: yellow;
+}
+
+.ui-resetwrap{position:relative;display:inline-block}.ui-reset{position:absolute;top:0;right:0;z-index:2;display:none;height:100%;cursor:pointer}.ui-resetwrap:hover .ui-reset{display:block}.ui-currency-pos{color:green}.ui-currency-neg{color:red}.ui-currency-zero{color:blue}.ui-currency-pos.ui-bignum,.ui-currency-neg.ui-smallnum{font-size:110%}.ui-match{background:yellow}
+/*!
  * vendor/styles/bootstrap v2.0.3
  *
  * Copyright 2012 Twitter, Inc
