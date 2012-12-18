@@ -7981,6 +7981,21 @@ body {
   text-align: center;
   padding: 10px;
 }
+#dashboard .pill {
+  float: left;
+  padding: 2px 6px;
+  color: white;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #69b645;
+  border: 1px solid #69b645;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+#dashboard .pill .close {
+  margin: -2px 0 0 4px;
+}
 #activities .table td {
   padding: 10px;
   font-size: 0.9em;

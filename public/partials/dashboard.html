@@ -7,7 +7,7 @@
                 <ul>
                   <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name}"
                      title="{{filter.name}}">
-                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter)">{{filter.name}}</a>
+                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
                   </li>
                 </ul>
               </section>
@@ -69,6 +69,12 @@
                   <div class="row-fluid">
                       <div class="pull-left span4">
                         <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
+                        <div class="pill" ng-show="$location.search().opportunity_type">
+                          {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
+                        </div>
+                        <div class="pill" ng-show="$location.search().event_type">
+                          {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
+                        </div>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
