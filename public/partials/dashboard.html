@@ -7,7 +7,7 @@
                 <ul>
                   <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name}"
                      title="{{filter.name}}">
-                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter)">{{filter.name}}</a>
+                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
                   </li>
                 </ul>
               </section>
@@ -28,10 +28,7 @@
               <section class="content">
                 <ul>
                   <li>
-                    <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
-                      <option value=""></option>
-                      <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
-                    </select>
+                    <select class="span10" ng-model="regionFilter" ng-options="r for r in regions"></select>
                   </li>
                 </ul>
               </section>
@@ -40,9 +37,9 @@
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
               <section class="content">
-                <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
-                  <option value=""></option>
-                  <option ng-repeat="company in companies"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                <select ui-select2 ng-model="selectedCompany" data-placeholder="-- Select Company --" class="span10">
+                  <option></option>
+                  <option ng-repeat="company in companies" data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
                 </select>
               </section>
             </section>
@@ -72,6 +69,12 @@
                   <div class="row-fluid">
                       <div class="pull-left span4">
                         <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
+                        <div class="pill" ng-show="$location.search().opportunity_type">
+                          {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
+                        </div>
+                        <div class="pill" ng-show="$location.search().event_type">
+                          {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
+                        </div>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
@@ -107,7 +110,7 @@
                       <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.abbreviated_name}}</a>
 
                       <div class="pull-right expand-collapse">
-                        <span class="reference-number" ng-show="event.selected">#{{event.eventable.reference_number}}</span>
+                        <a class="reference-number" ng-show="event.selected" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
                         <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
                       </div>
                     </span>

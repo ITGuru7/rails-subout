@@ -530,10 +530,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     if (!query) {
       return true;
     }
-    reg = new RegExp(query);
     eventable = event.eventable;
-    text = (eventable.name + ' ' + eventable.description).toLowerCase();
-    return reg.test(text);
+    if (query.indexOf("#") === 0) {
+      return ("#" + eventable.reference_number) === query;
+    } else {
+      reg = new RegExp(query);
+      text = (eventable.name + ' ' + eventable.description).toLowerCase();
+      return reg.test(text);
+    }
   };
   $scope.filterCompany = function(event) {
     var actor_id;
@@ -572,11 +576,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     $scope.companyFilter = $location.search().company_id;
     return $scope.$watch("companyFilter", setCompanyFilter);
   });
-  $scope.setOpportunityTypeFilter = function(filter) {
-    if ($location.search().opportunity_type === filter.name) {
+  $scope.setOpportunityTypeFilter = function(opportunity_type) {
+    if ($location.search().opportunity_type === opportunity_type) {
       $location.search('opportunity_type', null);
     } else {
-      $location.search('opportunity_type', filter.name);
+      $location.search('opportunity_type', opportunity_type);
     }
     return $scope.refreshEvents();
   };
@@ -587,6 +591,19 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       $location.search('event_type', eventType);
     }
     return $scope.refreshEvents();
+  };
+  $scope.eventTypeLabel = function(eventType) {
+    if (eventType === "opportunity_created") {
+      return "Created";
+    } else if (eventType === "bid_created") {
+      return "New Bid";
+    } else if (eventType === "opportunity_bidding_won") {
+      return "Bidding Won";
+    } else if (eventType === "opportunity_canceled") {
+      return "Canceled";
+    } else {
+      return "Unknown";
+    }
   };
   $scope.actionDescription = function(action) {
     switch (action.type) {
@@ -609,9 +626,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       });
     }
   };
-  return $scope.fullTextSearch = function(event) {
+  $scope.fullTextSearch = function(event) {
     $location.search('q', $scope.query);
     return $scope.refreshEvents();
+  };
+  return $scope.refNumSearch = function(ref_num) {
+    $scope.query = '#' + ref_num;
+    return $scope.fullTextSearch();
   };
 };
 
