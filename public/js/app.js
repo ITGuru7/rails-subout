@@ -530,10 +530,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     if (!query) {
       return true;
     }
-    reg = new RegExp(query);
     eventable = event.eventable;
-    text = (eventable.name + ' ' + eventable.description).toLowerCase();
-    return reg.test(text);
+    if (query.indexOf("#") === 0) {
+      return ("#" + eventable.reference_number) === query;
+    } else {
+      reg = new RegExp(query);
+      text = (eventable.name + ' ' + eventable.description).toLowerCase();
+      return reg.test(text);
+    }
   };
   $scope.filterCompany = function(event) {
     var actor_id;
@@ -609,9 +613,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       });
     }
   };
-  return $scope.fullTextSearch = function(event) {
+  $scope.fullTextSearch = function(event) {
     $location.search('q', $scope.query);
     return $scope.refreshEvents();
+  };
+  return $scope.refNumSearch = function(ref_num) {
+    $scope.query = '#' + ref_num;
+    return $scope.fullTextSearch();
   };
 };
 
