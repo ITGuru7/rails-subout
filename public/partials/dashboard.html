@@ -26,14 +26,10 @@
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
               <section class="content">
-                <ul>
-                  <li>
-                    <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
-                      <option value=""></option>
-                      <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
-                    </select>
-                  </li>
-                </ul>
+                <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
+                  <option value=""></option>
+                  <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+                </select>
               </section>
             </section>
 
@@ -72,12 +68,6 @@
                   <div class="row-fluid">
                       <div class="pull-left span4">
                         <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
-                        <div class="pill" ng-show="$location.search().opportunity_type">
-                          {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
-                        </div>
-                        <div class="pill" ng-show="$location.search().event_type">
-                          {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
-                        </div>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
@@ -86,6 +76,23 @@
                         </div>
                         <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
                       </div>
+                  </div>
+                  <div id="pills" class="row-fluid">
+                    <div class="pill" ng-show="$location.search().opportunity_type">
+                      {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().event_type">
+                      {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().region">
+                      {{$location.search().region}}<button type="button" ng-click="regionFilter=null" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().company_id">
+                      {{companyName($location.search().company_id)}}<button type="button" ng-click="companyFilter=null" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().q">
+                      {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
+                    </div>
                   </div>
               </div>
 

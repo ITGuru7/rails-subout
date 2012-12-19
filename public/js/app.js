@@ -36,13 +36,7 @@ subout.config([
 
 subout.value('ui.config', {
   select2: {
-    allowClear: true,
-    formatSelection: function(option) {
-      if (!option) {
-        return;
-      }
-      return $(option.element).data('abbreviated_name');
-    }
+    allowClear: true
   }
 });
 
@@ -603,6 +597,17 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return "Canceled";
     } else {
       return "Unknown";
+    }
+  };
+  $scope.companyName = function(companyId) {
+    var company;
+    company = _.find($scope.companies, function(company) {
+      return company._id === companyId;
+    });
+    if (company) {
+      return company.abbreviated_name;
+    } else {
+      return companyId;
     }
   };
   $scope.actionDescription = function(action) {
