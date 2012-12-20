@@ -7,9 +7,9 @@
   </div>
   <div class="modal-body">
     <section class="section-content">
-      <form>
-        <input id="supplier_email" type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
-        <button class="btn btn-primary" ng-click="findSupplier(foundCompany)">Find Supplier</button>
+      <form name="newFavorite" novalidate>
+        <input id="supplier_email" required type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
+        <button class="btn btn-primary" ng-disabled="newFavorite.$invalid" ng-click="findSupplier(foundCompany)">Find Supplier</button>
       </form>
       <div ng-show="showCompany">
         {{foundCompany.name}}
