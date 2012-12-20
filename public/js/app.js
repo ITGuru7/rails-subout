@@ -553,7 +553,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   setCompanyFilter = function() {
-    console.log("setCompanyFilter");
     if ($scope.companyFilter) {
       $location.search('company_id', $scope.companyFilter);
     } else {
@@ -917,6 +916,16 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     } else {
       return "Nationwide";
     }
+  };
+  Company.prototype.canBeAddedAsFavorite = function(company) {
+    var _ref;
+    if (this._id === company._id) {
+      return false;
+    }
+    if (!this.favoriting_buyer_ids) {
+      return false;
+    }
+    return !(_ref = company._id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0);
   };
   Company.prototype.canSeeEvent = function(event) {
     var _ref;
