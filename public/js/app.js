@@ -36,13 +36,7 @@ subout.config([
 
 subout.value('ui.config', {
   select2: {
-    allowClear: true,
-    formatSelection: function(option) {
-      if (!option) {
-        return;
-      }
-      return $(option.element).data('abbreviated_name');
-    }
+    allowClear: true
   }
 });
 
@@ -530,10 +524,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     if (!query) {
       return true;
     }
-    reg = new RegExp(query);
     eventable = event.eventable;
-    text = (eventable.name + ' ' + eventable.description).toLowerCase();
-    return reg.test(text);
+    if (query.indexOf("#") === 0) {
+      return ("#" + eventable.reference_number) === query;
+    } else {
+      reg = new RegExp(query);
+      text = (eventable.name + ' ' + eventable.description).toLowerCase();
+      return reg.test(text);
+    }
   };
   $scope.filterCompany = function(event) {
     var actor_id;
@@ -544,11 +542,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   $scope.setFavoriteFilter = function(company_id) {
-    if ($scope.favoriteFilter === company_id) {
-      return $scope.favoriteFilter = "";
-    } else {
-      return $scope.favoriteFilter = company_id;
-    }
+    return $scope.companyFilter = company_id;
   };
   setRegionFilter = function() {
     if ($scope.regionFilter) {
@@ -572,11 +566,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     $scope.companyFilter = $location.search().company_id;
     return $scope.$watch("companyFilter", setCompanyFilter);
   });
-  $scope.setOpportunityTypeFilter = function(filter) {
-    if ($location.search().opportunity_type === filter.name) {
+  $scope.setOpportunityTypeFilter = function(opportunity_type) {
+    if ($location.search().opportunity_type === opportunity_type) {
       $location.search('opportunity_type', null);
     } else {
-      $location.search('opportunity_type', filter.name);
+      $location.search('opportunity_type', opportunity_type);
     }
     return $scope.refreshEvents();
   };
@@ -587,6 +581,30 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       $location.search('event_type', eventType);
     }
     return $scope.refreshEvents();
+  };
+  $scope.eventTypeLabel = function(eventType) {
+    if (eventType === "opportunity_created") {
+      return "Created";
+    } else if (eventType === "bid_created") {
+      return "New Bid";
+    } else if (eventType === "opportunity_bidding_won") {
+      return "Bidding Won";
+    } else if (eventType === "opportunity_canceled") {
+      return "Canceled";
+    } else {
+      return "Unknown";
+    }
+  };
+  $scope.companyName = function(companyId) {
+    var company;
+    company = _.find($scope.companies, function(company) {
+      return company._id === companyId;
+    });
+    if (company) {
+      return company.abbreviated_name;
+    } else {
+      return companyId;
+    }
   };
   $scope.actionDescription = function(action) {
     switch (action.type) {
@@ -609,8 +627,25 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       });
     }
   };
-  return $scope.fullTextSearch = function(event) {
-    $location.search('q', $scope.query);
+  $scope.fullTextSearch = function(event) {
+    var query;
+    if ($scope.query && $scope.query !== "") {
+      query = $scope.query;
+    } else {
+      query = null;
+    }
+    $location.search('q', query);
+    return $scope.refreshEvents();
+  };
+  $scope.refNumSearch = function(ref_num) {
+    $scope.query = '#' + ref_num;
+    return $scope.fullTextSearch();
+  };
+  $scope.hasAnyFilter = function() {
+    return !_.isEmpty($location.search());
+  };
+  return $scope.clearFilters = function() {
+    $location.search({});
     return $scope.refreshEvents();
   };
 };
@@ -881,6 +916,16 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     } else {
       return "Nationwide";
     }
+  };
+  Company.prototype.canBeAddedAsFavorite = function(company) {
+    var _ref;
+    if (this._id === company._id) {
+      return false;
+    }
+    if (!this.favoriting_buyer_ids) {
+      return false;
+    }
+    return !(_ref = company._id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0);
   };
   Company.prototype.canSeeEvent = function(event) {
     var _ref;

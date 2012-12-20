@@ -4,8 +4,8 @@
             x
         </button>
         <h3>PROFILE</h3>
-        <div>
-            <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
+        <div ng-show="other_company.canBeAddedAsFavorite(company)">
+          <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
         </div>
     </div>
     <div class="modal-body">

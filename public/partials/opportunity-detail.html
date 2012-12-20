@@ -10,36 +10,38 @@
       </div>
     </div>
 
-    <div id="opportunity-detail" class="span9">
-      <h3>{{opportunity.name}}</h3>
+    <div class="span9">
+      <h3>{{opportunity.name}} <span class="status">({{opportunity.status}})</span></h3>
       <div class="row-fluid">
-        <div class="span8">
-          <p>
+        <div class="span8 details">
+          <div ng-show="opportunity.winning_bid_id">
+            <ul>
+              <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
+              <li><span class="label-field">Winning Amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
+            </ul>
+          </div>
+          <div>
             <ul>
               <li><span class="label-field">Origination Date: </span>{{opportunity.start_date| date:'MM/dd/yy'}}</li>
               <li><span class="label-field">Origination Location: </span>{{opportunity.start_location}}</li>
               <li><span class="label-field">Arrival Date: </span>{{opportunity.end_date| date:'MM/dd/yy'}}</li>
               <li><span class="label-field">Arrival Location: </span>{{opportunity.end_location}}</li>
             </ul>
-          </p>
-
-          <p>
+          </div>
+          <div>
             {{opportunity.description}}
-          </p>
-          
-          <p>
+          </div>
+          <div>
             <ul>
               <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
               <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>${{opportunity.win_it_now_price}}</li>
             </ul>
-          </p>
-
-          <p>
+          </div>
+          <div>
             <ul>
               <li><span class="label-field">SO#: </span>{{opportunity.reference_number}}</li>
             </ul>
-          </p>
-
+          </div>
           <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>

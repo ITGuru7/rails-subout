@@ -7,7 +7,7 @@
                 <ul>
                   <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name}"
                      title="{{filter.name}}">
-                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter)">{{filter.name}}</a>
+                  <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
                   </li>
                 </ul>
               </section>
@@ -26,14 +26,11 @@
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
               <section class="content">
-                <ul>
-                  <li>
-                    <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
-                      <option value=""></option>
-                      <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
-                    </select>
-                  </li>
-                </ul>
+                <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
+                  <option value=""></option>
+                  <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+                </select>
+                <div class="clearfix"></div>
               </section>
             </section>
 
@@ -44,25 +41,18 @@
                   <option value=""></option>
                   <option ng-repeat="company in companies"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
                 </select>
+                <div class="clearfix"></div>
               </section>
             </section>
 
-
-            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0">
+            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
               <section class="title"><h5>Favorites</h5></section>
               <section class="content">
-                <ul ng-show="favoriteCompanies.length <= 5">
+                <ul>
                   <li ng-repeat="company in favoriteCompanies">
                     <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
                   </li>
                 </ul>
-
-                <select class="span10" ng-model="favoriteFilter" ng-show="favoriteCompanies.length > 5">
-                  <option value="">All</option>
-                  <option ng-repeat="c in favoriteCompanies" value="{{c._id}}">
-                    {{c.name}}
-                  </option>
-                </select>
               </section>
             </section>
         </div>
@@ -80,6 +70,26 @@
                         </div>
                         <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
                       </div>
+                  </div>
+                  <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
+                    <div class="pill" ng-show="$location.search().opportunity_type">
+                      {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().event_type">
+                      {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().region">
+                      {{$location.search().region}}<button type="button" ng-click="regionFilter=null" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().company_id">
+                      {{companyName($location.search().company_id)}}<button type="button" ng-click="companyFilter=null" class="close">×</button>
+                    </div>
+                    <div class="pill" ng-show="$location.search().q">
+                      {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
+                    </div>
+                    <a class="clear-filters" ng-click="clearFilters()">
+                      Clear All
+                    </a>
                   </div>
               </div>
 
@@ -107,7 +117,7 @@
                       <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.abbreviated_name}}</a>
 
                       <div class="pull-right expand-collapse">
-                        <span class="reference-number" ng-show="event.selected">#{{event.eventable.reference_number}}</span>
+                        <a class="reference-number" ng-show="event.selected" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
                         <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
                       </div>
                     </span>
@@ -117,21 +127,23 @@
                       <div>
                         <p class="description">{{event.eventable.description}}</p>
                       </div>
-
+                      <div class="winner" ng-show="event.eventable.winning_bid_id">
+                        <span class="label-field">Winner: </span>{{event.eventable.winner.name}} <br />
+                        <span class="label-field">Winning Amount: </span> <span ui-currency ng-model="event.eventable.winner.amount"></span>
+                      </div>
                       <div>
-                        <span>Departs:</span> {{event.eventable.start_date|date}} </br>
+                        <span>Departs:</span> {{event.eventable.start_date|date}} <br />
                         <span>Arrives:</span> {{event.eventable.end_date|date}}
                       </div>
-
                       <div>
-                        <span>Created by:</span> {{event.actor.name}} </br>
+                        <span>Created by:</span> {{event.actor.name}} <br />
                         <span>Created on:</span> {{event.created_at|date}}
                       </div>
 
                       <div>
                         <span>Bidding Ends:</span> 
                         <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
-                        </br>
+                        <br />
                         <div ng-show="event.eventable.quick_winnable">
                           <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
                         </div>

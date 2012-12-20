@@ -23,6 +23,8 @@ class Company
   field :subscription_plan, default: 'free'
   field :regions, type: Array
 
+  field :notification_type, default: 'None'
+
   #address stuff TODO ask Tom about this
   field :street_address, type: String
   field :zip_code, type: String
@@ -40,7 +42,6 @@ class Company
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :opportunities
-
   has_many :bids, foreign_key: 'bidder_id'
 
   accepts_nested_attributes_for :users
@@ -57,6 +58,19 @@ class Company
   before_create :set_subscription_info, if: "created_from_subscription_id.present?"
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
+
+  def self.notified_recipients_by(opportunity)
+    options = [
+      {:id.in => opportunity.buyer.favoriting_buyer_ids}
+    ]
+
+    unless opportunity.for_favorites_only?
+      options << {:subscription_plan => 'national-service'}
+      options << {:regions.in => opportunity.regions}
+    end
+
+    Company.any_of(*options).excludes(id: opportunity.buyer_id, notification_type: 'None')
+  end
 
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
