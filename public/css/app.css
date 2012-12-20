@@ -8382,3 +8382,9 @@ table.bid-history {
   text-align: left;
   width: 140px;
 }
+#bid-new .control-group.error .help-block {
+  display: block;
+}
+#bid-new .control-group .help-block {
+  display: none;
+}

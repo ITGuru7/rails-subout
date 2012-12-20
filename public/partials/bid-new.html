@@ -9,17 +9,18 @@
     <form name="newBid" class="form-horizontal">
       <p class="alert alert-error" ng:show="errorMessage">{{errorMessage}}</p>
 
-      <div class="control-group">
+      <div class="control-group oportunity_name">
         <label class="control-label">Opportunity</label>
         <div class="controls opportunity-name">
           <h4>{{opportunity.name}}</h4>
         </div>
       </div>
 
-      <div class="control-group" ng-class="{error:newBid.bid_amount.$invalid}">
+      <div class="control-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid}">
         <label for="bid_amount" class="control-label">Bid Amount ($) *</label>
         <div class="controls">
           <input type="number" id="bid_amount" name="bid_amount" required ng-model="bid.amount" size="10" maxlength="10" class="input-small">
+          <p class="help-block">Numeric characters can be entered.</p>
         </div>
       </div>
 
