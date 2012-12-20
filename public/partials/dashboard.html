@@ -44,21 +44,14 @@
             </section>
 
 
-            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0">
+            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
               <section class="title"><h5>Favorites</h5></section>
               <section class="content">
-                <ul ng-show="favoriteCompanies.length <= 5">
+                <ul>
                   <li ng-repeat="company in favoriteCompanies">
                     <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
                   </li>
                 </ul>
-
-                <select class="span10" ng-model="favoriteFilter" ng-show="favoriteCompanies.length > 5">
-                  <option value="">All</option>
-                  <option ng-repeat="c in favoriteCompanies" value="{{c._id}}">
-                    {{c.name}}
-                  </option>
-                </select>
               </section>
             </section>
         </div>

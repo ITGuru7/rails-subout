@@ -542,11 +542,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   $scope.setFavoriteFilter = function(company_id) {
-    if ($scope.favoriteFilter === company_id) {
-      return $scope.favoriteFilter = "";
-    } else {
-      return $scope.favoriteFilter = company_id;
-    }
+    return $scope.companyFilter = company_id;
   };
   setRegionFilter = function() {
     if ($scope.regionFilter) {
@@ -557,6 +553,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   setCompanyFilter = function() {
+    console.log("setCompanyFilter");
     if ($scope.companyFilter) {
       $location.search('company_id', $scope.companyFilter);
     } else {
