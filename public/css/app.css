@@ -8119,11 +8119,14 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
-div#opportunity-show #opportunity-detail h3 {
+div#opportunity-show h3 {
   line-height: 24px;
 }
-div#opportunity-show #opportunity-detail .label-field {
+div#opportunity-show .label-field {
   font-weight: bold;
+}
+div#opportunity-show .details > div {
+  margin-bottom: 10px;
 }
 #modal dt {
   color: #666550;
@@ -8250,6 +8253,9 @@ table.bid-history {
   padding: 0 10px;
   margin-bottom: 20px;
   color: #666550;
+}
+#activity-stream .event .eventable-details .winner {
+  margin-bottom: 10px;
 }
 #activity-stream .event .eventable-details .description {
   font-style: italic;

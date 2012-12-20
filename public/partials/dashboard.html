@@ -133,21 +133,24 @@
                       <div>
                         <p class="description">{{event.eventable.description}}</p>
                       </div>
-
+                      <div class="winner" ng-show="event.eventable.winning_bid_id">
+                        <span class="label-field">Winner: </span>{{event.eventable.winner.name}} <br />
+                        <span class="label-field">Winning Amount: </span> <span ui-currency ng-model="event.eventable.winner.amount"></span>
+                      </div>
                       <div>
-                        <span>Departs:</span> {{event.eventable.start_date|date}} </br>
+                        <span>Departs:</span> {{event.eventable.start_date|date}} <br />
                         <span>Arrives:</span> {{event.eventable.end_date|date}}
                       </div>
 
                       <div>
-                        <span>Created by:</span> {{event.actor.name}} </br>
+                        <span>Created by:</span> {{event.actor.name}} <br />
                         <span>Created on:</span> {{event.created_at|date}}
                       </div>
 
                       <div>
                         <span>Bidding Ends:</span> 
                         <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
-                        </br>
+                        <br />
                         <div ng-show="event.eventable.quick_winnable">
                           <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
                         </div>
