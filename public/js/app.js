@@ -632,12 +632,25 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     }
   };
   $scope.fullTextSearch = function(event) {
-    $location.search('q', $scope.query);
+    var query;
+    if ($scope.query && $scope.query !== "") {
+      query = $scope.query;
+    } else {
+      query = null;
+    }
+    $location.search('q', query);
     return $scope.refreshEvents();
   };
-  return $scope.refNumSearch = function(ref_num) {
+  $scope.refNumSearch = function(ref_num) {
     $scope.query = '#' + ref_num;
     return $scope.fullTextSearch();
+  };
+  $scope.hasAnyFilter = function() {
+    return !_.isEmpty($location.search());
+  };
+  return $scope.clearFilters = function() {
+    $location.search({});
+    return $scope.refreshEvents();
   };
 };
 

@@ -77,7 +77,7 @@
                         <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
-                  <div id="pills" class="row-fluid">
+                  <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
                     <div class="pill" ng-show="$location.search().opportunity_type">
                       {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
                     </div>
@@ -93,6 +93,9 @@
                     <div class="pill" ng-show="$location.search().q">
                       {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
                     </div>
+                    <a class="clear-filters" ng-click="clearFilters()">
+                      Clear All
+                    </a>
                   </div>
               </div>
 
