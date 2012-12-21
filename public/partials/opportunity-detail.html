@@ -42,7 +42,7 @@
               <li><span class="label-field">SO#: </span>{{opportunity.reference_number}}</li>
             </ul>
           </div>
-          <div class="actions" ng-show="opportunity.bids.length == 0 && opportunity.buyer._id == company._id">
+          <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
           </div>

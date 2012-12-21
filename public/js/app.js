@@ -957,6 +957,9 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   Company.prototype.canBidOn = function(opportunity) {
     return opportunity.bidable && opportunity.buyer_id !== this._id;
   };
+  Company.prototype.canCancelOrEdit = function(opportunity) {
+    return opportunity.bids.length === 0 && opportunity.buyer._id === this._id && opportunity.status === 'In progress';
+  };
   return Company;
 }).factory("Token", function($resource) {
   return $resource("" + api_path + "/tokens", {}, {});
