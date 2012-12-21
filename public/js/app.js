@@ -958,7 +958,16 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     return opportunity.bidable && opportunity.buyer_id !== this._id;
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
-    return opportunity.bids.length === 0 && opportunity.buyer._id === this._id && opportunity.status === 'In progress';
+    if (!opportunity.status) {
+      return false;
+    }
+    if (opportunity.bids.length > 0) {
+      return false;
+    }
+    if (this._id !== opportunity.buyer._id) {
+      return false;
+    }
+    return opportunity.status === 'In progress';
   };
   return Company;
 }).factory("Token", function($resource) {
