@@ -282,7 +282,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         var $alertError;
         $("#modal form .alert-error").remove();
         $alertError = $rootScope.alertError(content.data.errors);
-        return $("#modal form").prepend($alertError);
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
       });
     } else {
       return Auction.save({
@@ -294,7 +295,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         var $alertError;
         $("#modal form .alert-error").remove();
         $alertError = $rootScope.alertError(content.data.errors);
-        return $("#modal form").prepend($alertError);
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
       });
     }
   };

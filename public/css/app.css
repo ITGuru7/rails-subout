@@ -8302,7 +8302,7 @@ table.bid-history {
   color: #666550;
 }
 #opportunity-form .modal-body .alert-error p {
-  margin-bottom: 5px 0;
+  margin-bottom: 0;
 }
 #opportunity-form .modal-body .control-group {
   margin-bottom: 14px;
