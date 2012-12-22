@@ -282,7 +282,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         var $alertError;
         $("#modal form .alert-error").remove();
         $alertError = $rootScope.alertError(content.data.errors);
-        return $("#modal form").prepend($alertError);
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
       });
     } else {
       return Auction.save({
@@ -294,7 +295,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         var $alertError;
         $("#modal form .alert-error").remove();
         $alertError = $rootScope.alertError(content.data.errors);
-        return $("#modal form").prepend($alertError);
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
       });
     }
   };
@@ -956,6 +958,18 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   };
   Company.prototype.canBidOn = function(opportunity) {
     return opportunity.bidable && opportunity.buyer_id !== this._id;
+  };
+  Company.prototype.canCancelOrEdit = function(opportunity) {
+    if (!opportunity.status) {
+      return false;
+    }
+    if (opportunity.bids.length > 0) {
+      return false;
+    }
+    if (this._id !== opportunity.buyer._id) {
+      return false;
+    }
+    return opportunity.status === 'In progress';
   };
   return Company;
 }).factory("Token", function($resource) {

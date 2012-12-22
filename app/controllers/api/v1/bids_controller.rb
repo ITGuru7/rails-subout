@@ -1,6 +1,6 @@
 class Api::V1::BidsController < Api::V1::BaseController
   def index
-    respond_with_namespace current_company.bids
+    respond_with_namespace current_company.bids.recent
   end
 
   def create
