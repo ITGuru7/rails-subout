@@ -204,7 +204,8 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   $rootScope.displayNewBidForm = function(opportunity) {
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
-    return $rootScope.setModal('partials/bid-new.html');
+    $rootScope.setModal('partials/bid-new.html');
+    return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
     $rootScope.setModal('partials/opportunity-form.html');
@@ -314,6 +315,9 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
+  $scope.$on('modalOpened', function() {
+    return $scope.errorMessage = false;
+  });
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
