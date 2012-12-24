@@ -126,6 +126,7 @@ class Opportunity
   private
 
   def set_bidding_ends_at
-    self.bidding_ends_at = created_at + bidding_duration_hrs.to_i.hours
+    created_time = self.created_at || Time.now
+    self.bidding_ends_at = created_time + self.bidding_duration_hrs.to_i.hours
   end
 end
