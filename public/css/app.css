@@ -7679,6 +7679,9 @@ body {
   margin-bottom: 5px;
   cursor: pointer;
 }
+#filters .filter:not(.active) {
+  background: none!important;
+}
 #filters .filter .color {
   width: 2em;
   height: 2em;
