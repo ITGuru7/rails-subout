@@ -2,7 +2,7 @@
     "_id":"503026b08859aed418000004",
     "active":false,
     "name":"Vehicle Needed",
-    "color":"#69b644",
+    "color":"#69b645",
     "icon": "icon-hand-up",
     
     "evaluation":{
@@ -19,7 +19,7 @@
     "_id":"503026b08859aed418000005",
     "active":false,
     "name":"Vehicle for Hire",
-    "color":"#e1c212",
+    "color":"#69b645",
     "icon": "icon-road",
     
     "evaluation":{

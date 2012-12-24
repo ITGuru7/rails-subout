@@ -197,14 +197,19 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       });
       return $fileUploader.bind('cloudinarydone', function(e, data) {
         progressImageUpload(this, false);
-        return setImageUpload(data);
+        if (data.result.resource_type !== "image") {
+          return alert("Sorry, only images are supported.");
+        } else {
+          return setImageUpload(data);
+        }
       });
     });
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
-    return $rootScope.setModal('partials/bid-new.html');
+    $rootScope.setModal('partials/bid-new.html');
+    return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function(opportunity) {
     $rootScope.setModal('partials/opportunity-form.html');
@@ -247,7 +252,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     });
     return result;
   };
-  return $rootScope.alertError = function(errors) {
+  $rootScope.alertError = function(errors) {
     var $alertError, close, errorMessage, errorMessages, _i, _len;
     errorMessages = $rootScope.errorMessages(errors);
     $alertError = $("<div class='alert alert-error'></div>");
@@ -258,6 +263,17 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       $alertError.append("<p>" + errorMessage + "</p>");
     }
     return $alertError;
+  };
+  return $rootScope.alertInfo = function(messages) {
+    var $alertInfo, close, info, _i, _len;
+    $alertInfo = $("<div class='alert alert-info'></div>");
+    close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
+    $alertInfo.append(close);
+    for (_i = 0, _len = messages.length; _i < _len; _i++) {
+      info = messages[_i];
+      $alertInfo.append("<p>" + info + "</p>");
+    }
+    return $alertInfo;
   };
 };
 
@@ -303,6 +319,9 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
+  $scope.$on('modalOpened', function() {
+    return $scope.errorMessage = false;
+  });
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -759,13 +778,22 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   };
 };
 
-CompanyProfileCtrl = function($rootScope, $scope, Favorite) {
+CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
   return $scope.addToFavorites = function(company) {
     return Favorite.save({
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      return jQuery("#modal").modal("hide");
+      var $alertInfo, messages;
+      $("#modal .modal-body .alert-info").remove();
+      messages = ["Successfully added to favorites."];
+      $alertInfo = $rootScope.alertInfo(messages);
+      console.log($alertInfo);
+      $("#modal .modal-body").prepend($alertInfo);
+      return $timeout(function() {
+        $("#modal .modal-body .alert-info").remove();
+        return jQuery("#modal").modal("hide");
+      }, 2000);
     });
   };
 };

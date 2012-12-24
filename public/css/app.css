@@ -7679,6 +7679,9 @@ body {
   margin-bottom: 5px;
   cursor: pointer;
 }
+#filters .filter:not(.active) {
+  background: none!important;
+}
 #filters .filter .color {
   width: 2em;
   height: 2em;
@@ -8081,6 +8084,9 @@ div.created-at {
 }
 .event div.description {
   margin: .5em;
+}
+.event.owner {
+  background-color: #eeeeee;
 }
 div.buyer {
   font-size: .8em;
