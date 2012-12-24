@@ -95,7 +95,7 @@
 
               <section id="activity-stream">
                 <div class="event row-fluid"
-                     ng-class="{expanded: event.selected}"
+                     ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
                      ng-repeat="event in events"
                      ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
 
