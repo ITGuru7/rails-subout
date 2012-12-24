@@ -15,8 +15,8 @@ class Opportunity
   field :start_time, type: String
   field :end_date, type: Date
   field :end_time, type: String
-  field :bidding_duration_hrs
-  #field :bidding_ends_at, type: DateTime
+  field :bidding_duration_hrs, type: String
+  field :bidding_ends_at, type: DateTime
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal
@@ -48,10 +48,12 @@ class Opportunity
   validate :validate_locations
   validate :validate_buyer_region
 
+  before_save :set_bidding_ends_at
+
   def self.send_expired_notification
-    where(:created_at.lte => (Time.now - bidding_duration_hrs.to_i.hours), :expired_notification_sent => false).each do |auction|
-      Notifier.delay.expired_auction_notification(auction.id)
-      auction.update_attribute(:expired_notification_sent, true)
+    where(:bidding_ends_at.lte => Time.now, :expired_notification_sent => false).each do |opportunity|
+      Notifier.delay.expired_auction_notification(opportunity.id)
+      opportunity.update_attribute(:expired_notification_sent, true)
     end
   end
 
@@ -85,7 +87,7 @@ class Opportunity
   end
 
   def bidding_ended?
-    self.bidding_ends_at <= Date.today
+    self.bidding_ends_at <= Time.now
   end
 
   def bidable?
@@ -110,10 +112,6 @@ class Opportunity
     end
   end
 
-  def bidding_ends_at
-    created_at + bidding_duration_hrs.to_i.hours
-  end
-
   def fulltext
     [name, description].join(' ')
   end
@@ -123,5 +121,11 @@ class Opportunity
     return false if location.country != "United States"
     return false if location.state.blank?
     true
+  end
+
+  private
+
+  def set_bidding_ends_at
+    self.bidding_ends_at = created_at + bidding_duration_hrs.to_i.hours
   end
 end

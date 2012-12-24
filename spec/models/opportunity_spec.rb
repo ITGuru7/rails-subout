@@ -52,4 +52,13 @@ describe Opportunity do
       opportunity.should_not be_bidable
     end
   end
+
+  describe ".send_expired_notification" do
+    it "sends expired opportunity notification" do
+      opportunity = FactoryGirl.create(:auction, created_at: 2.hour.ago, bidding_duration_hrs: "1")
+      Opportunity.send_expired_notification
+
+      opportunity.reload.expired_notification_sent.should == true
+    end
+  end
 end
