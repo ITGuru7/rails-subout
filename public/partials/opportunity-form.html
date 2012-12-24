@@ -40,6 +40,7 @@
       </div>
 
       <div class="control-group">
+        <label for="opportunity_image_id" class="control-label">Opportunity image</label>
         <div class="controls">
           <input class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
           <input type="hidden" id="opportunity_image_id" class="file-upload-public-id" value="{{opportunity.image_id}}" ng-model="opportunity.image_id">

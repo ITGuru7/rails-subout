@@ -197,7 +197,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       });
       return $fileUploader.bind('cloudinarydone', function(e, data) {
         progressImageUpload(this, false);
-        return setImageUpload(data);
+        if (data.result.resource_type !== "image") {
+          return alert("Sorry, only images are supported.");
+        } else {
+          return setImageUpload(data);
+        }
       });
     });
   };
