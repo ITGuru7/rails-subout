@@ -19,3 +19,4 @@ app/models/temp
 **.DS_Store
 public/js/app.js
 *.rdb
+*.swp

@@ -49,6 +49,7 @@ class Opportunity
   validate :validate_buyer_region
   validate :validate_start_time
   validate :validate_end_time
+  validate :validate_win_it_now_price
 
   before_save :set_bidding_ends_at
 
@@ -146,5 +147,9 @@ class Opportunity
 
   def validate_end_time
     errors.add(:end_date, "cannot be before the start date") if ends_at <= starts_at
+  end
+
+  def validate_win_it_now_price
+    errors.add(:win_it_now_price, "cannot be blank in case 'Win it now?' option is enabled.") if self.quick_winnable && self.win_it_now_price.blank?
   end
 end
