@@ -1,7 +1,7 @@
 <div id="dashboard">
       <div class="row-fluid">
-        <div id="sidebar" class="span3">
-            <section id="filters" class="filters">
+        <div id="sidebar" class="span3 filters">
+            <section id="filters">
               <section class="title"><h5>Opportunity Type</h5></section>
               <section class="content">
                 <ul>
@@ -49,7 +49,7 @@
               <section class="title"><h5>Favorites</h5></section>
               <section class="content">
                 <ul>
-                  <li ng-repeat="company in favoriteCompanies">
+                  <li class="filter" ng-repeat="company in favoriteCompanies" ng-class="{active: $location.search().company_id == company._id}">
                     <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
                   </li>
                 </ul>

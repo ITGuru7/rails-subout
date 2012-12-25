@@ -625,7 +625,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return company._id === companyId;
     });
     if (company) {
-      return company.abbreviated_name;
+      return _.str.trim(company.abbreviated_name);
     } else {
       return companyId;
     }
