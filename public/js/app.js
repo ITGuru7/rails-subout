@@ -418,7 +418,6 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
     opportunityId: $routeParams.opportunity_reference_number
   });
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
-    console.log('fresh');
     return $scope.opportunity = _opportunity;
   });
   $scope.cancelOpportunity = function() {
@@ -446,7 +445,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
-  var setCompanyFilter, setRegionFilter;
+  var setCompanyFilter, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -505,12 +504,25 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return callback();
     }
   };
+  updatePreviousEvents = function(event) {
+    var opportunity;
+    opportunity = event.eventable;
+    return _.each($scope.events, function(prevEvent) {
+      var prevOpportunity;
+      prevOpportunity = prevEvent.eventable;
+      if (prevOpportunity._id === opportunity._id) {
+        prevOpportunity.canceled = opportunity.canceled;
+        return prevOpportunity.bidable = opportunity.bidable;
+      }
+    });
+  };
   $scope.refreshEvents(function() {
     var channel;
     channel = $rootScope.pusher.subscribe('event');
     return channel.bind('created', function(event) {
       if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
         $scope.events.unshift(event);
+        updatePreviousEvents(event);
         return $scope.$apply();
       }
     });
@@ -791,7 +803,6 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
       $("#modal .modal-body .alert-info").remove();
       messages = ["Successfully added to favorites."];
       $alertInfo = $rootScope.alertInfo(messages);
-      console.log($alertInfo);
       $("#modal .modal-body").prepend($alertInfo);
       return $timeout(function() {
         $("#modal .modal-body .alert-info").remove();
@@ -928,7 +939,12 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     opportunityId: "@opportunityId"
   }, {});
 }).factory("Event", function($resource) {
-  return $resource("" + api_path + "/events/:eventId", {}, {});
+  var Event;
+  Event = $resource("" + api_path + "/events/:eventId", {}, {});
+  Event.prototype.isBidableBy = function(company) {
+    return this.eventable.bidable && this.eventable.buyer_id !== company._id;
+  };
+  return Event;
 }).factory("Company", function($resource) {
   var Company;
   Company = $resource("" + api_path + "/companies/:companyId/:action", {
@@ -986,9 +1002,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       }
       return _results;
     }).call(this)).length > 0;
-  };
-  Company.prototype.canBidOn = function(opportunity) {
-    return opportunity.bidable && opportunity.buyer_id !== this._id;
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (!opportunity.status) {

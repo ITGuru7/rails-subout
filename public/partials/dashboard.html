@@ -148,8 +148,7 @@
                           <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
                         </div>
                       </div>
-
-                      <div class="actions" ng-show="company.canBidOn(opportunity)">
+                      <div class="actions" ng-show="event.isBidableBy(company)">
                         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                         <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                       </div>
