@@ -211,7 +211,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $rootScope.setModal('partials/bid-new.html');
     return $rootScope.$broadcast('modalOpened');
   };
-  $rootScope.displayNewOpportunityForm = function(opportunity) {
+  $rootScope.displayNewOpportunityForm = function() {
     $rootScope.setModal('partials/opportunity-form.html');
     return $rootScope.setupFileUploader();
   };
@@ -223,7 +223,10 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     $("form .image-preview").attr('src', '');
     $("form .alert-content").empty();
     $("form .alert-error").hide();
-    return $rootScope.opportunity = {};
+    return $rootScope.opportunity = {
+      start_time: "00:00",
+      end_time: "00:00"
+    };
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
