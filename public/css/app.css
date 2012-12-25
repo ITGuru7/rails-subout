@@ -8125,6 +8125,9 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
+div#opportunity-show {
+  padding-bottom: 20px;
+}
 div#opportunity-show h3 {
   line-height: 24px;
 }
