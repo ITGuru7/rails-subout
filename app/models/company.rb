@@ -121,6 +121,11 @@ class Company
     self.national_subscriber? || (regions - self.regions).blank?
   end
 
+  def self.companies_for(company)
+    company.abbreviated_name = "Self"
+    [company] + Company.ne(id: company.id).to_a
+  end
+
   private
 
   def validate_invitation

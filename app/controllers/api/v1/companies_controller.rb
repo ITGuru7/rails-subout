@@ -2,7 +2,8 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   skip_before_filter :restrict_access, only: :create
 
   def index
-    render json: Company.all, each_serializer: ActorSerializer
+    companies = Company.companies_for(current_company)
+    render json: companies, each_serializer: ActorSerializer
   end
 
   def show
