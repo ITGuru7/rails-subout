@@ -47,8 +47,7 @@ describe Opportunity do
     end
 
     it "returns false if the opportunity has been ended" do
-      opportunity = Opportunity.new(bidding_ends: 1.day.ago) 
-
+      opportunity = Opportunity.new(created_at: 2.hours.ago, bidding_duration_hrs: "1") 
       opportunity.should_not be_bidable
     end
   end
@@ -59,6 +58,23 @@ describe Opportunity do
       Opportunity.send_expired_notification
 
       opportunity.reload.expired_notification_sent.should == true
+    end
+  end
+
+  describe "#editable?" do
+    let(:opportunity) { FactoryGirl.create(:opportunity) }
+
+    subject { opportunity }
+    it { should be_editable }
+
+    context "when there is a bid" do
+      before { FactoryGirl.create(:bid, opportunity: opportunity) }
+      it { should_not be_editable }
+    end
+
+    context "when the opportunity is canceled" do
+      before { opportunity.cancel! }
+      it { should_not be_editable }
     end
   end
 end

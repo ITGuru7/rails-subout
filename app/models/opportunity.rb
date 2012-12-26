@@ -65,7 +65,7 @@ class Opportunity
   end
 
   def cancel!
-    self.update_attributes(:canceled => true)
+    self.update_attributes(canceled: true)
   end
 
   def win!(bid_id)
@@ -132,6 +132,11 @@ class Opportunity
 
   def ends_at
     Time.parse("#{self.end_date} #{self.end_time}")
+  end
+
+  def editable?
+    return false if self.canceled?
+    not(self.bids.exists?)
   end
 
   private
