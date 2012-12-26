@@ -407,9 +407,38 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
 };
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
-  return $scope.opportunities = Auction.query({
+  var filterWithQuery;
+  $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
+  filterWithQuery = function(value) {
+    var reg;
+    reg = new RegExp($scope.opportunityQuery.toLowerCase());
+    if (value && reg.test(value.toLowerCase())) {
+      return true;
+    }
+  };
+  return $scope.opportunityFilter = function(item) {
+    if (!$scope.opportunityQuery) {
+      return true;
+    }
+    if (filterWithQuery(item.reference_number)) {
+      return true;
+    }
+    if (filterWithQuery(item.type)) {
+      return true;
+    }
+    if (filterWithQuery(item.name)) {
+      return true;
+    }
+    if (filterWithQuery(item.description)) {
+      return true;
+    }
+    if (item.winner && filterWithQuery(item.winner.name)) {
+      return true;
+    }
+    return false;
+  };
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {

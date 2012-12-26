@@ -8399,3 +8399,16 @@ table.bid-history {
 #bid-new .control-group .help-block {
   display: none;
 }
+#opportunities .search {
+  border: 1px solid #555555;
+  margin-bottom: 10px;
+}
+#opportunities .search input {
+  border: none;
+  width: 90%;
+  outline: none;
+  text-indent: 5px;
+}
+#opportunities .search .icon-search {
+  vertical-align: middle;
+}
