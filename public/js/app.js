@@ -682,6 +682,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   return $scope.clearFilters = function() {
     $scope.query = "";
+    $scope.companyFilter = null;
+    $scope.regionFilter = null;
     $location.search({});
     return $scope.refreshEvents();
   };
