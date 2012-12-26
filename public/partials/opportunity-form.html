@@ -75,7 +75,7 @@
       </div>
 
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_start_date.$invalid}">
-        <label for="opportunity_start_date" class="control-label">Start date *</label>
+        <label for="opportunity_start_date" class="control-label">Departure date *</label>
         <div class="controls">
           <input id="opportunity_start_date" name="opportunity_start_date" type="text" ng-model="opportunity.start_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format required>
           <span class="add-on"><i class="icon-calendar"></i></span>
@@ -85,7 +85,7 @@
       </div>
 
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_end_date.$invalid}">
-        <label for="opportunity_end_date" class="control-label">End date *</label>
+        <label for="opportunity_end_date" class="control-label">Arrival date *</label>
         <div class="controls">
           <input id="opportunity_end_date" name="opportunity_end_date" type="text" ng-model="opportunity.end_date" class="input-small" size="10" ui-date="dateOptions" ui-date-format required>
           <span class="add-on"><i class="icon-calendar"></i></span>
@@ -95,7 +95,7 @@
       </div>
 
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_bidding_ends.$invalid}">
-        <label for="opportunity_bidding_ends" class="control-label">Bidding ends</label>
+        <label for="opportunity_bidding_ends" class="control-label">Bidding ends *</label>
         <div class="controls">
           <select id="opportunity_bidding_ends" name="opportunity_bidding_ends" ng-model="opportunity.bidding_duration_hrs" required>
             <option value="6">in 6 hours</option>
