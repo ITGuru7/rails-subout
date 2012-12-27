@@ -10,9 +10,9 @@ class Bid
   validates_presence_of :bidder_id, :on => :create, :message => "can't be blank"
   validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
-  validate :validate_opportunity_bidable
-  validate :validate_bidable_by_bidder
-  validate :validate_multiple_bids_on_the_same_opportunity
+  validate :validate_opportunity_bidable, :on => :create
+  validate :validate_bidable_by_bidder, :on => :create
+  validate :validate_multiple_bids_on_the_same_opportunity, :on => :create
 
   scope :recent, desc(:created_at)
   scope :by_amount, asc(:amount)
