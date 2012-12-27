@@ -49,14 +49,25 @@ describe Api::V1::AuctionsController do
   end
 
   describe "PUT 'select_winner'" do
-    it "responds success" do
-      auction = FactoryGirl.create(:auction, buyer: user.company)
+    let(:opportunity) { FactoryGirl.create(:auction, buyer: user.company) }
 
+    it "responds success" do
       Opportunity.any_instance.should_receive(:win!).with('bid_id')
 
-      put :select_winner, id: auction.id, bid_id: 'bid_id', api_token: user.authentication_token, format: 'json'
+      put :select_winner, id: opportunity.id, bid_id: 'bid_id', api_token: user.authentication_token, format: 'json'
 
       response.should be_success
+    end
+
+    context "when the opportunity is canceled" do
+      it "returns error" do
+        opportunity.cancel!
+
+        put :select_winner, id: opportunity.id, bid_id: 'bid_id', api_token: user.authentication_token, format: 'json'
+
+        response.status.should == 422
+        parse_json(response.body)["errors"].should be
+      end
     end
   end
 
@@ -79,6 +90,28 @@ describe Api::V1::AuctionsController do
 
         response.status.should == 422
         auction.reload.name.should == "Old name"
+      end
+    end
+  end
+
+  describe "PUT 'cancel'" do
+    let(:opportunity) { FactoryGirl.create(:auction, buyer: user.company) }
+
+    it "cancels the opportunity" do
+      put :cancel, id: opportunity.id, api_token: user.authentication_token, format: 'json'
+
+      response.status.should == 200
+      opportunity.reload.should be_canceled
+    end
+
+    context "when there is a bid on the opportunity" do
+      it "responds error" do
+        FactoryGirl.create(:bid, opportunity: opportunity)
+
+        put :cancel, id: opportunity.id, api_token: user.authentication_token, format: 'json'
+
+        response.status.should == 422
+        parse_json(response.body)["errors"].should be
       end
     end
   end

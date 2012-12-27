@@ -250,7 +250,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       var field;
       field = _.str.humanize(key);
       return $.each(errors, function(i, error) {
-        return result.push("" + field + " " + error);
+        if (key === "base") {
+          return result.push(error);
+        } else {
+          return result.push("" + field + " " + error);
+        }
       });
     });
     return result;
@@ -283,12 +287,19 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
   return $scope.save = function() {
-    var opportunity;
+    var opportunity, showErrors;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
     opportunity.end_date = $('#opportunity_end_date').val();
     opportunity.image_id = $('#opportunity_image_id').val();
+    showErrors = function(errors) {
+      var $alertError;
+      $("#modal form .alert-error").remove();
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    };
     if (opportunity._id) {
       return Auction.update({
         opportunityId: opportunity._id,
@@ -298,11 +309,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
       }, function(content) {
-        var $alertError;
-        $("#modal form .alert-error").remove();
-        $alertError = $rootScope.alertError(content.data.errors);
-        $("#modal form").append($alertError);
-        return $("#modal .modal-body").scrollTop($("#modal form").height());
+        return showErrors(content.data.errors);
       });
     } else {
       return Auction.save({
@@ -311,11 +318,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(data) {
         return jQuery("#modal").modal("hide");
       }, function(content) {
-        var $alertError;
-        $("#modal form .alert-error").remove();
-        $alertError = $rootScope.alertError(content.data.errors);
-        $("#modal form").append($alertError);
-        return $("#modal .modal-body").scrollTop($("#modal form").height());
+        return showErrors(content.data.errors);
       });
     }
   };
@@ -449,13 +452,18 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
     return $scope.opportunity = _opportunity;
   });
+  $scope.hideErrorMessage = function() {
+    return $scope.errors = null;
+  };
   $scope.cancelOpportunity = function() {
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
       api_token: $rootScope.token.api_token
-    }, {}, function() {
+    }, {}, function(content) {
       return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
   return $scope.selectWinner = function(bid) {
@@ -464,11 +472,13 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
       action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.token.api_token
-    }, {}, function() {
+    }, {}, function(content) {
       return $scope.opportunity = Opportunity.get({
         api_token: $rootScope.token.api_token,
         opportunityId: $scope.opportunity._id
       });
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
 };
