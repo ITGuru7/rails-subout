@@ -20,7 +20,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       @auction.update!(params[:opportunity])
       respond_with_namespace(@auction)
     else
-      render json: { error: "The opportunity is not editable." }, status: :unprocessable_entity
+      render json: { errors: { base: ["This opportunity is not editable."] } }, status: :unprocessable_entity
     end
   end
 
@@ -29,18 +29,23 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     respond_with_namespace(@auction)
   end
 
-  # TODO: if it canceled, return error
   def select_winner
     @auction = current_company.auctions.find(params[:id])
-    @auction.win!(params[:bid_id])
-
-    head :ok
+    if @auction.canceled?
+      render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
+    else
+      @auction.win!(params[:bid_id])
+      head :ok
+    end
   end
 
-  # TODO: if it not cancelable return error
   def cancel
     @auction = Opportunity.find(params[:id])
-    @auction.cancel!
-    head :ok
+    if false and @auction.editable?
+      @auction.cancel!
+      head :ok
+    else
+      render json: { errors: { base: ["This opportunity cannot be canceled"] } }, status: :unprocessable_entity
+    end
   end
 end

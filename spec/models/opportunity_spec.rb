@@ -4,8 +4,9 @@ describe Opportunity do
   describe "#win!" do
     include EmailSpec::Helpers
 
-    let(:auction) { FactoryGirl.create(:auction) }
-    let(:bid) { FactoryGirl.create(:bid, opportunity: auction) }
+    let!(:auction) { FactoryGirl.create(:auction) }
+    let!(:bid) { FactoryGirl.create(:bid, opportunity: auction) }
+    let!(:other_bid) { FactoryGirl.create(:bid, opportunity: auction) }
 
     it "closes the auction"  do
       expect {
@@ -23,7 +24,19 @@ describe Opportunity do
     it "notifies the winner" do
       auction.win!(bid.id)
 
-      find_email(bid.bidder.email, :with_subject => /You won the bidding/).should_not be_nil
+      find_email(bid.bidder.email, with_subject: /You won the bidding/).should_not be_nil
+    end
+
+    it "notifies to the buyer" do
+      auction.win!(bid.id)
+
+      find_email(auction.buyer.email, with_subject: /has won the bidding/).should_not be_nil
+    end
+
+    it "notities to other bidders" do
+      auction.win!(bid.id)
+
+      find_email(other_bid.bidder.email, with_subject: /You didn't win the bidding/).should_not be_nil
     end
   end
 
@@ -48,6 +61,7 @@ describe Opportunity do
 
     it "returns false if the opportunity has been ended" do
       opportunity = Opportunity.new(created_at: 2.hours.ago, bidding_duration_hrs: "1") 
+      opportunity.send(:set_bidding_ends_at)
       opportunity.should_not be_bidable
     end
   end

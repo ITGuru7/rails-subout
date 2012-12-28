@@ -75,6 +75,9 @@ class Opportunity
 
     Notifier.delay.won_auction_to_supplier(self.id)
     Notifier.delay.won_auction_to_buyer(self.id)
+    self.bids.ne(id: winning_bid_id).each do |bid|
+      Notifier.delay.finished_auction_to_bidder(self.id, bid.id)
+    end
   end
 
   def update!(options)
