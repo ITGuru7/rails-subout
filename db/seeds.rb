@@ -34,7 +34,7 @@ demo_addresses =
 ]
 
 demo_opportunities = [
-  "Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts"
+  "Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"
 ]
 
 
@@ -74,10 +74,12 @@ demo_part = [
       "#{Faker::Address.city}, #{demo_vehicle_types.shuffle.first}, #{rand(100)}% OFF"
     when "Emergency"
       "#{Faker::Address.city}, Broken down on I#{rand(9)}95, mile #{rand(100)}"
-    when "Part"
+    when "Buy or Sell Parts and Vehicles"
         "#{Faker::Address.city}, Need a #{demo_part.shuffle.first}"    
    end 
 end
+
+
 [Company, Opportunity, Bid, Event].each do |model|
   model.all.destroy_all
 end
