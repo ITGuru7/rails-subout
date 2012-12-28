@@ -27,7 +27,8 @@ subout.config([
       templateUrl: "partials/favorites.html",
       controller: FavoritesCtrl
     }).when("/welcome-prelaunch", {
-      templateUrl: "partials/welcome-prelaunch.html"
+      templateUrl: "partials/welcome-prelaunch.html",
+      controller: WelcomePrelaunchCtrl
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -49,11 +50,11 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl,
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var REGION_NAMES, p, publicPages, token, _ref, _ref1;
+  var REGION_NAMES, p;
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -78,18 +79,6 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       api_token: token.api_token
     });
   };
-  publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
-  if (!((_ref = $rootScope.token) != null ? _ref.authorized : void 0)) {
-    if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
-      $cookieStore.remove('token');
-    } else if (token = $cookieStore.get('token')) {
-      $rootScope.token = token;
-      $rootScope.signedInSuccess(token);
-    } else {
-      $rootScope.redirectToPath = $location.path();
-      $location.path("/sign_in");
-    }
-  }
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };
@@ -284,6 +273,10 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
 };
 
+WelcomePrelaunchCtrl = function($cookieStore) {
+  return $cookieStore.remove('token');
+};
+
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
   return $scope.save = function() {
@@ -341,13 +334,19 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid) {
+MyBidCtrl = function($scope, $rootScope, MyBid, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
 };
 
-FavoritesCtrl = function($scope, $rootScope, Favorite) {
+FavoritesCtrl = function($scope, $rootScope, Favorite, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
@@ -409,8 +408,11 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction, Authorize) {
   var filterWithQuery;
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -444,7 +446,10 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.opportunity = Opportunity.get({
     api_token: $rootScope.token.api_token,
     opportunityId: $routeParams.opportunity_reference_number
@@ -483,8 +488,11 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, Authorize) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -768,6 +776,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
 };
 
 SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Company, User) {
+  $cookieStore.remove('token');
   $scope.email = "suboutdev@gmail.com";
   $scope.password = "password";
   return $scope.signIn = function() {
@@ -792,6 +801,7 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
 };
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
+  $cookieStore.remove('token');
   $scope.company = {};
   $scope.user = {};
   $rootScope.setupFileUploader();
@@ -1092,4 +1102,21 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
+}).factory("Authorize", function($rootScope, $location, $cookieStore) {
+  return {
+    check: function() {
+      var token, _ref;
+      if ((_ref = $rootScope.token) != null ? _ref.authorized : void 0) {
+        return true;
+      }
+      if (token = $cookieStore.get('token')) {
+        $rootScope.token = token;
+        $rootScope.signedInSuccess(token);
+        return true;
+      }
+      $rootScope.redirectToPath = $location.path();
+      $location.path("/sign_in");
+      return false;
+    }
+  };
 });
