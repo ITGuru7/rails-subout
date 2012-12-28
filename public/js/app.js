@@ -1,5 +1,7 @@
 var subout;
 
+$.cookie.json = true;
+
 subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
 
 subout.config([
@@ -27,7 +29,8 @@ subout.config([
       templateUrl: "partials/favorites.html",
       controller: FavoritesCtrl
     }).when("/welcome-prelaunch", {
-      templateUrl: "partials/welcome-prelaunch.html"
+      templateUrl: "partials/welcome-prelaunch.html",
+      controller: WelcomePrelaunchCtrl
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -49,17 +52,17 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl,
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Company, User, FileUploaderSignature) {
-  var REGION_NAMES, p, publicPages, token, _ref, _ref1;
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature) {
+  var REGION_NAMES, p;
   $rootScope.currentPath = function() {
     return $location.path();
   };
   $rootScope.userSignedIn = function() {
     var _ref;
-    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $cookieStore.get('token')) {
+    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie('auth_token')) {
       return true;
     }
   };
@@ -78,18 +81,6 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       api_token: token.api_token
     });
   };
-  publicPages = ["/sign_up", "/sign_in", "/welcome-prelaunch"];
-  if (!((_ref = $rootScope.token) != null ? _ref.authorized : void 0)) {
-    if (_ref1 = $location.path(), __indexOf.call(publicPages, _ref1) >= 0) {
-      $cookieStore.remove('token');
-    } else if (token = $cookieStore.get('token')) {
-      $rootScope.token = token;
-      $rootScope.signedInSuccess(token);
-    } else {
-      $rootScope.redirectToPath = $location.path();
-      $location.path("/sign_in");
-    }
-  }
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };
@@ -97,7 +88,7 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
     return $('#modal').modal("hide");
   };
   $rootScope.signOut = function() {
-    $cookieStore.remove('token');
+    $.removeCookie('auth_token');
     window.location = "#/sign_in";
     return window.location.reload();
   };
@@ -234,11 +225,12 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       opportunityId: opportunity._id
     });
   };
-  $rootScope.setOtherCompanyViaId = function(company_id) {
-    return $rootScope.other_company = Company.get({
+  $rootScope.displayCompanyProfile = function(company_id) {
+    $rootScope.other_company = Company.get({
       api_token: $rootScope.token.api_token,
       companyId: company_id
     });
+    return $rootScope.setModal('partials/company-profile.html');
   };
   $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
@@ -250,7 +242,11 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       var field;
       field = _.str.humanize(key);
       return $.each(errors, function(i, error) {
-        return result.push("" + field + " " + error);
+        if (key === "base") {
+          return result.push(error);
+        } else {
+          return result.push("" + field + " " + error);
+        }
       });
     });
     return result;
@@ -280,15 +276,26 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
   };
 };
 
+WelcomePrelaunchCtrl = function() {
+  return $.removeCookie('auth_token');
+};
+
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
-  $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"];
+  $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   return $scope.save = function() {
-    var opportunity;
+    var opportunity, showErrors;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
     opportunity.end_date = $('#opportunity_end_date').val();
     opportunity.image_id = $('#opportunity_image_id').val();
+    showErrors = function(errors) {
+      var $alertError;
+      $("#modal form .alert-error").remove();
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    };
     if (opportunity._id) {
       return Auction.update({
         opportunityId: opportunity._id,
@@ -298,11 +305,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         $rootScope.$emit('refreshOpportunity', opportunity);
         return jQuery("#modal").modal("hide");
       }, function(content) {
-        var $alertError;
-        $("#modal form .alert-error").remove();
-        $alertError = $rootScope.alertError(content.data.errors);
-        $("#modal form").append($alertError);
-        return $("#modal .modal-body").scrollTop($("#modal form").height());
+        return showErrors(content.data.errors);
       });
     } else {
       return Auction.save({
@@ -311,11 +314,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(data) {
         return jQuery("#modal").modal("hide");
       }, function(content) {
-        var $alertError;
-        $("#modal form .alert-error").remove();
-        $alertError = $rootScope.alertError(content.data.errors);
-        $("#modal form").append($alertError);
-        return $("#modal .modal-body").scrollTop($("#modal form").height());
+        return showErrors(content.data.errors);
       });
     }
   };
@@ -338,13 +337,19 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid) {
+MyBidCtrl = function($scope, $rootScope, MyBid, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
 };
 
-FavoritesCtrl = function($scope, $rootScope, Favorite) {
+FavoritesCtrl = function($scope, $rootScope, Favorite, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
@@ -406,8 +411,11 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction, Authorize) {
   var filterWithQuery;
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -441,7 +449,10 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Authorize) {
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.opportunity = Opportunity.get({
     api_token: $rootScope.token.api_token,
     opportunityId: $routeParams.opportunity_reference_number
@@ -449,13 +460,18 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
     return $scope.opportunity = _opportunity;
   });
+  $scope.hideErrorMessage = function() {
+    return $scope.errors = null;
+  };
   $scope.cancelOpportunity = function() {
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
       api_token: $rootScope.token.api_token
-    }, {}, function() {
+    }, {}, function(content) {
       return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
   return $scope.selectWinner = function(bid) {
@@ -464,17 +480,22 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
       action: 'select_winner',
       bid_id: bid._id,
       api_token: $rootScope.token.api_token
-    }, {}, function() {
+    }, {}, function(content) {
       return $scope.opportunity = Opportunity.get({
         api_token: $rootScope.token.api_token,
         opportunityId: $scope.opportunity._id
       });
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, Authorize) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
+  if (!Authorize.check()) {
+    return;
+  }
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -757,7 +778,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Company, User) {
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
+  $.removeCookie('auth_token');
   $scope.email = "suboutdev@gmail.com";
   $scope.password = "password";
   return $scope.signIn = function() {
@@ -767,7 +789,7 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
     }, function(token) {
       $rootScope.token = token;
       if (token.authorized) {
-        $cookieStore.put('token', token);
+        $.cookie('auth_token', token);
         $rootScope.signedInSuccess(token);
         if ($rootScope.redirectToPath) {
           return $location.path($rootScope.redirectToPath);
@@ -782,6 +804,7 @@ SignInCtrl = function($scope, $rootScope, $location, $cookieStore, Token, Compan
 };
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
+  $.removeCookie('auth_token');
   $scope.company = {};
   $scope.user = {};
   $rootScope.setupFileUploader();
@@ -827,18 +850,17 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
   return $scope.addToFavorites = function(company) {
+    $scope.notice = null;
     return Favorite.save({
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      var $alertInfo, messages;
-      $("#modal .modal-body .alert-info").remove();
-      messages = ["Successfully added to favorites."];
-      $alertInfo = $rootScope.alertInfo(messages);
-      $("#modal .modal-body").prepend($alertInfo);
+      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
+      company.favoriting_buyer_ids.push($rootScope.company._id);
+      $scope.notice = "Successfully added to favorites.";
       return $timeout(function() {
-        $("#modal .modal-body .alert-info").remove();
-        return jQuery("#modal").modal("hide");
+        $scope.notice = null;
+        return $("#modal").modal("hide");
       }, 2000);
     });
   };
@@ -1082,4 +1104,21 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
+}).factory("Authorize", function($rootScope, $location) {
+  return {
+    check: function() {
+      var token, _ref;
+      if ((_ref = $rootScope.token) != null ? _ref.authorized : void 0) {
+        return true;
+      }
+      if (token = $.cookie('auth_token')) {
+        $rootScope.token = token;
+        $rootScope.signedInSuccess(token);
+        return true;
+      }
+      $rootScope.redirectToPath = $location.path();
+      $location.path("/sign_in");
+      return false;
+    }
+  };
 });

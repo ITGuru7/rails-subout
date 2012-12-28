@@ -69,7 +69,7 @@
 {
     "_id":"503026b08859aed418000009",
     "active":false,
-    "name":"Part",
+    "name":"Buy or Sell Parts and Vehicles",
     "color":"#f25a29",
 
     "icon": "icon-cog",
@@ -78,7 +78,7 @@
        "type": "compare",
        "property":"type",
        "params":{
-            "value": "Part",
+            "value": "Buy or Sell Parts and Vehicles",
             "operator": "=="
         }   
     }

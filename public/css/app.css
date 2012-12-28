@@ -8192,6 +8192,9 @@ table.bid-history {
   background-color: white;
   background-image: none;
 }
+#subout-navbar.navbar .nav {
+  margin-right: 0;
+}
 #subout-navbar.navbar .brand {
   display: block;
   float: left;
@@ -8216,10 +8219,19 @@ table.bid-history {
   color: white;
 }
 #subout-navbar.navbar .navbar-buttons {
-  margin: 31px 0 0 0;
+  margin: 20px 0 0 0;
+  text-align: right;
 }
 #subout-navbar.navbar .navbar-buttons i {
   margin-right: 5px;
+}
+#subout-navbar.navbar .welcome {
+  text-align: right;
+  clear: right;
+  color: #999999;
+}
+#subout-navbar.navbar .welcome .username {
+  color: #666550;
 }
 .icon-vehicle-needed:before {
   content: "\f0a6";
@@ -8234,6 +8246,9 @@ table.bid-history {
   content: "\f055";
 }
 .icon-part:before {
+  content: "\f013";
+}
+.icon-buy-or-sell-parts-and-vehicles:before {
   content: "\f013";
 }
 #activity-stream .event.expanded {

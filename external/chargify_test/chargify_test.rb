@@ -7,6 +7,10 @@ class Chargify
   base_uri 'subout.chargify.com'
   basic_auth 'FsikQqr_iR0tcokkv8db', 'x'
 
+  def subscriptions
+    self.class.get("/subscriptions.json")
+  end
+
   def get_subscription(subscription_id)
     self.class.get("/subscriptions/#{subscription_id}.json")
   end
@@ -16,9 +20,7 @@ class Chargify
 end
 
 chargify = Chargify.new
-sub = chargify.get_subscription(2559906)
-PP.pp(sub["subscription"], $>, 40)
-
-component = chargify.get_components(2559906)
-PP.pp(component, $>, 40)
-
+subscriptions = chargify.subscriptions
+subscriptions.each do |s|
+  puts chargify.get_components(s["subscription"]["id"]).to_yaml
+end

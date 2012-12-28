@@ -32,15 +32,22 @@
             <a class="brand" href="#">SubOut</a>
           </div>
           <div class="span9">
-            <ul class="nav">
-              <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
-              <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-              <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-              <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
-            </ul>
-            <div class="btn-group pull-right navbar-buttons">
-              <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
-              <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
+            <div class="row-fluid">
+              <ul class="nav span8">
+                <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
+                <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+                <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
+                <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
+              </ul>
+              <div class="span4">
+                <div class="btn-group navbar-buttons">
+                  <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
+                  <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
+                </div>
+                <div class="welcome">
+                  signed in as <span class="username">{{company.abbreviated_name}}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

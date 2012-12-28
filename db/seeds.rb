@@ -34,7 +34,7 @@ demo_addresses =
 ]
 
 demo_opportunities = [
-  "Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Part"
+  "Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts"
 ]
 
 

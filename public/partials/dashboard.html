@@ -114,7 +114,7 @@
                       <span class="event-action">
                         {{actionDescription(action)}}
                       </span>
-                      <a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(actor._id); setModal('partials/company-profile.html')">{{actor.abbreviated_name}}</a>
+                      <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)">{{actor.abbreviated_name}}</a>
 
                       <div class="pull-right expand-collapse">
                         <a class="reference-number" ng-show="event.selected" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
