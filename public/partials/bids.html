@@ -6,7 +6,7 @@
       <th>Date</th>
     </tr>  
     <tr ng-repeat="bid in my_bids" >
-      <td><a href="#modal" data-toggle="modal" ng-click="setOpportunity(bid.opportunity); setModal('partials/opportunity-detail.html')">{{bid.opportunity.name}}</a></td>
+      <td><a href="#/opportunities/{{bid.opportunity.reference_number}}">{{bid.opportunity.name}}</a></td>
       <td>${{bid.amount}}</td>
       <td>{{bid.created_at | date}}</td>
     </tr>
