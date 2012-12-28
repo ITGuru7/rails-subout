@@ -5,7 +5,7 @@
       <div class="company-info">
         <ul>
           <li><img ng-src="{{opportunity.buyer.logo_url}}" /></li>
-          <li><a href="#modal" data-toggle="modal" ng-click="setOtherCompanyViaId(opportunity.buyer._id); setModal('partials/company-profile.html')">{{opportunity.buyer.abbreviated_name}}</a></li>
+          <li><a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(opportunity.buyer._id)">{{opportunity.buyer.abbreviated_name}}</a></li>
         </ul>
       </div>
     </div>
@@ -67,7 +67,7 @@
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>${{bid.amount}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
-          <td>by <a data-toggle="modal" href="#modal" ng-click="setOtherCompanyViaId(bid.bidder._id); setModal('partials/company-profile.html')">{{bid.bidder.name}}</a></td>
+          <td>by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td><a class='btn btn-primary btn-mini pull-right'  ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>

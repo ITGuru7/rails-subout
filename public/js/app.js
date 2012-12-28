@@ -223,11 +223,12 @@ AppCtrl = function($scope, $rootScope, $location, $cookieStore, Opportunity, Com
       opportunityId: opportunity._id
     });
   };
-  $rootScope.setOtherCompanyViaId = function(company_id) {
-    return $rootScope.other_company = Company.get({
+  $rootScope.displayCompanyProfile = function(company_id) {
+    $rootScope.other_company = Company.get({
       api_token: $rootScope.token.api_token,
       companyId: company_id
     });
+    return $rootScope.setModal('partials/company-profile.html');
   };
   $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
@@ -847,18 +848,17 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
   return $scope.addToFavorites = function(company) {
+    $scope.notice = null;
     return Favorite.save({
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      var $alertInfo, messages;
-      $("#modal .modal-body .alert-info").remove();
-      messages = ["Successfully added to favorites."];
-      $alertInfo = $rootScope.alertInfo(messages);
-      $("#modal .modal-body").prepend($alertInfo);
+      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
+      company.favoriting_buyer_ids.push($rootScope.company._id);
+      $scope.notice = "Successfully added to favorites.";
       return $timeout(function() {
-        $("#modal .modal-body .alert-info").remove();
-        return jQuery("#modal").modal("hide");
+        $scope.notice = null;
+        return $("#modal").modal("hide");
       }, 2000);
     });
   };
