@@ -12,7 +12,7 @@
     <tr ng-repeat="company in favoriteCompanies" >
       <td>
         <span class="span2">
-          <img src="{{company.logo}}" />
+          <img ng-show="company.logo" src="{{company.logo}}" />
         </span>
       </td>
       <td>

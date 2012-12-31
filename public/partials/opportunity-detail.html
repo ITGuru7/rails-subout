@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="span4">
-          <a rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
+          <a ng-show="opportunity.image_url" rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
             <img ng-src="{{opportunity.image_url}}" />
           </a>
         </div>
