@@ -289,6 +289,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.start_date = $('#opportunity_start_date').val();
     opportunity.end_date = $('#opportunity_end_date').val();
     opportunity.image_id = $('#opportunity_image_id').val();
+    opportunity.start_time = $("#opportunity_start_time").val();
+    opportunity.end_time = $("#opportunity_end_time").val();
     showErrors = function(errors) {
       var $alertError;
       $("#modal form .alert-error").remove();

@@ -91,4 +91,14 @@ describe Opportunity do
       it { should_not be_editable }
     end
   end
+
+  describe "validate_time" do
+    it "validates start_time" do
+      FactoryGirl.build(:opportunity, start_time: "25:00").should_not be_valid
+    end
+
+    it "validates end_time" do
+      FactoryGirl.build(:opportunity, end_time: "25:00").should_not be_valid
+    end
+  end
 end

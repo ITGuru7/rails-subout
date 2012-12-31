@@ -47,8 +47,7 @@ class Opportunity
   validates_presence_of :start_location
   validate :validate_locations
   validate :validate_buyer_region
-  validate :validate_start_time
-  validate :validate_end_time
+  validate :validate_start_and_end_date
   validate :validate_win_it_now_price
 
   before_save :set_bidding_ends_at
@@ -149,11 +148,27 @@ class Opportunity
     self.bidding_ends_at = created_time + self.bidding_duration_hrs.to_i.hours
   end
 
-  def validate_start_time
-    errors.add(:start_date, "cannot be before now") if starts_at <= Time.now
+  def valid_time?(time)
+    begin
+      Time.parse(time)
+      true
+    rescue ArgumentError
+      false
+    end
   end
 
-  def validate_end_time
+  def validate_start_and_end_date
+    unless valid_time?(start_time)
+      errors.add(:start_time, "is invalid")
+      return
+    end
+
+    unless valid_time?(end_time)
+      errors.add(:end_time, "is invalid")
+      return
+    end
+
+    errors.add(:start_date, "cannot be before now") if starts_at <= Time.now
     errors.add(:end_date, "cannot be before the start date") if ends_at <= starts_at
   end
 
