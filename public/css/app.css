@@ -8058,6 +8058,9 @@ body {
 .filters .filter.active a {
   color: white;
 }
+.filters .filter.active.red {
+  background-color: #f25a29;
+}
 #tags .tag {
   margin-bottom: 0.3em;
   cursor: pointer;
