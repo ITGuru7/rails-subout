@@ -42,4 +42,12 @@ class OpportunitySerializer < ActiveModel::Serializer
       "In progress"
     end
   end
+
+  def start_date
+    opportunity.start_date.strftime("%Y/%m/%d") if opportunity.start_date
+  end
+
+  def end_date
+    opportunity.end_date.strftime("%Y/%m/%d") if opportunity.end_date
+  end
 end
