@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/ooleem/rspec_api_documentation.git
+  revision: c65caa46d7017520f6de4693d92e4b1af277f32e
+  specs:
+    rspec_api_documentation (0.8.0)
+      activesupport (>= 3.0.0)
+      i18n (>= 0.1.0)
+      json (>= 1.4.6)
+      mustache (>= 0.99.4)
+      rspec (>= 2.6.0)
+      webmock (>= 1.7.0)
+
+GIT
   remote: git://github.com/rails-api/active_model_serializers.git
   revision: 6ca430cec318a9a413b33a0d5d9dcfc3b53bfae5
   specs:
@@ -64,6 +76,7 @@ GEM
       rest-client
     coderay (1.0.7)
     connection_pool (0.9.2)
+    crack (0.3.1)
     cucumber (1.2.1)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.3)
@@ -152,6 +165,7 @@ GEM
     moped (1.3.1)
     multi_json (1.4.0)
     multi_xml (0.5.1)
+    mustache (0.99.4)
     netrc (0.7.7)
     nokogiri (1.5.5)
     origin (1.0.11)
@@ -251,6 +265,9 @@ GEM
     tzinfo (0.3.35)
     warden (1.2.1)
       rack (>= 1.0)
+    webmock (1.9.0)
+      addressable (>= 2.2.7)
+      crack (>= 0.1.7)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 
@@ -283,6 +300,7 @@ DEPENDENCIES
   rack-cors
   rails (= 3.2.3)
   rspec-rails
+  rspec_api_documentation!
   sidekiq
   sinatra
   slim

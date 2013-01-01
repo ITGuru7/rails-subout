@@ -40,6 +40,13 @@ RSpec.configure do |config|
   end
 end
 
+RspecApiDocumentation.configure do |config|
+  config.docs_dir = Rails.root.join("docs", "public")
+  config.api_name = "Subout API"
+  config.url_prefix = "/api/doc"
+  config.format = [:html]
+end
+
 def sign_in_user(user = FactoryGirl.create(:user))
   sign_in user
   @current_company = user.company

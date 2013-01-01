@@ -5,6 +5,7 @@ Subout::Application.routes.draw do
   devise_for :users
 
   mount Sidekiq::Web => '/sidekiq'
+  mount ApiDoc => "/api/doc"
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
@@ -15,12 +16,12 @@ Subout::Application.routes.draw do
       resources :file_uploader_signatures, only: :new
 
       resources :tokens
-      resources :users  do 
-        collection do 
+      resources :users  do
+        collection do
           post :account
         end
       end
-      
+
       resources :auctions do
         member do
           put :select_winner
