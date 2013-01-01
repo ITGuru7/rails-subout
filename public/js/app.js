@@ -570,12 +570,22 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.refreshEvents(function() {
     var channel;
-    channel = $rootScope.pusher.subscribe('event');
-    return channel.bind('created', function(event) {
+    channel = $rootScope.pusher.subscribe('global');
+    channel.bind('event_created', function(event) {
       if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
         $scope.events.unshift(event);
         updatePreviousEvents(event);
         return $scope.$apply();
+      }
+    });
+    channel.bind('added_to_favorites', function(favorite) {
+      if ($rootScope.company._id === favorite.supplier_id) {
+        return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
+      }
+    });
+    return channel.bind('removed_from_favorites', function(favorite) {
+      if ($rootScope.company._id === favorite.supplier_id) {
+        return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
       }
     });
   });
@@ -1070,6 +1080,12 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return false;
     }
     return opportunity.status === 'In progress';
+  };
+  Company.prototype.removeFavoriteBuyerId = function(buyerId) {
+    return this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId);
+  };
+  Company.prototype.addFavoriteBuyerId = function(buyerId) {
+    return this.favoriting_buyer_ids.push(buyerId);
   };
   return Company;
 }).factory("Token", function($resource) {
