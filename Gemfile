@@ -24,6 +24,7 @@ gem 'ffaker'
 gem 'mongoid_token', github: 'samnang/mongoid_token'
 gem 'geocoder'
 gem 'mongoid_search'
+gem 'newrelic_rpm'
 
 group :development, :test do
   gem "pry"
