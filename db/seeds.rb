@@ -20,23 +20,16 @@ demo_companies = {
 demo_addresses = 
   ["540 Main St, Hyannis, MA, 02630", 
   "2325 Maryland Road, Willow Grove, PA 19090",
-  "881 7th Avenue  New York, NY 10019",
   "1084 Shennecossett Road, Groton, CT 06340",
-  "1668 Daniel Webster Highway  North Woodstock, NH 03262",
   "Route 1 South Ogunquit, ME 03907",
   "1404 Wheelock Road, Danville, VT 05828",
-  "70 Washington Road  Princeton, NJ 08540",
-  "3346 U.S. 301, Hamer, SC 29547",
   "205 14th St NW, Charlottesville, VA 22903",
-  "1600 Pennsylvania Avenue NW Washington DC 20500",
   "451 Bellevue Road, Newark, DE 19713",
-  "1 Thames St, Newport, RI, 02840"
 ]
 
 demo_opportunities = [
   "Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"
 ]
-
 
 def decent_name(opportunity_type)
   demo_vehicle_types = [
@@ -86,11 +79,18 @@ end
 
 
 User.all.destroy_all
+demo_regions = %w{ 
+  Pennsylvania Connecticut Vermont 
+  Maine Virginia Delaware Massachusetts 
+  }
+
 demo_companies.each do |company_name, user_email|
-  subscription = GatewaySubscription.create(:product_handle => "national-service")
+  subscription = GatewaySubscription.create(
+    :product_handle => "state-by-state-service",
+    :regions => demo_regions)
+
   company = Company.create(
     :email => user_email,
-    :regions => [:all],
     :abbreviated_name => company_name.squeeze[0..5],
     :name => company_name,
     :contact_name => Faker::Name.name,
@@ -103,6 +103,7 @@ demo_companies.each do |company_name, user_email|
     :prelaunch => false,
     :created_from_subscription => subscription.id
   )
+  puts "Just created #{company.inspect}"
   User.create(:email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
   25.times do
     opp_type = demo_opportunities.shuffle.first
@@ -110,6 +111,7 @@ demo_companies.each do |company_name, user_email|
       :name =>decent_name(opp_type),
       :description => "#{rand(100)} seats",
       :start_location => demo_addresses.shuffle.first,
+      :end_location => demo_addresses.shuffle.first,
       :start_date => (2+rand(4)).days.from_now.to_s,
       :start_time => "12:00",
       :end_date => 12.days.from_now.to_s,
@@ -128,10 +130,12 @@ demo_companies.each do |company_name, user_email|
   10.times do 
     print(".")
     o = Opportunity.all.shuffle.first
-    b = Bid.create(
-      :amount => rand(1000),
-      :opportunity_id => o.id,
-      :bidder_id => company.id
-    )
+    unless o.nil?
+      b = Bid.create(
+        :amount => rand(1000),
+        :opportunity_id => o.id,
+        :bidder_id => company.id
+      )
+    end
   end
 end

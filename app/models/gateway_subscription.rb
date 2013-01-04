@@ -12,7 +12,7 @@ class GatewaySubscription
   field :customer_id
   field :product_handle
   field :confirmed, type: Boolean, default: false
-  field :regions, type: Array, default: :all
+  field :regions, type: Array, default: []
 
   has_one :created_company, :class_name => "Company"
 

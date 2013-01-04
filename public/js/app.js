@@ -707,9 +707,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "recieved bid $" + action.details.amount + " from";
+        return "recieved bid $" + action.details.amount;
       default:
-        return "" + (action.type.split('_').pop()) + " by";
+        return "" + (action.type.split('_').pop());
     }
   };
   $scope.toggleEvent = function(event) {
@@ -1043,31 +1043,20 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     return !(_ref = company._id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0);
   };
   Company.prototype.canSeeEvent = function(event) {
-    var _ref;
-    if (event.eventable_company_id === this._id) {
+    var _ref, _ref1, _ref2;
+    if (!this.state_by_state_subscriber) {
       return true;
     }
-    if (_ref = event.eventable_company_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0) {
+    if (_ref = event.eventable.start_region, __indexOf.call(this.regions, _ref) >= 0) {
       return true;
     }
-    return !event.eventable.for_favorites_only && this.subscribedRegions(event.regions);
-  };
-  Company.prototype.subscribedRegions = function(regions) {
-    var region;
-    if (this.regions === "all") {
+    if (_ref1 = event.eventable.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
       return true;
     }
-    return ((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = regions.length; _i < _len; _i++) {
-        region = regions[_i];
-        if (__indexOf.call(this.regions, region) >= 0) {
-          _results.push(region);
-        }
-      }
-      return _results;
-    }).call(this)).length > 0;
+    if (_ref2 = this._id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
+      return true;
+    }
+    return false;
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (!opportunity.status) {

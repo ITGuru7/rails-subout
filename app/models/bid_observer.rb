@@ -3,7 +3,7 @@ class BidObserver < Mongoid::Observer
   
   def after_create(bid)
     Event.create do |e|
-      e.action = {type: :bid_created, details: {:amount => bid.amount, :bid_id => bid.id}}
+      e.action = {type: :bid_created, details: {:amount => sprintf('%.2f', bid.amount), :bid_id => bid.id}}
       e.eventable = bid.opportunity
       e.actor_id = bid.bidder_id
     end

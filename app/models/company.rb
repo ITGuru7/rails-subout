@@ -105,7 +105,7 @@ class Company
   end
 
   def state_by_state_subscriber? 
-    subscription_plan == 'state-by-state-service'
+    subscription_plan == 'state_by_state_service'
   end
 
   def national_subscriber? 
