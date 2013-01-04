@@ -21,8 +21,12 @@ class GatewaySubscription
   scope :pending, where(confirmed: false)
 
   def set_regions
-    response = Chargify.get_components(subscription_id)
-    self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact
+    unless ENV['DEV_SITE']
+      response = Chargify.get_components(subscription_id)
+      self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact
+    else
+      self.regions = ["Massachusetts"]
+    end
   end
 
   def confirm!
