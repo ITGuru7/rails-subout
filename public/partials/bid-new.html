@@ -7,7 +7,12 @@
   </div>
   <div class="modal-body">
     <form name="newBid" class="form-horizontal">
-      <p class="alert alert-error" ng:show="errorMessage">{{errorMessage}}</p>
+      <div class="alert alert-error" ng-show="errors">
+        <a class="close" ng-click="hideErrorMessage()">&times;</a>
+        <ul ng-repeat="error in errors">
+          <li>{{error}}</li>
+        </ul>
+      </div>
 
       <div class="control-group oportunity_name">
         <label class="control-label">Opportunity</label>

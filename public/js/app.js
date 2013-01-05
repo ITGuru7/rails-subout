@@ -243,7 +243,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
       field = _.str.humanize(key);
       return $.each(errors, function(i, error) {
         if (key === "base") {
-          return result.push(error);
+          return result.push(_.str.humanize(error));
         } else {
           return result.push("" + field + " " + error);
         }
@@ -324,8 +324,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
   $scope.$on('modalOpened', function() {
-    return $scope.errorMessage = false;
+    return $scope.hideErrorMessage();
   });
+  $scope.hideErrorMessage = function() {
+    return $scope.errors = null;
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -333,8 +336,8 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       return jQuery("#modal").modal("hide");
-    }, function(error) {
-      return $scope.errorMessage = error.data.errors.amount[0];
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
 };
