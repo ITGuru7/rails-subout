@@ -155,11 +155,16 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
   })();
   $rootScope.regions = REGION_NAMES.slice(0);
   $rootScope.setupFileUploader = function() {
+    var $fileUploader;
+    $fileUploader = $("input.cloudinary-fileupload[type=file]");
+    if (!($fileUploader.length > 0)) {
+      return;
+    }
+    $fileUploader.hide();
     return FileUploaderSignature.get({}, function(data) {
-      var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
+      var $fileProgressBar, previewUrl, progressImageUpload, setImageUpload;
       $fileProgressBar = $('#progress .bar');
-      $fileUploader = $("input.cloudinary-fileupload[type=file]");
-      $fileUploader.attr('data-form-data', JSON.stringify(data));
+      $fileUploader.attr('data-form-data', JSON.stringify(data)).show();
       $fileUploader.cloudinary_fileupload({
         progress: function(e, data) {
           var progress;
@@ -195,6 +200,10 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         }
       });
     });
+  };
+  $rootScope.displaySettings = function() {
+    $rootScope.setModal('partials/settings.html');
+    return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     $rootScope.bid = {};
