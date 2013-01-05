@@ -175,7 +175,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         });
       };
       setImageUpload = function(data) {
-        $("form .image-preview").attr('src', previewUrl(data));
+        $("form .image-preview").attr('src', previewUrl(data)).show();
         return $("form .file-upload-public-id").val(data.result.public_id);
       };
       progressImageUpload = function(element, progressing) {
