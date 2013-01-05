@@ -41,7 +41,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def cancel
     @auction = Opportunity.find(params[:id])
-    if false and @auction.editable?
+    if @auction.editable?
       @auction.cancel!
       head :ok
     else

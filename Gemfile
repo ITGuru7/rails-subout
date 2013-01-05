@@ -39,6 +39,7 @@ group :test do
   gem 'fivemat'
   gem 'email_spec'
   gem 'timecop'
+  gem 'pusher-fake'
   #gem 'capybara-screenshot'
   #gem "capybara-webkit"
   #gem 'poltergeist'
