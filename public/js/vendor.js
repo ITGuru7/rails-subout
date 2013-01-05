@@ -12161,6 +12161,10 @@ function crc32 (str) {
       acceptFileTypes: /(\.|\/)(gif|jpe?g|png|bmp|ico)$/i,
       headers: {"X-Requested-With": "XMLHttpRequest"}
     }, options);
+    // Changed by Hoon start
+    // Changed not to trigger cloudinarydone event multiple times
+    this.fileupload(options).unbind("fileuploaddone");
+    // Changed by Hoon end
     this.fileupload(options).bind("fileuploaddone", function(e, data) {
       if (data.result.error) return;
       data.result.path = ["v", data.result.version, "/", data.result.public_id,

@@ -164,7 +164,8 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
     return FileUploaderSignature.get({}, function(data) {
       var $fileProgressBar, previewUrl, progressImageUpload, setImageUpload;
       $fileProgressBar = $('#progress .bar');
-      $fileUploader.attr('data-form-data', JSON.stringify(data)).show();
+      $fileUploader.attr('data-form-data', JSON.stringify(data));
+      $fileUploader.show();
       $fileUploader.cloudinary_fileupload({
         progress: function(e, data) {
           var progress;
@@ -188,10 +189,12 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         $fileProgressBar.toggle(progressing);
         return $(element).toggle(!progressing);
       };
-      $fileUploader.bind('fileuploadstart', function(e, data) {
+      $fileUploader.off('fileuploadstart');
+      $fileUploader.on('fileuploadstart', function(e, data) {
         return progressImageUpload(this, true);
       });
-      return $fileUploader.bind('cloudinarydone', function(e, data) {
+      $fileUploader.off('cloudinarydone');
+      return $fileUploader.on('cloudinarydone', function(e, data) {
         progressImageUpload(this, false);
         if (data.result.resource_type !== "image") {
           return alert("Sorry, only images are supported.");
