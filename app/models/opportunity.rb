@@ -141,6 +141,10 @@ class Opportunity
     not(self.bids.exists?)
   end
 
+  def recent_bids
+    self.bids.recent
+  end
+
   private
 
   def set_bidding_ends_at

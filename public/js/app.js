@@ -155,11 +155,17 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
   })();
   $rootScope.regions = REGION_NAMES.slice(0);
   $rootScope.setupFileUploader = function() {
+    var $fileUploader;
+    $fileUploader = $("input.cloudinary-fileupload[type=file]");
+    if (!($fileUploader.length > 0)) {
+      return;
+    }
+    $fileUploader.hide();
     return FileUploaderSignature.get({}, function(data) {
-      var $fileProgressBar, $fileUploader, previewUrl, progressImageUpload, setImageUpload;
+      var $fileProgressBar, previewUrl, progressImageUpload, setImageUpload;
       $fileProgressBar = $('#progress .bar');
-      $fileUploader = $("input.cloudinary-fileupload[type=file]");
       $fileUploader.attr('data-form-data', JSON.stringify(data));
+      $fileUploader.show();
       $fileUploader.cloudinary_fileupload({
         progress: function(e, data) {
           var progress;
@@ -175,7 +181,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         });
       };
       setImageUpload = function(data) {
-        $("form .image-preview").attr('src', previewUrl(data));
+        $("form .image-preview").attr('src', previewUrl(data)).show();
         return $("form .file-upload-public-id").val(data.result.public_id);
       };
       progressImageUpload = function(element, progressing) {
@@ -183,10 +189,12 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         $fileProgressBar.toggle(progressing);
         return $(element).toggle(!progressing);
       };
-      $fileUploader.bind('fileuploadstart', function(e, data) {
+      $fileUploader.off('fileuploadstart');
+      $fileUploader.on('fileuploadstart', function(e, data) {
         return progressImageUpload(this, true);
       });
-      return $fileUploader.bind('cloudinarydone', function(e, data) {
+      $fileUploader.off('cloudinarydone');
+      return $fileUploader.on('cloudinarydone', function(e, data) {
         progressImageUpload(this, false);
         if (data.result.resource_type !== "image") {
           return alert("Sorry, only images are supported.");
@@ -195,6 +203,10 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
         }
       });
     });
+  };
+  $rootScope.displaySettings = function() {
+    $rootScope.setModal('partials/settings.html');
+    return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     $rootScope.bid = {};
@@ -243,7 +255,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
       field = _.str.humanize(key);
       return $.each(errors, function(i, error) {
         if (key === "base") {
-          return result.push(error);
+          return result.push(_.str.humanize(error));
         } else {
           return result.push("" + field + " " + error);
         }
@@ -324,8 +336,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
   $scope.$on('modalOpened', function() {
-    return $scope.errorMessage = false;
+    return $scope.hideErrorMessage();
   });
+  $scope.hideErrorMessage = function() {
+    return $scope.errors = null;
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -333,8 +348,8 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       return jQuery("#modal").modal("hide");
-    }, function(error) {
-      return $scope.errorMessage = error.data.errors.amount[0];
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
 };

@@ -6,7 +6,7 @@ class OpportunitySerializer < ActiveModel::Serializer
 
   has_one :buyer, serializer: ActorSerializer
 
-  has_many :bids, serializer: BidShortSerializer
+  has_many :recent_bids, serializer: BidShortSerializer, key: "bids"
 
   def winner
     return unless opportunity.winning_bid_id

@@ -90,7 +90,7 @@
             <label for="logo_id" class="control-label">Company Logo</label>
 
             <div class="controls">
-              <input class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+              <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
               <input type="hidden" id="company_logo_id" class="file-upload-public-id" ng-model="company.logo_id">
               <div id="progress">
                 <div class="bar" style="width: 0%;"></div>
