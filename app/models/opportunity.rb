@@ -173,7 +173,7 @@ class Opportunity
     end
 
     errors.add(:start_date, "cannot be before now") if starts_at <= Time.now
-    errors.add(:end_date, "cannot be before the start date") if ends_at <= starts_at
+    errors.add(:end_date, "cannot be before the start date") if ends_at < starts_at
   end
 
   def validate_win_it_now_price
