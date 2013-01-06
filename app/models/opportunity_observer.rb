@@ -23,10 +23,7 @@ class OpportunityObserver < Mongoid::Observer
   end
 
   def send_notification_to_companies(opportunity)
-    puts "Hey!"
     companies = Company.notified_recipients_by(opportunity)
-    puts companies.to_a.inspect
-
     companies.each do |company|
       Notifier.delay_for(5.minutes).new_opportunity(opportunity.id, company.id)
       begin

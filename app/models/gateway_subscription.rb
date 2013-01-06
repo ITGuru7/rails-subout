@@ -14,6 +14,8 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
 
+  attr_accessible :regions, :product_handle
+
   has_one :created_company, :class_name => "Company"
 
   before_create :set_regions, :if => "state_by_state_service?"
@@ -24,8 +26,6 @@ class GatewaySubscription
     unless ENV['DEV_SITE']
       response = Chargify.get_components(subscription_id)
       self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact
-    else
-      self.regions = ["Massachusetts"]
     end
   end
 

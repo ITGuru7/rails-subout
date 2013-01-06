@@ -11,10 +11,13 @@
 
 demo_companies = {
   'Diversified Transportation Ltd.' => 'suboutdev@gmail.com',
-  'Valley Bus Coaches, Llc' => 'ed@valley_bus.com',
-  'Peter Pan Bus Lines, Inc.' => 'peter@peterpan_bus.com',
-  'Phoenix Bus Inc' => 'tom@phoenix_bus.com',
-  'Boston Express Bus Inc.' => 'steve@boston_bus.com'
+  'Phoenix Bus Inc' => 'tom@phoenixbus.com',
+  'Boston Express Bus Inc.' => 'steve@bostonbus.com'
+}
+
+national_companies = {
+  'Valley Bus Coaches, Llc' => 'ed@valleybus.com',
+  'Peter Pan Bus Lines, Inc.' => 'peter@peterpanbus.com'  
 }
 
 demo_addresses = 
@@ -86,8 +89,9 @@ demo_regions = %w{
 
 demo_companies.each do |company_name, user_email|
   subscription = GatewaySubscription.create(
-    :product_handle => "state-by-state-service",
-    :regions => demo_regions)
+    :product_handle => "state-by-state-service")
+  subscription.regions=demo_regions
+  subscription.save
 
   company = Company.create(
     :email => user_email,
@@ -105,6 +109,32 @@ demo_companies.each do |company_name, user_email|
   )
   puts "Just created #{company.inspect}"
   User.create(:email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
+end
+
+national_companies.each do |company_name, user_email|
+  subscription = GatewaySubscription.create(
+    :product_handle => "national-service")
+
+  binding.pry
+  company = Company.create(
+    :email => user_email,
+    :abbreviated_name => company_name.squeeze[0..5],
+    :name => company_name,
+    :contact_name => Faker::Name.name,
+    :fleet_size => "7 65 PAX bus",
+    :since => "1975", 
+    :owner => Faker::Name.name,
+    :contact_phone => Faker::PhoneNumber.phone_number,
+    :tpa => rand(99999999).to_s,
+    :website => Faker::Internet.http_url,
+    :prelaunch => false,
+    :created_from_subscription => subscription.id
+  )
+  puts "Just created #{company.inspect}"
+  User.create(:email => user_email, :company => company, :password => 'password', :password_confirmation => 'password' )
+end
+
+Company.all.each do |company|  
   25.times do
     opp_type = demo_opportunities.shuffle.first
     opportunity = Opportunity.create(
@@ -120,13 +150,13 @@ demo_companies.each do |company_name, user_email|
       :quick_winnable => false,
       :type => opp_type,
       :buyer_id => company.id,
-      :bidding_duration_hrs => 24)
+      :bidding_duration_hrs => 24,
+      :notification_type => 'Individual')
     puts opportunity.errors.inspect unless opportunity.valid?
   end 
 end
 
-demo_companies.each do |company_name, user_email|
-  company = Company.where(:email => user_email).first
+Company.all.each do |company|
   10.times do 
     print(".")
     o = Opportunity.all.shuffle.first
