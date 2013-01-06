@@ -115,7 +115,6 @@ national_companies.each do |company_name, user_email|
   subscription = GatewaySubscription.create(
     :product_handle => "national-service")
 
-  binding.pry
   company = Company.create(
     :email => user_email,
     :abbreviated_name => company_name.squeeze[0..5],
