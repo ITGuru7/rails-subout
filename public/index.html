@@ -41,8 +41,7 @@
               </ul>
               <div class="pull-right">
                 <div class="btn-group navbar-buttons">
-                  <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()">
-                    <i class="icon-wrench"></i>Settings</a>
+                  <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="setModal('partials/settings.html')"><i class="icon-wrench"></i>Settings</a>
                   <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
                 </div>
                 <div class="welcome">
@@ -62,5 +61,6 @@
     <script type="text/javascript">
       if (typeof GSFN !== "undefined") { GSFN.loadWidget(3613,{"containerId":"getsat-widget-3613"}); }
     </script>
+
   </body>
 </html>
