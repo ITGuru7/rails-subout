@@ -23,10 +23,20 @@ class OpportunityObserver < Mongoid::Observer
   end
 
   def send_notification_to_companies(opportunity)
+    puts "Hey!"
     companies = Company.notified_recipients_by(opportunity)
+    puts companies.to_a.inspect
 
     companies.each do |company|
       Notifier.delay_for(5.minutes).new_opportunity(opportunity.id, company.id)
+      begin
+        bitly = Bitly.new("suboutdev", "R_8ba0587adb559eb9b2576826a915b557")
+        puts bitly.shorten("#{ENV['EXTERNAL_URL']}/#/opportunities/#{opportunity.reference_number}").short_url        
+      rescue Exception => e
+        puts e.backtrace
+        puts e.inspect
+
+      end
     end
   end
 end

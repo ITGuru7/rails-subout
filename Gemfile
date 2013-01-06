@@ -25,6 +25,7 @@ gem 'mongoid_token', github: 'samnang/mongoid_token'
 gem 'geocoder'
 gem 'mongoid_search'
 gem 'newrelic_rpm'
+gem 'bitly'
 
 group :development, :test do
   gem "pry"
