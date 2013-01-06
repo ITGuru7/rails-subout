@@ -14,6 +14,8 @@ class Company
   field :prelaunch, type: Boolean
   field :logo_id
   field :abbreviated_name
+  field :dot_number, type: String
+  field :cell_phone, type: String
 
   field :favorite_supplier_ids, type: Array, default: []
   field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
