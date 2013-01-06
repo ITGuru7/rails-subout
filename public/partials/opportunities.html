@@ -15,7 +15,7 @@
       <th>Winning Bidder</th>
       <th>Amount</th>
     </tr>
-    <tr ng-repeat="opportunity in opportunities | filter:opportunityFilter" >
+    <tr ng-repeat="opportunity in opportunities | orderBy:'bidding_ends_at':true | filter:opportunityFilter" >
       <td>{{opportunity.reference_number}}</td>
       <td>{{opportunity.type}}</td>
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
