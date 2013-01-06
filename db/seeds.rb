@@ -17,7 +17,7 @@ demo_companies = {
 
 national_companies = {
   'Valley Bus Coaches, Llc' => 'ed@valleybus.com',
-  'Peter Pan Bus Lines, Inc.' => 'peter@peterpanbus.com'  
+  'Peter Pan Bus Lines, Inc.' => 'peter@notpeterpanbus.com'  
 }
 
 demo_addresses = 
