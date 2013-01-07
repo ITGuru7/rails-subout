@@ -38,7 +38,7 @@ class Opportunity
   has_one :event, :as => :eventable
   has_many :bids
 
-  validates :win_it_now_price, numericality: { greater_than: 0 }
+  validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
