@@ -12,6 +12,8 @@
 demo_companies = {
   'Diversified Transportation Ltd.' => 'suboutdev@gmail.com',
   'Phoenix Bus Inc' => 'tom@phoenixbus.com',
+  'Hyannis Bus Inc' => 'tom@hyannisbus.com',
+  'Barnstable Bus Inc' => 'tom@barnstablebus.com',
   'Boston Express Bus Inc.' => 'steve@bostonbus.com'
 }
 
