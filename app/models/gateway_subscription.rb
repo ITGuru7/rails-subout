@@ -25,7 +25,7 @@ class GatewaySubscription
   def set_regions
     unless ENV['DEV_SITE']
       response = Chargify.get_components(subscription_id)
-      self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact
+      self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
     end
   end
 
