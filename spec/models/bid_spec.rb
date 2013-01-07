@@ -12,6 +12,12 @@ describe Bid do
     #end
   #end
 
+  describe "validation" do
+    it { should allow_value(1).for(:amount) }
+    it { should_not allow_value(0).for(:amount) }
+    it { should_not allow_value(-1).for(:amount) }
+  end
+
   describe "validate_multiple_bids_on_the_same_opportunity" do
     let(:bidder) { FactoryGirl.create(:company) }
 

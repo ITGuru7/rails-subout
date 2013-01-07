@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe Opportunity do
+  describe "validation" do
+    it { should allow_value(1).for(:win_it_now_price) }
+    it { should_not allow_value(0).for(:win_it_now_price) }
+    it { should_not allow_value(-1).for(:win_it_now_price) }
+  end
+
   describe "#win!" do
     include EmailSpec::Helpers
 

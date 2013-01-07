@@ -41,6 +41,7 @@ group :test do
   gem 'email_spec'
   gem 'timecop'
   gem 'pusher-fake'
+  gem 'shoulda-matchers'
   #gem 'capybara-screenshot'
   #gem "capybara-webkit"
   #gem 'poltergeist'

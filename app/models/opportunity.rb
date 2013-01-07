@@ -38,6 +38,7 @@ class Opportunity
   has_one :event, :as => :eventable
   has_many :bids
 
+  validates :win_it_now_price, numericality: { greater_than: 0 }
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
@@ -112,6 +113,8 @@ class Opportunity
   end
 
   def validate_buyer_region
+    return unless buyer
+
     unless buyer.subscribed?(regions)
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end
@@ -153,6 +156,7 @@ class Opportunity
   end
 
   def valid_time?(time)
+    return false unless time
     begin
       Time.parse(time)
       true

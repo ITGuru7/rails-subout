@@ -10,6 +10,7 @@ class Bid
   validates_presence_of :bidder_id, :on => :create, :message => "can't be blank"
   validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
   validates_presence_of :amount, :on => :create, :message => "can't be blank"
+  validates :amount, numericality: { greater_than: 0 }
   validate :validate_opportunity_bidable, :on => :create
   validate :validate_bidable_by_bidder, :on => :create
   validate :validate_multiple_bids_on_the_same_opportunity, :on => :create
@@ -36,12 +37,16 @@ class Bid
   end
 
   def validate_opportunity_bidable
+    return unless opportunity
+
     unless opportunity.bidable?
       errors.add :base, "opportunity has been closed"
     end
   end
 
   def validate_bidable_by_bidder
+    return unless opportunity
+
     unless opportunity.buyer_id != bidder_id
       errors.add :bidder_id, "cannot bid on your own opportunity"
     end
@@ -58,6 +63,8 @@ class Bid
   end
 
   def validate_multiple_bids_on_the_same_opportunity
+    return unless opportunity
+
     previous_bids = opportunity.bids.where(bidder_id: bidder.id, :id.ne => self.id)
     if opportunity.forward_auction?
       max_amount = previous_bids.max(:amount)
