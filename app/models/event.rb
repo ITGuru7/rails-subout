@@ -12,7 +12,7 @@ class Event
   belongs_to :actor, :class_name => "Company"
   embeds_one :action, class_name: "EventAction"
   belongs_to :eventable, :polymorphic => true
-  
+
   paginates_per 30
   search_in eventable: :fulltext
 
@@ -33,6 +33,14 @@ class Event
     end
 
     self.any_of(*options)
+  end
+
+  def self.search(query)
+    if query.present? and query.start_with?("#")
+      query = query[1..-1]
+    end
+
+    self.full_text_search(query)
   end
 
   private

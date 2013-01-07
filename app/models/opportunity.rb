@@ -118,7 +118,7 @@ class Opportunity
   end
 
   def fulltext
-    [name, description].join(' ')
+    [reference_number, name, description].join(' ')
   end
 
   def valid_location?(location)
