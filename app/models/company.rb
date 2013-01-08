@@ -24,7 +24,7 @@ class Company
   field :created_from_subscription_id
 
   field :subscription_plan, default: 'free'
-  field :regions, type: Array
+  field :regions, type: Array, default: []
 
   field :notification_type, default: 'Individual'
 
@@ -37,7 +37,7 @@ class Company
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
 
-  attr_accessor :password, :password_confirmation, :regions
+  attr_accessor :password, :password_confirmation
 
   belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
   belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
