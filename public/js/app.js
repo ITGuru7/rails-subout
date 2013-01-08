@@ -868,7 +868,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
     return Company.save({
       company: $scope.company
     }, function() {
-      return $location.path("/welcome-prelaunch").search({});
+      return $location.path("/sign_in").search({});
     }, function(response) {
       return $scope.errorMessage = response.data.errors.join("<br />");
     });
