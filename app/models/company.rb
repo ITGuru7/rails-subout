@@ -26,7 +26,7 @@ class Company
   field :subscription_plan, default: 'free'
   field :regions, type: Array
 
-  field :notification_type, default: 'None'
+  field :notification_type, default: 'Individual'
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
