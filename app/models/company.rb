@@ -69,6 +69,7 @@ class Company
 
     unless opportunity.for_favorites_only?
       options << {:subscription_plan => 'subout-national-service'}
+      options << {:subscription_plan => 'subout-partner'}
       options << {:regions.in => opportunity.regions}
     end
 
@@ -112,7 +113,8 @@ class Company
   end
 
   def national_subscriber? 
-    subscription_plan == 'subout-national-service'
+    subscription_plan == 'subout-national-service' ||
+    subscription_plan == 'subout-partner'
   end
 
   def create_initial_user!
