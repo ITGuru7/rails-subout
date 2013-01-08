@@ -125,7 +125,7 @@ class Company
   end
 
   def subscribed?(regions)
-    self.national_subscriber? || (regions - self.regions).blank?
+    self.national_subscriber? || not (regions & self.regions).empty?
   end
 
   def self.companies_for(company)
