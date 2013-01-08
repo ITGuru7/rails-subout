@@ -21,6 +21,7 @@ class Company
   field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
 
   field :created_from_invitation_id
+  field :created_from_subscription_id
 
   field :subscription_plan, default: 'free'
   field :regions, type: Array
@@ -36,7 +37,7 @@ class Company
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
 
-  attr_accessor :password, :password_confirmation, :gateway_subscription_id
+  attr_accessor :password, :password_confirmation, :regions
 
   belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
   belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
@@ -67,7 +68,7 @@ class Company
     ]
 
     unless opportunity.for_favorites_only?
-      options << {:subscription_plan => 'national-service'}
+      options << {:subscription_plan => 'subout-national-service'}
       options << {:regions.in => opportunity.regions}
     end
 
@@ -107,11 +108,11 @@ class Company
   end
 
   def state_by_state_subscriber? 
-    subscription_plan == 'state_by_state_service'
+    subscription_plan == 'state-by-state-service'
   end
 
   def national_subscriber? 
-    subscription_plan == 'national-service'
+    subscription_plan == 'subout-national-service'
   end
 
   def create_initial_user!
@@ -132,6 +133,11 @@ class Company
     [company] + Company.ne(id: company.id).to_a
   end
 
+  def set_subscription_info
+    self.subscription_plan = created_from_subscription.product_handle
+    self.regions = created_from_subscription.regions
+  end
+
   private
 
   def validate_invitation
@@ -146,10 +152,6 @@ class Company
     errors.add(:created_from_subscription_id, "Invalid subscription")
   end
 
-  def set_subscription_info
-    self.regions = created_from_subscription.regions
-    self.subscription_plan = created_from_subscription.product_handle
-  end
 
   def accept_invitation!
     self.created_from_invitation.accept! 

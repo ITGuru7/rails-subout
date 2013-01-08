@@ -1,5 +1,13 @@
 require 'chargify'
 
+STATE_NAMES = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+"Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
+"Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+"Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
+"North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island",
+"South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
+"West Virginia", "Wisconsin", "Wyoming", "District of Columbia", "Puerto Rico"]
+
 class GatewaySubscription
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -14,7 +22,7 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
 
-  attr_accessible :regions, :product_handle
+  attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
 
   has_one :created_company, :class_name => "Company"
 
@@ -24,8 +32,12 @@ class GatewaySubscription
 
   def set_regions
     unless ENV['DEV_SITE']
-      response = Chargify.get_components(subscription_id)
-      self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
+      if state_by_state_service? 
+        response = Chargify.get_components(subscription_id)
+        self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
+      else
+        self.regions = STATE_NAMES
+      end
     end
   end
 

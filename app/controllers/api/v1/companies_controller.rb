@@ -23,6 +23,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def create
     company = Company.new(params[:company])
+    company.created_from_subscription_id = params[:company]["gateway_subscription_id"]
     company.prelaunch = true
     if company.save
       respond_with_namespace(company)
