@@ -26,6 +26,8 @@ gem 'geocoder'
 gem 'mongoid_search'
 gem 'newrelic_rpm'
 gem 'bitly'
+gem "airbrake"
+
 
 group :development, :test do
   gem "pry"
