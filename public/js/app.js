@@ -807,8 +807,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
 
 SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   $.removeCookie('auth_token');
-  $scope.email = "suboutdev@gmail.com";
-  $scope.password = "password";
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,
