@@ -126,8 +126,11 @@ class Company
 
   def subscribed?(regions)
     return true if self.national_subscriber?
-    return true unless regions & self.regions.empty?
-    return false
+    if regions & self.regions.empty?
+      return false
+    else
+      return true
+    end
   end
 
   def self.companies_for(company)
