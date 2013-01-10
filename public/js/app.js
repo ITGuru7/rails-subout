@@ -12,6 +12,12 @@ subout.config([
     }).when("/sign_up", {
       templateUrl: "partials/sign_up.html",
       controller: SignUpCtrl
+    }).when("/password/new", {
+      templateUrl: "partials/password-new.html",
+      controller: NewPasswordCtrl
+    }).when("/password/edit", {
+      templateUrl: "partials/password-edit.html",
+      controller: EditPasswordCtrl
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
       controller: DashboardCtrl,
@@ -52,7 +58,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, EditPasswordCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature) {
@@ -828,6 +834,53 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
+NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password) {
+  $.removeCookie('auth_token');
+  $scope.hideAlert = function() {
+    $scope.notice = null;
+    return $scope.errors = null;
+  };
+  return $scope.requestResetPassword = function() {
+    $scope.hideAlert();
+    return Password.save({
+      user: $scope.user
+    }, function() {
+      $scope.user.email = null;
+      $scope.notice = "You will receive an email with instructions" + " about how to reset your password in a few minutes.";
+      return $timeout(function() {
+        return $scope.notice = null;
+      }, 2000);
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+};
+
+EditPasswordCtrl = function($scope, $rootScope, $routeParams, $location, $timeout, Password) {
+  $.removeCookie('auth_token');
+  $scope.hideAlert = function() {
+    $scope.notice = null;
+    return $scope.errors = null;
+  };
+  return $scope.resetPassword = function() {
+    $scope.hideAlert();
+    $scope.user.reset_password_token = $routeParams.reset_password_token;
+    return Password.update({
+      user: $scope.user
+    }, function() {
+      $scope.notice = "Your password is reset successfully";
+      $scope.password = null;
+      $scope.password_confirmation = null;
+      return $timeout(function() {
+        $scope.notice = null;
+        return $location.path("sign_in").search({});
+      }, 2000);
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+};
+
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
   $.removeCookie('auth_token');
   $scope.company = {};
@@ -1092,6 +1145,13 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return Company;
 }).factory("Token", function($resource) {
   return $resource("" + api_path + "/tokens", {}, {});
+}).factory("Password", function($resource) {
+  return $resource("" + api_path + "/passwords", {}, {
+    update: {
+      method: "PUT",
+      params: {}
+    }
+  });
 }).factory("User", function($resource) {
   return $resource("" + api_path + "/users/:userId.json", {
     userId: '@userId'

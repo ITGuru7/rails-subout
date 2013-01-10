@@ -7,7 +7,7 @@
         </div>
     </div>
 </header>
-<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well" ng-hide="showReset == 1">
+<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well">
 	<fieldset>
 		<legend>
 			Sign In
@@ -38,35 +38,8 @@
             </div>
         </div>
         <div class="form-actions">
-            <button class="btn btn-primary" type="submit" ng:disabled="{{signInForm.$invalid}}">Sign In</button>
+          <p><button class="btn btn-primary" type="submit" ng:disabled="{{signInForm.$invalid}}">Sign In</button></p>
+          <p><a href="#/password/new">Forgot the password?</a></p>
         </div>
 	</fieldset>
 </form>
-
-<div span6>
-
-</div>
-<div class="span7 offset2" ng-show="showReset == 1">
-    <form id="reset-password-form" ng:submit="reset-password()" name="resetForm" class="form-horizontal well">
-        <fieldset>
-            <legend>
-                Reset Password
-            </legend>
-            <p class="alert alert-error" ng:show="message">{{message}}</p>
-            <div class="control-group">
-                <label for="resetEmail" class="control-label">Email</label>
-                <div class="controls">                  
-                  <input id="resetEmail" 
-                        type="text"
-                        class="input-xlarge"
-                        ng:model="email"
-                        required
-                        />
-                </div>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" ng:disabled="{{resetForm.$invalid}}">Send Reset Link</button>
-            </div>
-        </fieldset>
-    </form>
-</div>
