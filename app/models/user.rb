@@ -49,6 +49,10 @@ class User
   ## Needed for simple_role and cancan
   field :role, :type => String  
   
+  before_save do
+    self.email.downcase! if self.email
+  end
+
   def self.find_by_email(email)
     where(:email => email).first
   end
