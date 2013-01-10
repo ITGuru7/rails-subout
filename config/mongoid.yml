@@ -14,7 +14,7 @@ development:
   sessions:
     # Defines the default session. (required)
     default:
-      database: subout_development
+      database: <%= ENV['MONGO_DB_NAME'] || "subout_development" %>
       hosts:
         - localhost:27017
       options:

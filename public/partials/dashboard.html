@@ -117,7 +117,7 @@
                       <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)"></a>
 
                       <div class="pull-right expand-collapse">
-                        <a class="reference-number" ng-show="event.selected" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
+                        <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
                         <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
                       </div>
                     </span>
@@ -140,16 +140,23 @@
                       </div>
 
                       <div>
-                        <span>Bidding Ends:</span>
-                        <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
-                        <div ng-show="event.eventable.quick_winnable">
-                          <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
+                        <div ng-hide="event.eventable.winning_bid_id">
+                          <span>Bidding Ends:</span>
+                          <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
+                          <div ng-show="event.eventable.quick_winnable">
+                            <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
+                          </div>
                         </div>
                       </div>
                       <div ng-show="company.canSeeEvent(event)">
-                        <div ng-show="opportunity.buyer_id != company._id">
+                        <div ng-show="(opportunity.buyer_id != company._id)">
                           <div>
-                            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                            <a  href="#modal" 
+                                class="btn btn-success btn-small" 
+                                data-toggle="modal" 
+                                ng-click="displayNewBidForm(opportunity)"
+                                ng-hide="event.eventable.winning_bid_id">
+                                Bid</a>
                           </div>
                           <span>
                             <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>

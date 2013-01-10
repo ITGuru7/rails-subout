@@ -27,6 +27,7 @@ gem 'mongoid_search'
 gem 'newrelic_rpm'
 gem 'bitly'
 gem "airbrake"
+gem "jquery-rails"
 
 
 group :development, :test do

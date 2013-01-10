@@ -35,7 +35,13 @@ Subout::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost', :port => 3000 }
+  ActionMailer::Base.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    :address => "localhost",
+    :port => 1025,
+    :domain => "suboutapp.com" }
 
   DEFAULT_HOST_WITH_PORT = "localhost:3000"
+  config.action_mailer.default_url_options = { :host => DEFAULT_HOST_WITH_PORT }
+
 end

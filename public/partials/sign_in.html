@@ -7,7 +7,7 @@
         </div>
     </div>
 </header>
-<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well">
+<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well" ng-hide="showReset == 1">
 	<fieldset>
 		<legend>
 			Sign In
@@ -21,7 +21,6 @@
                     type="text"
                     class="input-xlarge"
                     ng:model="email"
-                    required
                     autofocus
                     />
             </div>
@@ -35,17 +34,39 @@
                     type="password"
                     class="input-xlarge"
                     ng:model="password"
-                    required
-                    autofocus
                     />
             </div>
         </div>
         <div class="form-actions">
             <button class="btn btn-primary" type="submit" ng:disabled="{{signInForm.$invalid}}">Sign In</button>
         </div>
-
 	</fieldset>
 </form>
-            <div class="span2 offset4">
-                <a href="mailto:password_reset@subout.com">Need your password reset?</a> 
-            </div>        
+
+<div span6>
+
+</div>
+<div class="span7 offset2" ng-show="showReset == 1">
+    <form id="reset-password-form" ng:submit="reset-password()" name="resetForm" class="form-horizontal well">
+        <fieldset>
+            <legend>
+                Reset Password
+            </legend>
+            <p class="alert alert-error" ng:show="message">{{message}}</p>
+            <div class="control-group">
+                <label for="resetEmail" class="control-label">Email</label>
+                <div class="controls">                  
+                  <input id="resetEmail" 
+                        type="text"
+                        class="input-xlarge"
+                        ng:model="email"
+                        required
+                        />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit" ng:disabled="{{resetForm.$invalid}}">Send Reset Link</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
