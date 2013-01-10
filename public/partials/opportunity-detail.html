@@ -67,8 +67,10 @@
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>${{bid.amount}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
-          <td>by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
-          <td><a class='btn btn-primary btn-mini pull-right'  ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+          <div ng-show="opportunity.buyer._id == company._id">
+            <td>by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
+          </div> 
+         <td><a class='btn btn-primary btn-mini pull-right'  ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>
     </div>
