@@ -15,6 +15,9 @@ Subout::Application.routes.draw do
 
       resources :file_uploader_signatures, only: :new
 
+      resources :passwords do
+        put "update", on: :collection
+      end
       resources :tokens
       resources :users  do
         collection do
