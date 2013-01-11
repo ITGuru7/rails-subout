@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+
 ruby '1.9.3'
 gem 'rails', '3.2.11'
 
@@ -28,7 +29,6 @@ gem 'newrelic_rpm'
 gem 'bitly'
 gem "airbrake"
 gem "jquery-rails"
-
 
 group :development, :test do
   gem "pry"

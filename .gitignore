@@ -20,3 +20,4 @@ app/models/temp
 public/js/app.js
 *.rdb
 *.swp
+dump

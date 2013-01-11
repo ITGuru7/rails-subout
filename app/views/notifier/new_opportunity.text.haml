@@ -1,9 +1,8 @@
 Hi #{@company.contact_name},
 
-There is a new opportunity has just arrived:
+There is a new opportunity has just arrived on Subout: #{@opportunity.name}
 
+To view the details of this opportunity, please click #{ENV['EXTERNAL_URL']}/#/opportunities/#{@opportunity.reference_number}
 
-#{@opportunity.name}
+Thank you!!!
 
-
-Please login into your account to bid on it if you like.
