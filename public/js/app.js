@@ -933,7 +933,10 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
+      var _ref;
+      if ((_ref = company.favoriting_buyer_ids) == null) {
+        company.favoriting_buyer_ids = [];
+      }
       company.favoriting_buyer_ids.push($rootScope.company._id);
       $scope.notice = "Successfully added to favorites.";
       return $timeout(function() {

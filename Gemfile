@@ -29,6 +29,7 @@ gem 'newrelic_rpm'
 gem 'bitly'
 gem "airbrake"
 gem "jquery-rails"
+gem "awesome_print"
 
 group :development, :test do
   gem "pry"

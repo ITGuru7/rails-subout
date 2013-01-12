@@ -55,17 +55,9 @@ class Notifier < ActionMailer::Base
 
   def new_opportunity(opportunity_id, company_id)
     @opportunity = Opportunity.find(opportunity_id)
-
-    puts "Heyeyeyeyeyey"
     return if @opportunity.canceled?
 
     @company = Company.find(company_id)
-
-    begin
-      mail(subject: "SUBOUT: new opportunity arrived", to: @company.email)
-      
-    rescue Exception => e
-      
-    end
+    mail(subject: "SUBOUT: new opportunity arrived", to: @company.email)
   end
 end

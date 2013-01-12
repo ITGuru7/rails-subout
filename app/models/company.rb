@@ -20,8 +20,7 @@ class Company
   field :cell_phone, type: String
 
   field :favorite_supplier_ids, type: Array, default: []
-  field :favoriting_buyer_ids, type: Array, default: []  #TODO see if come up with a better name
-
+  field :favoriting_buyer_ids, type: Array, default: []
   field :created_from_invitation_id
   field :created_from_subscription_id
 
@@ -56,13 +55,21 @@ class Company
   validates :email, presence: true, uniqueness: true
   validates_confirmation_of :password
 
+
   # Thomas Total Hack validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
   validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
   validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
+  validate :check_nils
 
   before_create :set_subscription_info, if: "created_from_subscription_id.present?"
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
+
+  def check_nils
+    errors.add(:favorite_supplier_ids, "is not defined") if favorite_supplier_ids.nil?
+    errors.add(:favoriting_buyer_ids, "is not defined") if favoriting_buyer_ids.nil?
+  end
+
 
   def self.notified_recipients_by(opportunity)
     options = [
