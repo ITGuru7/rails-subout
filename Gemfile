@@ -31,6 +31,13 @@ gem "airbrake"
 gem "jquery-rails"
 gem "awesome_print"
 
+group :assets do
+  gem 'therubyracer'
+  gem 'sass-rails', "  ~> 3.1.0"
+  gem 'coffee-rails', "~> 3.1.0"
+  gem 'uglifier'
+end
+
 group :development, :test do
   gem "pry"
   gem "factory_girl_rails", "~> 4.0"
