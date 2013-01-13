@@ -30,7 +30,6 @@ gem 'bitly'
 gem "airbrake"
 gem "jquery-rails"
 gem "awesome_print"
-gem "saas"
 
 group :assets do
   gem 'therubyracer'

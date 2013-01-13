@@ -23,6 +23,8 @@ class Event
   end
 
   def self.for(company)
+    events = Array.new
+    
     options = [
       {:eventable_company_id.in => company.favoriting_buyer_ids + [company.id]},
       {:eventable_for_favorites_only => false}

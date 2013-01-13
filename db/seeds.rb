@@ -9,15 +9,17 @@
 
 #ORM.observers.disable :event_observer
 
+puts "Running in development mode" if DEVELOPMENT_MODE
+
 demo_companies = {
+}
+
+national_companies = {
   'Diversified Transportation Ltd.' => 'suboutdev@gmail.com',
   'Phoenix Bus Inc' => 'tom@phoenixbus.com',
   'Hyannis Bus Inc' => 'tom@hyannisbus.com',
   'Barnstable Bus Inc' => 'tom@barnstablebus.com',
-  'Boston Express Bus Inc.' => 'steve@bostonbus.com'
-}
-
-national_companies = {
+  'Boston Express Bus Inc.' => 'steve@bostonbus.com',
   'Valley Bus Coaches, Llc' => 'ed@valleybus.com',
   'Peter Pan Bus Lines, Inc.' => 'peter@notpeterpanbus.com'  
 }

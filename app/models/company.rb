@@ -99,8 +99,9 @@ class Company
 
     supplier.favoriting_buyer_ids << self.id
     supplier.save
-
-    Pusher['global'].trigger!('added_to_favorites', company_id: self.id, supplier_id: supplier.id)
+    unless DEVELOPMENT_MODE
+      Pusher['global'].trigger!('added_to_favorites', company_id: self.id, supplier_id: supplier.id)
+    end
   end
 
   def remove_favorite_supplier!(supplier)
@@ -110,7 +111,9 @@ class Company
     supplier.favoriting_buyer_ids.delete( self.id )
     supplier.save
 
-    Pusher['global'].trigger!('removed_from_favorites', company_id: self.id, supplier_id: supplier.id)
+    unless DEVELOPMENT_MODE
+      Pusher['global'].trigger!('removed_from_favorites', company_id: self.id, supplier_id: supplier.id)
+    end
   end
 
   def guest? 

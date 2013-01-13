@@ -26,18 +26,21 @@ class GatewaySubscription
 
   has_one :created_company, :class_name => "Company"
 
-  before_create :set_regions, :if => "state_by_state_service?"
+  before_create :set_regions
 
   scope :pending, where(confirmed: false)
 
   def set_regions
-    unless ENV['DEV_SITE']
+    unless DEVELOPMENT_MODE
       if state_by_state_service? 
         response = Chargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
         self.regions = STATE_NAMES
       end
+    else
+      self.regions = STATE_NAMES
+      self.product_handle = 'state-by-state-service'
     end
   end
 
