@@ -3,11 +3,13 @@
     <tr>
       <th>Opportunity</th>
       <th>Amount</th>
+      <th>Comment</th>
       <th>Date</th>
-    </tr>  
+    </tr>
     <tr ng-repeat="bid in my_bids" >
       <td><a href="#/opportunities/{{bid.opportunity.reference_number}}">{{bid.opportunity.name}}</a></td>
       <td>${{bid.amount}}</td>
+      <td>{{bid.comment}}</td>
       <td>{{bid.created_at | date}}</td>
     </tr>
   </table>

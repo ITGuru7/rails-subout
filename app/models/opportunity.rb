@@ -121,7 +121,6 @@ class Opportunity
 
     return unless buyer 
     unless buyer.subscribed?(regions) || DEVELOPMENT_MODE
-      binding.pry
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end
   end

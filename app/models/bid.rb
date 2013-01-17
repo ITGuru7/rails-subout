@@ -3,6 +3,7 @@ class Bid
   include Mongoid::Timestamps
 
   field :amount, type: BigDecimal
+  field :comment, type: String
 
   belongs_to :opportunity
   belongs_to :bidder, :class_name => "Company"
