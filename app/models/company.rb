@@ -40,8 +40,8 @@ class Company
 
   attr_accessor :password, :password_confirmation
 
-  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
-  belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
+  belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company
+  belongs_to :created_from_subscription, class_name: 'GatewaySubscription', inverse_of: :created_company
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'

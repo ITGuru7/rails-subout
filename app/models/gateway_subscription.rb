@@ -22,6 +22,8 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
 
+  has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
+
   attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
 
   before_create :set_regions
@@ -53,9 +55,5 @@ class GatewaySubscription
 
   def state_by_state_service?
     product_handle == 'state-by-state-service'
-  end
-
-  def created_company
-    Company.where(created_from_subscription_id: id).first
   end
 end
