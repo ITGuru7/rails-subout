@@ -23,15 +23,15 @@
           <div ng-show="opportunity.winning_bid_id">
             <ul>
               <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
-              <li><span class="label-field">Winning Amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
+              <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
             </ul>
           </div>
           <div>
             <ul>
-              <li><span class="label-field">Origination Date: </span>{{opportunity.start_date| date:'MM/dd/yy'}}</li>
-              <li><span class="label-field">Origination Location: </span>{{opportunity.start_location}}</li>
-              <li><span class="label-field">Arrival Date: </span>{{opportunity.end_date| date:'MM/dd/yy'}}</li>
-              <li><span class="label-field">Arrival Location: </span>{{opportunity.end_location}}</li>
+              <li><span class="label-field">Origination time: </span>{{opportunity.start_date| date:'MM/dd/yy'}} {{opportunity.start_time}}</li>
+              <li><span class="label-field">Origination location: </span>{{opportunity.start_location}}</li>
+              <li><span class="label-field">Arrival time: </span>{{opportunity.end_date| date:'MM/dd/yy'}} {{opportunity.end_time}}</li>
+              <li><span class="label-field">Arrival location: </span>{{opportunity.end_location}}</li>
             </ul>
           </div>
           <div>
