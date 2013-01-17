@@ -1109,20 +1109,14 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     return !(_ref = company._id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0);
   };
   Company.prototype.canSeeEvent = function(event) {
-    var _ref, _ref1, _ref2;
-    if (!this.state_by_state_subscriber) {
+    var _ref;
+    if (!event.eventable.for_favorites_only) {
       return true;
     }
-    if (_ref = event.eventable.start_region, __indexOf.call(this.regions, _ref) >= 0) {
+    if (event.eventable.buyer_id === this._id) {
       return true;
     }
-    if (_ref1 = event.eventable.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
-      return true;
-    }
-    if (_ref2 = this._id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
-      return true;
-    }
-    return false;
+    return _ref = event.eventable.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (!opportunity.status) {

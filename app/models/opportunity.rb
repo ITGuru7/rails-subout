@@ -112,8 +112,8 @@ class Opportunity
         errors.add :end_location, "is not valid, please try again"
       end
     else
-      self.start_region = "Massaschusetts"
-      self.end_region = "Massaschusetts"
+      self.start_region = "Massaschusetts" unless self.start_region
+      self.end_region = "Massaschusetts" unless self.end_region
     end
   end
 

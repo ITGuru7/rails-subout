@@ -30,9 +30,11 @@ class Event
       {:eventable_for_favorites_only => false}
     ]
 
-    if company.state_by_state_subscriber?
-      options.last[:regions.in] = company.regions
-    end
+    # To encourage users to subscribe more states
+    # state by state subscriber also see all events
+    # if company.state_by_state_subscriber?
+    #   options.last[:regions.in] = company.regions
+    # end
 
     self.any_of(*options)
   end

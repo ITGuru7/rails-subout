@@ -14,7 +14,7 @@ FactoryGirl.define do
 
     factory :ca_company do
       after :create do |company|
-        company.regions = ['CA']
+        company.regions = ['California']
         company.subscription_plan = 'state-by-state-service' 
         company.save(callbacks: false)
       end
