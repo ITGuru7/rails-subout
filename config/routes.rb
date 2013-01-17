@@ -54,7 +54,7 @@ Subout::Application.routes.draw do
   end
 
   namespace :admin do
-    get "/" => "base#index", as: :admin
+    get "/" => "base#index"
     resources :gateway_subscriptions, only: [:index]
   end
 end
