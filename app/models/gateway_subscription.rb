@@ -24,11 +24,10 @@ class GatewaySubscription
 
   attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
 
-  has_one :created_company, :class_name => "Company"
-
   before_create :set_regions
 
-  scope :pending, where(confirmed: false)
+  scope :pending, -> { where(confirmed: false) }
+  scope :recent, -> { desc(:created_at) }
 
   def set_regions
     unless DEVELOPMENT_MODE
@@ -54,5 +53,9 @@ class GatewaySubscription
 
   def state_by_state_service?
     product_handle == 'state-by-state-service'
+  end
+
+  def created_company
+    Company.where(created_from_subscription_id: id).first
   end
 end

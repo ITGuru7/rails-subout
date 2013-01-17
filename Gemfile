@@ -34,6 +34,8 @@ gem "awesome_print"
 group :assets do
   gem 'therubyracer'
   gem 'uglifier'
+  gem 'sass-rails'
+  gem 'bootstrap-sass'
 end
 
 group :development, :test do

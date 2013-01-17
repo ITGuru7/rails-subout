@@ -7,5 +7,9 @@
     = csrf_meta_tags
 
   %body
+    .navbar
+      .navbar-inner
+        .container
+          = link_to "Admin", admin_path, class: "brand"
     .container-fluid
       = yield

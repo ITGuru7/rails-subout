@@ -9,6 +9,8 @@ require 'sidekiq/testing/inline'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+DEVELOPMENT_MODE = true
+
 RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   config.include MailerMacros
@@ -76,3 +78,9 @@ end
 def parse_json(json)
   JSON.parse(json)
 end
+
+def http_login
+  user = ENV['SUBOUT_ADMIN_USERNAME']
+  password = ENV['SUBOUT_ADMIN_PASSWORD']
+  request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user, password)
+end  

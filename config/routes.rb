@@ -1,9 +1,6 @@
 require 'sidekiq/web'
 
 Subout::Application.routes.draw do
-
-  devise_for :users
-
   mount Sidekiq::Web => '/sidekiq'
   mount ApiDoc => "/api/doc"
 
@@ -54,5 +51,10 @@ Subout::Application.routes.draw do
         resources :bids
       end
     end
+  end
+
+  namespace :admin do
+    get "/" => "base#index", as: :admin
+    resources :gateway_subscriptions, only: [:index]
   end
 end
