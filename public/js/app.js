@@ -728,7 +728,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "recieved bid $" + action.details.amount;
+        return "received bid $" + action.details.amount;
       default:
         return "" + (action.type.split('_').pop());
     }
@@ -933,10 +933,7 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      var _ref;
-      if ((_ref = company.favoriting_buyer_ids) == null) {
-        company.favoriting_buyer_ids = [];
-      }
+      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
       company.favoriting_buyer_ids.push($rootScope.company._id);
       $scope.notice = "Successfully added to favorites.";
       return $timeout(function() {
