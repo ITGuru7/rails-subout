@@ -7,6 +7,6 @@ class Admin::GatewaySubscriptionsController < Admin::BaseController
     subscription = GatewaySubscription.pending.find(params[:id])
     Notifier.delay.subscription_confirmation(subscription.id)
 
-    redirect_to admin_gateway_subscriptions_path
+    redirect_to admin_gateway_subscriptions_path, notice: "Resent invitation successfully"
   end
 end
