@@ -10,7 +10,7 @@ describe Api::V1::EventsController do
       Event.should_receive(:recent).and_return(events)
 
       get :index, api_token: user.authentication_token, format: 'json'
-      
+
       result = parse_json(response.body)
       result.should == events
     end

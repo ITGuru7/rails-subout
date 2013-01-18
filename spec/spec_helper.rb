@@ -9,8 +9,6 @@ require 'sidekiq/testing/inline'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-DEVELOPMENT_MODE = true
-
 RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   config.include MailerMacros

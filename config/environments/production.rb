@@ -76,4 +76,5 @@ Subout::Application.configure do
   :authentication => :plain,
   }
   ActionMailer::Base.delivery_method = :smtp
+  DEVELOPMENT_MODE = false
 end
