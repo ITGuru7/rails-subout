@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :event do
-    description 'event description'
-    association :eventable, :factory => :opportunity
+    association :eventable, factory: :opportunity
+    association :actor, factory: :company
   end
 end

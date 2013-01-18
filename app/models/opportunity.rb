@@ -112,14 +112,14 @@ class Opportunity
         errors.add :end_location, "is not valid, please try again"
       end
     else
-      self.start_region = "Massaschusetts" unless self.start_region
-      self.end_region = "Massaschusetts" unless self.end_region
+      self.start_region = "Massachusetts" unless self.start_region
+      self.end_region = "Massachusetts" unless self.end_region
     end
   end
 
   def validate_buyer_region
 
-    return unless buyer 
+    return unless buyer
     unless buyer.subscribed?(regions) || DEVELOPMENT_MODE
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end

@@ -56,7 +56,8 @@ class Company
   validates_confirmation_of :password
 
 
-  # Thomas Total Hack validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
+  # FIXME: Thomas Total Hack
+  # validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
   validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
   validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
   validate :check_nils
@@ -114,10 +115,6 @@ class Company
     unless DEVELOPMENT_MODE
       Pusher['global'].trigger!('removed_from_favorites', company_id: self.id, supplier_id: supplier.id)
     end
-  end
-
-  def guest?
-    subscription_plan == 'free'
   end
 
   def state_by_state_subscriber?
