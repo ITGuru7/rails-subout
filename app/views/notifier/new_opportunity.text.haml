@@ -2,7 +2,7 @@ Hi #{@company.contact_name},
 
 There is a new opportunity has just arrived on Subout: #{@opportunity.name}
 
-To view the details of this opportunity, please click #{ENV['EXTERNAL_URL']}/#/opportunities/#{@opportunity.reference_number}
+To view the details of this opportunity, please click http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@opportunity.reference_number}
 
 Thank you!!!
 
