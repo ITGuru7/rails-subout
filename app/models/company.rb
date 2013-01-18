@@ -1,7 +1,7 @@
 class Company
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   field :name, type: String
   field :email, type: String
 
@@ -116,15 +116,15 @@ class Company
     end
   end
 
-  def guest? 
+  def guest?
     subscription_plan == 'free'
   end
 
-  def state_by_state_subscriber? 
+  def state_by_state_subscriber?
     subscription_plan == 'state-by-state-service'
   end
 
-  def national_subscriber? 
+  def national_subscriber?
     subscription_plan == 'subout-national-service' ||
     subscription_plan == 'subout-partner'
   end
@@ -173,11 +173,11 @@ class Company
 
 
   def accept_invitation!
-    self.created_from_invitation.accept! 
+    self.created_from_invitation.accept!
   end
 
   def confirm_subscription!
-    self.created_from_subscription.confirm! 
+    self.created_from_subscription.confirm!
   end
 end
 
