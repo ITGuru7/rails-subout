@@ -24,5 +24,23 @@ production:
   pool: 5
   timeout: 5000
 
+suboutdemo:
+  adapter: sqlite3
+  database: db/suboutdemo.sqlite3
+  pool: 5
+  timeout: 5000
+
+suboutdev:
+  adapter: sqlite3
+  database: db/suboutdev.sqlite3
+  pool: 5
+  timeout: 5000
+
+subouttest:
+  adapter: sqlite3
+  database: db/subouttest.sqlite3
+  pool: 5
+  timeout: 5000
+
 cucumber:
   <<: *test

@@ -4,7 +4,40 @@ production:
       database: <%= ENV['MONGO_DB_NAME'] %>
       username: heroku
       password: sub0utd3v
-      hosts: 
+      hosts:
+        - <%= ENV['MONGO_DB_HOST'] %>
+      options:
+        safe: true
+
+suboutdemo:
+  sessions:
+    default:
+      database: <%= ENV['MONGO_DB_NAME'] %>
+      username: heroku
+      password: sub0utd3v
+      hosts:
+        - <%= ENV['MONGO_DB_HOST'] %>
+      options:
+        safe: true
+
+suboutdev:
+  sessions:
+    default:
+      database: <%= ENV['MONGO_DB_NAME'] %>
+      username: heroku
+      password: sub0utd3v
+      hosts:
+        - <%= ENV['MONGO_DB_HOST'] %>
+      options:
+        safe: true
+
+subouttest:
+  sessions:
+    default:
+      database: <%= ENV['MONGO_DB_NAME'] %>
+      username: heroku
+      password: sub0utd3v
+      hosts:
         - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
