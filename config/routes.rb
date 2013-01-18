@@ -6,12 +6,8 @@ Subout::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
-      resources :gateway_subscriptions do
-        get :test_form, on: :collection
-      end
-
+      resources :gateway_subscriptions
       resources :file_uploader_signatures, only: :new
-
       resources :passwords do
         put "update", on: :collection
       end
@@ -55,6 +51,8 @@ Subout::Application.routes.draw do
 
   namespace :admin do
     get "/" => "base#index"
-    resources :gateway_subscriptions, only: [:index]
+    resources :gateway_subscriptions, only: [:index] do
+      put 'resend_invitation', on: :member
+    end
   end
 end

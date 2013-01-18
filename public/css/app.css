@@ -8152,12 +8152,6 @@ div#opportunity-show .details > div {
 table.bid-history {
   width: 100%;
 }
-#modal.modal {
-  margin-top: 0px;
-}
-#modal.modal.fade.in {
-  top: 10%;
-}
 #search-listing {
   padding-left: 5px;
 }

@@ -6,7 +6,7 @@ describe Bid do
       #let(:bidder) { FactoryGirl.create(:company) }
       #let(:opportunity) { FactoryGirl.create(:opportunity) }
       #opportunity.stub(:biddable_by?).with(bidder).and_return(false)
-      
+
       #my_new_bid = FactoryGirl.build(:bid, bidder: bidder, opportunity: opportunity, amount: 101.0)
       #my_new_bid.should_not be_valid
     #end
