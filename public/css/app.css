@@ -8145,6 +8145,12 @@ div#opportunity-show .label-field {
 div#opportunity-show .details > div {
   margin-bottom: 10px;
 }
+#modal.modal {
+  margin-top: 0px;
+}
+#modal.modal.fade.in {
+  top: 10%;
+}
 #modal dt {
   color: #666550;
   font-weight: normal;
