@@ -31,18 +31,6 @@ class OpportunitySerializer < ActiveModel::Serializer
     opportunity.buyer.abbreviated_name
   end
 
-  def status
-    if opportunity.canceled?
-      "Canceled"
-    elsif opportunity.winning_bid_id
-      "Bidding won"
-    elsif opportunity.bidding_ended?
-      "Bidding ended"
-    else
-      "In progress"
-    end
-  end
-
   def start_date
     opportunity.start_date.strftime("%Y/%m/%d") if opportunity.start_date
   end

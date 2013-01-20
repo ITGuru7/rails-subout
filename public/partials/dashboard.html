@@ -149,14 +149,9 @@
                         </div>
                       </div>
                       <div ng-show="company.canSeeEvent(event)">
-                        <div ng-show="(opportunity.buyer_id != company._id)">
+                        <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
                           <div>
-                            <a  href="#modal" 
-                                class="btn btn-success btn-small" 
-                                data-toggle="modal" 
-                                ng-click="displayNewBidForm(opportunity)"
-                                ng-hide="event.eventable.winning_bid_id">
-                                Bid</a>
+                            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                           </div>
                           <span>
                             <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>

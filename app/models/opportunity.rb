@@ -154,6 +154,18 @@ class Opportunity
     self.bids.recent
   end
 
+  def status
+    if self.canceled?
+      "Canceled"
+    elsif self.winning_bid_id
+      "Bidding won"
+    elsif self.bidding_ended?
+      "Bidding ended"
+    else
+      "In progress"
+    end
+  end
+
   private
 
   def set_bidding_ends_at
