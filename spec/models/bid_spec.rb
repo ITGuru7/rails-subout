@@ -16,6 +16,7 @@ describe Bid do
     it { should allow_value(1).for(:amount) }
     it { should_not allow_value(0).for(:amount) }
     it { should_not allow_value(-1).for(:amount) }
+    it { should ensure_length_of(:comment).is_at_most(255) }
   end
 
   describe "validate_multiple_bids_on_the_same_opportunity" do

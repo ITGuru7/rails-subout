@@ -8155,8 +8155,11 @@ div#opportunity-show .details > div {
   color: #666550;
   font-weight: normal;
 }
-table.bid-history {
+.bid-history {
   width: 100%;
+}
+.bid-history td {
+  max-width: 300px;
 }
 #search-listing {
   padding-left: 5px;
