@@ -6,6 +6,10 @@ describe Opportunity do
     it { should allow_value(1).for(:win_it_now_price) }
     it { should_not allow_value(0).for(:win_it_now_price) }
     it { should_not allow_value(-1).for(:win_it_now_price) }
+    it { should_not allow_value(-1).for(:win_it_now_price) }
+    it { should allow_value("1").for(:bidding_duration_hrs) }
+    it { should_not allow_value("0").for(:bidding_duration_hrs) }
+    it { should_not allow_value("-1").for(:bidding_duration_hrs) }
   end
 
   describe "#win!" do

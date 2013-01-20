@@ -40,12 +40,12 @@ class Opportunity
   has_many :bids
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
+  validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
   validates_presence_of :start_date
   validates_presence_of :end_date
-  validates_presence_of :bidding_duration_hrs
   validates_presence_of :start_location
   validate :validate_locations
   validate :validate_buyer_region
