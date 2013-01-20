@@ -69,7 +69,7 @@ class TestDataGenerator
   end
 
   def state_by_state_subscription
-    GatewaySubscription.create(product_handle: "subout-state-by-state-service") do |subscription|
+    GatewaySubscription.create(product_handle: "state-by-state-service") do |subscription|
       subscription.regions = demo_regions
     end
   end

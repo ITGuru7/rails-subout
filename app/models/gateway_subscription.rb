@@ -33,7 +33,7 @@ class GatewaySubscription
 
   def set_regions
     unless DEVELOPMENT_MODE
-      if state_by_state_service? 
+      if state_by_state_service?
         response = Chargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
