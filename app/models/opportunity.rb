@@ -31,11 +31,12 @@ class Opportunity
   field :tracking_id
   field :contact_phone, type: String
 
-  scope :active, where(:canceled => false)
+  scope :active, -> { where(canceled: false) }
+  scope :recent, -> { desc(:created_at) }
 
-  belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
+  belongs_to :buyer, class_name: "Company", inverse_of: :auctions
 
-  has_one :event, :as => :eventable
+  has_one :event, as: :eventable
   has_many :bids
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
@@ -54,7 +55,7 @@ class Opportunity
   before_save :set_bidding_ends_at
 
   def self.send_expired_notification
-    where(:bidding_ends_at.lte => Time.now, :expired_notification_sent => false).each do |opportunity|
+    where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
       Notifier.delay.expired_auction_notification(opportunity.id)
       opportunity.update_attribute(:expired_notification_sent, true)
     end
