@@ -148,7 +148,7 @@
                           </div>
                         </div>
                       </div>
-                      <div ng-show="company.canSeeEvent(event)">
+                      <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
                         <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
                           <div>
                             <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
@@ -157,14 +157,12 @@
                             <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
                           </span>
                         </div>
-                        <span>
-                         <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
-                        </span>
+                        <div>
+                          <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
+                        </div>
                       </div>
-                      <div ng-hide="company.canSeeEvent(event)">
-                        <span>
+                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event)">
                         <a href="http://subout.com/pricing/">You are not licesnsed to bid on this opportunity. Upgrade now! </a>
-                        </span>
                       </div>
                     </div>
                     <div class="span4">
