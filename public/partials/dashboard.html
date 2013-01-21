@@ -124,8 +124,9 @@
                   </div>
                   <div class="eventable-details" ng-show="event.selected" class="action-buttons">
                     <div class="offset3 span5">
-                      <div>
-                        <p class="description">{{event.eventable.description}}</p>
+                      <div class="description">
+                        <div><strong>Description</strong></div>
+                        <div class="content">{{event.eventable.description}}</div>
                       </div>
                       <div class="winner" ng-show="event.eventable.winning_bid_id">
                         <span class="label-field">Winner: </span>{{event.eventable.winner.name}} <br />

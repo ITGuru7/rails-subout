@@ -7544,13 +7544,13 @@ input.ng-dirty.ng-invalid {
 }
 /****************************************************************************************************************************
  *
- * current_file: app/styles/themes/custom/_overrides.less 
+ * current_file: app/styles/themes/custom/_overrides.less
  *
  */
 /*
 Place custom styles here. Thes styles are ment to be loaded after
 bootstrap, so the may override it's behavior.
-*/
+ */
 /** This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
  *
@@ -7736,17 +7736,6 @@ div.created-at {
   font-size: .8em;
   color: #666;
 }
-.event h3.title {
-  margin: 0px;
-  padding: 0px;
-  line-height: 1em;
-}
-.event .left {
-  margin-left: 10px;
-}
-.event div.description {
-  margin: .5em;
-}
 div.buyer {
   font-size: .8em;
   color: #666550;
@@ -7867,7 +7856,7 @@ a:hover {
 }
 /****************************************************************************************************************************
  *
- * current_file: app/styles/themes/custom/_global.less 
+ * current_file: app/styles/themes/custom/_global.less
  *
  */
 body {
@@ -8084,9 +8073,6 @@ div.created-at {
 .event .left {
   margin-left: 10px;
 }
-.event div.description {
-  margin: .5em;
-}
 .event.owner {
   background-color: #eeeeee;
 }
@@ -8144,6 +8130,13 @@ div#opportunity-show .label-field {
 }
 div#opportunity-show .details > div {
   margin-bottom: 10px;
+}
+div#opportunity-show .description .content {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  padding-left: 5px;
 }
 #modal.modal {
   margin-top: 0px;
@@ -8261,6 +8254,14 @@ div#opportunity-show .details > div {
 .icon-buy-or-sell-parts-and-vehicles:before {
   content: "\f013";
 }
+.event h3.title {
+  margin: 0px;
+  padding: 0px;
+  line-height: 1em;
+}
+.event .left {
+  margin-left: 10px;
+}
 #activity-stream .event.expanded {
   background: #e0f1db;
   margin-bottom: 5px;
@@ -8295,7 +8296,14 @@ div#opportunity-show .details > div {
   margin-bottom: 10px;
 }
 #activity-stream .event .eventable-details .description {
-  font-style: italic;
+  padding-bottom: 5px;
+}
+#activity-stream .event .eventable-details .description .content {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  padding-left: 5px;
 }
 #activity-stream .event .eventable-details div span {
   font-weight: bold;
@@ -8444,4 +8452,7 @@ div#opportunity-show .details > div {
   border: none;
   padding-left: 10px;
   width: 85%;
+}
+#opportunities td {
+  max-width: 300px;
 }
