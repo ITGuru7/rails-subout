@@ -45,9 +45,10 @@
             </ul>
           </div>
           <div>
-            <ul>
-              <li><span class="label-field">SO#: </span>{{opportunity.reference_number}}</li>
-            </ul>
+            <span class="label-field">SO#: </span>{{opportunity.reference_number}}
+          </div>
+          <div ng-show="opportunity.contact_phone">
+            <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
