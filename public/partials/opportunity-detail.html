@@ -23,19 +23,20 @@
           <div ng-show="opportunity.winning_bid_id">
             <ul>
               <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
-              <li><span class="label-field">Winning Amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
+              <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
             </ul>
           </div>
           <div>
             <ul>
-              <li><span class="label-field">Origination Date: </span>{{opportunity.start_date| date:'MM/dd/yy'}}</li>
-              <li><span class="label-field">Origination Location: </span>{{opportunity.start_location}}</li>
-              <li><span class="label-field">Arrival Date: </span>{{opportunity.end_date| date:'MM/dd/yy'}}</li>
-              <li><span class="label-field">Arrival Location: </span>{{opportunity.end_location}}</li>
+              <li><span class="label-field">Origination time: </span>{{opportunity.start_date| date:'MM/dd/yy'}} {{opportunity.start_time}}</li>
+              <li><span class="label-field">Origination location: </span>{{opportunity.start_location}}</li>
+              <li><span class="label-field">Arrival time: </span>{{opportunity.end_date| date:'MM/dd/yy'}} {{opportunity.end_time}}</li>
+              <li><span class="label-field">Arrival location: </span>{{opportunity.end_location}}</li>
             </ul>
           </div>
-          <div>
-            {{opportunity.description}}
+          <div class="description">
+            <div><strong>Description</strong></div>
+            <div class="content">{{opportunity.description}}</div>
           </div>
           <div>
             <ul>
@@ -44,9 +45,10 @@
             </ul>
           </div>
           <div>
-            <ul>
-              <li><span class="label-field">SO#: </span>{{opportunity.reference_number}}</li>
-            </ul>
+            <span class="label-field">SO#: </span>{{opportunity.reference_number}}
+          </div>
+          <div ng-show="opportunity.contact_phone">
+            <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
@@ -67,10 +69,9 @@
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>${{bid.amount}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
-          <div>
-            <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
-          </div> 
-         <td><a class='btn btn-primary btn-mini pull-right'  ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+          <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
+          <td>{{bid.comment}}</td>
+          <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>
     </div>

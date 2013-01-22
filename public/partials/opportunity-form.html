@@ -100,15 +100,10 @@
       </div>
 
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_bidding_ends.$invalid}">
-        <label for="opportunity_bidding_ends" class="control-label">Bidding ends *</label>
+        <label for="opportunity_bidding_ends" class="control-label">Duration *</label>
         <div class="controls">
-          <select id="opportunity_bidding_ends" name="opportunity_bidding_ends" ng-model="opportunity.bidding_duration_hrs" required>
-            <option value="6">in 6 hours</option>
-            <option value="12">in 12 hours</option>
-            <option value="24">in 1 day</option>
-            <option value="48">in 2 days</option>
-            <option value="96">in 4 days</option>
-          </select>
+          <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="input-small" ng-model="opportunity.bidding_duration_hrs" required>
+          <span class="time">hours</span>
         </div>
       </div>
 

@@ -6405,30 +6405,6 @@ a.badge:hover {
   background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
-.accordion {
-  margin-bottom: 20px;
-}
-.accordion-group {
-  margin-bottom: 2px;
-  border: 1px solid #e5e5e5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.accordion-heading {
-  border-bottom: 0;
-}
-.accordion-heading .accordion-toggle {
-  display: block;
-  padding: 8px 15px;
-}
-.accordion-toggle {
-  cursor: pointer;
-}
-.accordion-inner {
-  padding: 9px 15px;
-  border-top: 1px solid #e5e5e5;
-}
 .carousel {
   position: relative;
   margin-bottom: 20px;
@@ -7544,13 +7520,13 @@ input.ng-dirty.ng-invalid {
 }
 /****************************************************************************************************************************
  *
- * current_file: app/styles/themes/custom/_overrides.less 
+ * current_file: app/styles/themes/custom/_overrides.less
  *
  */
 /*
 Place custom styles here. Thes styles are ment to be loaded after
 bootstrap, so the may override it's behavior.
-*/
+ */
 /** This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
  *
@@ -7735,17 +7711,6 @@ div.created-at {
   font-size: .8em;
   color: #666;
 }
-.event h3.title {
-  margin: 0px;
-  padding: 0px;
-  line-height: 1em;
-}
-.event .left {
-  margin-left: 10px;
-}
-.event div.description {
-  margin: .5em;
-}
 div.buyer {
   font-size: .8em;
   color: #666550;
@@ -7866,7 +7831,7 @@ a:hover {
 }
 /****************************************************************************************************************************
  *
- * current_file: app/styles/themes/custom/_global.less 
+ * current_file: app/styles/themes/custom/_global.less
  *
  */
 body {
@@ -8083,9 +8048,6 @@ div.created-at {
 .event .left {
   margin-left: 10px;
 }
-.event div.description {
-  margin: .5em;
-}
 .event.owner {
   background-color: #eeeeee;
 }
@@ -8144,18 +8106,28 @@ div#opportunity-show .label-field {
 div#opportunity-show .details > div {
   margin-bottom: 10px;
 }
-#modal dt {
-  color: #666550;
-  font-weight: normal;
-}
-table.bid-history {
-  width: 100%;
+div#opportunity-show .description .content {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  padding-left: 5px;
 }
 #modal.modal {
   margin-top: 0px;
 }
 #modal.modal.fade.in {
   top: 10%;
+}
+#modal dt {
+  color: #666550;
+  font-weight: normal;
+}
+.bid-history {
+  width: 100%;
+}
+.bid-history td {
+  max-width: 300px;
 }
 #search-listing {
   padding-left: 5px;
@@ -8257,6 +8229,14 @@ table.bid-history {
 .icon-buy-or-sell-parts-and-vehicles:before {
   content: "\f013";
 }
+.event h3.title {
+  margin: 0px;
+  padding: 0px;
+  line-height: 1em;
+}
+.event .left {
+  margin-left: 10px;
+}
 #activity-stream .event.expanded {
   background: #e0f1db;
   margin-bottom: 5px;
@@ -8291,7 +8271,14 @@ table.bid-history {
   margin-bottom: 10px;
 }
 #activity-stream .event .eventable-details .description {
-  font-style: italic;
+  padding-bottom: 5px;
+}
+#activity-stream .event .eventable-details .description .content {
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  padding-left: 5px;
 }
 #activity-stream .event .eventable-details div span {
   font-weight: bold;
@@ -8440,4 +8427,7 @@ table.bid-history {
   border: none;
   padding-left: 10px;
   width: 85%;
+}
+#opportunities td {
+  max-width: 300px;
 }

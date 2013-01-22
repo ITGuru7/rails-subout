@@ -17,7 +17,7 @@ subout.config([
       controller: NewPasswordCtrl
     }).when("/password/edit", {
       templateUrl: "partials/password-edit.html",
-      controller: EditPasswordCtrl
+      controller: "EditPasswordCtrl"
     }).when("/dashboard", {
       templateUrl: "partials/dashboard.html",
       controller: DashboardCtrl,
@@ -49,6 +49,8 @@ subout.value('ui.config', {
   }
 });
 
+subout.value('AuthToken', 'auth_token_v2');
+
 $.timeago.settings.allowFuture = true;
 
 $.cloudinary.config({
@@ -58,17 +60,17 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, EditPasswordCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
   var REGION_NAMES, p;
   $rootScope.currentPath = function() {
     return $location.path();
   };
   $rootScope.userSignedIn = function() {
     var _ref;
-    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie('auth_token')) {
+    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
   };
@@ -94,7 +96,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
     return $('#modal').modal("hide");
   };
   $rootScope.signOut = function() {
-    $.removeCookie('auth_token');
+    $.removeCookie(AuthToken);
     window.location = "#/sign_in";
     return window.location.reload();
   };
@@ -294,8 +296,8 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
   };
 };
 
-WelcomePrelaunchCtrl = function() {
-  return $.removeCookie('auth_token');
+WelcomePrelaunchCtrl = function(AuthToken) {
+  return $.removeCookie(AuthToken);
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
@@ -728,7 +730,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "recieved bid $" + action.details.amount;
+        return "received bid $" + action.details.amount;
       default:
         return "" + (action.type.split('_').pop());
     }
@@ -811,8 +813,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
-  $.removeCookie('auth_token');
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken) {
+  $.removeCookie(AuthToken);
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,
@@ -820,7 +822,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
     }, function(token) {
       $rootScope.token = token;
       if (token.authorized) {
-        $.cookie('auth_token', token);
+        $.cookie(AuthToken, token);
         $rootScope.signedInSuccess(token);
         if ($rootScope.redirectToPath) {
           return $location.path($rootScope.redirectToPath);
@@ -834,8 +836,8 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password) {
-  $.removeCookie('auth_token');
+NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, AuthToken) {
+  $.removeCookie(AuthToken);
   $scope.hideAlert = function() {
     $scope.notice = null;
     return $scope.errors = null;
@@ -856,33 +858,8 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password) {
   };
 };
 
-EditPasswordCtrl = function($scope, $rootScope, $routeParams, $location, $timeout, Password) {
-  $.removeCookie('auth_token');
-  $scope.hideAlert = function() {
-    $scope.notice = null;
-    return $scope.errors = null;
-  };
-  return $scope.resetPassword = function() {
-    $scope.hideAlert();
-    $scope.user.reset_password_token = $routeParams.reset_password_token;
-    return Password.update({
-      user: $scope.user
-    }, function() {
-      $scope.notice = "Your password is reset successfully";
-      $scope.password = null;
-      $scope.password_confirmation = null;
-      return $timeout(function() {
-        $scope.notice = null;
-        return $location.path("sign_in").search({});
-      }, 2000);
-    }, function(content) {
-      return $scope.errors = $rootScope.errorMessages(content.data.errors);
-    });
-  };
-};
-
-SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
-  $.removeCookie('auth_token');
+SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken) {
+  $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
   $rootScope.setupFileUploader();
@@ -933,10 +910,7 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
-      var _ref;
-      if ((_ref = company.favoriting_buyer_ids) == null) {
-        company.favoriting_buyer_ids = [];
-      }
+      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
       company.favoriting_buyer_ids.push($rootScope.company._id);
       $scope.notice = "Successfully added to favorites.";
       return $timeout(function() {
@@ -946,6 +920,37 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
     });
   };
 };
+
+(function() {
+  var applyScopeHelpers;
+  applyScopeHelpers = function($scope, $rootScope, $location, $routeParams, $timeout, Password, AuthToken) {
+    $scope.hideAlert = function() {
+      $scope.notice = null;
+      return $scope.errors = null;
+    };
+    return $scope.resetPassword = function() {
+      $scope.hideAlert();
+      $scope.user.reset_password_token = $routeParams.reset_password_token;
+      return Password.update({
+        user: $scope.user
+      }, function() {
+        $scope.notice = "Your password is reset successfully";
+        $scope.password = null;
+        $scope.password_confirmation = null;
+        return $timeout(function() {
+          $scope.notice = null;
+          return $location.path("sign_in").search({});
+        }, 2000);
+      }, function(content) {
+        return $scope.errors = $rootScope.errorMessages(content.data.errors);
+      });
+    };
+  };
+  return subout.controller('EditPasswordCtrl', function($scope, $rootScope, $routeParams, $location, $timeout, Password, AuthToken) {
+    $.removeCookie(AuthToken);
+    return applyScopeHelpers($scope, $rootScope, $location, $routeParams, $timeout, Password, AuthToken);
+  });
+})();
 
 subout.directive("relativeTime", function() {
   return {
@@ -1112,6 +1117,16 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     return !(_ref = company._id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0);
   };
   Company.prototype.canSeeEvent = function(event) {
+    var _ref;
+    if (!event.eventable.for_favorites_only) {
+      return true;
+    }
+    if (event.eventable.buyer_id === this._id) {
+      return true;
+    }
+    return _ref = event.eventable.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
+  };
+  Company.prototype.isLicensedToBidOnOpportunityOf = function(event) {
     var _ref, _ref1, _ref2;
     if (!this.state_by_state_subscriber) {
       return true;
@@ -1122,7 +1137,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     if (_ref1 = event.eventable.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
       return true;
     }
-    if (_ref2 = this._id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
+    if (_ref2 = event.eventable.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
       return true;
     }
     return false;
@@ -1187,14 +1202,14 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
-}).factory("Authorize", function($rootScope, $location) {
+}).factory("Authorize", function($rootScope, $location, AuthToken) {
   return {
     check: function() {
       var token, _ref;
       if ((_ref = $rootScope.token) != null ? _ref.authorized : void 0) {
         return true;
       }
-      if (token = $.cookie('auth_token')) {
+      if (token = $.cookie(AuthToken)) {
         $rootScope.token = token;
         $rootScope.signedInSuccess(token);
         return true;
