@@ -19,6 +19,24 @@ describe Bid do
     it { should ensure_length_of(:comment).is_at_most(255) }
   end
 
+  describe "validate_bidable_by_bidder" do
+    let(:buyer) { FactoryGirl.create(:company) }
+    let(:bidder) { FactoryGirl.create(:company) }
+
+    context "favorite only opportunity" do
+      let(:opportunity) { FactoryGirl.create(:opportunity, buyer: buyer, for_favorites_only: true) }
+
+      it "is not valid if bidder is not added to favorites" do
+        FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
+      end
+
+      it "is valid if the bidder is added to favorites" do
+        buyer.add_favorite_supplier!(bidder)
+        FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should be_valid
+      end
+    end
+  end
+
   describe "validate_multiple_bids_on_the_same_opportunity" do
     let(:bidder) { FactoryGirl.create(:company) }
 

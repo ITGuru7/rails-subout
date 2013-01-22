@@ -54,7 +54,7 @@ class Bid
     end
 
     if opportunity.for_favorites_only?
-      unless opportunity.buyer.favoriting_buyer_ids.include?(bidder.id)
+      unless bidder.favoriting_buyer_ids.include?(opportunity.buyer_id)
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
       end
     else
