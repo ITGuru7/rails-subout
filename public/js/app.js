@@ -49,6 +49,8 @@ subout.value('ui.config', {
   }
 });
 
+subout.value('AuthToken', 'auth_token_v2');
+
 $.timeago.settings.allowFuture = true;
 
 $.cloudinary.config({
@@ -61,14 +63,14 @@ angular.element(document).ready(function() {
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, EditPasswordCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature) {
+AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
   var REGION_NAMES, p;
   $rootScope.currentPath = function() {
     return $location.path();
   };
   $rootScope.userSignedIn = function() {
     var _ref;
-    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie('auth_token')) {
+    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
   };
@@ -94,7 +96,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
     return $('#modal').modal("hide");
   };
   $rootScope.signOut = function() {
-    $.removeCookie('auth_token');
+    $.removeCookie(AuthToken);
     window.location = "#/sign_in";
     return window.location.reload();
   };
@@ -294,8 +296,8 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
   };
 };
 
-WelcomePrelaunchCtrl = function() {
-  return $.removeCookie('auth_token');
+WelcomePrelaunchCtrl = function(AuthToken) {
+  return $.removeCookie(AuthToken);
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
@@ -811,8 +813,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
-  $.removeCookie('auth_token');
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken) {
+  $.removeCookie(AuthToken);
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,
@@ -820,7 +822,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
     }, function(token) {
       $rootScope.token = token;
       if (token.authorized) {
-        $.cookie('auth_token', token);
+        $.cookie(AuthToken, token);
         $rootScope.signedInSuccess(token);
         if ($rootScope.redirectToPath) {
           return $location.path($rootScope.redirectToPath);
@@ -834,8 +836,8 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
 };
 
-NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password) {
-  $.removeCookie('auth_token');
+NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, AuthToken) {
+  $.removeCookie(AuthToken);
   $scope.hideAlert = function() {
     $scope.notice = null;
     return $scope.errors = null;
@@ -856,8 +858,8 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password) {
   };
 };
 
-EditPasswordCtrl = function($scope, $rootScope, $routeParams, $location, $timeout, Password) {
-  $.removeCookie('auth_token');
+EditPasswordCtrl = function($scope, $rootScope, $routeParams, $location, $timeout, Password, AuthToken) {
+  $.removeCookie(AuthToken);
   $scope.hideAlert = function() {
     $scope.notice = null;
     return $scope.errors = null;
@@ -881,8 +883,8 @@ EditPasswordCtrl = function($scope, $rootScope, $routeParams, $location, $timeou
   };
 };
 
-SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription) {
-  $.removeCookie('auth_token');
+SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken) {
+  $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
   $rootScope.setupFileUploader();
@@ -1194,14 +1196,14 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
-}).factory("Authorize", function($rootScope, $location) {
+}).factory("Authorize", function($rootScope, $location, AuthToken) {
   return {
     check: function() {
       var token, _ref;
       if ((_ref = $rootScope.token) != null ? _ref.authorized : void 0) {
         return true;
       }
-      if (token = $.cookie('auth_token')) {
+      if (token = $.cookie(AuthToken)) {
         $rootScope.token = token;
         $rootScope.signedInSuccess(token);
         return true;
