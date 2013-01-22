@@ -46,7 +46,7 @@ Subout::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  # config.assets.precompile += %w( search.js )
+  config.assets.precompile += %w( admin.js admin.css )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
@@ -68,12 +68,13 @@ Subout::Application.configure do
   DEFAULT_HOST_WITH_PORT = "suboutapp.com"
 
   ActionMailer::Base.smtp_settings = {
-  :port           => ENV['MAILGUN_SMTP_PORT'], 
-  :address        => ENV['MAILGUN_SMTP_SERVER'],
-  :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
-  :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-  :domain         => 'yourapp.heroku.com',
-  :authentication => :plain,
+    :port           => ENV['MAILGUN_SMTP_PORT'],
+    :address        => ENV['MAILGUN_SMTP_SERVER'],
+    :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
+    :password       => ENV['MAILGUN_SMTP_PASSWORD'],
+    :domain         => DEFAULT_HOST_WITH_PORT,
+    :authentication => :plain,
   }
   ActionMailer::Base.delivery_method = :smtp
+  DEVELOPMENT_MODE = false
 end

@@ -1,6 +1,6 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
   def index
-    @auctions = current_company.auctions.active
+    @auctions = current_company.auctions.active.recent
     respond_with_namespace(@auctions)
   end
 

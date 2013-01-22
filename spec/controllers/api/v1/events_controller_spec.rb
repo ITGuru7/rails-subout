@@ -4,15 +4,15 @@ describe Api::V1::EventsController do
   let(:user) { FactoryGirl.create(:user) }
 
   describe "GET 'index'" do
-    it "responds recent events" do
-      events = [3, 2, 1]
+    let!(:opportunity1) { FactoryGirl.create(:opportunity) }
+    let!(:opportunity2) { FactoryGirl.create(:opportunity) }
 
-      Event.should_receive(:recent).and_return(events)
-
+    it "responds events" do
       get :index, api_token: user.authentication_token, format: 'json'
-      
+
+      response.status.should == 200
       result = parse_json(response.body)
-      result.should == events
+      result.should have(2).items
     end
   end
 end

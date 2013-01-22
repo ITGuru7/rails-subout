@@ -3,17 +3,19 @@ class Bid
   include Mongoid::Timestamps
 
   field :amount, type: BigDecimal
+  field :comment, type: String
 
   belongs_to :opportunity
-  belongs_to :bidder, :class_name => "Company"
+  belongs_to :bidder, class_name: "Company"
 
-  validates_presence_of :bidder_id, :on => :create, :message => "can't be blank"
-  validates_presence_of :opportunity_id, :on => :create, :message => "can't be blank"
-  validates_presence_of :amount, :on => :create, :message => "can't be blank"
+  validates_presence_of :bidder_id, on: :create, message: "can't be blank"
+  validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
+  validates_presence_of :amount, on: :create, message: "can't be blank"
   validates :amount, numericality: { greater_than: 0 }
-  validate :validate_opportunity_bidable, :on => :create
-  validate :validate_bidable_by_bidder, :on => :create
-  validate :validate_multiple_bids_on_the_same_opportunity, :on => :create
+  validate :validate_opportunity_bidable, on: :create
+  validate :validate_bidable_by_bidder, on: :create
+  validate :validate_multiple_bids_on_the_same_opportunity, on: :create
+  validates :comment, length: { maximum: 255 }
 
   scope :recent, desc(:created_at)
   scope :by_amount, asc(:amount)
@@ -52,7 +54,7 @@ class Bid
     end
 
     if opportunity.for_favorites_only?
-      unless opportunity.buyer.favoriting_buyer_ids.include?(bidder.id)
+      unless bidder.favoriting_buyer_ids.include?(opportunity.buyer_id)
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
       end
     else

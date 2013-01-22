@@ -1,7 +1,7 @@
 class BidShortSerializer < ActiveModel::Serializer
   include ActionView::Helpers::NumberHelper
 
-  attributes :_id, :amount, :formatted_amount, :created_at
+  attributes :_id, :amount, :formatted_amount, :created_at, :comment
 
   has_one :bidder, serializer: ActorSerializer
 

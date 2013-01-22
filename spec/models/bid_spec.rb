@@ -6,7 +6,7 @@ describe Bid do
       #let(:bidder) { FactoryGirl.create(:company) }
       #let(:opportunity) { FactoryGirl.create(:opportunity) }
       #opportunity.stub(:biddable_by?).with(bidder).and_return(false)
-      
+
       #my_new_bid = FactoryGirl.build(:bid, bidder: bidder, opportunity: opportunity, amount: 101.0)
       #my_new_bid.should_not be_valid
     #end
@@ -16,6 +16,25 @@ describe Bid do
     it { should allow_value(1).for(:amount) }
     it { should_not allow_value(0).for(:amount) }
     it { should_not allow_value(-1).for(:amount) }
+    it { should ensure_length_of(:comment).is_at_most(255) }
+  end
+
+  describe "validate_bidable_by_bidder" do
+    let(:buyer) { FactoryGirl.create(:company) }
+    let(:bidder) { FactoryGirl.create(:company) }
+
+    context "favorite only opportunity" do
+      let(:opportunity) { FactoryGirl.create(:opportunity, buyer: buyer, for_favorites_only: true) }
+
+      it "is not valid if bidder is not added to favorites" do
+        FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
+      end
+
+      it "is valid if the bidder is added to favorites" do
+        buyer.add_favorite_supplier!(bidder)
+        FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should be_valid
+      end
+    end
   end
 
   describe "validate_multiple_bids_on_the_same_opportunity" do

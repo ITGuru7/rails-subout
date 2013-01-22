@@ -39,10 +39,10 @@ Subout::Application.configure do
   {
     :address => "localhost",
     :port => 1025,
-    :domain => "suboutapp.com" 
+    :domain => "suboutapp.com"
   }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   DEFAULT_HOST_WITH_PORT = "localhost:3000"
-
+  DEVELOPMENT_MODE = true
 end

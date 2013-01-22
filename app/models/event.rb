@@ -23,14 +23,18 @@ class Event
   end
 
   def self.for(company)
+    events = Array.new
+
     options = [
       {:eventable_company_id.in => company.favoriting_buyer_ids + [company.id]},
       {:eventable_for_favorites_only => false}
     ]
 
-    if company.state_by_state_subscriber?
-      options.last[:regions.in] = company.regions
-    end
+    # To encourage users to subscribe more states
+    # state by state subscriber also see all events
+    # if company.state_by_state_subscriber?
+    #   options.last[:regions.in] = company.regions
+    # end
 
     self.any_of(*options)
   end

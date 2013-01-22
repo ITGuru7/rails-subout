@@ -1,7 +1,7 @@
 class Company
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   field :name, type: String
   field :email, type: String
 
@@ -40,8 +40,8 @@ class Company
 
   attr_accessor :password, :password_confirmation
 
-  belongs_to :created_from_invitation, :class_name => 'FavoriteInvitation', :inverse_of => :created_company
-  belongs_to :created_from_subscription, :class_name => 'GatewaySubscription', :inverse_of => :created_company
+  belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company
+  belongs_to :created_from_subscription, class_name: 'GatewaySubscription', inverse_of: :created_company
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
@@ -56,7 +56,8 @@ class Company
   validates_confirmation_of :password
 
 
-  # Thomas Total Hack validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
+  # FIXME: Thomas Total Hack
+  # validates_presence_of :created_from_invitation_id, :on => :create, unless: 'created_from_subscription_id.present?'
   validate :validate_invitation, :on => :create, if: "created_from_invitation_id.present?"
   validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
   validate :check_nils
@@ -100,7 +101,9 @@ class Company
     supplier.favoriting_buyer_ids << self.id
     supplier.save
 
-    Pusher['global'].trigger!('added_to_favorites', company_id: self.id, supplier_id: supplier.id)
+    unless DEVELOPMENT_MODE
+      Pusher['global'].trigger!('added_to_favorites', company_id: self.id, supplier_id: supplier.id)
+    end
   end
 
   def remove_favorite_supplier!(supplier)
@@ -110,18 +113,16 @@ class Company
     supplier.favoriting_buyer_ids.delete( self.id )
     supplier.save
 
-    Pusher['global'].trigger!('removed_from_favorites', company_id: self.id, supplier_id: supplier.id)
+    unless DEVELOPMENT_MODE
+      Pusher['global'].trigger!('removed_from_favorites', company_id: self.id, supplier_id: supplier.id)
+    end
   end
 
-  def guest? 
-    subscription_plan == 'free'
-  end
-
-  def state_by_state_subscriber? 
+  def state_by_state_subscriber?
     subscription_plan == 'state-by-state-service'
   end
 
-  def national_subscriber? 
+  def national_subscriber?
     subscription_plan == 'subout-national-service' ||
     subscription_plan == 'subout-partner'
   end
@@ -170,11 +171,11 @@ class Company
 
 
   def accept_invitation!
-    self.created_from_invitation.accept! 
+    self.created_from_invitation.accept!
   end
 
   def confirm_subscription!
-    self.created_from_subscription.confirm! 
+    self.created_from_subscription.confirm!
   end
 end
 

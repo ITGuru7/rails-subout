@@ -27,7 +27,7 @@ class OpportunityObserver < Mongoid::Observer
   def send_notification_to_companies(opportunity)
     companies = Company.notified_recipients_by(opportunity)
     companies.each do |company|
-      Notifier.delay_for(5.minutes).new_opportunity(opportunity.id, company.id)
+      Notifier.delay_for(1.minutes).new_opportunity(opportunity.id, company.id)
       send_sms_notification(opportunity, company) if company.notification_type && company.cell_phone
     end
   end

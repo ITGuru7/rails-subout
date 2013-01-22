@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title Subout
+    = stylesheet_link_tag    "admin", :media => "all"
+    = javascript_include_tag "admin"
+    = csrf_meta_tags
+
+  %body
+    .navbar
+      .navbar-inner
+        .container
+          = link_to "Admin", admin_path, class: "brand"
+    .container-fluid
+      - if flash[:error]
+        %p.alert.alert-error
+          = h flash[:error]
+          %a.close(href="#") x
+      - if flash[:notice]
+        %p.alert.alert-info
+          = h flash[:notice]
+          %a.close(href="#") x
+      = yield

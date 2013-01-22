@@ -22,22 +22,26 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
 
+  has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
+
   attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
 
-  has_one :created_company, :class_name => "Company"
+  before_create :set_regions
 
-  before_create :set_regions, :if => "state_by_state_service?"
-
-  scope :pending, where(confirmed: false)
+  scope :pending, -> { where(confirmed: false) }
+  scope :recent, -> { desc(:created_at) }
 
   def set_regions
-    unless ENV['DEV_SITE']
-      if state_by_state_service? 
+    unless DEVELOPMENT_MODE
+      if state_by_state_service?
         response = Chargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
         self.regions = STATE_NAMES
       end
+    else
+      self.regions = STATE_NAMES
+      self.product_handle = 'state-by-state-service'
     end
   end
 

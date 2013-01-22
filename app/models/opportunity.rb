@@ -31,20 +31,21 @@ class Opportunity
   field :tracking_id
   field :contact_phone, type: String
 
-  scope :active, where(:canceled => false)
+  scope :active, -> { where(canceled: false) }
+  scope :recent, -> { desc(:created_at) }
 
-  belongs_to :buyer, :class_name => "Company", :inverse_of => :auctions
+  belongs_to :buyer, class_name: "Company", inverse_of: :auctions
 
-  has_one :event, :as => :eventable
+  has_one :event, as: :eventable
   has_many :bids
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
+  validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
   validates_presence_of :start_date
   validates_presence_of :end_date
-  validates_presence_of :bidding_duration_hrs
   validates_presence_of :start_location
   validate :validate_locations
   validate :validate_buyer_region
@@ -54,7 +55,7 @@ class Opportunity
   before_save :set_bidding_ends_at
 
   def self.send_expired_notification
-    where(:bidding_ends_at.lte => Time.now, :expired_notification_sent => false).each do |opportunity|
+    where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
       Notifier.delay.expired_auction_notification(opportunity.id)
       opportunity.update_attribute(:expired_notification_sent, true)
     end
@@ -101,21 +102,26 @@ class Opportunity
   end
 
   def validate_locations
-    start_location_info = start_location.blank? ? nil : Geocoder.search(start_location).first
-    self.start_region = start_location_info.try(:state)
-    errors.add :start_location, "is not valid, please try again" unless valid_location?(start_location_info)
+    unless DEVELOPMENT_MODE
+      start_location_info = start_location.blank? ? nil : Geocoder.search(start_location).first
+      self.start_region = start_location_info.try(:state)
+      errors.add :start_location, "is not valid, please try again" unless valid_location?(start_location_info)
 
-    end_location_info = end_location.blank? ? start_location_info : Geocoder.search(end_location).first
-    self.end_region = end_location_info.try(:state)
-    if !end_location.blank? and !valid_location?(end_location_info)
-      errors.add :end_location, "is not valid, please try again"
+      end_location_info = end_location.blank? ? start_location_info : Geocoder.search(end_location).first
+      self.end_region = end_location_info.try(:state)
+      if !end_location.blank? and !valid_location?(end_location_info)
+        errors.add :end_location, "is not valid, please try again"
+      end
+    else
+      self.start_region = "Massachusetts" unless self.start_region
+      self.end_region = "Massachusetts" unless self.end_region
     end
   end
 
   def validate_buyer_region
-    return unless buyer
 
-    unless buyer.subscribed?(regions)
+    return unless buyer
+    unless buyer.subscribed?(regions) || DEVELOPMENT_MODE
       errors.add :buyer_id, "cannot create an opportunity within this region"
     end
   end
@@ -146,6 +152,18 @@ class Opportunity
 
   def recent_bids
     self.bids.recent
+  end
+
+  def status
+    if self.canceled?
+      "Canceled"
+    elsif self.winning_bid_id
+      "Bidding won"
+    elsif self.bidding_ended?
+      "Bidding ended"
+    else
+      "In progress"
+    end
   end
 
   private

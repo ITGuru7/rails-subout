@@ -17,8 +17,8 @@ describe Api::V1::BidsController do
     context "with opportunity_id" do
       let(:opportunity) { FactoryGirl.create(:opportunity) }
 
-      it "responds bids belong to the opportunity" do
-        FactoryGirl.create_list(:bid, 2, opportunity: opportunity)
+      it "responds my bids" do
+        FactoryGirl.create_list(:bid, 2, bidder: user.company)
         FactoryGirl.create(:bid)
 
         get :index, opportunity_id: opportunity.id, api_token: user.authentication_token, format: 'json'
@@ -28,6 +28,7 @@ describe Api::V1::BidsController do
       end
     end
   end
+
   describe "POST 'create'" do
     let(:opportunity) { FactoryGirl.create(:opportunity) }
 
