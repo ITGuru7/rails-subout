@@ -45,14 +45,14 @@
                   <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
                 </div>
                 <div class="welcome">
-                  signed in as <span class="username">{{company.abbreviated_name}}</span>
+                  signed in as <span class="username" ng-bind="company.abbreviated_name">...</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="content" ng-view="content"></div>
+      <div id="content" ng-view="content" class="ng-cloak"></div>
       <div id="modal" class="modal hide fade">
          <div ng-include="modal"></div>
       </div>
