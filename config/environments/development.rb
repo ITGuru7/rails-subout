@@ -44,5 +44,5 @@ Subout::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   DEFAULT_HOST_WITH_PORT = "localhost:3000"
-  DEVELOPMENT_MODE = true
+  DEVELOPMENT_MODE = ENV["DEV_SITE"].nil? ? false : true
 end

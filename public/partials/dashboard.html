@@ -162,7 +162,7 @@
                           <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                         </div>
                       </div>
-                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event)">
+                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'"">
                         <a href="http://subout.com/pricing/">You are not licensed to bid on this opportunity. Upgrade now! </a>
                       </div>
                     </div>

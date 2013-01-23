@@ -52,7 +52,7 @@ class Opportunity
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price
 
-  before_save :set_bidding_ends_at
+  before_save :set_bidding_ends_at, unless: 'self.canceled'
 
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
@@ -66,7 +66,7 @@ class Opportunity
   end
 
   def cancel!
-    self.update_attributes(canceled: true)
+    self.update_attributes(canceled: true, bidding_ends_at: Time.now)
   end
 
   def win!(bid_id)
@@ -119,7 +119,6 @@ class Opportunity
   end
 
   def validate_buyer_region
-
     return unless buyer
     unless buyer.subscribed?(regions) || DEVELOPMENT_MODE
       errors.add :buyer_id, "cannot create an opportunity within this region"
