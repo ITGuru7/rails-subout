@@ -15,8 +15,15 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
+SUBOUT_DEPLOY_VERSION = Time.now.to_i.to_s
+SUBOUT_APP_VERSION = 1.2
+
+require File.expand_path "./lib/api_version"
+
 module Subout
   class Application < Rails::Application
+    config.middleware.use "ApiVersion"
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -65,7 +72,7 @@ module Subout
     config.assets.precompile += ['rails_admin/rails_admin.css', 'rails_admin/rails_admin.js']
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.1'
+    config.assets.version = SUBOUT_APP_VERSION
 
     # Observers
     config.mongoid.observers = :company_observer, :opportunity_observer, :bid_observer, :event_observer

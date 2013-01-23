@@ -7,7 +7,8 @@ $.cookie.defaults.expires = 7;
 subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
 
 subout.config([
-  "$routeProvider", function($routeProvider) {
+  "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
+    $httpProvider.responseInterceptors.push('myHttpInterceptor');
     return $routeProvider.when("/sign_in", {
       templateUrl: "partials/sign_in.html",
       controller: SignInCtrl
@@ -1221,5 +1222,24 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       $location.path("/sign_in");
       return false;
     }
+  };
+}).factory("myHttpInterceptor", function($q) {
+  return function(promise) {
+    return promise.then((function(response) {
+      var mime, payloadData;
+      mime = "application/json; charset=utf-8";
+      if (response.headers()["content-type"] === mime) {
+        payloadData = response.data ? response.data.payload : null;
+        if (payloadData) {
+          response.data = payloadData;
+          if (!payloadData) {
+            return $q.reject(response);
+          }
+        }
+      }
+      return response;
+    }), function(response) {
+      return $q.reject(response);
+    });
   };
 });
