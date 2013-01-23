@@ -102,7 +102,7 @@
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_bidding_ends.$invalid}">
         <label for="opportunity_bidding_ends" class="control-label">Duration *</label>
         <div class="controls">
-          <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="input-small" ng-model="opportunity.bidding_duration_hrs" required>
+          <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="input-small" ng-model="opportunity.bidding_duration_hrs" ui-mask="'9?9'" required>
           <span class="time">hours</span>
         </div>
       </div>
