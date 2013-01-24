@@ -16,7 +16,7 @@ if defined?(Bundler)
 end
 
 SUBOUT_DEPLOY_VERSION = Time.now.to_i.to_s
-SUBOUT_APP_VERSION = 1.2
+SUBOUT_APP_VERSION = 1.5
 
 require File.expand_path "./lib/api_version"
 

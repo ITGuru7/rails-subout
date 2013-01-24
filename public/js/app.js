@@ -6,6 +6,17 @@ $.cookie.defaults.expires = 7;
 
 subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
 
+subout.run([
+  '$rootScope', '$appVersioning', '$location', function($rootScope, $versioning, $location) {
+    return $rootScope.$on('$routeChangeStart', function(scope, next, current) {
+      if (current && $versioning.isMarkedForReload()) {
+        window.location = $location.path();
+        return window.location.reload();
+      }
+    });
+  }
+]);
+
 subout.config([
   "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
@@ -102,7 +113,7 @@ AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, Fi
   $rootScope.signOut = function() {
     $.removeCookie(AuthToken);
     window.location = "#/sign_in";
-    return window.location.reload();
+    return window.location.reload(true);
   };
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
@@ -1223,18 +1234,70 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return false;
     }
   };
-}).factory("myHttpInterceptor", function($q) {
+}).factory("$appVersioning", function() {
+  return {
+    _version: 0,
+    _deploy: 0,
+    isAppVersionUpToDate: function(version) {
+      var v;
+      version = parseFloat(version);
+      v = this.getAppVersion();
+      if (v > 0 && version !== v) {
+        return false;
+      }
+      this.setAppVersion(version);
+      return true;
+    },
+    isDeployTimestampUpToDate: function(deploy) {
+      var d;
+      deploy = parseInt(deploy);
+      d = this.getDeployTimestamp();
+      if (d > 0 && deploy !== d) {
+        return false;
+      }
+      this.setDeployTimestamp(deploy);
+      return true;
+    },
+    getAppVersion: function() {
+      return this._version;
+    },
+    setAppVersion: function(v) {
+      return this._version = v;
+    },
+    getDeployTimestamp: function() {
+      return this._deploy;
+    },
+    setDeployTimestamp: function(d) {
+      return this._deploy = d;
+    },
+    markForReload: function() {
+      return this._reload = true;
+    },
+    isMarkedForReload: function() {
+      return this._reload === true;
+    }
+  };
+}).factory("myHttpInterceptor", function($q, $appVersioning, $rootScope) {
   return function(promise) {
     return promise.then((function(response) {
-      var mime, payloadData;
+      var deploy, mime, payloadData, version;
       mime = "application/json; charset=utf-8";
       if (response.headers()["content-type"] === mime) {
         payloadData = response.data ? response.data.payload : null;
         if (payloadData) {
-          response.data = payloadData;
+          version = response.data.version;
+          if (!$appVersioning.isAppVersionUpToDate(version)) {
+            $rootScope.signOut();
+            return;
+          }
+          deploy = response.data.deploy;
+          if (!$appVersioning.isDeployTimestampUpToDate(deploy)) {
+            $appVersioning.markForReload();
+          }
           if (!payloadData) {
             return $q.reject(response);
           }
+          response.data = payloadData;
         }
       }
       return response;
