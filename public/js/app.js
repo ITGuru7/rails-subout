@@ -77,9 +77,13 @@ angular.element(document).ready(function() {
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
+AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
   var REGION_NAMES, p;
-  $rootScope.ie8 = $.browser.msie && $.browser.version <= 8;
+  if ($appBrowser.isReallyOld()) {
+    window.location = "/upgrade_browser.html";
+    return;
+  }
+  $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -1275,6 +1279,15 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     },
     isMarkedForReload: function() {
       return this._reload === true;
+    }
+  };
+}).factory("$appBrowser", function() {
+  return {
+    isReallyOld: function() {
+      return ($.browser.msie && $.browser.version < 8) || ($.browser.firefox && $.browser.version < 4);
+    },
+    isOld: function() {
+      return ($.browser.msie && $.browser.version < 9) || ($.browser.firefox && $.browser.version < 5);
     }
   };
 }).factory("myHttpInterceptor", function($q, $appVersioning, $rootScope) {

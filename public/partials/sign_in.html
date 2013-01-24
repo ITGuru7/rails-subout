@@ -7,6 +7,15 @@
         </div>
     </div>
 </header>
+
+<div class="alert alert-error" ng:show="isOldBrowser">
+  Warning: Your browser is out of date, and may not be compatible with
+  our website. A list of the most popular web browsers can be
+  found 
+  <a href="/upgrade_browser.html" target="_blank">here</a>. 
+  By continuing with your current browser you acknowledge that your experience on this website may be degraded.
+</div>
+
 <form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well">
 	<fieldset>
 		<legend>
