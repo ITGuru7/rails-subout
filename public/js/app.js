@@ -2,6 +2,8 @@ var subout;
 
 $.cookie.json = true;
 
+$.cookie.defaults.expires = 7;
+
 subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
 
 subout.config([
