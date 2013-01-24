@@ -133,8 +133,8 @@
                         <span class="label-field">Winning Amount: </span> <span ui-currency ng-model="event.eventable.winner.amount"></span>
                       </div>
                       <div>
-                        <span>Departs:</span> {{event.eventable.start_date|date}} <br />
-                        <span>Arrives:</span> {{event.eventable.end_date|date}}
+                        <span>Departs:</span> {{event.eventable.start_date|date}} {{event.eventable.start_time}}<br />
+                        <span>Arrives:</span> {{event.eventable.end_date|date}} {{event.eventable.end_time}}
                       </div>
                       <div>
                         <span>Created on:</span> {{event.eventable.created_at|date}}
