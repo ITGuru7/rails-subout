@@ -67,6 +67,7 @@ var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBid
 
 AppCtrl = function($scope, $rootScope, $location, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
   var REGION_NAMES, p;
+  $rootScope.ie8 = $.browser.msie && $.browser.version <= 8;
   $rootScope.currentPath = function() {
     return $location.path();
   };

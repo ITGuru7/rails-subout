@@ -167,7 +167,10 @@
                       </div>
                     </div>
                     <div class="span4">
-                      <a ng-show="event.eventable.image_url" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
+                      <a ng-show="event.eventable.image_url && !ie8" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
+                        <img ng-src="{{event.eventable.image_url}}" />
+                      </a>
+                      <a ng-show="event.eventable.image_url && ie8"  href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}" target="_blank">
                         <img ng-src="{{event.eventable.image_url}}" />
                       </a>
                     </div>
