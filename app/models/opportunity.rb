@@ -76,11 +76,18 @@ class Opportunity
 
     update_attributes(bidding_done: true, winning_bid_id: bid.id)
 
-    Notifier.delay.won_auction_to_supplier(self.id)
     Notifier.delay.won_auction_to_buyer(self.id)
-    self.bids.ne(id: winning_bid_id).each do |bid|
-      Notifier.delay.finished_auction_to_bidder(self.id, bid.id)
+
+    Notifier.delay.won_auction_to_supplier(self.id)
+    bid_loser_ids.each do |bidder_id|
+      Notifier.delay.finished_auction_to_bidder(self.id, bidder_id)
     end
+  end
+
+  def bid_loser_ids
+    bidder_ids = self.bids.map(&:bidder_id)
+    bidder_ids.reject! { |bidder_id| bidder_id == winning_bid.bidder_id }
+    bidder_ids.uniq
   end
 
   def update!(options)
