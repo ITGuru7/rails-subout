@@ -31,6 +31,8 @@ class Opportunity
   field :tracking_id
   field :contact_phone, type: String
 
+  attr_accessor :viewer
+
   scope :active, -> { where(canceled: false) }
   scope :recent, -> { desc(:created_at) }
 
@@ -150,7 +152,10 @@ class Opportunity
   end
 
   def recent_bids
-    self.bids.recent
+    self.bids.recent.map do |bid|
+      bid.opportunity = self
+      bid
+    end
   end
 
   def status

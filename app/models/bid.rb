@@ -22,6 +22,10 @@ class Bid
 
   after_create :win_quick_winable_opportunity
 
+  def comment_as_seen_by(viewer)
+    (viewer == bidder || viewer == opportunity.buyer) ? comment : ""
+  end
+
   private
 
   def win_quick_winable_opportunity
@@ -31,7 +35,7 @@ class Bid
   end
 
   def quick_win_forward_auction?
-    opportunity.forward_auction? and opportunity.win_it_now_price <= self.amount 
+    opportunity.forward_auction? and opportunity.win_it_now_price <= self.amount
   end
 
   def quick_win_reverse_auction?

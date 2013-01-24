@@ -8,4 +8,8 @@ class BidShortSerializer < ActiveModel::Serializer
   def formatted_amount
     number_to_currency(bid_short.amount, :unit=>'')
   end
+
+  def comment
+    bid_short.comment_as_seen_by(bid_short.opportunity.viewer)
+  end
 end
