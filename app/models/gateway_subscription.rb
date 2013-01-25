@@ -56,4 +56,8 @@ class GatewaySubscription
   def state_by_state_service?
     product_handle == 'state-by-state-service'
   end
+
+  def company_last_sign_in_at
+    self.created_company.try(:last_sign_in_at)
+  end
 end

@@ -155,6 +155,11 @@ class Company
     self.regions = created_from_subscription.regions
   end
 
+  def last_sign_in_at
+    user = self.users.first
+    user.try(:last_sign_in_at)
+  end
+
   private
 
   def validate_invitation

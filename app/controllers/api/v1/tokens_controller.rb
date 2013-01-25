@@ -12,6 +12,7 @@ class Api::V1::TokensController < Api::V1::BaseController
         user_id: user._id,
         pusher_key: Pusher.key
       }
+      user.update_tracked_fields!(request)
     else
       render :json => { authorized: false, message: "Invalid username or password!"}
     end

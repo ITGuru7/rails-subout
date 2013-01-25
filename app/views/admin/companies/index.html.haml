@@ -1,0 +1,16 @@
+%h1 Companies
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Last signed in
+      %th # Ops
+      %th # Bids
+  %tbody
+    - @companies.each do |company|
+      %tr
+        %td= company.name
+        %td= time_ago_in_words(company.last_sign_in_at) + " ago" if company.last_sign_in_at
+        %td= company.auctions.count
+        %td= company.bids.count

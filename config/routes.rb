@@ -54,5 +54,6 @@ Subout::Application.routes.draw do
     resources :gateway_subscriptions, only: [:index] do
       put 'resend_invitation', on: :member
     end
+    resources :companies, only: [:index]
   end
 end
