@@ -1,2 +1,3 @@
-#mongo: mongod run --config /usr/local/etc/mongod.conf
-#rails: rails s
+redis: redis-server
+mongo: mongod run --config /usr/local/etc/mongod.conf
+rails: rails s
