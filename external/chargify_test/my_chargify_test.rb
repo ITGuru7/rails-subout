@@ -2,7 +2,7 @@ require 'rubygems'
 require 'httparty'
 require 'pp'
 
-class Chargify
+class MyChargify
   include HTTParty
   base_uri 'subout.chargify.com'
   basic_auth 'FsikQqr_iR0tcokkv8db', 'x'
@@ -19,7 +19,7 @@ class Chargify
   end
 end
 
-chargify = Chargify.new
+chargify = MyChargify.new
 subscriptions = chargify.subscriptions
 subscriptions.each do |s|
   puts chargify.get_components(s["subscription"]["id"]).to_yaml

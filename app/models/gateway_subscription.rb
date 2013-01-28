@@ -1,4 +1,4 @@
-require 'chargify'
+require 'my_chargify'
 
 STATE_NAMES = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
 "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
@@ -34,7 +34,7 @@ class GatewaySubscription
   def set_regions
     unless DEVELOPMENT_MODE
       if state_by_state_service?
-        response = Chargify.get_components(subscription_id)
+        response = MyChargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
         self.regions = STATE_NAMES
