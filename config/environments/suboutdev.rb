@@ -77,4 +77,6 @@ Subout::Application.configure do
   }
   ActionMailer::Base.delivery_method = :test
   DEVELOPMENT_MODE = false
+  CHARGIFY_URI = 'subout.chargify.com'
+  CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
 end

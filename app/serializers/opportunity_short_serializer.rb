@@ -4,14 +4,14 @@ class OpportunityShortSerializer < ActiveModel::Serializer
     :buyer_name, :buyer_abbreviated_name, :reference_number, :canceled, :win_it_now_price, :status
 
   def icon
-    "icon-#{opportunity_short.type.parameterize}"
+    "icon-#{object.type.parameterize}"
   end
 
   def buyer_name
-    opportunity_short.buyer.name
+    object.buyer.name
   end
 
   def buyer_abbreviated_name
-    opportunity_short.buyer.abbreviated_name
+    object.buyer.abbreviated_name
   end
 end

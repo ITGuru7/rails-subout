@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'httparty'
 
-class Chargify
+class MyChargify
   include HTTParty
-  base_uri 'subout.chargify.com'
-  basic_auth 'FsikQqr_iR0tcokkv8db', 'x'
+  base_uri CHARGIFY_URI
+  basic_auth CHARGIFY_TOKEN, 'x'
 
   def self.get_subscription(subscription_id)
     self.get("/subscriptions/#{subscription_id}.json")
@@ -15,7 +15,7 @@ class Chargify
   end
 end
 
-#chargify = Chargify.new
+#chargify = MyChargify.new
 #sub = chargify.get_subscription(2559906)
 
 #PP.pp(sub["subscription"], $>, 40)

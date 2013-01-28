@@ -5,14 +5,14 @@ class CompanySerializer < ActiveModel::Serializer
     :dot_number, :cell_phone
 
   def logo_url
-    Cloudinary::Utils.cloudinary_url(company.logo_id, width: 200, crop: :scale, format: 'png')
+    Cloudinary::Utils.cloudinary_url(object.logo_id, width: 200, crop: :scale, format: 'png')
   end
 
   def bids_count
-    company.bids.count
+    object.bids.count
   end
 
   def opportunities_count
-    company.auctions.count
+    object.auctions.count
   end
 end
