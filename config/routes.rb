@@ -4,6 +4,8 @@ Subout::Application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   mount ApiDoc => "/api/doc"
 
+  devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]
+
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
       resources :gateway_subscriptions
