@@ -79,8 +79,16 @@ class GatewaySubscription
     self.created_company.try(:name)
   end
 
+  def subscription_url
+    subscription_id.blank? ? "" : "https://subout.chargify.com/subscriptions/#{subscription_id}"
+  end
+
+  def customer_url
+    customer_id.blank? ? "" : "https://subout.chargify.com/customers/#{customer_id}"
+  end
+
   def self.csv_column_names
-    ["_id","email", "name", "organization", "subscription_id", "customer_id", "product_handle", "regions", "confirmed", "created_company_name"]
+    ["_id","email", "name", "organization", "subscription_url", "customer_url", "product_handle", "regions", "confirmed", "created_company_name"]
   end
 
   def self.to_csv(options = {})

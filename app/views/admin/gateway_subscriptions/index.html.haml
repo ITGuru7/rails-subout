@@ -40,8 +40,10 @@
           #{subscription.name}<br>
           #{subscription.organization}
         %td
-          #{subscription.subscription_id}<br>
-          #{subscription.customer_id}
+          - unless subscription.subscription_id.blank?
+            = link_to "Sub #{subscription.subscription_id}", subscription.subscription_url, target: "_blank"
+            %br
+            = link_to "Cus #{subscription.customer_id}", subscription.customer_url, target: "_blank"
         %td= subscription.product_handle
         %td= subscription.regions if subscription.state_by_state_service?
         %td= subscription.confirmed
