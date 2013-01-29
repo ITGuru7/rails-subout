@@ -1,16 +1,15 @@
 require 'my_chargify'
 
-STATE_NAMES = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-"Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas",
-"Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
-"Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York",
-"North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island",
-"South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
-"West Virginia", "Wisconsin", "Wyoming", "District of Columbia", "Puerto Rico"]
-
 class GatewaySubscription
   include Mongoid::Document
   include Mongoid::Timestamps
+
+  REGIONS = Chargify::Component.find(
+    :all, 
+    :params => {
+      :product_family_id => Chargify::ProductFamily.find_by_handle("subout").id
+    }
+  )
 
   field :email
   field :first_name
@@ -31,16 +30,38 @@ class GatewaySubscription
   scope :pending, -> { where(confirmed: false) }
   scope :recent, -> { desc(:created_at) }
 
+  def self.region_prices
+    return @region_prices if @region_prices
+
+    #@region_prices = {}
+    #REGIONS.each do |region|
+      #@region_prices[region.name] = region.unit_price.to_i
+    #end
+
+    #@region_prices
+
+    @region_prices = REGIONS.map do |region|
+      {
+        name: region.name,
+        price: region.unit_price.to_i
+      }
+    end
+  end
+
+  def self.region_names
+    REGIONS.map {|s| s.name }
+  end
+
   def set_regions
     unless DEVELOPMENT_MODE
       if state_by_state_service?
         response = MyChargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
-        self.regions = STATE_NAMES
+        self.regions = region_names
       end
     else
-      self.regions = STATE_NAMES
+      self.regions = region_names
       self.product_handle = 'state-by-state-service'
     end
   end
@@ -59,5 +80,19 @@ class GatewaySubscription
 
   def company_last_sign_in_at
     self.created_company.try(:last_sign_in_at)
+  end
+
+  def update_regions!(regions)
+    sub = Chargify::Subscription.find(self.subscription_id)
+    sub.components.each do |component|
+      was_enabled = component.enabled
+      if regions.include?(component.name) 
+        component.enabled = true
+      else
+        component.enabled = false
+      end
+      component.save unless component.enabled == was_enabled
+    end
+    self.update_attributes(:regions => regions)
   end
 end
