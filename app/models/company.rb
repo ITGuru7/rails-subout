@@ -183,4 +183,3 @@ class Company
     self.created_from_subscription.confirm!
   end
 end
-

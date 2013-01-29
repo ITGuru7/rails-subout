@@ -60,4 +60,35 @@ class GatewaySubscription
   def company_last_sign_in_at
     self.created_company.try(:last_sign_in_at)
   end
+
+  def self.by_category(category)
+    if category == "registered"
+      scoped.where(confirmed: true)
+    elsif category == "not_registered"
+      scoped.where(confirmed: false)
+    else
+      scoped
+    end
+  end
+
+  def name
+    "#{self.first_name} #{self.last_name}"
+  end
+
+  def created_company_name
+    self.created_company.try(:name)
+  end
+
+  def self.csv_column_names
+    ["_id","email", "name", "organization", "subscription_id", "customer_id", "product_handle", "regions", "confirmed", "created_company_name"]
+  end
+
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << csv_column_names
+      all.each do |product|
+        csv << csv_column_names.map { |column| product.send(column) }
+      end
+    end
+  end
 end

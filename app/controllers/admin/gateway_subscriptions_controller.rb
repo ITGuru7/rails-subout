@@ -1,6 +1,11 @@
 class Admin::GatewaySubscriptionsController < Admin::BaseController
   def index
-    @subscriptions = GatewaySubscription.recent
+    @subscriptions = GatewaySubscription.by_category(params[:category]).recent
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @subscriptions.to_csv }
+    end
   end
 
   def resend_invitation

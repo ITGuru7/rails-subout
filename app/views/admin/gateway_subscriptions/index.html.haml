@@ -1,15 +1,29 @@
 %h1 Gateway Subscriptions
 
+%ul.nav.nav-pills
+  %li{class: ("active" if params[:category].blank?)}
+    = link_to "All", admin_gateway_subscriptions_path
+  %li{class: ("active" if params[:category] == "not_registered")}
+    = link_to "Not registered", admin_gateway_subscriptions_path(category: "not_registered")
+  %li{class: ("active" if params[:category] == "registered")}
+    = link_to "Registered", admin_gateway_subscriptions_path(category: "registered")
+  %li.pull-right
+    = link_to "Download CSV", admin_gateway_subscriptions_path(format: "csv", category: params[:category]), target: "_blank"
+
 %table#subscriptions.table.table-striped
   %thead
     %tr
-      %th Created time
-      %th ID
-      %th Email
-      %th Name
-      %th Organization
-      %th Chargify subscription ID
-      %th Chargify customer ID
+      %th
+        Created Time<br>
+        Identifier
+      %th
+        Email<br>
+        Name<br>
+        Organization
+      %th
+        Chargify<br>
+        Subscription ID<br>
+        Customer ID
       %th Subscription plan
       %th Regions
       %th Confirmed
@@ -18,15 +32,18 @@
   %tbody
     - @subscriptions.each do |subscription|
       %tr
-        %td= subscription.created_at
-        %td= subscription.id
-        %td= subscription.email
-        %td #{subscription.first_name} #{subscription.last_name}
-        %td= subscription.organization
-        %td= subscription.subscription_id
-        %td= subscription.customer_id
+        %td
+          #{subscription.created_at}<br>
+          #{subscription.id}
+        %td
+          #{subscription.email}<br>
+          #{subscription.name}<br>
+          #{subscription.organization}
+        %td
+          #{subscription.subscription_id}<br>
+          #{subscription.customer_id}
         %td= subscription.product_handle
         %td= subscription.regions if subscription.state_by_state_service?
         %td= subscription.confirmed
-        %td= subscription.created_company.try(:name)
+        %td= subscription.created_company_name
         %td= link_to "Resend", resend_invitation_admin_gateway_subscription_path(subscription), method: "put", class: "btn btn-primary" unless subscription.created_company
