@@ -184,4 +184,9 @@ class Company
   def confirm_subscription!
     self.created_from_subscription.confirm!
   end
+
+  def update_regions!(regions)
+    self.created_from_subscription.update_regions!(regions)
+    self.update_attributes(:regions  => regions)
+  end
 end

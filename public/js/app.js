@@ -77,8 +77,15 @@ angular.element(document).ready(function() {
 var AppCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Company, User, FileUploaderSignature, AuthToken) {
+AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region) {
   var REGION_NAMES, p;
+  $('#modal').on('hidden', function() {
+    $scope = angular.element(document).scope();
+    $scope.modal = null;
+    if (!$scope.$$phase) {
+      return $scope.$apply();
+    }
+  });
   if ($appBrowser.isReallyOld()) {
     window.location = "/upgrade_browser.html";
     return;
@@ -103,8 +110,11 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
         return $rootScope.regions = company.regions;
       }
     });
-    return $rootScope.user = User.get({
+    $rootScope.user = User.get({
       userId: token.user_id,
+      api_token: token.api_token
+    });
+    return $rootScope.REGION_PRICES = Region.query({
       api_token: token.api_token
     });
   };
@@ -246,17 +256,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewFavoriteForm = function() {
-    $rootScope.$broadcast('clearNewFavoriteForm');
     return $rootScope.setModal('partials/add-new-favorite.html');
-  };
-  $rootScope.clearOpportunity = function() {
-    $("form .image-preview").attr('src', '');
-    $("form .alert-content").empty();
-    $("form .alert-error").hide();
-    return $rootScope.opportunity = {
-      start_time: "00:00",
-      end_time: "00:00"
-    };
   };
   $rootScope.setOpportunity = function(opportunity) {
     return $rootScope.opportunity = Opportunity.get({
@@ -320,6 +320,7 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
+  alert("hello new op form");
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   return $scope.save = function() {
     var opportunity, showErrors;
@@ -410,12 +411,6 @@ FavoritesCtrl = function($scope, $rootScope, Favorite, Authorize) {
 };
 
 NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, FavoriteInvitation) {
-  $scope.$on('clearNewFavoriteForm', function() {
-    $scope.supplierEmail = '';
-    $scope.showCompany = false;
-    $scope.showInvitation = false;
-    return $scope.companyNotFound = false;
-  });
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
@@ -794,8 +789,39 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
-  $scope.userProfile = $rootScope.user;
-  $scope.companyProfile = $rootScope.company;
+  var region, _i, _len, _ref;
+  $scope.userProfile = angular.copy($rootScope.user);
+  $scope.companyProfile = angular.copy($rootScope.company);
+  $scope.companyProfile.allRegions = {};
+  _ref = $scope.companyProfile.regions;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    region = _ref[_i];
+    $scope.companyProfile.allRegions[region] = true;
+  }
+  $scope.regionPrice = function(region_name) {
+    region = _.find($rootScope.REGION_PRICES, function(item) {
+      return item.name === region_name;
+    });
+    if (region) {
+      return region.price;
+    } else {
+      return 0;
+    }
+  };
+  $scope.updateTotalPrice = function() {
+    var is_enabled, totalPrice, _ref1;
+    totalPrice = 0;
+    _ref1 = $scope.companyProfile.allRegions;
+    for (region in _ref1) {
+      is_enabled = _ref1[region];
+      if (is_enabled) {
+        totalPrice += $scope.regionPrice(region);
+      }
+    }
+    $scope.totalPrice = totalPrice;
+    return totalPrice;
+  };
+  $scope.totalPrice = $scope.updateTotalPrice();
   $rootScope.setupFileUploader();
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
@@ -815,6 +841,29 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
     } else {
       return $scope.userProfileError = "The new password and password confirmation are not identical.";
     }
+  };
+  $scope.saveLicensedRegions = function() {
+    var finalRegions, isEnabled, _ref1;
+    finalRegions = [];
+    _ref1 = $scope.companyProfile.allRegions;
+    for (region in _ref1) {
+      isEnabled = _ref1[region];
+      if (!!isEnabled) {
+        finalRegions.push(region);
+      }
+    }
+    $scope.companyProfile.regions = finalRegions;
+    return Company.update_regions({
+      companyId: $rootScope.company._id,
+      company: $scope.companyProfile,
+      api_token: $rootScope.token.api_token,
+      action: "update_regions"
+    }, function(company) {
+      $rootScope.company = $scope.companyProfile;
+      return $rootScope.closeModal();
+    }, function(error) {
+      return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
+    });
   };
   return $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";
@@ -1093,6 +1142,8 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/opportunities/:opportunityId", {}, {});
 }).factory("MyBid", function($resource) {
   return $resource("" + api_path + "/bids", {}, {});
+}).factory("Region", function($resource) {
+  return $resource("" + api_path + "/regions", {}, {});
 }).factory("Bid", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
     opportunityId: "@opportunityId"
@@ -1116,6 +1167,10 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     search: {
       method: "GET",
       action: "search"
+    },
+    update_regions: {
+      method: "PUT",
+      action: "update_regions"
     }
   });
   Company.prototype.regionNames = function() {

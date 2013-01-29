@@ -41,7 +41,11 @@ Subout::Application.routes.draw do
       resources :events
       resources :companies do
         get :search, on: :collection
+        put :update_regions, on: :member
       end
+
+      resources :regions
+
       resources :bids
       resources :filters
       resources :tags

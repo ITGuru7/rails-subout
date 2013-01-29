@@ -8431,3 +8431,13 @@ div#opportunity-show .description .content {
 #opportunities td {
   max-width: 300px;
 }
+fieldset.regions-table {
+  columns: 200px 2;
+  -webkit-columns: 200px 2;
+  /* Safari and Chrome */
+
+  -moz-columns: 200px 2;
+  /* Firefox */
+
+  text-align: left;
+}
