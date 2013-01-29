@@ -38,6 +38,8 @@ class Company
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
 
+  scope :recent, -> { desc(:created_at) }
+
   attr_accessor :password, :password_confirmation
 
   belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company

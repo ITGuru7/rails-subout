@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
   def index
-    @companies = Company.all
+    @companies = Company.recent
   end
 end
