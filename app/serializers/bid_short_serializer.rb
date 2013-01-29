@@ -6,10 +6,10 @@ class BidShortSerializer < ActiveModel::Serializer
   has_one :bidder, serializer: ActorSerializer
 
   def formatted_amount
-    number_to_currency(bid_short.amount, :unit=>'')
+    number_to_currency(object.amount, :unit=>'')
   end
 
   def comment
-    bid_short.comment_as_seen_by(bid_short.opportunity.viewer)
+    object.comment_as_seen_by(object.opportunity.viewer)
   end
 end

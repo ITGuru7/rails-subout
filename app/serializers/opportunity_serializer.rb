@@ -9,33 +9,33 @@ class OpportunitySerializer < ActiveModel::Serializer
   has_many :recent_bids, serializer: BidShortSerializer, key: "bids"
 
   def winner
-    return unless opportunity.winning_bid_id
+    return unless object.winning_bid_id
 
-    winning_bid = opportunity.winning_bid
+    winning_bid = object.winning_bid
     {name: winning_bid.bidder.name, amount: winning_bid.amount}
   end
 
   def image_url
-    Cloudinary::Utils.cloudinary_url(opportunity.image_id, width: 200, crop: :scale, format: 'png')
+    Cloudinary::Utils.cloudinary_url(object.image_id, width: 200, crop: :scale, format: 'png')
   end
 
   def large_image_url
-    Cloudinary::Utils.cloudinary_url(opportunity.image_id, width: 500, crop: :scale, format: 'png')
+    Cloudinary::Utils.cloudinary_url(object.image_id, width: 500, crop: :scale, format: 'png')
   end
 
   def buyer_name
-    opportunity.buyer.name
+    object.buyer.name
   end
 
   def buyer_abbreviated_name
-    opportunity.buyer.abbreviated_name
+    object.buyer.abbreviated_name
   end
 
   def start_date
-    opportunity.start_date.strftime("%Y/%m/%d") if opportunity.start_date
+    object.start_date.strftime("%Y/%m/%d") if object.start_date
   end
 
   def end_date
-    opportunity.end_date.strftime("%Y/%m/%d") if opportunity.end_date
+    object.end_date.strftime("%Y/%m/%d") if object.end_date
   end
 end

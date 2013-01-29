@@ -12,12 +12,12 @@ describe Admin::GatewaySubscriptionsController, "GET index" do
 end
 
 describe Admin::GatewaySubscriptionsController, "PUT resend_invitation" do
-  let(:subscription) { FactoryGirl.create(:gateway_subscription) }
+  let!(:subscription) { FactoryGirl.create(:gateway_subscription) }
 
   it "sends invitation again" do
     http_login
 
-    Notifier.should_receive(:subscription_confirmation).with(subscription.id).and_return(double(deliver: nil))
+    Notifier.should_receive(:subscription_confirmation).with(subscription.id)
 
     put :resend_invitation, id: subscription.id
     response.should redirect_to(admin_gateway_subscriptions_path)
