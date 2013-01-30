@@ -8431,7 +8431,7 @@ div#opportunity-show .description .content {
 #opportunities td {
   max-width: 300px;
 }
-fieldset.regions-table {
+#licensed-regions fieldset.regions-table {
   columns: 200px 2;
   -webkit-columns: 200px 2;
   /* Safari and Chrome */
@@ -8440,4 +8440,15 @@ fieldset.regions-table {
   /* Firefox */
 
   text-align: left;
+}
+#licensed-regions .total-price {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+#licensed-regions .cancel {
+  margin-left: 10px;
+}
+#licensed-regions .checkbox {
+  padding-left: 20px;
 }

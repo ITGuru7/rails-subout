@@ -320,7 +320,6 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
-  alert("hello new op form");
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   return $scope.save = function() {
     var opportunity, showErrors;
@@ -545,7 +544,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.query = $location.search().q;
   $scope.filter = null;
   $scope.opportunity = null;
-  $scope.regions = $rootScope.regions.slice(0);
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
@@ -792,6 +790,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   var region, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
+  console.log($rootScope.company);
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -852,6 +851,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
         finalRegions.push(region);
       }
     }
+    delete $scope.companyProfile.allRegions;
     $scope.companyProfile.regions = finalRegions;
     return Company.update_regions({
       companyId: $rootScope.company._id,
@@ -865,7 +865,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
-  return $scope.saveCompanyProfile = function() {
+  $scope.saveCompanyProfile = function() {
     $scope.companyProfileError = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
     return Company.update({
@@ -874,6 +874,26 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
       api_token: $rootScope.token.api_token
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
+      return $rootScope.closeModal();
+    }, function(error) {
+      return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
+    });
+  };
+  return $scope.upgradeToNationalPlan = function() {
+    return Company.update_product({
+      companyId: $rootScope.company._id,
+      product: "subout-national-service",
+      api_token: $rootScope.token.api_token,
+      action: "update_product"
+    }, function(company) {
+      $rootScope.company = Company.get({
+        companyId: $rootScope.token.company_id,
+        api_token: $rootScope.token.api_token
+      }, function(company) {
+        if (company.state_by_state_subscriber) {
+          return $rootScope.regions = company.regions;
+        }
+      });
       return $rootScope.closeModal();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
@@ -1155,7 +1175,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     return this.eventable.bidable && this.eventable.buyer_id !== company._id;
   };
   return Event;
-}).factory("Company", function($resource) {
+}).factory("Company", function($resource, $rootScope) {
   var Company;
   Company = $resource("" + api_path + "/companies/:companyId/:action", {
     companyId: '@companyId',
@@ -1171,6 +1191,10 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     update_regions: {
       method: "PUT",
       action: "update_regions"
+    },
+    update_product: {
+      method: "PUT",
+      action: "update_product"
     }
   });
   Company.prototype.regionNames = function() {

@@ -35,7 +35,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
     else
       @auction.win!(params[:bid_id])
-      head :ok
+      render json: {}
     end
   end
 
@@ -43,7 +43,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = Opportunity.find(params[:id])
     if @auction.editable?
       @auction.cancel!
-      head :ok
+      render json: {}
     else
       render json: { errors: { base: ["This opportunity cannot be canceled"] } }, status: :unprocessable_entity
     end

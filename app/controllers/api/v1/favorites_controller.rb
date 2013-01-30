@@ -11,13 +11,13 @@ class Api::V1::FavoritesController < Api::V1::BaseController
 
     Notifier.delay.send_known_favorite_invitation(current_company.id, supplier.id)
 
-    head :ok
+    render json: {}
   end
 
   def destroy
     @supplier = current_company.favorite_suppliers.find(params[:id])
     current_company.remove_favorite_supplier!(@supplier)
     
-    head :ok
+    render json: {}
   end
 end
