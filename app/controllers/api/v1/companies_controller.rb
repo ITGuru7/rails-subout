@@ -35,9 +35,17 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def update_regions
     if current_company.update_regions!(params[:company][:regions])
-      respond_with_namespace(current_company)
+      render json: {}
     else
-      render json: { errors: company.errors.full_messages }, status: 422
+      render json: { errors: current_company.errors.full_messages }, status: 422
+    end
+  end
+
+  def update_product
+    if current_company.update_product!(params[:product])
+      render json: {}
+    else
+      render json: { errors: current_company.errors.full_messages }, status: 423
     end
   end
 end

@@ -58,10 +58,10 @@ class GatewaySubscription
         response = MyChargify.get_components(subscription_id)
         self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
       else
-        self.regions = region_names
+        self.regions = self.class.region_names
       end
     else
-      self.regions = region_names
+      self.regions = self.class.region_names
       self.product_handle = 'state-by-state-service'
     end
   end
@@ -94,5 +94,15 @@ class GatewaySubscription
       component.save unless component.enabled == was_enabled
     end
     self.update_attributes(:regions => regions)
+  end
+
+  def update_product!(product_handle)
+    sub = Chargify::Subscription.find(self.subscription_id)
+    sub.product_handle = product_handle
+    sub.save
+
+    self.product_handle = product_handle
+    set_regions
+    self.save
   end
 end
