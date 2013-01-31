@@ -6,6 +6,12 @@ Subout::Application.routes.draw do
 
   devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]
 
+  # this is used for cache busting locally
+  if Rails.env.development?
+    get '/' => 'static#root'
+    get '/index.html' => 'static#root'
+  end
+
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
       resources :gateway_subscriptions
