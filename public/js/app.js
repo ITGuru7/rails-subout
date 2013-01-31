@@ -84,6 +84,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
     return;
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
+  $rootScope.isMobile = $appBrowser.isMobile();
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -785,9 +786,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return !_.isEmpty($location.search());
   };
   return $scope.clearFilters = function() {
+    var filterValue;
     $scope.query = "";
-    $scope.companyFilter = null;
-    $scope.regionFilter = null;
+    filterValue = $rootScope.isMobile ? '' : null;
+    $scope.companyFilter = filterValue;
+    $scope.regionFilter = filterValue;
     $location.search({});
     return $scope.refreshEvents();
   };
@@ -1288,6 +1291,12 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     },
     isOld: function() {
       return ($.browser.msie && $.browser.version < 9) || ($.browser.firefox && $.browser.version < 5);
+    },
+    isMobile: function() {
+      var android, iOS;
+      android = navigator.userAgent.match(/Android/i);
+      iOS = navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      return android || iOS;
     }
   };
 }).factory("myHttpInterceptor", function($q, $appVersioning, $rootScope) {

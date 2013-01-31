@@ -8431,3 +8431,6 @@ div#opportunity-show .description .content {
 #opportunities td {
   max-width: 300px;
 }
+.span10.mobileSelect {
+  width: 100%;
+}
