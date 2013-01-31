@@ -790,7 +790,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   var region, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
-  console.log($rootScope.company);
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {

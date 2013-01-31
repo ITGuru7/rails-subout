@@ -119,6 +119,7 @@ class GatewaySubscription
         csv << csv_column_names.map { |column| product.send(column) }
       end
     end
+  end
 
   def update_regions!(regions)
     sub = Chargify::Subscription.find(self.subscription_id)
