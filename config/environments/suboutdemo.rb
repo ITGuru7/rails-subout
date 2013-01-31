@@ -67,15 +67,14 @@ Subout::Application.configure do
 
   DEFAULT_HOST_WITH_PORT = "suboutdemo.herokuapp.com"
 
+  ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
-    :port           => ENV['MAILGUN_SMTP_PORT'],
-    :address        => ENV['MAILGUN_SMTP_SERVER'],
-    :user_name      => ENV['MAILGUN_SMTP_LOGIN'],
-    :password       => ENV['MAILGUN_SMTP_PASSWORD'],
-    :domain         => DEFAULT_HOST_WITH_PORT,
+    :user_name => 'suboutdemo-8240d59d94935990',
+    :password => '22e8b5eccb23bed6',
+    :address => 'mailtrap.io',
+    :port => '2525',
     :authentication => :plain,
   }
-  ActionMailer::Base.delivery_method = :test
   DEVELOPMENT_MODE = false
   CHARGIFY_URI = 'subout.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
