@@ -5,12 +5,12 @@
   </div>
   <div class="modal-body">
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#user-login" data-toggle="tab">User Login</a></li>
+      <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
       <li><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
-      <li><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
+      <li ng-class="{active:selectedTab == 'licensed-regions'}"><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane active" id="user-login">
+      <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane" id="user-login">
         <form name="settingsUserLogin" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
@@ -253,28 +253,34 @@
         </form>
       </div>
 
-      <div class="tab-pane" id="licensed-regions">
+      <div ng-class="{active:selectedTab == 'licensed-regions'}" class="tab-pane" id="licensed-regions">
         <div ng-hide="company.state_by_state_subscriber">
           You subscribed national plan
         </div>
         <div ng-show="company.state_by_state_subscriber">
-          <button class="btn btn-primary" ng-click="upgradeToNationalPlan()">Upgrade to national plan</button>
+          <div class="text-centered">
+            <button class="btn btn-primary" ng-click="upgradeToNationalPlan()">Upgrade to national plan for ${{product.price_in_cents/100}}</button>
+          </div>
+          <hr/>
+          <h4>Or add individual regions:</h4>
           <form name="settingsLicensedRegions" class="form-horizontal" novalidate>
-            <fieldset class="regions-table">
-              <label ng-repeat="(region_name, region_abbr) in ALL_REGIONS" for="input-region-{{region_abbr}}" class="checkbox">
-                <div>
-                  <input
-                    id="input-region-{{region_abbr}}"
-                    type="checkbox"
-                    name="regions[{{ region_abbr }}]"
-                    ng-model="companyProfile.allRegions[region_name]"
-                    ng-change="updateTotalPrice()"
-                    ng-disabled="companyProfile.allRegions[region_name]"
-                    value="1">
-                    {{region_name}}(${{regionPrice(region_name)}})
-                </div>
-              </label>
-            </fieldset>
+            <div class="region-checkboxes">
+              <fieldset class="regions-table">
+                <label ng-repeat="(region_name, region_abbr) in ALL_REGIONS" for="input-region-{{region_abbr}}" class="checkbox">
+                  <div>
+                    <input
+                      id="input-region-{{region_abbr}}"
+                      type="checkbox"
+                      name="regions[{{ region_abbr }}]"
+                      ng-model="companyProfile.allRegions[region_name]"
+                      ng-change="updateTotalPrice()"
+                      ng-disabled="companyProfile.allRegions[region_name]"
+                      value="1">
+                      {{region_name}}(${{regionPrice(region_name)}})
+                  </div>
+                </label>
+              </fieldset>
+            </div>
             <hr />
             <div class="total-price">Total price: ${{totalPrice}}</div>
             <div class="form-actions">

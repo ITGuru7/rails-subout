@@ -163,7 +163,7 @@
                         </div>
                       </div>
                       <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'"">
-                        <a href="http://subout.com/pricing/">You are not licensed to bid on this opportunity. Upgrade now! </a>
+                        <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                       </div>
                     </div>
                     <div class="span4">

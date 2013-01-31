@@ -8,7 +8,8 @@ Subout::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do
-      resources :gateway_subscriptions
+      resources :gateway_subscriptions 
+      resources :products
       resources :file_uploader_signatures, only: :new
       resources :passwords do
         put "update", on: :collection

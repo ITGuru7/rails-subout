@@ -241,7 +241,11 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
       });
     });
   };
-  $rootScope.displaySettings = function() {
+  $rootScope.displaySettings = function(selectedTab) {
+    if (selectedTab == null) {
+      selectedTab = "user-login";
+    }
+    $rootScope.selectedTab = selectedTab;
     $rootScope.setModal('partials/settings.html');
     return $rootScope.setupFileUploader();
   };
@@ -786,8 +790,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
 };
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product) {
   var region, _i, _len, _ref;
+  Product.get({
+    productHandle: 'subout-national-service',
+    api_token: $rootScope.token.api_token
+  }, function(data) {
+    return $scope.product = data.product;
+  });
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.companyProfile.allRegions = {};
@@ -842,6 +852,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
   };
   $scope.saveLicensedRegions = function() {
     var finalRegions, isEnabled, _ref1;
+    if (!confirm("Are you sure?")) {
+      return;
+    }
     finalRegions = [];
     _ref1 = $scope.companyProfile.allRegions;
     for (region in _ref1) {
@@ -879,6 +892,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User) {
     });
   };
   return $scope.upgradeToNationalPlan = function() {
+    if (!confirm("Are you sure?")) {
+      return;
+    }
     return Company.update_product({
       companyId: $rootScope.company._id,
       product: "subout-national-service",
@@ -1163,6 +1179,8 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/bids", {}, {});
 }).factory("Region", function($resource) {
   return $resource("" + api_path + "/regions", {}, {});
+}).factory("Product", function($resource) {
+  return $resource("" + api_path + "/products/:productHandle", {}, {});
 }).factory("Bid", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
     opportunityId: "@opportunityId"

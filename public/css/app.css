@@ -7860,6 +7860,9 @@ h5 {
 body {
   background: #bfbfbf;
 }
+.text-centered {
+  text-align: center;
+}
 #pageWrapper {
   position: relative;
   background: #FFFFFF;
@@ -8383,6 +8386,11 @@ div#opportunity-show .description .content {
   background-color: white;
   margin: 0;
   padding-top: 5px;
+  padding-bottom: 0;
+}
+#page-settings .region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
