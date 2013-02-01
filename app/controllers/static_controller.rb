@@ -1,19 +1,24 @@
 class StaticController < ApplicationController
 
-  def root
-    dir = 'public'
-    default_file = dir + '/index_default.html'
-    file = dir + '/index.html'
-    unless File.exist?(file)
-      file = default_file
-    end
-    render :file => file
+  def index
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"]        = "no-cache"
+    response.headers["Expires"]       = "Fri, 01 Jan 1990 00:00:00 GMT"
+
+    file_name = 'public/default.html'
+    render :inline => File.read(file_name), :layout => nil
   end
 
   def asset
-    final_path = '/assets/' + timestamp + '/' + path
-    logger.debug(final_path)
-    render :file => final_path
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"]        = "no-cache"
+    response.headers["Expires"]       = "Fri, 01 Jan 1990 00:00:00 GMT"
+
+    timestamp = params[:timestamp]
+    path      = params[:path]
+    timestamp = Time.now.to_i if timestamp == '--DEPLOY--'
+    qs = path.include?("?") ? "&" : "?"
+    redirect_to "/#{path}#{qs}t=#{timestamp}"
   end
 
 end

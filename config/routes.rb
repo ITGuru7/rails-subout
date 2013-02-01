@@ -4,14 +4,16 @@ Subout::Application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
   mount ApiDoc => "/api/doc"
 
-  devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]
+  root :to => 'static#index'
+  get '/' => 'static#index'
+  get '/index.html' => 'static#index'
 
   # this is used for cache busting locally
   if Rails.env.development?
-    get '/files' => 'static#asset'
-    get '/' => 'static#root'
-    get '/index.html' => 'static#root'
+    get '/files/:timestamp/:path' => 'static#asset', :constraints => { :path => /.+/ }
   end
+
+  devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do

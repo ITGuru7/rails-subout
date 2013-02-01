@@ -1,0 +1,82 @@
+<div id="opportunity-show">
+  <div class="row-fluid">
+    <div id="sidebar" class="span3">
+      <h5>OFFERED BY</h5>
+      <div class="company-info">
+        <ul>
+          <li><img ng-src="{{opportunity.buyer.logo_url}}" /></li>
+          <li><a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(opportunity.buyer._id)">{{opportunity.buyer.abbreviated_name}}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="span9">
+      <div class="alert alert-error" ng-show="errors">
+        <a class="close" ng-click="hideErrorMessage()">&times;</a>
+        <ul ng-repeat="error in errors">
+          <li>{{error}}</li>
+        </ul>
+      </div>
+      <h3>{{opportunity.name}} <span class="status">({{opportunity.status}})</span></h3>
+      <div class="row-fluid">
+        <div class="span8 details">
+          <div ng-show="opportunity.winning_bid_id">
+            <ul>
+              <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
+              <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><span class="label-field">Origination time: </span>{{opportunity.start_date| date:'MM/dd/yy'}} {{opportunity.start_time}}</li>
+              <li><span class="label-field">Origination location: </span>{{opportunity.start_location}}</li>
+              <li><span class="label-field">Arrival time: </span>{{opportunity.end_date| date:'MM/dd/yy'}} {{opportunity.end_time}}</li>
+              <li><span class="label-field">Arrival location: </span>{{opportunity.end_location}}</li>
+            </ul>
+          </div>
+          <div class="description">
+            <div><strong>Description</strong></div>
+            <div class="content">{{opportunity.description}}</div>
+          </div>
+          <div>
+            <ul>
+              <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
+              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>${{opportunity.win_it_now_price}}</li>
+            </ul>
+          </div>
+          <div>
+            <span class="label-field">SO#: </span>{{opportunity.reference_number}}
+          </div>
+          <div ng-show="opportunity.contact_phone">
+            <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
+          </div>
+          <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
+            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
+            <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
+          </div>
+        </div>
+        <div class="span4">
+          <a ng-show="opportunity.image_url && !isOldBrowser" rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
+            <img ng-src="{{opportunity.image_url}}" />
+          </a>
+          <a ng-show="opportunity.image_url && isOldBrowser"  href="{{opportunity.large_image_url}}" title="{{opportunity.name}}" target="_blank">
+            <img ng-src="{{opportunity.image_url}}" />
+          </a>
+        </div>
+      </div>
+
+      <hr />
+
+      <h4>Bid History</h4>
+      <table class="bid-history">
+        <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
+          <td><strong>${{bid.amount}}</strong></td>
+          <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
+          <td>{{bid.comment}}</td>
+          <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -15,13 +15,15 @@ if defined?(Bundler)
   # Bundler.require(:default, :assets, Rails.env)
 end
 
-SUBOUT_DEPLOY_VERSION = Time.now.to_i.to_s
+#SUBOUT_DEPLOY_VERSION = Time.now.to_i.to_s
+SUBOUT_DEPLOY_VERSION = `cat ./deploy.txt`.strip
 SUBOUT_APP_VERSION = 1.5
 
 require File.expand_path "./lib/api_version"
 
 module Subout
   class Application < Rails::Application
+
     config.middleware.use "ApiVersion"
 
     # Settings in config/environments/* take precedence over those specified here.
