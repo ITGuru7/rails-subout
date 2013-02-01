@@ -1285,12 +1285,15 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     }
   };
 }).factory("$appBrowser", function() {
+  var version;
+  version = parseInt($.browser.version);
   return {
     isReallyOld: function() {
-      return ($.browser.msie && $.browser.version < 8) || ($.browser.firefox && $.browser.version < 4);
+      return ($.browser.msie && version < 8) || ($.browser.mozilla && version < 2);
     },
     isOld: function() {
-      return ($.browser.msie && $.browser.version < 9) || ($.browser.firefox && $.browser.version < 5);
+      console.log($.browser);
+      return ($.browser.msie && version < 9) || ($.browser.mozilla && version < 3);
     },
     isMobile: function() {
       var android, iOS;
