@@ -61,6 +61,24 @@
     <script type="text/javascript">
       if (typeof GSFN !== "undefined") { GSFN.loadWidget(3613,{"containerId":"getsat-widget-3613"}); }
     </script>
-
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      var googleAnalyticsKey = null;
+      var hostname = location.hostname;
+      if (hostname == "suboutapp.com") {
+        googleAnalyticsKey = 'UA-38160184-1';
+      } else if (hostname == "subouttest.herokuapp.com") {
+        googleAnalyticsKey = 'UA-38160184-2';
+      }
+      if (googleAnalyticsKey) {
+        _gaq.push(['_setAccount', googleAnalyticsKey]);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      }
+    </script>
   </body>
 </html>
