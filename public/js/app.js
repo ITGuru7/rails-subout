@@ -1324,6 +1324,9 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       }
       return response;
     }), function(response) {
+      if (response.data.payload) {
+        response.data = response.data.payload;
+      }
       return $q.reject(response);
     });
   };
