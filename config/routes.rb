@@ -8,6 +8,7 @@ Subout::Application.routes.draw do
 
   # this is used for cache busting locally
   if Rails.env.development?
+    get '/files' => 'static#asset'
     get '/' => 'static#root'
     get '/index.html' => 'static#root'
   end

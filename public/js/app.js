@@ -1,8 +1,22 @@
-var subout;
+var subout, suboutDeployTimestamp, suboutPartialPath;
 
 $.cookie.json = true;
 
 $.cookie.defaults.expires = 7;
+
+suboutDeployTimestamp = function() {
+  return parseInt($(document.body).attr('data-subout-deploy'));
+};
+
+suboutPartialPath = function(file) {
+  var deploy, path;
+  path = '/partials/' + file;
+  deploy = suboutDeployTimestamp();
+  if (deploy > 0) {
+    path = '/assets/' + deploy + path;
+  }
+  return path;
+};
 
 subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
 
@@ -21,35 +35,35 @@ subout.config([
   "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
     return $routeProvider.when("/sign_in", {
-      templateUrl: "partials/sign_in.html",
+      templateUrl: suboutPartialPath("sign_in.html"),
       controller: SignInCtrl
     }).when("/sign_up", {
-      templateUrl: "partials/sign_up.html",
+      templateUrl: suboutPartialPath("sign_up.html"),
       controller: SignUpCtrl
     }).when("/password/new", {
-      templateUrl: "partials/password-new.html",
+      templateUrl: suboutPartialPath("password-new.html"),
       controller: NewPasswordCtrl
     }).when("/password/edit", {
-      templateUrl: "partials/password-edit.html",
+      templateUrl: suboutPartialPath("password-edit.html"),
       controller: "EditPasswordCtrl"
     }).when("/dashboard", {
-      templateUrl: "partials/dashboard.html",
+      templateUrl: suboutPartialPath("dashboard.html"),
       controller: DashboardCtrl,
       reloadOnSearch: false
     }).when("/bids", {
-      templateUrl: "partials/bids.html",
+      templateUrl: suboutPartialPath("bids.html"),
       controller: MyBidCtrl
     }).when("/opportunities", {
-      templateUrl: "partials/opportunities.html",
+      templateUrl: suboutPartialPath("opportunities.html"),
       controller: OpportunityCtrl
     }).when("/opportunities/:opportunity_reference_number", {
-      templateUrl: "partials/opportunity-detail.html",
+      templateUrl: suboutPartialPath("opportunity-detail.html"),
       controller: OpportunityDetailCtrl
     }).when("/favorites", {
-      templateUrl: "partials/favorites.html",
+      templateUrl: suboutPartialPath("favorites.html"),
       controller: FavoritesCtrl
     }).when("/welcome-prelaunch", {
-      templateUrl: "partials/welcome-prelaunch.html",
+      templateUrl: suboutPartialPath("welcome-prelaunch.html"),
       controller: WelcomePrelaunchCtrl
     }).otherwise({
       redirectTo: "/dashboard"
@@ -232,22 +246,22 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
     });
   };
   $rootScope.displaySettings = function() {
-    $rootScope.setModal('partials/settings.html');
+    $rootScope.setModal(suboutPartialPath('settings.html'));
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
-    $rootScope.setModal('partials/bid-new.html');
+    $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function() {
-    $rootScope.setModal('partials/opportunity-form.html');
+    $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewFavoriteForm = function() {
     $rootScope.$broadcast('clearNewFavoriteForm');
-    return $rootScope.setModal('partials/add-new-favorite.html');
+    return $rootScope.setModal(suboutPartialPath('add-new-favorite.html'));
   };
   $rootScope.clearOpportunity = function() {
     $("form .image-preview").attr('src', '');
@@ -269,7 +283,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
       api_token: $rootScope.token.api_token,
       companyId: company_id
     });
-    return $rootScope.setModal('partials/company-profile.html');
+    return $rootScope.setModal(suboutPartialPath('company-profile.html'));
   };
   $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
