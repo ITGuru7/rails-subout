@@ -1292,7 +1292,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return ($.browser.msie && version < 8) || ($.browser.mozilla && version < 2);
     },
     isOld: function() {
-      console.log($.browser);
       return ($.browser.msie && version < 9) || ($.browser.mozilla && version < 3);
     },
     isMobile: function() {
