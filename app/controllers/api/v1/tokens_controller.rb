@@ -5,13 +5,7 @@ class Api::V1::TokensController < Api::V1::BaseController
     username = params[:email].downcase if params[:email]
     user = User.where(:email => username).first
     if user && user.valid_password?(params[:password])
-      render :json => {
-        api_token: user.authentication_token,
-        authorized: true,
-        company_id: user.company_id,
-        user_id: user._id,
-        pusher_key: Pusher.key
-      }
+      render json: user.auth_token_hash
       user.update_tracked_fields!(request)
     else
       render :json => { authorized: false, message: "Invalid username or password!"}

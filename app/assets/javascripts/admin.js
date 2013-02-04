@@ -12,5 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery/jquery.cookie
+//= require admin/global
 //= require_tree ./admin
 

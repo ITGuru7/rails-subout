@@ -157,8 +157,19 @@ class Company
   end
 
   def last_sign_in_at
-    user = self.users.first
-    user.try(:last_sign_in_at)
+    first_user.try(:last_sign_in_at)
+  end
+
+  def first_user
+    self.users.first
+  end
+
+  def auth_token_hash
+    if first_user.present?
+      first_user.auth_token_hash
+    else
+      {}
+    end
   end
 
   private

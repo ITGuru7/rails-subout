@@ -1,6 +1,6 @@
 %h1 Companies
 
-%table.table.table-striped
+%table.table.table-striped.admin-companies
   %thead
     %tr
       %th #
@@ -13,6 +13,7 @@
       %th Subscription
       %th # Ops
       %th # Bids
+      %th Actions
   %tbody
     - @companies.each_with_index do |company, index|
       %tr
@@ -34,3 +35,4 @@
           = company.regions if company.state_by_state_subscriber?
         %td= company.auctions.count
         %td= company.bids.count
+        %td= link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json }

@@ -47,13 +47,23 @@ class User
   validates_presence_of :email, :on => :create, :message => "can't be blank"
 
   ## Needed for simple_role and cancan
-  field :role, :type => String  
-  
+  field :role, :type => String
+
   before_save do
     self.email.downcase! if self.email
   end
 
   def self.find_by_email(email)
     where(:email => email).first
+  end
+
+  def auth_token_hash
+    {
+      api_token: authentication_token,
+      authorized: true,
+      company_id: company_id,
+      user_id: _id,
+      pusher_key: Pusher.key
+    }
   end
 end
