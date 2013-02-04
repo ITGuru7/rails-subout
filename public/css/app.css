@@ -8442,6 +8442,25 @@ div#opportunity-show .description .content {
 .span10.mobileSelect {
   width: 100%;
 }
+@media only screen and (max-device-width: 767px) {
+  #content {
+    padding: 10px 5% 0px 5%;
+  }
+  .table th,
+  .table td {
+    padding: 8px 2px;
+  }
+}
+.table-border {
+  border: 1px solid #ccc;
+}
+.reference-number {
+  width: 35%;
+}
+.table-header {
+  font-weight: bold;
+  width: 35%;
+}
 #licensed-regions fieldset.regions-table {
   columns: 200px 2;
   -webkit-columns: 200px 2;

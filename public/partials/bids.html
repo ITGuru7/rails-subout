@@ -1,5 +1,5 @@
 <div id="bid-new">
-  <table class="table">
+  <table ng-show="!isPhone" class="table">
     <tr>
       <th>Opportunity</th>
       <th>Amount</th>
@@ -10,6 +10,25 @@
       <td><a href="#/opportunities/{{bid.opportunity.reference_number}}">{{bid.opportunity.name}}</a></td>
       <td>${{bid.amount}}</td>
       <td>{{bid.comment}}</td>
+      <td>{{bid.created_at | date}}</td>
+    </tr>
+  </table>
+
+  <table ng-show="isPhone" ng-repeat="bid in my_bids" class="table table-border">
+    <tr>
+      <td class="table-header">Opportunity</td>
+      <td><a href="#/opportunities/{{bid.opportunity.reference_number}}">{{bid.opportunity.name}}</a></td>
+    </tr>
+    <tr>
+      <td class="table-header">Amount</td>
+      <td>${{bid.amount}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Comment</td>
+      <td>{{bid.comment}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Date</td>
       <td>{{bid.created_at | date}}</td>
     </tr>
   </table>

@@ -5,7 +5,7 @@
       <div class="icon-search"></div>
     </div>
   </div>
-  <table class="table">
+  <table ng-show="!isPhone" class="table">
     <tr>
       <th>Reference #</th>
       <th>Type</th>
@@ -24,6 +24,41 @@
         <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
       </td>
       <td>{{opportunity.winner.name}}</td>
+      <td>
+        <span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>
+      </td>
+    </tr>
+  </table>
+
+  <table ng-show="isPhone" class="table table-border" ng-repeat="opportunity in opportunities | filter:opportunityFilter">
+    <tr>
+      <td class="table-header reference-number">Reference #</td>
+      <td>{{opportunity.reference_number}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Type</td>
+      <td>{{opportunity.type}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Name</td>
+      <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
+    </tr>
+    <tr>
+      <td class="table-header">Description</td>
+      <td>{{opportunity.description}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Ends</td>
+      <td>
+        <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="table-header">Winning Bidder</td>
+      <td>{{opportunity.winner.name}}</td>
+    </tr>
+    <tr>
+      <td class="table-header">Amount</td>
       <td>
         <span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>
       </td>

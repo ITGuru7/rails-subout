@@ -92,6 +92,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.isMobile = $appBrowser.isMobile();
+  $rootScope.isPhone = $appBrowser.isPhone();
   $rootScope.currentPath = function() {
     return $location.path();
   };
@@ -1394,6 +1395,12 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       var android, iOS;
       android = navigator.userAgent.match(/Android/i);
       iOS = navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      return android || iOS;
+    },
+    isPhone: function() {
+      var android, iOS;
+      android = navigator.userAgent.match(/Android/i && navigator.userAgent.match(/Mobile/i));
+      iOS = navigator.userAgent.match(/iPhone|iPod/i);
       return android || iOS;
     }
   };
