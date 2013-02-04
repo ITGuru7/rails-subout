@@ -8439,11 +8439,9 @@ div#opportunity-show .description .content {
 #opportunities td {
   max-width: 300px;
 }
-
 .span10.mobileSelect {
   width: 100%;
 }
-
 #licensed-regions fieldset.regions-table {
   columns: 200px 2;
   -webkit-columns: 200px 2;
