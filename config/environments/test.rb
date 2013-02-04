@@ -28,7 +28,7 @@ Subout::Application.configure do
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
-  
+
   config.action_mailer.delivery_method = :test
   #config.action_mailer.delivery_method = :cache
   #config.action_mailer.cache_settings = { :location => "#{Rails.root}/tmp/mail.cache" }
@@ -43,4 +43,6 @@ Subout::Application.configure do
 
   DEFAULT_HOST_WITH_PORT = "localhost:3000"
   DEVELOPMENT_MODE = true
+  CHARGIFY_URI = 'subouttest.chargify.com'
+  CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
 end

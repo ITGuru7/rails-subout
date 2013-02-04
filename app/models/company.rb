@@ -75,11 +75,10 @@ class Company
 
 
   def self.notified_recipients_by(opportunity)
-    options = [
-      {:id.in => opportunity.buyer.favoriting_buyer_ids}
-    ]
-
-    unless opportunity.for_favorites_only?
+    options = []
+    if opportunity.for_favorites_only?
+      options << {:id.in => opportunity.buyer.favorite_supplier_ids}
+    else
       options << {:subscription_plan => 'subout-national-service'}
       options << {:subscription_plan => 'subout-partner'}
       options << {:regions.in => opportunity.regions}
