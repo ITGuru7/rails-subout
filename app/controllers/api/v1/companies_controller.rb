@@ -32,4 +32,22 @@ class Api::V1::CompaniesController < Api::V1::BaseController
       render json: { errors: company.errors.full_messages }, status: 422
     end
   end
+
+  def update_regions
+    if current_company.update_regions!(params[:company][:regions])
+      Notifier.delay.updated_licensed_regions(current_company.id)
+      render json: {}
+    else
+      render json: { errors: current_company.errors.full_messages }, status: 422
+    end
+  end
+
+  def update_product
+    if current_company.update_product!(params[:product])
+      Notifier.delay.updated_product(current_company.id)
+      render json: {}
+    else
+      render json: { errors: current_company.errors.full_messages }, status: 423
+    end
+  end
 end

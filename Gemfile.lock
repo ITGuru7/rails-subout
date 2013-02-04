@@ -82,6 +82,8 @@ GEM
     celluloid (0.12.4)
       facter (>= 1.6.12)
       timers (>= 1.0.0)
+    chargify_api_ares (0.5.2)
+      activeresource (>= 2.3.5)
     childprocess (0.3.7)
       ffi (~> 1.0, >= 1.0.6)
     cloudinary (1.0.43)
@@ -365,6 +367,7 @@ DEPENDENCIES
   awesome_print
   bitly
   bootstrap-sass
+  chargify_api_ares
   cloudinary
   coffee-rails
   cucumber-rails

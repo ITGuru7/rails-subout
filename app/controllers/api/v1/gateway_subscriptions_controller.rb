@@ -11,9 +11,10 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       :organization  => customer["organization"],
       :product_handle => payload["subscription"]["product"]["handle"]
     )
+
     Notifier.delay.subscription_confirmation(gw_subscription.id)
 
-    head :ok
+    render json: {}
   end
 
   def show

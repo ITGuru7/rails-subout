@@ -60,4 +60,14 @@ class Notifier < ActionMailer::Base
     @company = Company.find(company_id)
     mail(subject: "SUBOUT: new opportunity arrived", to: @company.email)
   end
+
+  def updated_licensed_regions(company_id)
+    @company = Company.find(company_id)
+    mail(subject: "SUBOUT: updated licensed regions", to: @company.email)
+  end
+
+  def updated_product(company_id)
+    @company = Company.find(company_id)
+    mail(subject: "SUBOUT: updated subscription product", to: @company.email)
+  end
 end

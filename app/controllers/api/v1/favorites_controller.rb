@@ -17,7 +17,6 @@ class Api::V1::FavoritesController < Api::V1::BaseController
   def destroy
     @supplier = current_company.favorite_suppliers.find(params[:id])
     current_company.remove_favorite_supplier!(@supplier)
-
     render json: {}
   end
 end

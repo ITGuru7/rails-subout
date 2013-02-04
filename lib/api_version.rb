@@ -6,7 +6,9 @@ class ApiVersion
   def call(env)
     status, headers, response = @app.call(env)
     if headers["Content-Type"] =~ /application\/json/
-      response.body = "{ \"payload\":#{response.body}, \"version\":#{SUBOUT_APP_VERSION}, \"deploy\":#{SUBOUT_DEPLOY_VERSION}}"
+      data = response.body.to_s
+      data = '{}' if data.empty?
+      response.body = "{ \"payload\":#{data}, \"version\":#{SUBOUT_APP_VERSION}, \"deploy\":#{SUBOUT_DEPLOY_VERSION}}"
     end
     [status, headers, response]
   end
