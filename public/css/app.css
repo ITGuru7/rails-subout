@@ -8461,6 +8461,9 @@ div#opportunity-show .description .content {
   font-weight: bold;
   width: 35%;
 }
+.mobile-bid-history.table td {
+  border-top: 0px none #ccc;
+}
 #licensed-regions fieldset.regions-table {
   columns: 200px 2;
   -webkit-columns: 200px 2;
