@@ -1,0 +1,38 @@
+<div id="favorites">
+  <div>
+    <a href="#modal" data-toggle="modal" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+  </div>
+  <table class="table">
+    <tr>
+      <th colspan="2">Company</th>
+      <th>Bids</th>
+      <th>Opportunities</th>
+      <th>&nbsp;</th>
+    </tr>  
+    <tr ng-repeat="company in favoriteCompanies" >
+      <td>
+        <span class="span2">
+          <img ng-show="company.logo" src="{{company.logo}}" />
+          <div ng-hide="company.logo">No Logo Available</div>
+
+        </span>
+      </td>
+      <td>
+        <span class="span4">
+          <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(company._id)">{{company.name}}</a>
+        </span>
+      </td>
+      <td>
+        <span class="span2">{{company.bids_count}}</span>
+      </td>
+      <td>
+        <span class="span2">{{company.opportunities_count}}</span>
+      </td>
+      <td>
+        <span class="span2">
+          <a class="btn btn-small btn-danger pull-right" ng-click="removeFavorite(company)">Remove</a>
+        </span>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
-
-
 ruby '1.9.3'
+
 gem 'rails', '3.2.11'
 
 gem "mongoid", "~> 3.0.0.rc"
@@ -25,12 +24,15 @@ gem 'ffaker'
 gem 'mongoid_token', github: 'samnang/mongoid_token'
 gem 'geocoder'
 gem 'mongoid_search'
-gem 'newrelic_rpm'
 gem 'bitly'
-gem "airbrake"
 gem "jquery-rails"
 gem "awesome_print"
 gem "chargify_api_ares"
+
+group :production do
+  gem 'newrelic_rpm'
+  gem "airbrake"
+end
 
 group :assets do
   gem 'therubyracer'

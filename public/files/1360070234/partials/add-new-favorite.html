@@ -1,0 +1,40 @@
+<div id="add-new-favorite" ng-controller="NewFavoriteCtrl">
+  <div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">
+      x
+    </button>
+    <h3>ADD NEW FAVORITE</h3>
+  </div>
+  <div class="modal-body">
+    <section class="section-content">
+      <form name="newFavorite" class="form-horizontal" novalidate>
+        <input id="supplier_email" required type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
+        <button class="btn btn-primary" ng-disabled="newFavorite.$invalid" ng-click="findSupplier(foundCompany)">Find Supplier</button>
+      </form>
+      <div ng-show="showCompany">
+        {{foundCompany.name}}
+        <a ng-click="addToFavorites(foundCompany)">Add to Favorites</a>
+      </div>
+      <div ng-show="companyNotFound">
+        That supplier was not found
+        <a ng-click="showInvitationForm()">Invite them to join as a guest supplier</a>
+        <div ng-show="showInvitation">
+          <form class="form-horizontal invitation-form">
+            <div class="control-group">
+              <input id="supplier_email" class="input-xlarge" required disabled type="email" placeholder="Email" ng-model="invitation.supplier_email" />
+            </div>
+            <div class="control-group">
+              <input id="supplier_name" class="input-xlarge" type="text" placeholder="Company Name" ng-model="invitation.supplier_name" />
+            </div>
+            <div class="control-group">
+              <textarea id="message" class="span5" rows="4" required ng-model="invitation.message"></textarea>
+            </div>
+            <div class="control-group last">
+              <button class="btn btn-primary" ng-click="sendInvitation()">Send Invitation</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
