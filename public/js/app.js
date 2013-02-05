@@ -801,14 +801,19 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.hasAnyFilter = function() {
     return !_.isEmpty($location.search());
   };
-  return $scope.clearFilters = function() {
-    var filterValue;
+  $scope.filterValue = $rootScope.isMobile ? '' : null;
+  $scope.clearFilters = function() {
     $scope.query = "";
-    filterValue = $rootScope.isMobile ? '' : null;
-    $scope.companyFilter = filterValue;
-    $scope.regionFilter = filterValue;
+    $scope.companyFilter = $scope.filterValue;
+    $scope.regionFilter = $scope.filterValue;
     $location.search({});
     return $scope.refreshEvents();
+  };
+  $scope.clearRegionFilter = function() {
+    return $scope.regionFilter = $scope.filterValue;
+  };
+  return $scope.clearCompanyFilter = function() {
+    return $scope.companyFilter = $scope.filterValue;
   };
 };
 
