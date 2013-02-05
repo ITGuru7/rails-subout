@@ -96,10 +96,10 @@
                       {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().region">
-                      {{$location.search().region}}<button type="button" ng-click="regionFilter=null" class="close">×</button>
+                      {{$location.search().region}}<button type="button" ng-click="clearRegionFilter()" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().company_id">
-                      {{companyName($location.search().company_id)}}<button type="button" ng-click="companyFilter=null" class="close">×</button>
+                      {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().q">
                       {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
