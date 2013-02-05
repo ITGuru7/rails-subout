@@ -172,6 +172,14 @@ class Company
     end
   end
 
+  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc')
+    options = []
+    options << {:for_favorites_only => true, :buyer_id.in => self.favoriting_buyer_ids}
+    options << {:for_favorites_only => false, :start_region.in => self.regions}
+    options << {:for_favorites_only => false, :end_region.in => self.regions}
+    Opportunity.any_of(*options).where(canceled: false, :bidding_ends_at.gt => Time.now, winning_bid_id: nil, :buyer_id.ne => self.id).order_by(sort_by => sort_direction)
+  end
+
   private
 
   def validate_invitation

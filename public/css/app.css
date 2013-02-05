@@ -8521,3 +8521,13 @@ div#opportunity-show .description .content {
 #licensed-regions .checkbox {
   padding-left: 20px;
 }
+#available_opportunities .current-bid-amount {
+  padding-right: 20px;
+  text-align: right;
+}
+#available_opportunities .win-it-now {
+  margin-top: 5px;
+}
+#available_opportunities .win-it-now .ui-currency-pos {
+  color: white;
+}

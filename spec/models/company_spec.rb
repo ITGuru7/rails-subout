@@ -61,4 +61,59 @@ describe Company do
       end
     end
   end
+
+  describe ".available_opportunities" do
+    let(:poster) { FactoryGirl.create(:company) }
+    let!(:ca_subscriber) { FactoryGirl.create(:ca_company) }
+    let!(:ma_subscriber) { FactoryGirl.create(:ma_company) }
+    let!(:national_subscriber) { FactoryGirl.create(:company) }
+    let!(:favorited_ca_subscriber) { FactoryGirl.create(:ca_company) }
+
+    before do
+      poster.add_favorite_supplier!(favorited_ca_subscriber)
+    end
+
+    context "favorite only opportunity" do
+      let!(:fav_only_opportunity) { FactoryGirl.create(:opportunity, for_favorites_only: true, buyer: poster) }
+
+      it { favorited_ca_subscriber.available_opportunities.should include(fav_only_opportunity) }
+      it { ma_subscriber.available_opportunities.should_not include(fav_only_opportunity) }
+      it { national_subscriber.available_opportunities.should_not include(fav_only_opportunity) }
+    end
+
+    context "non favorite only Massachusetts opportunity" do
+      let!(:ma_opportunity) { FactoryGirl.create(:opportunity, buyer: poster) }
+
+      it { national_subscriber.available_opportunities.should include(ma_opportunity) }
+      it { ma_subscriber.available_opportunities.should include(ma_opportunity) }
+      it { ca_subscriber.available_opportunities.should_not include(ma_opportunity) }
+      it { favorited_ca_subscriber.available_opportunities.should_not include(ma_opportunity) }
+    end
+
+    context "canceled opportunity" do
+      let!(:ma_opportunity) { FactoryGirl.create(:opportunity, buyer: poster) }
+      before { ma_opportunity.update_attribute(:canceled, true) }
+
+      it { national_subscriber.available_opportunities.should_not include(ma_opportunity) }
+    end
+
+    context "ended opportunity" do
+      let!(:ma_opportunity) { FactoryGirl.create(:opportunity, buyer: poster) }
+      before { ma_opportunity.update_attribute(:created_at, 2.days.ago) }
+
+      it { national_subscriber.available_opportunities.should_not include(ma_opportunity) }
+    end
+
+    context "won opportunity" do
+      let!(:ma_opportunity) { FactoryGirl.create(:opportunity, buyer: poster, winning_bid_id: "some_id") }
+
+      it { national_subscriber.available_opportunities.should_not include(ma_opportunity) }
+    end
+
+    context "own opportunities" do
+      let!(:ma_opportunity) { FactoryGirl.create(:opportunity, buyer: poster) }
+
+      it { poster.available_opportunities.should_not include(ma_opportunity) }
+    end
+  end
 end

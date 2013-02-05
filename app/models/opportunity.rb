@@ -177,6 +177,18 @@ class Opportunity
     end
   end
 
+  def lowest_bid_amount
+    self.bids.asc(:amount).first.try(:amount)
+  end
+
+  def highest_bid_amount
+    self.bids.desc(:amount).first.try(:amount)
+  end
+
+  def current_bid_amount
+    forward_auction? ? highest_bid_amount : lowest_bid_amount
+  end
+
   private
 
   def set_bidding_ends_at
