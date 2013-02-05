@@ -9,6 +9,7 @@ class OpportunityObserver < Mongoid::Observer
   end
 
   def after_update(opportunity)
+    return if opportunity.expired_notification_sent_changed?
     if opportunity.canceled_changed?
       create_event(opportunity, :opportunity_canceled)
     elsif opportunity.winning_bid_id_changed?
