@@ -36,13 +36,16 @@ namespace :subout do
         `cp -R #{start_path} #{final_path}`
       end
 
-      index_file = dir + '/default.html'
+      index_file = dir + '/index_development.html'
+      replacement_file = dir + '/index_production.html'
       token = '--DEPLOY--'
-      replacement_files = [index_file]
-      replacement_files.each do |file|
-        text = File.read(file)
+      replacement_files = {
+        index_file => replacement_file
+      }
+      replacement_files.each do |origin, dest|
+        text = File.read(origin)
         text = text.gsub(/--DEPLOY--/, deploy)
-        File.open(file, 'w') { |file| file.write(text) }
+        File.open(dest, 'w') { |file| file.write(text) }
       end
 
 
