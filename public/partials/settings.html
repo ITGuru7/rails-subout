@@ -10,7 +10,7 @@
       <li ng-class="{active:selectedTab == 'licensed-regions'}"><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
     </ul>
     <div class="tab-content">
-      <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane" id="user-login">
+      <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane modal-content" id="user-login">
         <form name="settingsUserLogin" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
@@ -76,7 +76,7 @@
         </form>
       </div>
 
-      <div class="tab-pane" id="company-profile">
+      <div class="tab-pane modal-content" id="company-profile">
         <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
@@ -262,6 +262,9 @@
             <button class="btn btn-primary" ng-click="upgradeToNationalPlan()">Upgrade to national plan for ${{product.price_in_cents/100}}</button>
           </div>
           <hr/>
+          <div style="float:right">
+            <div class="total-price">Total price: ${{totalPrice}}</div>
+          </div>
           <h4>Or add individual regions:</h4>
           <form name="settingsLicensedRegions" class="form-horizontal" novalidate>
             <div class="region-checkboxes">
@@ -280,12 +283,10 @@
                   </div>
                 </label>
               </fieldset>
-            </div>
-            <hr />
-            <div class="total-price">Total price: ${{totalPrice}}</div>
-            <div class="form-actions">
-              <button class="btn btn-primary" ng-click="saveLicensedRegions()">Save</button>
-              <button class="btn cancel" data-dismiss="modal">Cancel</button>
+              <div class="form-actions">
+                <button class="btn btn-primary" ng-click="saveLicensedRegions()">Save</button>
+                <button class="btn cancel" data-dismiss="modal">Cancel</button>
+              </div>
             </div>
           </form>
         </div>
