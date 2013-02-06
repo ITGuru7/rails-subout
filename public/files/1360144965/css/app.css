@@ -7860,6 +7860,9 @@ h5 {
 body {
   background: #bfbfbf;
 }
+.text-centered {
+  text-align: center;
+}
 #pageWrapper {
   position: relative;
   background: #FFFFFF;
@@ -8383,6 +8386,11 @@ div#opportunity-show .description .content {
   background-color: white;
   margin: 0;
   padding-top: 5px;
+  padding-bottom: 0;
+}
+#page-settings .region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8430,4 +8438,57 @@ div#opportunity-show .description .content {
 }
 #opportunities td {
   max-width: 300px;
+}
+.span10.mobileSelect {
+  width: 100%;
+}
+@media only screen and (max-device-width: 767px) {
+  #content {
+    padding: 10px 5% 0px 5%;
+  }
+  .table th,
+  .table td {
+    padding: 8px 2px;
+  }
+}
+.table-border {
+  border: 1px solid #ccc;
+}
+.reference-number {
+  width: 35%;
+}
+.table-header {
+  font-weight: bold;
+  width: 35%;
+}
+#licensed-regions fieldset.regions-table {
+  columns: 200px 2;
+  -webkit-columns: 200px 2;
+  /* Safari and Chrome */
+
+  -moz-columns: 200px 2;
+  /* Firefox */
+
+  text-align: left;
+}
+#licensed-regions .total-price {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+#licensed-regions .cancel {
+  margin-left: 10px;
+}
+#licensed-regions .checkbox {
+  padding-left: 20px;
+}
+#available_opportunities .current-bid-amount {
+  padding-right: 20px;
+  text-align: right;
+}
+#available_opportunities .win-it-now {
+  margin-top: 5px;
+}
+#available_opportunities .win-it-now .ui-currency-pos {
+  color: white;
 }
