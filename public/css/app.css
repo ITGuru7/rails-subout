@@ -7693,12 +7693,9 @@ body {
 /*}*/
 /*.modal{ height:80%; }*/
 .modal {
-  overflow-y: auto;
-  max-height: 90%;
-  margin-top: -45% /*position: absolute!important;*/
- /*margin:0px auto;*/
- /*top:10%!important;*/
-;
+  overflow-y: hidden;
+  max-height: 80%;
+  margin-top: -45%;
 }
 #company.well {
   padding: 10px;
@@ -8116,6 +8113,49 @@ div#opportunity-show .description .content {
   white-space: pre-wrap;
   padding-left: 5px;
 }
+.modal {
+  margin-top: -45%;
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-body {
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-content {
+  overflow: auto!important;
+  max-height: 400px!important;
+}
+.region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
+}
+@media all and (max-height: 650px) {
+  .modal-content {
+    max-height: 325px!important;
+  }
+  .region-checkboxes {
+    height: 150px;
+  }
+}
+@media all and (max-height: 550px) {
+  .modal-content {
+    max-height: 250px!important;
+  }
+  .region-checkboxes {
+    height: 100px;
+  }
+}
+@media all and (max-height: 450px) {
+  .modal-content {
+    max-height: 100px!important;
+  }
+  .region-checkboxes {
+    height: 50px;
+  }
+}
 #modal.modal {
   margin-top: 0px;
 }
@@ -8388,10 +8428,6 @@ div#opportunity-show .description .content {
   padding-top: 5px;
   padding-bottom: 0;
 }
-#page-settings .region-checkboxes {
-  height: 280px;
-  overflow-y: scroll;
-}
 .control-group .ng-invalid {
   border: solid 1px red;
 }
@@ -8460,6 +8496,9 @@ div#opportunity-show .description .content {
 .table-header {
   font-weight: bold;
   width: 35%;
+}
+.mobile-bid-history.table td {
+  border-top: 0px none #ccc;
 }
 #licensed-regions fieldset.regions-table {
   columns: 200px 2;
