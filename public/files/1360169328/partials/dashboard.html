@@ -25,24 +25,41 @@
             </section>
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
-              <section class="content">
-                <select ui-select2 class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
+              <section  ng-show="!isMobile" class="content">   
+                <select ui-select2   class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter"> 
                   <option value=""></option>
                   <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
                 </select>
                 <div class="clearfix"></div>
               </section>
+              
+              <section  ng-show="isMobile" class="content">
+                <select class="span10 mobileSelect"  ng-model="regionFilter"> 
+                  <option value="" selected="selected">-- Select Region --</option>
+                  <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+                </select>
+                <div class="clearfix"></div>
+              </section>              
             </section>
 
             <section id="companies">
               <section class="title"><h5>Company</h5></section>
-              <section class="content">
+              <section ng-show="!isMobile" class="content">
                 <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
                   <option value=""></option>
                   <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
-                </select>
+                </select>        
                 <div class="clearfix"></div>
               </section>
+
+              <section ng-show="isMobile" class="content">
+                <select ng-model="companyFilter" class="span10 mobileSelect">
+                  <option value=""> -- Select Company -- </option>
+                  <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
+                </select>              
+                <div class="clearfix"></div>
+              </section>
+
             </section>
 
             <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
@@ -68,7 +85,7 @@
                           <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
-                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="clearOpportunity(); displayNewOpportunityForm()">New Opportunity</a>
+                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
                   <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
@@ -79,10 +96,10 @@
                       {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().region">
-                      {{$location.search().region}}<button type="button" ng-click="regionFilter=null" class="close">×</button>
+                      {{$location.search().region}}<button type="button" ng-click="clearRegionFilter()" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().company_id">
-                      {{companyName($location.search().company_id)}}<button type="button" ng-click="companyFilter=null" class="close">×</button>
+                      {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>
                     </div>
                     <div class="pill" ng-show="$location.search().q">
                       {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
@@ -162,8 +179,8 @@
                           <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                         </div>
                       </div>
-                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'"">
-                        <a href="http://subout.com/pricing/">You are not licensed to bid on this opportunity. Upgrade now! </a>
+                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'">
+                        <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                       </div>
                     </div>
                     <div class="span4">

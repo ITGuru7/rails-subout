@@ -1,6 +1,6 @@
 <div id="opportunity-show">
   <div class="row-fluid">
-    <div id="sidebar" class="span3">
+    <div class="span3">
       <h5>OFFERED BY</h5>
       <div class="company-info">
         <ul>
@@ -68,7 +68,8 @@
       <hr />
 
       <h4>Bid History</h4>
-      <table class="bid-history">
+      
+      <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>${{bid.amount}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
@@ -77,6 +78,23 @@
           <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>
+
+      <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
+        <tr>
+          <td><strong>${{bid.amount}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+        </tr>
+        <tr ng-show="opportunity.buyer._id == company._id">
+          <td>
+            by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+          </td>
+        </tr>
+        <tr ng-show="bid.comment">
+          <td>{{bid.comment}}</td>
+        </tr>
+        <tr ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" >
+          <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+        </tr>
+      </table>  
     </div>
   </div>
 </div>

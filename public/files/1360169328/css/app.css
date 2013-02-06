@@ -7693,12 +7693,9 @@ body {
 /*}*/
 /*.modal{ height:80%; }*/
 .modal {
-  overflow-y: auto;
-  max-height: 90%;
-  margin-top: -45% /*position: absolute!important;*/
- /*margin:0px auto;*/
- /*top:10%!important;*/
-;
+  overflow-y: hidden;
+  max-height: 80%;
+  margin-top: -45%;
 }
 #company.well {
   padding: 10px;
@@ -7859,6 +7856,9 @@ h5 {
 }
 body {
   background: #bfbfbf;
+}
+.text-centered {
+  text-align: center;
 }
 #pageWrapper {
   position: relative;
@@ -8112,6 +8112,49 @@ div#opportunity-show .description .content {
   white-space: pre;
   white-space: pre-wrap;
   padding-left: 5px;
+}
+.modal {
+  margin-top: -45%;
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-body {
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-content {
+  overflow: auto!important;
+  max-height: 400px!important;
+}
+.region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
+}
+@media all and (max-height: 650px) {
+  .modal-content {
+    max-height: 325px!important;
+  }
+  .region-checkboxes {
+    height: 150px;
+  }
+}
+@media all and (max-height: 550px) {
+  .modal-content {
+    max-height: 250px!important;
+  }
+  .region-checkboxes {
+    height: 100px;
+  }
+}
+@media all and (max-height: 450px) {
+  .modal-content {
+    max-height: 100px!important;
+  }
+  .region-checkboxes {
+    height: 50px;
+  }
 }
 #modal.modal {
   margin-top: 0px;
@@ -8383,6 +8426,7 @@ div#opportunity-show .description .content {
   background-color: white;
   margin: 0;
   padding-top: 5px;
+  padding-bottom: 0;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8430,4 +8474,60 @@ div#opportunity-show .description .content {
 }
 #opportunities td {
   max-width: 300px;
+}
+.span10.mobileSelect {
+  width: 100%;
+}
+@media only screen and (max-device-width: 767px) {
+  #content {
+    padding: 10px 5% 0px 5%;
+  }
+  .table th,
+  .table td {
+    padding: 8px 2px;
+  }
+}
+.table-border {
+  border: 1px solid #ccc;
+}
+.reference-number {
+  width: 35%;
+}
+.table-header {
+  font-weight: bold;
+  width: 35%;
+}
+.mobile-bid-history.table td {
+  border-top: 0px none #ccc;
+}
+#licensed-regions fieldset.regions-table {
+  columns: 200px 2;
+  -webkit-columns: 200px 2;
+  /* Safari and Chrome */
+
+  -moz-columns: 200px 2;
+  /* Firefox */
+
+  text-align: left;
+}
+#licensed-regions .total-price {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+#licensed-regions .cancel {
+  margin-left: 10px;
+}
+#licensed-regions .checkbox {
+  padding-left: 20px;
+}
+#available_opportunities .current-bid-amount {
+  padding-right: 20px;
+  text-align: right;
+}
+#available_opportunities .win-it-now {
+  margin-top: 5px;
+}
+#available_opportunities .win-it-now .ui-currency-pos {
+  color: white;
 }
