@@ -198,7 +198,7 @@ GEM
     mime-types (1.19)
     mocha (0.10.5)
       metaclass (~> 0.0.1)
-    mongoid (3.0.19)
+    mongoid (3.0.21)
       activemodel (~> 3.1)
       moped (~> 1.2)
       origin (~> 1.0)
@@ -211,7 +211,7 @@ GEM
     mongoid_search (0.3.0)
       fast-stemmer (~> 1.0.0)
       mongoid (>= 3.0.0)
-    moped (1.3.2)
+    moped (1.4.0)
     multi_json (1.5.0)
     multi_xml (0.5.2)
     multipart-post (1.1.5)
@@ -379,7 +379,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   kiqstand
-  mongoid (~> 3.0.0.rc)
+  mongoid (~> 3.0.21)
   mongoid_rails_migrations
   mongoid_search
   mongoid_token!

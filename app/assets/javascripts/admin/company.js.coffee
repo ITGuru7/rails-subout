@@ -1,5 +1,5 @@
 jQuery ->
-  $(".admin-companies").on "click", ".become-user", (event) ->
+  $("#admin-companies").on "click", ".become-user", (event) ->
     event.preventDefault()
 
     authTokeyKey = "auth_token_v2"

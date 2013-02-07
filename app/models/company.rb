@@ -189,6 +189,19 @@ class Company
     sign_up_errors
   end
 
+  def self.sort(sort_by, direction)
+    dir = (direction == "asc") ? 1 : -1
+
+    case sort_by
+    when "auctions_count"
+      scoped.sort_by { |c| c.auctions.count * dir }
+    when "bids_count"
+      scoped.sort_by { |c| c.bids.count * dir }
+    else
+      scoped.order_by(sort_by => direction)
+    end
+  end
+
   private
 
   def validate_invitation
