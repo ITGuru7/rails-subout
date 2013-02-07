@@ -7971,6 +7971,9 @@ body {
   background-color: #378bac;
   border: 1px solid #378bac;
 }
+#dashboard .win-it-now-button-wrapper {
+  padding-top: 2px;
+}
 #activities .table td {
   padding: 10px;
   font-size: 0.9em;

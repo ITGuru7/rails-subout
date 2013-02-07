@@ -353,6 +353,9 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
   };
   return $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
+    if (!confirm("Win it now price is $" + opportunity.win_it_now_price + ". Do you want to proceed?")) {
+      return;
+    }
     bid = {
       amount: opportunity.win_it_now_price
     };
