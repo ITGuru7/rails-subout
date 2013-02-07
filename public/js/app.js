@@ -414,12 +414,12 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
-  $scope.$on('modalOpened', function() {
-    return $scope.hideErrorMessage();
-  });
-  $scope.hideErrorMessage = function() {
+  $scope.hideAlert = function() {
     return $scope.errors = null;
   };
+  $scope.$on('modalOpened', function() {
+    return $scope.hideAlert();
+  });
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -605,7 +605,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
     return $scope.opportunity = _opportunity;
   });
-  $scope.hideErrorMessage = function() {
+  $scope.hideAlert = function() {
     return $scope.errors = null;
   };
   $scope.cancelOpportunity = function() {
