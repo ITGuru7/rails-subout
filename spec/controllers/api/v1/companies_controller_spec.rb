@@ -62,6 +62,25 @@ describe Api::V1::CompaniesController do
       favorite_invitation.reload.should be_accepted
     end
 
+    context "password does not match with confirmation" do
+      it "shows proper error message" do
+        company_attributes["users_attributes"] = {
+          "0" => {
+            "password" => "password",
+            "password_confirmation" => "wrongpass",
+            "email" => company_attributes[:email]
+          }
+        }
+
+        post :create, company: company_attributes, format: 'json'
+
+        response.status.should == 422
+        errors = parse_json(response.body)["errors"]
+        errors["password"].should == ["doesn't match confirmation"]
+        errors["users"].should be_blank
+      end
+    end
+
     context "without invitation" do
       it "reponds with the error" do
         pending

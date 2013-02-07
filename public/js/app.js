@@ -1078,6 +1078,9 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   } else {
     $location.path("/sign_in");
   }
+  $scope.hideAlert = function() {
+    return $scope.errors = null;
+  };
   return $scope.signUp = function() {
     $scope.company.users_attributes = {
       "0": $scope.user
@@ -1086,9 +1089,11 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
     return Company.save({
       company: $scope.company
     }, function() {
+      $scope.errors = null;
       return $location.path("/sign_in").search({});
-    }, function(response) {
-      return $scope.errorMessage = response.data.errors.join("<br />");
+    }, function(content) {
+      $scope.errors = $rootScope.errorMessages(content.data.errors);
+      return $("body").scrollTop(0);
     });
   };
 };

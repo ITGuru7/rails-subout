@@ -180,6 +180,15 @@ class Company
     Opportunity.any_of(*options).where(canceled: false, :bidding_ends_at.gt => Time.now, winning_bid_id: nil, :buyer_id.ne => self.id).order_by(sort_by => sort_direction)
   end
 
+  def sign_up_errors
+    sign_up_errors = self.errors.to_hash
+    if user = self.users.first and !user.valid?
+      sign_up_errors.delete(:users)
+      sign_up_errors.merge!(user.errors.to_hash)
+    end
+    sign_up_errors
+  end
+
   private
 
   def validate_invitation

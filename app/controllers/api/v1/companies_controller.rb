@@ -29,7 +29,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
     if company.save
       respond_with_namespace(company)
     else
-      render json: { errors: company.errors.full_messages }, status: 422
+      render json: { errors: company.sign_up_errors }, status: 422
     end
   end
 
