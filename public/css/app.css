@@ -8531,3 +8531,6 @@ div#opportunity-show .description .content {
 #available_opportunities .win-it-now .ui-currency-pos {
   color: white;
 }
+#available_opportunities td {
+  max-width: 300px;
+}
