@@ -8537,3 +8537,43 @@ div#opportunity-show .description .content {
 #available_opportunities td {
   max-width: 300px;
 }
+#subout-loading {
+  width: 50px;
+  height: 80px;
+  -webkit-transition: 0.2s linear all;
+  -moz-transition: 0.2s linear all;
+  -ms-transition: 0.2s linear all;
+  -o-transition: 0.2s linear all;
+  transition: 0.2s linear all;
+  background: url(/img/ajax-loader.gif) center right no-repeat;
+  opacity: 0;
+  float: right;
+}
+#subout-loading.loading {
+  opacity: 1;
+}
+#content.loading {
+  min-height: 100px;
+  position: relative;
+}
+#content.loading:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.content-loading-animation,
+#content.loading:after {
+  background: #ffffff url(/img/ajax-loader-body.gif) center 50px no-repeat;
+}
+.content-loading-animation {
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+.modal-loading-animation.loading {
+  background: blue;
+}

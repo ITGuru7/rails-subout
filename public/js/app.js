@@ -25,6 +25,17 @@ subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngC
 
 subout.run([
   '$rootScope', '$appVersioning', '$location', function($rootScope, $versioning, $location) {
+    $rootScope.$on('$routeChangeStart', function(scope, next, current) {
+      var url;
+      if (_gaq) {
+        url = $location.path();
+        _gaq.push(['_trackPageview'], url);
+      }
+      return $('#content').addClass('loading');
+    });
+    $rootScope.$on('$routeChangeSuccess', function(scope, next, current) {
+      return $('#content').removeClass('loading');
+    });
     return $rootScope.$on('$routeChangeStart', function(scope, next, current) {
       if (current && $versioning.isMarkedForReload()) {
         window.location = $location.path();
@@ -36,6 +47,12 @@ subout.run([
 
 subout.config([
   "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
+    var oldTransformReq;
+    oldTransformReq = $httpProvider.defaults.transformRequest;
+    $httpProvider.defaults.transformRequest = function(d, headers) {
+      $('.loading-animation').addClass('loading');
+      return oldTransformReq[0].apply(this, arguments);
+    };
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
     return $routeProvider.when("/sign_in", {
       templateUrl: suboutPartialPath("sign_in.html"),
@@ -279,7 +296,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
       selectedTab = "user-login";
     }
     $rootScope.selectedTab = selectedTab;
-    $rootScope.setModal('partials/settings.html');
+    $rootScope.setModal(suboutPartialPath('settings.html'));
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
@@ -1495,10 +1512,10 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return android || iOS;
     }
   };
-}).factory("myHttpInterceptor", function($q, $appVersioning, $rootScope) {
+}).factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector) {
   return function(promise) {
     return promise.then((function(response) {
-      var deploy, mime, payloadData, version;
+      var $http, deploy, mime, payloadData, version;
       mime = "application/json; charset=utf-8";
       if (response.headers()["content-type"] === mime) {
         payloadData = response.data ? response.data.payload : null;
@@ -1515,11 +1532,16 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
           if (!payloadData) {
             return $q.reject(response);
           }
+          $http = $injector.get('$http');
+          if ($http.pendingRequests.length === 0) {
+            $('.loading-animation').removeClass('loading');
+          }
           response.data = payloadData;
         }
       }
       return response;
     }), function(response) {
+      $('.loading-animation').removeClass('loading');
       if (response.data.payload) {
         response.data = response.data.payload;
       }

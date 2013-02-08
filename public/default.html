@@ -9,10 +9,8 @@
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
     <link rel="stylesheet" href="/files/--DEPLOY--/css/app.css" />
 <!--[if lte IE 7]>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
-<![endif]-->
-<!--[if lte IE 8]>
-  <script src="/html5shiv.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script><![endif]--><!--[if lte IE 8]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
     <script>
       window.brunch = window.brunch || {};
@@ -23,8 +21,8 @@
     </script>
     <script src="/files/--DEPLOY--/js/vendor.js"></script>
     <script src="/files/--DEPLOY--/js/app.js"></script>
+    <script src="http://js.pusher.com/1.12/pusher.min.js"></script>
   </head>
-
 
   <body ng-controller="AppCtrl" data-subout-deploy="--DEPLOY--">
     <div id="pageWrapper" class="container">
@@ -32,13 +30,12 @@
         <div class="navbar-inner row-fluid">
           <div class="span3">
             <a class="brand" href="#">SubOut</a>
-            <div id="subout-loading" class="loading-animation"></div>
+            <div class="loading-animation" id="subout-loading" ng-class="loading_status">123a</div>
           </div>
           <div class="span9">
             <div class="row-fluid">
               <ul class="nav">
                 <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
-                <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
                 <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
                 <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
                 <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
@@ -62,28 +59,9 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="//loader.engage.gsfn.us/loader.js"></script>
+    <script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>
     <script type="text/javascript">
       if (typeof GSFN !== "undefined") { GSFN.loadWidget(3613,{"containerId":"getsat-widget-3613"}); }
-    </script>
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      var googleAnalyticsKey = null;
-      var hostname = location.hostname;
-      if (hostname == "suboutapp.com") {
-        googleAnalyticsKey = 'UA-38160184-1';
-      } else if (hostname == "subouttest.herokuapp.com") {
-        googleAnalyticsKey = 'UA-38160184-2';
-      }
-      if (googleAnalyticsKey) {
-        _gaq.push(['_setAccount', googleAnalyticsKey]);
-        _gaq.push(['_trackPageview']);
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-      }
     </script>
   </body>
 </html>
