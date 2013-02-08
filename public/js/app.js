@@ -283,6 +283,10 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
+    if (!$rootScope.company.dot_number) {
+      $rootScope.setModal(suboutPartialPath('dot-required.html'));
+      return;
+    }
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
@@ -353,6 +357,11 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
   };
   return $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
+    if (!$rootScope.company.dot_number) {
+      $rootScope.setModal(suboutPartialPath('dot-required.html'));
+      $("#modal").modal("show");
+      return;
+    }
     if (!confirm("Win it now price is $" + ($numberFormatter.format(opportunity.win_it_now_price, 2)) + ". Do you want to proceed?")) {
       return;
     }
