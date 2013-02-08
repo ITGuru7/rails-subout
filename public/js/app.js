@@ -97,7 +97,7 @@ angular.element(document).ready(function() {
 var AppCtrl, AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
+AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $('#modal').on('hidden', function() {
     $scope = angular.element(document).scope();
@@ -353,7 +353,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Comp
   };
   return $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
-    if (!confirm("Win it now price is $" + opportunity.win_it_now_price + ". Do you want to proceed?")) {
+    if (!confirm("Win it now price is $" + ($numberFormatter.format(opportunity.win_it_now_price, 2)) + ". Do you want to proceed?")) {
       return;
     }
     bid = {
@@ -1412,6 +1412,12 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
+}).factory("$numberFormatter", function() {
+  return {
+    format: function(number, precision) {
+      return _.str.numberFormat(parseFloat(number), precision);
+    }
+  };
 }).factory("Authorize", function($rootScope, $location, AuthToken) {
   return {
     check: function() {
