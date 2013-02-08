@@ -595,12 +595,21 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, Authorize) {
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Authorize) {
+  var reloadOpportunity;
   if (!Authorize.check()) {
     return;
   }
-  $scope.opportunity = Opportunity.get({
-    api_token: $rootScope.token.api_token,
-    opportunityId: $routeParams.opportunity_reference_number
+  reloadOpportunity = function() {
+    return $scope.opportunity = Opportunity.get({
+      api_token: $rootScope.token.api_token,
+      opportunityId: $routeParams.opportunity_reference_number
+    });
+  };
+  reloadOpportunity();
+  $rootScope.channel.bind('event_created', function(event) {
+    if (event.eventable._id === $scope.opportunity._id) {
+      return reloadOpportunity();
+    }
   });
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
     return $scope.opportunity = _opportunity;

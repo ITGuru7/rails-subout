@@ -54,6 +54,19 @@
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
           </div>
+          <div ng-show="company.isLicensedToBidOnOpportunity(opportunity)">
+            <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+              <div>
+                <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+              </div>
+              <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+                <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+              </div>
+            </div>
+          </div>
+          <div ng-hide="company.isLicensedToBidOnOpportunity(opportunity) || opportunity.status != 'In progress'">
+            <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
+          </div>
         </div>
         <div class="span4">
           <a ng-show="opportunity.image_url && !isOldBrowser" rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
