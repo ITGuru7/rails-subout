@@ -7693,12 +7693,9 @@ body {
 /*}*/
 /*.modal{ height:80%; }*/
 .modal {
-  overflow-y: auto;
-  max-height: 90%;
-  margin-top: -45% /*position: absolute!important;*/
- /*margin:0px auto;*/
- /*top:10%!important;*/
-;
+  overflow-y: hidden;
+  max-height: 80%;
+  margin-top: -45%;
 }
 #company.well {
   padding: 10px;
@@ -7860,6 +7857,9 @@ h5 {
 body {
   background: #bfbfbf;
 }
+.text-centered {
+  text-align: center;
+}
 #pageWrapper {
   position: relative;
   background: #FFFFFF;
@@ -7970,6 +7970,9 @@ body {
   text-decoration: none;
   background-color: #378bac;
   border: 1px solid #378bac;
+}
+#dashboard .win-it-now-button-wrapper {
+  padding-top: 2px;
 }
 #activities .table td {
   padding: 10px;
@@ -8112,6 +8115,49 @@ div#opportunity-show .description .content {
   white-space: pre;
   white-space: pre-wrap;
   padding-left: 5px;
+}
+.modal {
+  margin-top: -45%;
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-body {
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-content {
+  overflow: auto!important;
+  max-height: 400px!important;
+}
+.region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
+}
+@media all and (max-height: 650px) {
+  .modal-content {
+    max-height: 325px!important;
+  }
+  .region-checkboxes {
+    height: 150px;
+  }
+}
+@media all and (max-height: 550px) {
+  .modal-content {
+    max-height: 250px!important;
+  }
+  .region-checkboxes {
+    height: 100px;
+  }
+}
+@media all and (max-height: 450px) {
+  .modal-content {
+    max-height: 100px!important;
+  }
+  .region-checkboxes {
+    height: 50px;
+  }
 }
 #modal.modal {
   margin-top: 0px;
@@ -8296,16 +8342,6 @@ div#opportunity-show .description .content {
 #welcome-prelaunch-message h2 {
   color: #666550;
 }
-#page-settings ul.nav-tabs li {
-  font-size: 18px;
-}
-#page-settings .tab-content {
-  padding: 15px;
-}
-#page-settings li.btn-close {
-  margin-top: 5px;
-  margin-right: 10px;
-}
 #opportunity-form .modal-header {
   background-color: #378bac;
 }
@@ -8342,6 +8378,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#dot-required .modal-header {
+  background-color: #69b645;
+}
+#dot-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#dot-required .modal-body {
+  color: #666550;
+}
 #bid-new .modal-header {
   background-color: #69b645;
 }
@@ -8364,6 +8410,28 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#bid-new .form-horizontal .control-label {
+  float: left;
+  padding-top: 5px;
+  text-align: left;
+  width: 140px;
+}
+#bid-new .control-group.error .help-block {
+  display: block;
+}
+#bid-new .control-group .help-block {
+  display: none;
+}
+#page-settings ul.nav-tabs li {
+  font-size: 18px;
+}
+#page-settings .tab-content {
+  padding: 15px;
+}
+#page-settings li.btn-close {
+  margin-top: 5px;
+  margin-right: 10px;
+}
 #page-settings .modal-header {
   background-color: #69b645;
 }
@@ -8383,6 +8451,14 @@ div#opportunity-show .description .content {
   background-color: white;
   margin: 0;
   padding-top: 5px;
+  padding-bottom: 0;
+}
+#page-settings .control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
+#page-settings .control-group .help-block.warning {
+  color: #b92a2a;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8392,18 +8468,6 @@ div#opportunity-show .description .content {
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
-}
-#bid-new .form-horizontal .control-label {
-  float: left;
-  padding-top: 5px;
-  text-align: left;
-  width: 140px;
-}
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
-  display: none;
 }
 #opportunities .search {
   border: 1px solid #000000;
@@ -8429,5 +8493,64 @@ div#opportunity-show .description .content {
   width: 85%;
 }
 #opportunities td {
+  max-width: 300px;
+}
+.span10.mobileSelect {
+  width: 100%;
+}
+@media only screen and (max-device-width: 767px) {
+  #content {
+    padding: 10px 5% 0px 5%;
+  }
+  .table th,
+  .table td {
+    padding: 8px 2px;
+  }
+}
+.table-border {
+  border: 1px solid #ccc;
+}
+.reference-number {
+  width: 35%;
+}
+.table-header {
+  font-weight: bold;
+  width: 35%;
+}
+.mobile-bid-history.table td {
+  border-top: 0px none #ccc;
+}
+#licensed-regions fieldset.regions-table {
+  columns: 200px 2;
+  -webkit-columns: 200px 2;
+  /* Safari and Chrome */
+
+  -moz-columns: 200px 2;
+  /* Firefox */
+
+  text-align: left;
+}
+#licensed-regions .total-price {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+#licensed-regions .cancel {
+  margin-left: 10px;
+}
+#licensed-regions .checkbox {
+  padding-left: 20px;
+}
+#available_opportunities .current-bid-amount {
+  padding-right: 20px;
+  text-align: right;
+}
+#available_opportunities .win-it-now {
+  margin-top: 5px;
+}
+#available_opportunities .win-it-now .ui-currency-pos {
+  color: white;
+}
+#available_opportunities td {
   max-width: 300px;
 }
