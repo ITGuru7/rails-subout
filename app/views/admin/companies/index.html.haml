@@ -1,18 +1,35 @@
 %h1 Companies
 
-%table.table.table-striped.admin-companies
+%table#admin-companies.table.table-striped
   %thead
     %tr
       %th #
       %th Company Name<br>Owner
       %th Email<br>Contact
       %th
-        Sign up
+        - if @sort_by != "created_at"
+          = link_to "Sign up", admin_companies_path(sort_by: "created_at", sort_direction: "desc")
+        - elsif @sort_direction == "asc"
+          = link_to "Sign up ^", admin_companies_path(sort_by: "created_at", sort_direction: "desc")
+        - else
+          = link_to "Sign up v", admin_companies_path(sort_by: "created_at", sort_direction: "asc")
       %th
         Last signed in
       %th Subscription
-      %th # Ops
-      %th # Bids
+      %th
+        - if @sort_by != "auctions_count"
+          = link_to "# Ops", admin_companies_path(sort_by: "auctions_count", sort_direction: "desc")
+        - elsif @sort_direction == "asc"
+          = link_to "# Ops ^", admin_companies_path(sort_by: "auctions_count", sort_direction: "desc")
+        - else
+          = link_to "# Ops v", admin_companies_path(sort_by: "auctions_count", sort_direction: "asc")
+      %th
+        - if @sort_by != "bids_count"
+          = link_to "# Bids", admin_companies_path(sort_by: "bids_count", sort_direction: "desc")
+        - elsif @sort_direction == "asc"
+          = link_to "# Bids ^", admin_companies_path(sort_by: "bids_count", sort_direction: "desc")
+        - else
+          = link_to "# Bids v", admin_companies_path(sort_by: "bids_count", sort_direction: "asc")
       %th Actions
   %tbody
     - @companies.each_with_index do |company, index|

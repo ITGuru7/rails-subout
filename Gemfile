@@ -3,7 +3,7 @@ ruby '1.9.3'
 
 gem 'rails', '3.2.11'
 
-gem "mongoid", "~> 3.0.0.rc"
+gem "mongoid", "~> 3.0.21"
 gem 'haml-rails'
 gem 'pusher'
 gem 'thin'

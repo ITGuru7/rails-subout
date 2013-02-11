@@ -1,0 +1,66 @@
+<div id="company-profile" ng-controller="CompanyProfileCtrl">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">
+            x
+        </button>
+        <h3>PROFILE</h3>
+        <div class="add-to-favorites" ng-show="other_company.canBeAddedAsFavorite(company)">
+          <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
+        </div>
+    </div>
+    <div class="alert alert-info" ng-show="notice">
+      {{notice}}
+    </div>
+    <div class="modal-body modal-content">
+        <section class="section-content">
+            <div class="row-fluid">
+                <div class="span6">
+                    <h4>{{other_company.name}}</h4>
+                </div>
+                <div class="span6"><img ng-show="company.logo" class="logo" ng-src="{{company.logo}}" />
+                </div>
+            </div>
+           
+            <div class="row-fluid">
+                <div class="span3">Regions:</div>
+                <div class="span9">{{other_company.regionNames()}}</div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Fleet Size:</div>
+                <div class="span9">{{other_company.fleet_size}}</div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Since:</div>
+                <div class="span9">{{other_company.since}}</div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Owner:</div>
+                <div class="span9">{{other_company.owner}}</div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Contact:</div>
+                <div class="span9">
+                    <a href="mailto:{{other_company.email}}">{{other_company.contact}}</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Website:</div>
+                <div class="span9">
+                    <a href="{{other_company.website | websiteUrl}}" target="_blank">{{other_company.website}}</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">TPA:</div>
+                <div class="span9">{{other_company.tpa}}</div>
+            </div>
+        </section>
+    </div>
+</div>
+<script>
+</script>

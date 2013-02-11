@@ -30,21 +30,20 @@
             </section>
             <section id="regions">
               <section class="title"><h5>Region</h5></section>
-              <section  ng-show="!isMobile" class="content">   
-                <select ui-select2   class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter"> 
+              <section  ng-show="!isMobile" class="content">
+                <select ui-select2   class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter">
                   <option value=""></option>
                   <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
                 </select>
                 <div class="clearfix"></div>
               </section>
-              
               <section  ng-show="isMobile" class="content">
-                <select class="span10 mobileSelect"  ng-model="regionFilter"> 
+                <select class="span10 mobileSelect"  ng-model="regionFilter">
                   <option value="" selected="selected">-- Select Region --</option>
                   <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
                 </select>
                 <div class="clearfix"></div>
-              </section>              
+              </section>
             </section>
 
             <section id="companies">
@@ -53,18 +52,16 @@
                 <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
                   <option value=""></option>
                   <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
-                </select>        
+                </select>
                 <div class="clearfix"></div>
               </section>
-
               <section ng-show="isMobile" class="content">
                 <select ng-model="companyFilter" class="span10 mobileSelect">
                   <option value=""> -- Select Company -- </option>
                   <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
-                </select>              
+                </select>
                 <div class="clearfix"></div>
               </section>
-
             </section>
 
             <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
@@ -184,9 +181,9 @@
                           <div>
                             <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                           </div>
-                          <span>
-                            <a class="btn btn-success btn-small" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now</a>
-                          </span>
+                          <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+                            <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                          </div>
                         </div>
                         <div>
                           <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>

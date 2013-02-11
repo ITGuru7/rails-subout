@@ -7971,6 +7971,9 @@ body {
   background-color: #378bac;
   border: 1px solid #378bac;
 }
+#dashboard .win-it-now-button-wrapper {
+  padding-top: 2px;
+}
 #activities .table td {
   padding: 10px;
   font-size: 0.9em;
@@ -8339,16 +8342,6 @@ div#opportunity-show .description .content {
 #welcome-prelaunch-message h2 {
   color: #666550;
 }
-#page-settings ul.nav-tabs li {
-  font-size: 18px;
-}
-#page-settings .tab-content {
-  padding: 15px;
-}
-#page-settings li.btn-close {
-  margin-top: 5px;
-  margin-right: 10px;
-}
 #opportunity-form .modal-header {
   background-color: #378bac;
 }
@@ -8385,6 +8378,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#dot-required .modal-header {
+  background-color: #69b645;
+}
+#dot-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#dot-required .modal-body {
+  color: #666550;
+}
 #bid-new .modal-header {
   background-color: #69b645;
 }
@@ -8407,6 +8410,28 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#bid-new .form-horizontal .control-label {
+  float: left;
+  padding-top: 5px;
+  text-align: left;
+  width: 140px;
+}
+#bid-new .control-group.error .help-block {
+  display: block;
+}
+#bid-new .control-group .help-block {
+  display: none;
+}
+#page-settings ul.nav-tabs li {
+  font-size: 18px;
+}
+#page-settings .tab-content {
+  padding: 15px;
+}
+#page-settings li.btn-close {
+  margin-top: 5px;
+  margin-right: 10px;
+}
 #page-settings .modal-header {
   background-color: #69b645;
 }
@@ -8428,6 +8453,13 @@ div#opportunity-show .description .content {
   padding-top: 5px;
   padding-bottom: 0;
 }
+#page-settings .control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
+#page-settings .control-group .help-block.warning {
+  color: #b92a2a;
+}
 .control-group .ng-invalid {
   border: solid 1px red;
 }
@@ -8436,18 +8468,6 @@ div#opportunity-show .description .content {
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
-}
-#bid-new .form-horizontal .control-label {
-  float: left;
-  padding-top: 5px;
-  text-align: left;
-  width: 140px;
-}
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
-  display: none;
 }
 #opportunities .search {
   border: 1px solid #000000;
@@ -8530,6 +8550,9 @@ div#opportunity-show .description .content {
 }
 #available_opportunities .win-it-now .ui-currency-pos {
   color: white;
+}
+#available_opportunities td {
+  max-width: 300px;
 }
 .display-message {
   font-size: 15px;
