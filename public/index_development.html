@@ -25,7 +25,6 @@
     <script src="/files/--DEPLOY--/js/app.js"></script>
   </head>
 
-
   <body ng-controller="AppCtrl" data-subout-deploy="--DEPLOY--">
     <div id="pageWrapper" class="container">
       <div id="subout-navbar" class="navbar" ui-if="userSignedIn()">
@@ -46,9 +45,6 @@
                 <div class="btn-group navbar-buttons">
                   <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
                   <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-                </div>
-                <div class="welcome">
-                  signed in as <span class="username" ng-bind="company.abbreviated_name">...</span>
                 </div>
               </div>
             </div>

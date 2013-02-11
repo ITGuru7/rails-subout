@@ -8531,3 +8531,18 @@ div#opportunity-show .description .content {
 #available_opportunities .win-it-now .ui-currency-pos {
   color: white;
 }
+.display-message {
+  font-size: 15px;
+  font-weight: bold;
+}
+.display-message .display-message-extra {
+  color: lightgray;
+}
+.display-message .display-message-subject {
+  color: gray;
+}
+.info-label-heading {
+  margin: 20px 0 0;
+  color: #69b645;
+  font-size: 1.2em;
+}

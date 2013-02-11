@@ -40,6 +40,7 @@ class Opportunity
 
   has_one :event, as: :eventable
   has_many :bids
+  belongs_to :winning_bid, :class_name => "Bid"
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
   validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true

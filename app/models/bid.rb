@@ -7,6 +7,7 @@ class Bid
 
   belongs_to :opportunity
   belongs_to :bidder, class_name: "Company"
+  has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id"
 
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"

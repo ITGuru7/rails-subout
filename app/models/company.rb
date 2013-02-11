@@ -180,6 +180,10 @@ class Company
     Opportunity.any_of(*options).where(canceled: false, :bidding_ends_at.gt => Time.now, winning_bid_id: nil, :buyer_id.ne => self.id).order_by(sort_by => sort_direction)
   end
 
+  def sales_info
+    "$155,000 in sales"
+  end
+
   private
 
   def validate_invitation
