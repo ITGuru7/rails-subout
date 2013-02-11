@@ -8506,6 +8506,9 @@ div#opportunity-show .description .content {
   .table td {
     padding: 8px 2px;
   }
+  .gsfn-widget-tab.gsfn-left {
+    display: none;
+  }
 }
 .table-border {
   border: 1px solid #ccc;
