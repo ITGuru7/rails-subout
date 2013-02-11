@@ -1,6 +1,11 @@
 <div id="dashboard">
       <div class="row-fluid">
         <div id="sidebar" class="span3 filters">
+            <div class="welcome display-message">
+              <span class="display-message-extra">Welcome</span>
+              <span class="company display-message-subject">{{company.name}}!</span>
+            </div>
+            <div class="info-label-heading">Filter My View By:</div>
             <section id="filters">
               <section class="title"><h5>Opportunity Type</h5></section>
               <section class="content">
@@ -75,7 +80,15 @@
               <div id="toolbar">
                   <div class="row-fluid">
                       <div class="pull-left span4">
-                        <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
+                        <!--<div class="display-message sales-info">-->
+                          <!--<span class="display-message-subject">$155,000 in sales</span>-->
+                          <!--<span class="display-message-extra">/past 30 days</span>-->
+                        <!--</div>-->
+
+                        <div class="info-label-heading">
+                          <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
+                          <span ng-hide="hasAnyFilter()">All Events:</span>
+                        </div>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">

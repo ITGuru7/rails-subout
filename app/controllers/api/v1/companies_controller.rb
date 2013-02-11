@@ -1,5 +1,6 @@
 class Api::V1::CompaniesController < Api::V1::BaseController
   skip_before_filter :restrict_access, only: :create
+  serialization_scope :current_company
 
   def index
     companies = Company.companies_for(current_company)
@@ -8,7 +9,9 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def show
     @company = Company.find(params[:id])
-    respond_with_namespace(@company)
+    @serializer = CompanySerializer.new(@company, :scope => current_company)
+    render :json => @serializer
+    #respond_with_namespace(@company)
   end
 
   def search

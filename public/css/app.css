@@ -8491,6 +8491,9 @@ div#opportunity-show .description .content {
   .table td {
     padding: 8px 2px;
   }
+  .gsfn-widget-tab.gsfn-left {
+    display: none;
+  }
 }
 .table-border {
   border: 1px solid #ccc;
@@ -8538,4 +8541,19 @@ div#opportunity-show .description .content {
 }
 #available_opportunities td {
   max-width: 300px;
+}
+.display-message {
+  font-size: 15px;
+  font-weight: bold;
+}
+.display-message .display-message-extra {
+  color: lightgray;
+}
+.display-message .display-message-subject {
+  color: gray;
+}
+.info-label-heading {
+  margin: 20px 0 0;
+  color: #69b645;
+  font-size: 1.2em;
 }
