@@ -6,7 +6,7 @@
   <div class="modal-body">
     <ul class="nav nav-tabs">
       <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
-      <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
+      <li><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
       <li ng-class="{active:selectedTab == 'licensed-regions'}"><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
     </ul>
     <div class="tab-content">
@@ -76,7 +76,7 @@
         </form>
       </div>
 
-      <div ng-class="{active:selectedTab == 'company-profile'}" class="tab-pane modal-content" id="company-profile">
+      <div class="tab-pane modal-content" id="company-profile">
         <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
           <fieldset>
             <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
@@ -217,7 +217,6 @@
                 class="input-xlarge"
                 ng:model="companyProfile.dot_number"
                 />
-                <p class="help-block warning">Required for bidding.</p>
               </div>
             </div>
 

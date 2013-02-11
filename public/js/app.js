@@ -36,6 +36,19 @@ subout.run([
 
 subout.config([
   "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
+    var resolveAuth;
+    resolveAuth = {
+      requiresAuthentication: function(Authorize, $location) {
+        var response;
+        response = Authorize.check();
+        if (response === false) {
+          $location.path('/sign_in').replace();
+          return false;
+        } else {
+          return response;
+        }
+      }
+    };
     $httpProvider.responseInterceptors.push('myHttpInterceptor');
     return $routeProvider.when("/sign_in", {
       templateUrl: suboutPartialPath("sign_in.html"),
@@ -48,29 +61,40 @@ subout.config([
       controller: NewPasswordCtrl
     }).when("/password/edit", {
       templateUrl: suboutPartialPath("password-edit.html"),
-      controller: "EditPasswordCtrl"
+      controller: "EditPasswordCtrl",
+      resolve: resolveAuth
     }).when("/dashboard", {
       templateUrl: suboutPartialPath("dashboard.html"),
       controller: DashboardCtrl,
-      reloadOnSearch: false
+      reloadOnSearch: false,
+      resolve: resolveAuth
     }).when("/bids", {
       templateUrl: suboutPartialPath("bids.html"),
-      controller: MyBidCtrl
+      controller: MyBidCtrl,
+      resolve: resolveAuth
     }).when("/opportunities", {
       templateUrl: suboutPartialPath("opportunities.html"),
-      controller: OpportunityCtrl
+      controller: OpportunityCtrl,
+      resolve: resolveAuth
     }).when("/available_opportunities", {
       templateUrl: "partials/available_opportunities.html",
-      controller: AvailableOpportunityCtrl
+      controller: AvailableOpportunityCtrl,
+      resolve: resolveAuth
     }).when("/opportunities/:opportunity_reference_number", {
       templateUrl: suboutPartialPath("opportunity-detail.html"),
-      controller: OpportunityDetailCtrl
+      controller: OpportunityDetailCtrl,
+      resolve: resolveAuth
     }).when("/favorites", {
       templateUrl: suboutPartialPath("favorites.html"),
-      controller: FavoritesCtrl
+      controller: FavoritesCtrl,
+      resolve: resolveAuth
     }).when("/welcome-prelaunch", {
       templateUrl: suboutPartialPath("welcome-prelaunch.html"),
-      controller: WelcomePrelaunchCtrl
+      controller: WelcomePrelaunchCtrl,
+      resolve: resolveAuth
+    }).when("/settings", {
+      templateUrl: suboutPartialPath("settings.html"),
+      resolve: resolveAuth
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -97,7 +121,7 @@ angular.element(document).ready(function() {
 var AppCtrl, AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
+AppCtrl = function($scope, $rootScope, $location, $appBrowser, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $('#modal').on('hidden', function() {
     $scope = angular.element(document).scope();
@@ -111,45 +135,16 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
     return;
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
-  $rootScope.isMobile = $appBrowser.isMobile();
-  $rootScope.isPhone = $appBrowser.isPhone();
-  $rootScope.currentPath = function() {
-    return $location.path();
-  };
   $rootScope.userSignedIn = function() {
     var _ref;
     if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
   };
-  $rootScope.signedInSuccess = function(token) {
-    $rootScope.pusher = new Pusher(token.pusher_key);
-    $rootScope.channel = $rootScope.pusher.subscribe('global');
-    $rootScope.channel.bind('added_to_favorites', function(favorite) {
-      if ($rootScope.company._id === favorite.supplier_id) {
-        return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
-      }
-    });
-    $rootScope.channel.bind('removed_from_favorites', function(favorite) {
-      if ($rootScope.company._id === favorite.supplier_id) {
-        return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
-      }
-    });
-    $rootScope.company = Company.get({
-      companyId: token.company_id,
-      api_token: token.api_token
-    }, function(company) {
-      if (company.state_by_state_subscriber) {
-        return $rootScope.regions = company.regions;
-      }
-    });
-    $rootScope.user = User.get({
-      userId: token.user_id,
-      api_token: token.api_token
-    });
-    return $rootScope.REGION_PRICES = Region.query({
-      api_token: token.api_token
-    });
+  $rootScope.isMobile = $appBrowser.isMobile();
+  $rootScope.isPhone = $appBrowser.isPhone();
+  $rootScope.currentPath = function() {
+    return $location.path();
   };
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
@@ -283,10 +278,6 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewBidForm = function(opportunity) {
-    if (!$rootScope.company.dot_number) {
-      $rootScope.setModal(suboutPartialPath('dot-required.html'));
-      return;
-    }
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
@@ -357,12 +348,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
   };
   return $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
-    if (!$rootScope.company.dot_number) {
-      $rootScope.setModal(suboutPartialPath('dot-required.html'));
-      $("#modal").modal("show");
-      return;
-    }
-    if (!confirm("Win it now price is $" + ($numberFormatter.format(opportunity.win_it_now_price, 2)) + ". Do you want to proceed?")) {
+    if (!confirm("Win it now price is $" + opportunity.win_it_now_price + ". Do you want to proceed?")) {
       return;
     }
     bid = {
@@ -442,19 +428,13 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid, Authorize) {
-  if (!Authorize.check()) {
-    return;
-  }
+MyBidCtrl = function($scope, $rootScope, MyBid) {
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
 };
 
-FavoritesCtrl = function($scope, $rootScope, Favorite, Authorize) {
-  if (!Authorize.check()) {
-    return;
-  }
+FavoritesCtrl = function($scope, $rootScope, Favorite) {
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
@@ -510,11 +490,8 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, Authorize) {
+AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   var availableToCurrentCompany;
-  if (!Authorize.check()) {
-    return;
-  }
   availableToCurrentCompany = function(opportunity) {
     var _ref;
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
@@ -565,11 +542,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   return $scope.sortOpportunities('bidding_ends_at');
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction, Authorize) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   var filterWithQuery;
-  if (!Authorize.check()) {
-    return;
-  }
   $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -603,22 +577,10 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, Authorize) {
   };
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Authorize) {
-  var reloadOpportunity;
-  if (!Authorize.check()) {
-    return;
-  }
-  reloadOpportunity = function() {
-    return $scope.opportunity = Opportunity.get({
-      api_token: $rootScope.token.api_token,
-      opportunityId: $routeParams.opportunity_reference_number
-    });
-  };
-  reloadOpportunity();
-  $rootScope.channel.bind('event_created', function(event) {
-    if (event.eventable._id === $scope.opportunity._id) {
-      return reloadOpportunity();
-    }
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+  $scope.opportunity = Opportunity.get({
+    api_token: $rootScope.token.api_token,
+    opportunityId: $routeParams.opportunity_reference_number
   });
   $rootScope.$on('refreshOpportunity', function(e, _opportunity) {
     return $scope.opportunity = _opportunity;
@@ -654,11 +616,8 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, Authorize) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
-  if (!Authorize.check()) {
-    return;
-  }
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -718,13 +677,15 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     });
   };
   $scope.refreshEvents(function() {
-    return $rootScope.channel.bind('event_created', function(event) {
-      if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
-        $scope.events.unshift(event);
-        updatePreviousEvents(event);
-        return $scope.$apply();
-      }
-    });
+    if ($rootScope.channel) {
+      return $rootScope.channel.bind('event_created', function(event) {
+        if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
+          $scope.events.unshift(event);
+          updatePreviousEvents(event);
+          return $scope.$apply();
+        }
+      });
+    }
   });
   $scope.matchFilters = function(event) {
     return $scope.filterEventType(event) && $scope.filterRegion(event) && $scope.filterOpportunityType(event) && $scope.filterFullText(event) && $scope.filterCompany(event);
@@ -896,15 +857,23 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product) {
-  var region, _i, _len, _ref;
+  var region, token, _i, _len, _ref;
+  $scope.userProfile = angular.copy($rootScope.user);
+  $scope.companyProfile = angular.copy($rootScope.company);
+  $rootScope.selectedTab = "user-login";
+  token = $rootScope.token;
   Product.get({
     productHandle: 'subout-national-service',
     api_token: $rootScope.token.api_token
   }, function(data) {
     return $scope.product = data.product;
   });
-  $scope.userProfile = angular.copy($rootScope.user);
-  $scope.companyProfile = angular.copy($rootScope.company);
+  console.log("user in SettingCtrl");
+  console.log($rootScope.user);
+  console.log($scope.userProfile);
+  console.log("companyProfile in SettingCtrl");
+  console.log($rootScope.company);
+  console.log($scope.companyProfile);
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1021,7 +990,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken) {
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken, Authorize) {
   $.removeCookie(AuthToken);
   return $scope.signIn = function() {
     return Token.save({
@@ -1031,7 +1000,6 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
       $rootScope.token = token;
       if (token.authorized) {
         $.cookie(AuthToken, token);
-        $rootScope.signedInSuccess(token);
         if ($rootScope.redirectToPath) {
           return $location.path($rootScope.redirectToPath);
         } else {
@@ -1430,27 +1398,61 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
   return $resource("" + api_path + "/gateway_subscriptions/:subscriptionId", {}, {});
 }).factory("FileUploaderSignature", function($resource) {
   return $resource("" + api_path + "/file_uploader_signatures/new", {}, {});
-}).factory("$numberFormatter", function() {
+}).factory("Authorize", function($rootScope, $location, AuthToken, Region, User, Company, $q) {
   return {
-    format: function(number, precision) {
-      return _.str.numberFormat(parseFloat(number), precision);
-    }
-  };
-}).factory("Authorize", function($rootScope, $location, AuthToken) {
-  return {
+    token: function() {
+      return this.tokenValue;
+    },
+    authenticate: function(token) {
+      var defer, promise;
+      defer = $q.defer();
+      this.tokenValue = token;
+      $rootScope.token = token;
+      $rootScope.pusher = new Pusher(token.pusher_key);
+      $rootScope.channel = $rootScope.pusher.subscribe('global');
+      $rootScope.REGION_PRICES = Region.query({
+        api_token: token.api_token
+      });
+      promise = defer.promise.then(function() {
+        return $rootScope.company = Company.get({
+          companyId: token.company_id,
+          api_token: token.api_token
+        }, function(company) {
+          $rootScope.channel.bind('added_to_favorites', function(favorite) {
+            if ($rootScope.company._id === favorite.supplier_id) {
+              return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
+            }
+          });
+          $rootScope.channel.bind('removed_from_favorites', function(favorite) {
+            if ($rootScope.company._id === favorite.supplier_id) {
+              return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
+            }
+          });
+          if (company.state_by_state_subscriber) {
+            $rootScope.regions = company.regions;
+          }
+          return defer.resolve();
+        }, function() {});
+      });
+      $rootScope.user = User.get({
+        userId: token.user_id,
+        api_token: token.api_token
+      }, function(company) {
+        return defer.resolve();
+      });
+      return promise;
+    },
     check: function() {
       var token, _ref;
       if ((_ref = $rootScope.token) != null ? _ref.authorized : void 0) {
         return true;
       }
-      if (token = $.cookie(AuthToken)) {
-        $rootScope.token = token;
-        $rootScope.signedInSuccess(token);
-        return true;
+      token = $.cookie(AuthToken);
+      if (!this.token() && token) {
+        return this.authenticate(token);
+      } else {
+        return false;
       }
-      $rootScope.redirectToPath = $location.path();
-      $location.path("/sign_in");
-      return false;
     }
   };
 }).factory("$appVersioning", function() {

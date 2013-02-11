@@ -44,7 +44,8 @@
               </ul>
               <div class="pull-right">
                 <div class="btn-group navbar-buttons">
-                  <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                  <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                  <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
                   <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
                 </div>
                 <div class="welcome">
