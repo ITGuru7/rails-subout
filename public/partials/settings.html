@@ -96,10 +96,11 @@
               </div>
             </div>
 
+
             <div class="control-group">
               <label for="logo_id" class="control-label">Company Logo</label>
 
-              <div class="controls">
+              <div class="controls mobile-controls">
                 <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
                 <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
                 <div id="progress">
@@ -108,6 +109,7 @@
                 <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
               </div>
             </div>
+
 
             <div class="control-group">
               <label for="fleet-size" class="control-label">Fleet Size:</label>

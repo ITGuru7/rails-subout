@@ -8511,6 +8511,9 @@ div#opportunity-show .description .content {
   .gsfn-widget-tab.gsfn-left {
     display: none;
   }
+  .mobile-controls .cloudinary-fileupload {
+    width: 100%;
+  }
 }
 .table-border {
   border: 1px solid #ccc;
