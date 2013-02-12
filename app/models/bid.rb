@@ -5,9 +5,9 @@ class Bid
   field :amount, type: BigDecimal
   field :comment, type: String
 
-  belongs_to :opportunity
+  belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company"
-  has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id"
+  has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
 
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
