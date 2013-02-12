@@ -7,7 +7,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
-    <link rel="stylesheet" href="/files/1360316061/css/app.css" />
+    <link rel="stylesheet" href="/files/1360690677/css/app.css" />
 <!--[if lte IE 7]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 <![endif]-->
@@ -21,17 +21,17 @@
       };
       eval_ = eval;
     </script>
-    <script src="/files/1360316061/js/vendor.js"></script>
-    <script src="/files/1360316061/js/app.js"></script>
+    <script src="/files/1360690677/js/vendor.js"></script>
+    <script src="/files/1360690677/js/app.js"></script>
   </head>
 
-
-  <body ng-controller="AppCtrl" data-subout-deploy="1360316061">
+  <body ng-controller="AppCtrl" data-subout-deploy="1360690677">
     <div id="pageWrapper" class="container">
       <div id="subout-navbar" class="navbar" ui-if="userSignedIn()">
         <div class="navbar-inner row-fluid">
           <div class="span3">
             <a class="brand" href="#">SubOut</a>
+            <div id="subout-loading" class="loading-animation"></div>
           </div>
           <div class="span9">
             <div class="row-fluid">
@@ -44,11 +44,9 @@
               </ul>
               <div class="pull-right">
                 <div class="btn-group navbar-buttons">
-                  <a href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                  <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                  <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
                   <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-                </div>
-                <div class="welcome">
-                  signed in as <span class="username" ng-bind="company.abbreviated_name">...</span>
                 </div>
               </div>
             </div>
