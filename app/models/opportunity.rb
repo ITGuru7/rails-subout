@@ -160,10 +160,11 @@ class Opportunity
   end
 
   def recent_bids
-    self.bids.recent.map do |bid|
-      bid.opportunity = self
+    result = self.bids.recent.map do |bid|
+      bid.opportunity = self # to prevent loading opportunity again from db while serializing see BidShortSerializer#comment
       bid
     end
+    result.uniq { |bid| bid.bidder_id }
   end
 
   def status
