@@ -76,6 +76,6 @@ Subout::Application.configure do
     :authentication => :plain,
   }
   DEVELOPMENT_MODE = false
-  CHARGIFY_URI = 'subouttest.chargify.com'
+  CHARGIFY_URI = 'suboutdemo.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
 end
