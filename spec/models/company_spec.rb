@@ -115,5 +115,9 @@ describe Company do
 
       it { poster.available_opportunities.should_not include(ma_opportunity) }
     end
+
+    context "when sort_by and sort_direction are nil" do
+      it { lambda { poster.available_opportunities(nil, nil) }.should_not raise_error }
+    end
   end
 end

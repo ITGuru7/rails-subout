@@ -173,6 +173,9 @@ class Company
   end
 
   def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc')
+    sort_by ||= :bidding_ends_at
+    sort_direction ||= "asc"
+
     options = []
     options << {:for_favorites_only => true, :buyer_id.in => self.favoriting_buyer_ids}
     options << {:for_favorites_only => false, :start_region.in => self.regions}
