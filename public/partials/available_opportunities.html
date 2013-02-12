@@ -15,7 +15,7 @@
         <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
         <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
       </th>
-      <th class="current-bid-amount">Current Bid</th>
+      <th class="current-bid-amount">Bid Range</th>
       <th>Actions</th>
     </tr>
     <tr ng-repeat="opportunity in opportunities" >
@@ -29,7 +29,13 @@
       <td>
         <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
       </td>
-      <td class="current-bid-amount"><span ui-currency ng-show="opportunity.current_bid_amount" ng-model="opportunity.current_bid_amount"></span></td>
+      <td class="current-bid-amount">
+        <span ng-show="opportunity.lowest_bid_amount">
+          <span ui-currency ng-model="opportunity.lowest_bid_amount"></span>
+          /
+          <span ui-currency ng-model="opportunity.highest_bid_amount"></span>
+        </span>
+      </td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
         <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now (<span ui-currency ng-model="opportunity.win_it_now_price"></span>)</a>

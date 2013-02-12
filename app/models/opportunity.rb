@@ -186,10 +186,6 @@ class Opportunity
     self.bids.desc(:amount).first.try(:amount)
   end
 
-  def current_bid_amount
-    forward_auction? ? highest_bid_amount : lowest_bid_amount
-  end
-
   private
 
   def set_bidding_ends_at
