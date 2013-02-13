@@ -1,7 +1,7 @@
 <div id="page-settings" ng-controller="SettingCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Settings</h3>
+    <h3>Settings {{selectedTab}}</h3>
     <div class="modal-loading-animation loading-animation"></div>
   </div>
   <div class="modal-body">
@@ -26,7 +26,6 @@
                 class="input-xlarge"
                 ng:model="userProfile.email"
                 required
-                autofocus
                 />
               </div>
             </div>
@@ -96,6 +95,19 @@
               </div>
             </div>
 
+
+            <div class="control-group">
+              <label for="dot_number" class="control-label">DOT Number</label>
+              <div class="controls">
+
+                <input id="dot_number" 
+                type="text"
+                class="input-xlarge"
+                ng:model="companyProfile.dot_number"
+                />
+                <p class="help-block warning">Required for bidding.</p>
+              </div>
+            </div>
 
             <div class="control-group">
               <label for="logo_id" class="control-label">Company Logo</label>
@@ -169,7 +181,6 @@
                 class="input-xlarge"
                 ng:model="companyProfile.contact_phone"
                 required
-                autofocus
                 />
               </div>
             </div>
@@ -210,20 +221,6 @@
                 />
               </div>
             </div>
-
-            <div class="control-group">
-              <label for="dot_number" class="control-label">DOT Number</label>
-              <div class="controls">
-
-                <input id="dot_number" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.dot_number"
-                />
-                <p class="help-block warning">Required for bidding.</p>
-              </div>
-            </div>
-
 
             <div class="control-group">
               <label for="cell_phone" class="control-label">Mobile Phone</label>

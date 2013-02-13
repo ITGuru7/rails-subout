@@ -894,7 +894,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   var region, token, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
-  $rootScope.selectedTab = "user-login";
+  if (!$rootScope.selectedTab) {
+    $rootScope.selectedTab = "user-login";
+  }
   token = $rootScope.token;
   Product.get({
     productHandle: 'subout-national-service',
@@ -902,12 +904,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }, function(data) {
     return $scope.product = data.product;
   });
-  console.log("user in SettingCtrl");
-  console.log($rootScope.user);
-  console.log($scope.userProfile);
-  console.log("companyProfile in SettingCtrl");
-  console.log($rootScope.company);
-  console.log($scope.companyProfile);
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
