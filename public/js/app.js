@@ -140,8 +140,16 @@ var AppCtrl, AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, Dashboard
 AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $('#modal').on('hidden', function() {
+    var modalElement, modalScope;
     $scope = angular.element(document).scope();
-    $scope.modal = null;
+    $scope.modal = '';
+    $rootScope.opportunity = null;
+    modalElement = $('#modal-stage');
+    modalScope = angular.element(modalElement.find('.ng-scope')).scope();
+    if (modalScope) {
+      modalScope.$destroy();
+    }
+    modalElement.html('');
     if (!$scope.$$phase) {
       return $scope.$apply();
     }
@@ -369,7 +377,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
     }
     return $alertInfo;
   };
-  return $rootScope.winOpportunityNow = function(opportunity) {
+  $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
     if (!$rootScope.company.dot_number) {
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
@@ -388,6 +396,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
       opportunityId: opportunity._id
     });
   };
+  return $rootScope.salesInfoMessages = [];
 };
 
 WelcomePrelaunchCtrl = function(AuthToken) {
@@ -653,8 +662,11 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $salesInfoMessage) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
+  $scope.salesInfoMessage = $salesInfoMessage.message();
+  console.log("DashboardCtrl");
+  console.log($scope.salesInfoMessage);
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -1188,6 +1200,19 @@ subout.directive("whenScrolled", function() {
     });
   };
 });
+
+subout.directive("salesInfoMessage", function($salesInfoMessage, $rootScope) {
+  return {
+    template: function() {
+      console.log("salesInfoMessage#template");
+      return "<span class='display-message-subject'>{{message}} {{messages}}</span>";
+    },
+    scope: {
+      messages: "=messages",
+      messgage: "=message"
+    }
+  };
+});
 var Evaluators, evaluation, module;
 
 module = angular.module("suboutFilters", []);
@@ -1473,6 +1498,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
           if (company.state_by_state_subscriber) {
             $rootScope.regions = company.regions;
           }
+          $rootScope.salesInfoMessages = company.sales_info_messages;
           return defer.resolve();
         }, function() {});
       });
@@ -1538,6 +1564,15 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     },
     isMarkedForReload: function() {
       return this._reload === true;
+    }
+  };
+}).factory("$salesInfoMessage", function($rootScope) {
+  return {
+    message: function() {
+      var messages;
+      messages = $rootScope.salesInfoMessages;
+      $rootScope.salesInfoMessageIdx = (($rootScope.salesInfoMessageIdx || 0) + 1) % messages.length;
+      return messages[$rootScope.salesInfoMessageIdx];
     }
   };
 }).factory("$appBrowser", function() {
