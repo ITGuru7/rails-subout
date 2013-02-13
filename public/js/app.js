@@ -150,6 +150,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
       modalScope.$destroy();
     }
     modalElement.html('');
+    $('.loading-animation').removeClass('loading');
     if (!$scope.$$phase) {
       return $scope.$apply();
     }
