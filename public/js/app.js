@@ -153,6 +153,9 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
   $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.userSignedIn = function() {
     var _ref;
+    if ($location.path() === '/sign_in') {
+      return false;
+    }
     if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
@@ -1027,14 +1030,17 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
       email: $scope.email,
       password: $scope.password
     }, function(token) {
-      $rootScope.token = token;
+      var promise;
       if (token.authorized) {
         $.cookie(AuthToken, token);
-        if ($rootScope.redirectToPath) {
-          return $location.path($rootScope.redirectToPath);
-        } else {
-          return $location.path("dashboard");
-        }
+        promise = Authorize.authenticate(token);
+        return promise.then(function() {
+          if ($rootScope.redirectToPath) {
+            return $location.path($rootScope.redirectToPath);
+          } else {
+            return $location.path("dashboard");
+          }
+        });
       } else {
         return $scope.message = token.message;
       }
