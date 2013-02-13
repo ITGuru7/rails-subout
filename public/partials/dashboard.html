@@ -176,21 +176,23 @@
                           </div>
                         </div>
                       </div>
-                      <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
-                        <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+                      <div style="display:none" ng-show="event.eventable._id">
+                        <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
+                          <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+                            <div>
+                              <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                            </div>
+                            <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+                              <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                            </div>
+                          </div>
                           <div>
-                            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-                          </div>
-                          <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                            <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                            <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                           </div>
                         </div>
-                        <div>
-                          <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
+                        <div ng-show="!company.isLicensedToBidOnOpportunityOf(event) && opportunity.status == 'In progress'">
+                          <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                         </div>
-                      </div>
-                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'">
-                        <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                       </div>
                     </div>
                     <div class="span4">
