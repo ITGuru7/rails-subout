@@ -29,6 +29,9 @@ class Company
 
   field :notification_type, default: 'Individual'
 
+  field :total_sales, type: Integer, default: 0
+  field :total_winnings, type: Integer, default: 0
+
   #address stuff TODO ask Tom about this
   field :street_address, type: String
   field :zip_code, type: String
@@ -47,7 +50,6 @@ class Company
 
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
-  has_many :opportunities
   has_many :bids, foreign_key: 'bidder_id'
 
   accepts_nested_attributes_for :users
@@ -183,8 +185,18 @@ class Company
     Opportunity.any_of(*options).where(canceled: false, :bidding_ends_at.gt => Time.now, winning_bid_id: nil, :buyer_id.ne => self.id).order_by(sort_by => sort_direction)
   end
 
-  def sales_info
-    "$155,000 in sales"
+  def sales_info_messages
+    sales_messages = []
+    sales_messages << "#{total_sales} in sales" if total_sales > 0
+    sales_messages << "#{total_winnings} in winnings" if total_winnings > 0
+    sales_messages << "Bid on #{opportunities_bid_on.size} opportunities worth $#{opportunities_bid_on.sum(&:value)}" if bids.count > 0
+
+    sales_messages << "No activity so far" if sales_messages.empty?
+    sales_messages
+  end
+
+  def opportunities_bid_on
+    Opportunity.where(:id.in => self.bids.distinct(:opportunity_id))
   end
 
   def sign_up_errors

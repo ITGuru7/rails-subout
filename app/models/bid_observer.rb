@@ -8,6 +8,8 @@ class BidObserver < Mongoid::Observer
       e.actor_id = bid.bidder_id
     end
 
+    bid.opportunity.update_value!
+
     Notifier.delay.new_bid(bid.id)
   end
 end

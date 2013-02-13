@@ -30,6 +30,7 @@ class Opportunity
   field :image_id
   field :tracking_id
   field :contact_phone, type: String
+  field :value, type: BigDecimal, default: 0
 
   attr_accessor :viewer
 
@@ -75,7 +76,9 @@ class Opportunity
   def win!(bid_id)
     bid = self.bids.find(bid_id)
 
-    update_attributes(bidding_done: true, winning_bid_id: bid.id)
+    update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount)
+    bid.buyer.inc(:total_sales, bid.amount)
+    bid.bidder.inc(:total_winnings, bid.amount)
 
     Notifier.delay.won_auction_to_buyer(self.id)
 
@@ -177,6 +180,19 @@ class Opportunity
     else
       "In progress"
     end
+  end
+
+  def won?
+    self.winning_bid_id.present?
+  end
+
+  def update_value!
+    if self.won?
+      value = self.winning_bid.amount 
+    else
+      value = forward_auction? ? highest_bid_amount : lowest_bid_amount
+    end
+    update_attribute(:value, value)
   end
 
   def lowest_bid_amount
