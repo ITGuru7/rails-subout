@@ -8588,11 +8588,13 @@ div#opportunity-show .description .content {
   background: url(/img/ajax-loader.gif) center right no-repeat;
   opacity: 0;
   float: right;
-  filter: alpha(opacity=0);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
 #subout-loading.loading {
   opacity: 1;
-  filter: alpha(opacity=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
 }
 #content.loading {
   min-height: 100px;
