@@ -7,8 +7,7 @@ resource "Token" do
   post "/api/v1/tokens.json" do
     parameter :email, "Email Address"
     parameter :password, "Password"
-    required_parameters :email
-    required_parameters :password
+    required_parameters :email, :password
 
     let(:email) { "user@email.com" }
     let(:password) { "password" }

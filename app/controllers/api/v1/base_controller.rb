@@ -5,7 +5,7 @@ class Api::V1::BaseController < ActionController::Base
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Mongoid::Errors::DocumentNotFound, :with => :render_404
-  end 
+  end
 
   private
 
