@@ -17,6 +17,7 @@ class CompanySerializer < ActiveModel::Serializer
   end
 
   def include_sales_info_messages?
+    return false unless scope
     scope.id == object.id
   end
 end
