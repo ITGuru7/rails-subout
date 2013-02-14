@@ -685,13 +685,16 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   });
   $scope.loadMoreEvents = function() {
     var queryOptions;
+    console.log("loadMoreEvents");
     if ($scope.noMoreEvents || $scope.loading) {
       return;
     }
+    console.log("loadMoreEvents loading");
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
     queryOptions.page = $scope.currentPage;
+    console.log("load events");
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
         $scope.noMoreEvents = true;
@@ -706,6 +709,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     });
   };
   $scope.refreshEvents = function(callback) {
+    console.log("refreshEvents");
     $scope.events = [];
     $scope.currentPage = 1;
     $scope.noMoreEvents = false;
@@ -788,9 +792,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   $scope.setFavoriteFilter = function(company_id) {
+    console.log("setFavoriteFilter");
     return $scope.companyFilter = company_id;
   };
   setRegionFilter = function() {
+    console.log("setRegionFilter");
     if ($scope.regionFilter) {
       $location.search('region', $scope.regionFilter);
     } else {
@@ -799,6 +805,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   setCompanyFilter = function() {
+    console.log("setCompanyFilter");
     if ($scope.companyFilter) {
       $location.search('company_id', $scope.companyFilter);
     } else {
@@ -807,12 +814,14 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   $scope.$watch("regions", function() {
+    console.log("regions updated");
     $scope.regionFilter = $location.search().region;
     $scope.$watch("regionFilter", setRegionFilter);
     $scope.companyFilter = $location.search().company_id;
     return $scope.$watch("companyFilter", setCompanyFilter);
   });
   $scope.setOpportunityTypeFilter = function(opportunity_type) {
+    console.log("setOpportunityTypeFilter");
     if ($location.search().opportunity_type === opportunity_type) {
       $location.search('opportunity_type', null);
     } else {
@@ -821,6 +830,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   $scope.setEventType = function(eventType) {
+    console.log("setEventType");
     if ($location.search().event_type === eventType) {
       $location.search('event_type', null);
     } else {
@@ -875,6 +885,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.fullTextSearch = function(event) {
     var query;
+    console.log("fullTextSearch");
     if ($scope.query && $scope.query !== "") {
       query = $scope.query;
     } else {
@@ -892,6 +903,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.filterValue = $rootScope.isMobile ? '' : null;
   $scope.clearFilters = function() {
+    console.log("clearFilters");
     $scope.query = "";
     $scope.companyFilter = $scope.filterValue;
     $scope.regionFilter = $scope.filterValue;
