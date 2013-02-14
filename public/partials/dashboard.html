@@ -92,7 +92,8 @@
                           <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
-                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                        <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                        <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
                   <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">

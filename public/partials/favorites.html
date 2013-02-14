@@ -5,7 +5,8 @@
     <span class="display-message sales-info">{{salesInfoMessage}}</span>
   </div>
   <div class="new-favorite">
-    <a href="#modal" data-toggle="modal" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+    <a ng-show="!isMobile" href="#modal" data-toggle="modal" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+    <a ng-show="isMobile" href="#/add-favorite" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>

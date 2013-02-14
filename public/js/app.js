@@ -111,6 +111,12 @@ subout.config([
     }).when("/settings", {
       templateUrl: suboutPartialPath("settings.html"),
       resolve: resolveAuth
+    }).when("/new-opportunity", {
+      templateUrl: suboutPartialPath("opportunity-form.html"),
+      resolve: resolveAuth
+    }).when("/add-favorite", {
+      templateUrl: suboutPartialPath("add-new-favorite.html"),
+      resolve: resolveAuth
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -405,7 +411,15 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
+  var successUpdate;
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      return $location.path('/dashboard');
+    } else {
+      return jQuery("#modal").modal("hide");
+    }
+  };
   return $scope.save = function() {
     var opportunity, showErrors;
     opportunity = $scope.opportunity;
@@ -417,10 +431,14 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.end_time = $("#opportunity_end_time").val();
     showErrors = function(errors) {
       var $alertError;
-      $("#modal form .alert-error").remove();
-      $alertError = $rootScope.alertError(errors);
-      $("#modal form").append($alertError);
-      return $("#modal .modal-body").scrollTop($("#modal form").height());
+      if ($rootScope.isMobile) {
+        return alert($rootScope.errorMessages(errors).join('\n'));
+      } else {
+        $alertError = $rootScope.alertError(errors);
+        $("#modal form .alert-error").remove();
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
+      }
     };
     if (opportunity._id) {
       return Auction.update({
@@ -429,7 +447,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         api_token: $rootScope.token.api_token
       }, function(data) {
         $rootScope.$emit('refreshOpportunity', opportunity);
-        return jQuery("#modal").modal("hide");
+        return successUpdate();
       }, function(content) {
         return showErrors(content.data.errors);
       });
@@ -438,7 +456,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         opportunity: opportunity,
         api_token: $rootScope.token.api_token
       }, function(data) {
-        return jQuery("#modal").modal("hide");
+        return successUpdate();
       }, function(content) {
         return showErrors(content.data.errors);
       });
@@ -490,7 +508,15 @@ FavoritesCtrl = function($scope, $rootScope, Favorite, $salesInfoMessage) {
   };
 };
 
-NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, FavoriteInvitation) {
+NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Company, FavoriteInvitation) {
+  var successUpdate;
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      return $location.path('/favorites');
+    } else {
+      return $rootScope.closeModal();
+    }
+  };
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
@@ -498,7 +524,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
       api_token: $rootScope.token.api_token
     }, {}, function() {
       $route.reload();
-      return $rootScope.closeModal();
+      return successUpdate();
     });
   };
   return $scope.findSupplier = function() {
@@ -524,7 +550,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
         favorite_invitation: $scope.invitation,
         api_token: $rootScope.token.api_token
       }, function() {
-        return $rootScope.closeModal();
+        return successUpdate();
       });
     };
   };
@@ -921,7 +947,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product) {
-  var region, token, _i, _len, _ref;
+  var region, successUpdate, token, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   if (!$rootScope.selectedTab) {
@@ -965,6 +991,14 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
   $scope.totalPrice = $scope.updateTotalPrice();
   $rootScope.setupFileUploader();
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      alert("redirect");
+      return $location.path('/dashboard');
+    } else {
+      return $rootScope.closeModal();
+    }
+  };
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
     if ($scope.userProfile.password === $scope.userProfile.password_confirmation) {
@@ -976,7 +1010,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
         $scope.userProfile.password = '';
         $scope.userProfile.current_password = '';
         $rootScope.user = $scope.userProfile;
-        return $rootScope.closeModal();
+        return successUpdate();
       }, function(error) {
         return $scope.userProfileError = "Invalid password or email!";
       });
@@ -1006,7 +1040,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       action: "update_regions"
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1020,7 +1054,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1043,7 +1077,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
           return $rootScope.regions = company.regions;
         }
       });
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
