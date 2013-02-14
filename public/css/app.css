@@ -8572,6 +8572,12 @@ div#opportunity-show .description .content {
 .display-message .display-message-subject {
   color: gray;
 }
+.display-message.top-banner {
+  margin-bottom: 20px;
+}
+.display-message.top-banner .display-message.sales-info {
+  margin-left: 20px;
+}
 .info-label-heading {
   margin: 20px 0 0;
   color: #69b645;

@@ -466,13 +466,15 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid) {
+MyBidCtrl = function($scope, $rootScope, MyBid, $salesInfoMessage) {
+  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
 };
 
-FavoritesCtrl = function($scope, $rootScope, Favorite) {
+FavoritesCtrl = function($scope, $rootScope, Favorite, $salesInfoMessage) {
+  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
@@ -528,8 +530,9 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
   };
 };
 
-AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
+AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $salesInfoMessage) {
   var availableToCurrentCompany;
+  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   availableToCurrentCompany = function(opportunity) {
     var _ref;
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
@@ -580,8 +583,9 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
   return $scope.sortOpportunities('bidding_ends_at');
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction, $salesInfoMessage) {
   var filterWithQuery;
+  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -666,8 +670,6 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $salesInfoMessage) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
   $scope.salesInfoMessage = $salesInfoMessage.message();
-  console.log("DashboardCtrl");
-  console.log($scope.salesInfoMessage);
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -1478,7 +1480,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return _.str.numberFormat(parseFloat(number), precision);
     }
   };
-}).factory("Authorize", function($rootScope, $location, AuthToken, Region, User, Company, $q) {
+}).factory("Authorize", function($rootScope, $location, AuthToken, Region, User, Company, $q, $salesInfoMessage) {
   return {
     token: function() {
       return this.tokenValue;
