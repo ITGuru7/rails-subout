@@ -7693,12 +7693,9 @@ body {
 /*}*/
 /*.modal{ height:80%; }*/
 .modal {
-  overflow-y: auto;
-  max-height: 90%;
-  margin-top: -45% /*position: absolute!important;*/
- /*margin:0px auto;*/
- /*top:10%!important;*/
-;
+  overflow-y: hidden;
+  max-height: 80%;
+  margin-top: -45%;
 }
 #company.well {
   padding: 10px;
@@ -7974,6 +7971,9 @@ body {
   background-color: #378bac;
   border: 1px solid #378bac;
 }
+#dashboard .win-it-now-button-wrapper {
+  padding-top: 2px;
+}
 #activities .table td {
   padding: 10px;
   font-size: 0.9em;
@@ -8115,6 +8115,52 @@ div#opportunity-show .description .content {
   white-space: pre;
   white-space: pre-wrap;
   padding-left: 5px;
+}
+.modal {
+  margin-top: -45%;
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+.modal-body {
+  max-height: none;
+}
+#modal .modal-body {
+  overflow: visible!important;
+  height: auto!important;
+  max-height: none!important;
+}
+#modal .modal-content {
+  overflow: auto!important;
+  max-height: 400px!important;
+}
+#modal .region-checkboxes {
+  height: 280px;
+  overflow-y: scroll;
+}
+@media all and (max-height: 650px) {
+  #modal .modal-content {
+    max-height: 325px!important;
+  }
+  #modal .region-checkboxes {
+    height: 150px;
+  }
+}
+@media all and (max-height: 550px) {
+  #modal .modal-content {
+    max-height: 250px!important;
+  }
+  #modal .region-checkboxes {
+    height: 100px;
+  }
+}
+@media all and (max-height: 450px) {
+  #media .modal-content {
+    max-height: 100px!important;
+  }
+  #media .region-checkboxes {
+    height: 50px;
+  }
 }
 #modal.modal {
   margin-top: 0px;
@@ -8299,16 +8345,6 @@ div#opportunity-show .description .content {
 #welcome-prelaunch-message h2 {
   color: #666550;
 }
-#page-settings ul.nav-tabs li {
-  font-size: 18px;
-}
-#page-settings .tab-content {
-  padding: 15px;
-}
-#page-settings li.btn-close {
-  margin-top: 5px;
-  margin-right: 10px;
-}
 #opportunity-form .modal-header {
   background-color: #378bac;
 }
@@ -8345,6 +8381,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#dot-required .modal-header {
+  background-color: #69b645;
+}
+#dot-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#dot-required .modal-body {
+  color: #666550;
+}
 #bid-new .modal-header {
   background-color: #69b645;
 }
@@ -8367,6 +8413,28 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+#bid-new .form-horizontal .control-label {
+  float: left;
+  padding-top: 5px;
+  text-align: left;
+  width: 140px;
+}
+#bid-new .control-group.error .help-block {
+  display: block;
+}
+#bid-new .control-group .help-block {
+  display: none;
+}
+#page-settings ul.nav-tabs li {
+  font-size: 18px;
+}
+#page-settings .tab-content {
+  padding: 15px;
+}
+#page-settings li.btn-close {
+  margin-top: 5px;
+  margin-right: 10px;
+}
 #page-settings .modal-header {
   background-color: #69b645;
 }
@@ -8375,7 +8443,6 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #page-settings .modal-body {
-  max-height: 600px;
   color: #666550;
 }
 #page-settings .modal-body .control-group.two-lines .controls {
@@ -8388,9 +8455,12 @@ div#opportunity-show .description .content {
   padding-top: 5px;
   padding-bottom: 0;
 }
-#page-settings .region-checkboxes {
-  height: 280px;
-  overflow-y: scroll;
+#page-settings .control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
+#page-settings .control-group .help-block.warning {
+  color: #b92a2a;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8400,18 +8470,6 @@ div#opportunity-show .description .content {
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
-}
-#bid-new .form-horizontal .control-label {
-  float: left;
-  padding-top: 5px;
-  text-align: left;
-  width: 140px;
-}
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
-  display: none;
 }
 #opportunities .search {
   border: 1px solid #000000;
@@ -8450,6 +8508,12 @@ div#opportunity-show .description .content {
   .table td {
     padding: 8px 2px;
   }
+  .gsfn-widget-tab.gsfn-left {
+    display: none;
+  }
+  .mobile-controls .cloudinary-fileupload {
+    width: 100%;
+  }
 }
 .table-border {
   border: 1px solid #ccc;
@@ -8460,6 +8524,9 @@ div#opportunity-show .description .content {
 .table-header {
   font-weight: bold;
   width: 35%;
+}
+.mobile-bid-history.table td {
+  border-top: 0px none #ccc;
 }
 #licensed-regions fieldset.regions-table {
   columns: 200px 2;
@@ -8491,4 +8558,66 @@ div#opportunity-show .description .content {
 }
 #available_opportunities .win-it-now .ui-currency-pos {
   color: white;
+}
+#available_opportunities td {
+  max-width: 300px;
+}
+.display-message {
+  font-size: 15px;
+  font-weight: bold;
+}
+.display-message .display-message-extra {
+  color: lightgray;
+}
+.display-message .display-message-subject {
+  color: gray;
+}
+.info-label-heading {
+  margin: 20px 0 0;
+  color: #69b645;
+  font-size: 1.2em;
+}
+#subout-loading {
+  width: 50px;
+  height: 80px;
+  -webkit-transition: 0.2s linear all;
+  -moz-transition: 0.2s linear all;
+  -ms-transition: 0.2s linear all;
+  -o-transition: 0.2s linear all;
+  transition: 0.2s linear all;
+  background: url(/img/ajax-loader.gif) center right no-repeat;
+  opacity: 0;
+  float: right;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+#subout-loading.loading {
+  opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+}
+#content.loading {
+  min-height: 100px;
+  position: relative;
+}
+#content.loading:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.content-loading-animation,
+#content.loading:after {
+  background: #ffffff url(/img/ajax-loader-body.gif) center 50px no-repeat;
+}
+.content-loading-animation {
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+.modal-loading-animation.loading {
+  background: blue;
 }
