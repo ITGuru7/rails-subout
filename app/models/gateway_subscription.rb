@@ -125,7 +125,7 @@ class GatewaySubscription
     sub = Chargify::Subscription.find(self.subscription_id)
     sub.components.each do |component|
       was_enabled = component.enabled
-      if regions.include?(component.name) 
+      if regions.include?(component.name)
         component.enabled = true
       else
         component.enabled = false
