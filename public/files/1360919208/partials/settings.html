@@ -1,7 +1,8 @@
 <div id="page-settings" ng-controller="SettingCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Settings</h3>
+    <h3>Settings {{selectedTab}}</h3>
+    <div class="modal-loading-animation loading-animation"></div>
   </div>
   <div class="modal-body">
     <ul class="nav nav-tabs">
@@ -18,15 +19,7 @@
             <div class="control-group" ng-class="{error:settingsUserLogin.user_email.$invalid}">
               <label for="user_email" class="control-label">Email *</label>
               <div class="controls">
-
-              <input id="user_email" 
-                name="user_email"
-                type="text"
-                class="input-xlarge"
-                ng:model="userProfile.email"
-                required
-                autofocus
-                />
+                <input id="user_email" name="user_email" type="text" class="input-xlarge" ng:model="userProfile.email" required />
               </div>
             </div>
             
@@ -95,118 +88,6 @@
               </div>
             </div>
 
-            <div class="control-group">
-              <label for="logo_id" class="control-label">Company Logo</label>
-
-              <div class="controls">
-                <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
-                <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
-                <div id="progress">
-                  <div class="bar" style="width: 0%;"></div>
-                </div>
-                <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="fleet-size" class="control-label">Fleet Size:</label>
-              <div class="controls">
-
-                <input id="fleet-size" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.fleet_size"
-                />
-              </div>
-            </div>
-
-
-            <div class="control-group">
-              <label for="since" class="control-label">Since:</label>
-              <div class="controls">
-
-                <input id="since" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.since"
-                />
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="owner" class="control-label">Owner:</label>
-              <div class="controls">
-
-                <input id="owner" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.owner"
-                />
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="owner" class="control-label">Contact Name:</label>
-              <div class="controls">
-
-                <input id="contact" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.contact_name"
-                />
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="contact_phone" class="control-label">Contact Phone</label>
-              <div class="controls">
-
-                <input id="contact_phone"
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.contact_phone"
-                required
-                autofocus
-                />
-              </div>
-            </div>
-
-            <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_email.$invalid}">
-              <label for="contact_email" class="control-label">Contact Email *</label>
-              <div class="controls">
-
-                <input id="contact_email" 
-                name="contact_email"
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.email"
-                required
-                />
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="website" class="control-label">Website</label>
-              <div class="controls">
-                <input id="website" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.website"
-                />
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label for="tpa" class="control-label">TPA</label>
-              <div class="controls">
-
-                <input id="tpa" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.tpa"
-                />
-              </div>
-            </div>
 
             <div class="control-group">
               <label for="dot_number" class="control-label">DOT Number</label>
@@ -221,16 +102,79 @@
               </div>
             </div>
 
+            <div class="control-group">
+              <label for="logo_id" class="control-label">Company Logo</label>
+
+              <div class="controls mobile-controls">
+                <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+                <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+                <div id="progress">
+                  <div class="bar" style="width: 0%;"></div>
+                </div>
+                <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.fleet_size.$invalid}">
+              <label for="fleet-size" class="control-label">Fleet Size *</label>
+              <div class="controls">
+                <input id="fleet-size" name="fleet_size" type="text" class="input-xlarge" ng:model="companyProfile.fleet_size" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.since.$invalid}">
+              <label for="since" class="control-label">Since *</label>
+              <div class="controls">
+                <input id="since" name="since" type="text" class="input-xlarge" ng:model="companyProfile.since" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.owner.$invalid}">
+              <label for="owner" class="control-label">Owner *</label>
+              <div class="controls">
+                <input id="owner" name="owner" type="text" class="input-xlarge" ng:model="companyProfile.owner" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_name.$invalid}">
+              <label for="owner" class="control-label">Contact Name *</label>
+              <div class="controls">
+                <input id="contact" name="contact_name" type="text" class="input-xlarge" ng:model="companyProfile.contact_name" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_phone.$invalid}">
+              <label for="contact_phone" class="control-label">Contact Phone *</label>
+              <div class="controls">
+                <input id="contact_phone" name="contact_phone" type="text" class="input-xlarge" ng:model="companyProfile.contact_phone" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_email.$invalid}">
+              <label for="contact_email" class="control-label">Contact Email *</label>
+              <div class="controls">
+                <input id="contact_email" name="contact_email" type="text" class="input-xlarge" ng:model="companyProfile.email" required />
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.website.$invalid}">
+              <label for="website" class="control-label">Website *</label>
+              <div class="controls">
+                <input id="website" name="website" type="text" class="input-xlarge" ng:model="companyProfile.website" required />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="tpa" class="control-label">TPA</label>
+              <div class="controls">
+                <input id="tpa" type="text" class="input-xlarge" ng:model="companyProfile.tpa" />
+              </div>
+            </div>
 
             <div class="control-group">
               <label for="cell_phone" class="control-label">Mobile Phone</label>
               <div class="controls">
-
-                <input id="cell_phone" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.cell_phone"
-                />
+                <input id="cell_phone" type="text" class="input-xlarge" ng:model="companyProfile.cell_phone" />
               </div>
             </div>
 

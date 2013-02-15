@@ -8123,39 +8123,42 @@ div#opportunity-show .description .content {
   max-height: none!important;
 }
 .modal-body {
+  max-height: none;
+}
+#modal .modal-body {
   overflow: visible!important;
   height: auto!important;
   max-height: none!important;
 }
-.modal-content {
+#modal .modal-content {
   overflow: auto!important;
   max-height: 400px!important;
 }
-.region-checkboxes {
+#modal .region-checkboxes {
   height: 280px;
   overflow-y: scroll;
 }
 @media all and (max-height: 650px) {
-  .modal-content {
+  #modal .modal-content {
     max-height: 325px!important;
   }
-  .region-checkboxes {
+  #modal .region-checkboxes {
     height: 150px;
   }
 }
 @media all and (max-height: 550px) {
-  .modal-content {
+  #modal .modal-content {
     max-height: 250px!important;
   }
-  .region-checkboxes {
+  #modal .region-checkboxes {
     height: 100px;
   }
 }
 @media all and (max-height: 450px) {
-  .modal-content {
+  #media .modal-content {
     max-height: 100px!important;
   }
-  .region-checkboxes {
+  #media .region-checkboxes {
     height: 50px;
   }
 }
@@ -8440,7 +8443,6 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #page-settings .modal-body {
-  max-height: 600px;
   color: #666550;
 }
 #page-settings .modal-body .control-group.two-lines .controls {
@@ -8455,16 +8457,15 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
-  color: #c7c6b3;
-}
-#page-settings .control-group .help-block.warning {
-  color: #b92a2a;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
 }
 .control-group .ng-pristine {
   border: solid 1px gray;
+}
+.control-group .help-block.warning {
+  color: #b92a2a;
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
@@ -8505,6 +8506,12 @@ div#opportunity-show .description .content {
   .table th,
   .table td {
     padding: 8px 2px;
+  }
+  .gsfn-widget-tab.gsfn-left {
+    display: none;
+  }
+  .mobile-controls .cloudinary-fileupload {
+    width: 100%;
   }
 }
 .table-border {
@@ -8553,4 +8560,69 @@ div#opportunity-show .description .content {
 }
 #available_opportunities td {
   max-width: 300px;
+}
+.display-message {
+  font-size: 15px;
+  font-weight: bold;
+}
+.display-message .display-message-extra {
+  color: lightgray;
+}
+.display-message .display-message-subject {
+  color: gray;
+}
+.display-message.top-banner {
+  margin-bottom: 20px;
+}
+.display-message.top-banner .display-message.sales-info {
+  margin-left: 20px;
+}
+.info-label-heading {
+  margin: 20px 0 0;
+  color: #69b645;
+  font-size: 1.2em;
+}
+#subout-loading {
+  width: 50px;
+  height: 80px;
+  -webkit-transition: 0.2s linear all;
+  -moz-transition: 0.2s linear all;
+  -ms-transition: 0.2s linear all;
+  -o-transition: 0.2s linear all;
+  transition: 0.2s linear all;
+  background: url(/img/ajax-loader.gif) center right no-repeat;
+  opacity: 0;
+  float: right;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+#subout-loading.loading {
+  opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+}
+#content.loading {
+  min-height: 100px;
+  position: relative;
+}
+#content.loading:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.content-loading-animation,
+#content.loading:after {
+  background: #ffffff url(/img/ajax-loader-body.gif) center 50px no-repeat;
+}
+.content-loading-animation {
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+.modal-loading-animation.loading {
+  background: blue;
 }

@@ -1,6 +1,11 @@
 <div id="dashboard">
       <div class="row-fluid">
         <div id="sidebar" class="span3 filters">
+            <div class="welcome display-message">
+              <span class="display-message-extra">Welcome</span>
+              <span class="company display-message-subject">{{company.name}}!</span>
+            </div>
+            <div class="info-label-heading">Filter My View By:</div>
             <section id="filters">
               <section class="title"><h5>Opportunity Type</h5></section>
               <section class="content">
@@ -58,31 +63,26 @@
                 <div class="clearfix"></div>
               </section>
             </section>
-
-            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
-              <section class="title"><h5>Favorites</h5></section>
-              <section class="content">
-                <ul>
-                  <li class="filter" ng-repeat="company in favoriteCompanies" ng-class="{active: $location.search().company_id == company._id}">
-                    <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
-                  </li>
-                </ul>
-              </section>
-            </section>
         </div>
         <div class="span9">
            <section id="activities" when-scrolled="loadMoreEvents()">
               <div id="toolbar">
                   <div class="row-fluid">
                       <div class="pull-left span4">
-                        <h5 class="filter-title">{{filter.name || "All Events"}}</h5>
+                        <div class="display-message sales-info">{{salesInfoMessage}}</div>
+
+                        <div class="info-label-heading">
+                          <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
+                          <span ng-hide="hasAnyFilter()">All Events:</span>
+                        </div>
                       </div>
                       <div class='pull-right span8 toolbar-buttons'>
                         <div id="search" class="pull-right span6">
                           <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                             <div class="icon-search"></div>
                         </div>
-                        <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                        <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                        <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
                       </div>
                   </div>
                   <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
@@ -163,21 +163,23 @@
                           </div>
                         </div>
                       </div>
-                      <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
-                        <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+                      <div style="display:none" ng-show="event.eventable._id">
+                        <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
+                          <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+                            <div>
+                              <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                            </div>
+                            <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+                              <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                            </div>
+                          </div>
                           <div>
-                            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-                          </div>
-                          <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                            <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                            <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                           </div>
                         </div>
-                        <div>
-                          <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
+                        <div ng-show="!company.isLicensedToBidOnOpportunityOf(event) && opportunity.status == 'In progress'">
+                          <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                         </div>
-                      </div>
-                      <div ng-hide="company.isLicensedToBidOnOpportunityOf(event) || opportunity.status != 'In progress'">
-                        <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
                       </div>
                     </div>
                     <div class="span4">
@@ -192,7 +194,7 @@
                 </div>
               </section>
             <div class="load-more" ng-hide="noMoreEvents">
-              <span ng-show="loading">Loading...</span>
+              <span ng-show="loading" class="content-loading-animation"></span>
             </div>
           </section>
         </div>
