@@ -558,6 +558,21 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
 
 AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $salesInfoMessage) {
   var availableToCurrentCompany;
+  $scope.sortItems = [
+    {
+      value: "created_at,asc",
+      label: "Created (ascending)"
+    }, {
+      value: "created_at,desc",
+      label: "Created (descending)"
+    }, {
+      value: "bidding_ends_at,asc",
+      label: "Ends (ascending)"
+    }, {
+      value: "bidding_ends_at,desc",
+      label: "Ends (descending)"
+    }
+  ];
   $rootScope.salesInfoMessage = $salesInfoMessage.message();
   availableToCurrentCompany = function(opportunity) {
     var _ref;
@@ -604,6 +619,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       $scope.sortDirection = "asc";
       $scope.sortBy = sortBy;
     }
+    return $scope.reloadOpportunities();
+  };
+  $scope.sortMobileOpportunity = function() {
+    var sortOptions;
+    sortOptions = $scope.sortOption.split(",");
+    $scope.sortBy = sortOptions[0];
+    $scope.sortDirection = sortOptions[1];
     return $scope.reloadOpportunities();
   };
   return $scope.sortOpportunities('bidding_ends_at');
