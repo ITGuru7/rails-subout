@@ -33,10 +33,11 @@
         <span class="span2">{{company.bids_count}}</span>
       </td>
       <td>
-        <span class="span2">{{company.opportunities_count}}</span>
+        <span class="span1">{{company.opportunities_count}}</span>
       </td>
       <td>
-        <span class="span2">
+        <span class="span3">
+          <a href="/#/dashboard?company_id={{company._id}}">View Activity</a>
           <a class="btn btn-small btn-danger pull-right" ng-click="removeFavorite(company)">Remove</a>
         </span>
       </td>

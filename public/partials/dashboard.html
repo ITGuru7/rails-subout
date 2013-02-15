@@ -63,17 +63,6 @@
                 <div class="clearfix"></div>
               </section>
             </section>
-
-            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
-              <section class="title"><h5>Favorites</h5></section>
-              <section class="content">
-                <ul>
-                  <li class="filter" ng-repeat="company in favoriteCompanies" ng-class="{active: $location.search().company_id == company._id}">
-                    <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
-                  </li>
-                </ul>
-              </section>
-            </section>
         </div>
         <div class="span9">
            <section id="activities" when-scrolled="loadMoreEvents()">

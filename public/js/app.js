@@ -700,9 +700,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
   });
-  $scope.favoriteCompanies = Favorite.query({
-    api_token: $rootScope.token.api_token
-  });
   $scope.query = $location.search().q;
   $scope.filter = null;
   $scope.opportunity = null;
@@ -818,10 +815,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return true;
     }
     return event.actor._id === actor_id;
-  };
-  $scope.setFavoriteFilter = function(company_id) {
-    console.log("setFavoriteFilter");
-    return $scope.companyFilter = company_id;
   };
   setRegionFilter = function() {
     console.log("setRegionFilter");
