@@ -8457,16 +8457,15 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
-  color: #c7c6b3;
-}
-#page-settings .control-group .help-block.warning {
-  color: #b92a2a;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
 }
 .control-group .ng-pristine {
   border: solid 1px gray;
+}
+.control-group .help-block.warning {
+  color: #b92a2a;
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
