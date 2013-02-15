@@ -1,12 +1,14 @@
 <div id="favorites">
-  <div class="welcome display-message top-banner pull-left">
-    <span class="display-message-extra">Welcome</span>
-    <span class="company display-message-subject">{{company.name}}!</span>
-    <span class="display-message sales-info">{{salesInfoMessage}}</span>
-  </div>
-  <div class="new-favorite">
-    <a ng-show="!isMobile" href="#modal" data-toggle="modal" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
-    <a ng-show="isMobile" href="#/add-favorite" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+  <div class="clearfix">
+    <div class="welcome display-message top-banner pull-left">
+      <span class="display-message-extra">Welcome</span>
+      <span class="company display-message-subject">{{company.name}}!</span>
+      <span class="display-message sales-info">{{salesInfoMessage}}</span>
+    </div>
+    <div class="new-favorite">
+      <a ng-show="!isMobile" href="#modal" data-toggle="modal" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+      <a ng-show="isMobile" href="#/add-favorite" ng-click="displayNewFavoriteForm()" class="btn btn-primary add-new-favorite">Add new Favorite</a>
+    </div>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>
