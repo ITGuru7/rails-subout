@@ -39,4 +39,10 @@ class OpportunitySerializer < ActiveModel::Serializer
   def end_date
     object.end_date.strftime("%Y/%m/%d") if object.end_date
   end
+
+  def win_it_now_price
+    return nil unless object.win_it_now_price.present?
+
+    "%.2f" % object.win_it_now_price
+  end
 end
