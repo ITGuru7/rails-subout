@@ -1008,7 +1008,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   $rootScope.setupFileUploader();
   successUpdate = function() {
     if ($rootScope.isMobile) {
-      alert("redirect");
       return $location.path('/dashboard');
     } else {
       return $rootScope.closeModal();
