@@ -384,7 +384,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
     }
     return $alertInfo;
   };
-  $rootScope.winOpportunityNow = function(opportunity) {
+  return $rootScope.winOpportunityNow = function(opportunity) {
     var bid;
     if (!$rootScope.company.dot_number) {
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
@@ -403,7 +403,6 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
       opportunityId: opportunity._id
     });
   };
-  return $rootScope.salesInfoMessages = [];
 };
 
 WelcomePrelaunchCtrl = function(AuthToken) {
@@ -484,15 +483,13 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid, $salesInfoMessage) {
-  $rootScope.salesInfoMessage = $salesInfoMessage.message();
+MyBidCtrl = function($scope, $rootScope, MyBid) {
   return $scope.my_bids = MyBid.query({
     api_token: $rootScope.token.api_token
   });
 };
 
-FavoritesCtrl = function($scope, $rootScope, Favorite, $salesInfoMessage) {
-  $rootScope.salesInfoMessage = $salesInfoMessage.message();
+FavoritesCtrl = function($scope, $rootScope, Favorite) {
   $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
@@ -556,7 +553,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
   };
 };
 
-AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $salesInfoMessage) {
+AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   var availableToCurrentCompany;
   $scope.sortItems = [
     {
@@ -573,7 +570,6 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       label: "Ends (descending)"
     }
   ];
-  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   availableToCurrentCompany = function(opportunity) {
     var _ref;
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
@@ -631,9 +627,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   return $scope.sortOpportunities('bidding_ends_at');
 };
 
-OpportunityCtrl = function($scope, $rootScope, $location, Auction, $salesInfoMessage) {
+OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   var filterWithQuery;
-  $rootScope.salesInfoMessage = $salesInfoMessage.message();
   $scope.opportunities = Auction.query({
     api_token: $rootScope.token.api_token
   });
@@ -715,9 +710,8 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $salesInfoMessage) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
-  $scope.salesInfoMessage = $salesInfoMessage.message();
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -732,16 +726,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   });
   $scope.loadMoreEvents = function() {
     var queryOptions;
-    console.log("loadMoreEvents");
     if ($scope.noMoreEvents || $scope.loading) {
       return;
     }
-    console.log("loadMoreEvents loading");
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
     queryOptions.page = $scope.currentPage;
-    console.log("load events");
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
         $scope.noMoreEvents = true;
@@ -756,7 +747,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     });
   };
   $scope.refreshEvents = function(callback) {
-    console.log("refreshEvents");
     $scope.events = [];
     $scope.currentPage = 1;
     $scope.noMoreEvents = false;
@@ -839,7 +829,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   setRegionFilter = function() {
-    console.log("setRegionFilter");
     if ($scope.regionFilter) {
       $location.search('region', $scope.regionFilter);
     } else {
@@ -848,7 +837,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   setCompanyFilter = function() {
-    console.log("setCompanyFilter");
     if ($scope.companyFilter) {
       $location.search('company_id', $scope.companyFilter);
     } else {
@@ -857,14 +845,12 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   $scope.$watch("regions", function() {
-    console.log("regions updated");
     $scope.regionFilter = $location.search().region;
     $scope.$watch("regionFilter", setRegionFilter);
     $scope.companyFilter = $location.search().company_id;
     return $scope.$watch("companyFilter", setCompanyFilter);
   });
   $scope.setOpportunityTypeFilter = function(opportunity_type) {
-    console.log("setOpportunityTypeFilter");
     if ($location.search().opportunity_type === opportunity_type) {
       $location.search('opportunity_type', null);
     } else {
@@ -873,7 +859,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.refreshEvents();
   };
   $scope.setEventType = function(eventType) {
-    console.log("setEventType");
     if ($location.search().event_type === eventType) {
       $location.search('event_type', null);
     } else {
@@ -928,7 +913,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.fullTextSearch = function(event) {
     var query;
-    console.log("fullTextSearch");
     if ($scope.query && $scope.query !== "") {
       query = $scope.query;
     } else {
@@ -946,7 +930,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.filterValue = $rootScope.isMobile ? '' : null;
   $scope.clearFilters = function() {
-    console.log("clearFilters");
     $scope.query = "";
     $scope.companyFilter = $scope.filterValue;
     $scope.regionFilter = $scope.filterValue;
@@ -1264,15 +1247,20 @@ subout.directive("whenScrolled", function() {
   };
 });
 
-subout.directive("salesInfoMessage", function($salesInfoMessage, $rootScope) {
+subout.directive("salesInfoMessages", function($rootScope) {
   return {
-    template: function() {
-      console.log("salesInfoMessage#template");
-      return "<span class='display-message-subject'>{{message}} {{messages}}</span>";
-    },
-    scope: {
-      messages: "=messages",
-      messgage: "=message"
+    link: function(scope, iElement, iAttrs) {
+      var variable;
+      variable = iAttrs["salesInfoMessages"];
+      return scope.$watch(variable, function() {
+        var messages;
+        messages = scope[variable];
+        if (messages && messages.length > 0) {
+          $rootScope.salesInfoMessageIdx = ($rootScope.salesInfoMessageIdx || 0) % messages.length;
+          iElement.text(messages[$rootScope.salesInfoMessageIdx]);
+          return $rootScope.salesInfoMessageIdx += 1;
+        }
+      });
     }
   };
 });
@@ -1528,7 +1516,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
       return _.str.numberFormat(parseFloat(number), precision);
     }
   };
-}).factory("Authorize", function($rootScope, $location, AuthToken, Region, User, Company, $q, $salesInfoMessage) {
+}).factory("Authorize", function($rootScope, $location, AuthToken, Region, User, Company, $q) {
   return {
     token: function() {
       return this.tokenValue;
@@ -1627,15 +1615,6 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     },
     isMarkedForReload: function() {
       return this._reload === true;
-    }
-  };
-}).factory("$salesInfoMessage", function($rootScope) {
-  return {
-    message: function() {
-      var messages;
-      messages = $rootScope.salesInfoMessages;
-      $rootScope.salesInfoMessageIdx = (($rootScope.salesInfoMessageIdx || 0) + 1) % messages.length;
-      return messages[$rootScope.salesInfoMessageIdx];
     }
   };
 }).factory("$appBrowser", function() {
