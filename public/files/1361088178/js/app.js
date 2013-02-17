@@ -111,6 +111,12 @@ subout.config([
     }).when("/settings", {
       templateUrl: suboutPartialPath("settings.html"),
       resolve: resolveAuth
+    }).when("/new-opportunity", {
+      templateUrl: suboutPartialPath("opportunity-form.html"),
+      resolve: resolveAuth
+    }).when("/add-favorite", {
+      templateUrl: suboutPartialPath("add-new-favorite.html"),
+      resolve: resolveAuth
     }).otherwise({
       redirectTo: "/dashboard"
     });
@@ -140,8 +146,17 @@ var AppCtrl, AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, Dashboard
 AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $('#modal').on('hidden', function() {
+    var modalElement, modalScope;
     $scope = angular.element(document).scope();
-    $scope.modal = null;
+    $scope.modal = '';
+    $rootScope.opportunity = null;
+    modalElement = $('#modal-stage');
+    modalScope = angular.element(modalElement.find('.ng-scope')).scope();
+    if (modalScope) {
+      modalScope.$destroy();
+    }
+    modalElement.html('');
+    $('.loading-animation').removeClass('loading');
     if (!$scope.$$phase) {
       return $scope.$apply();
     }
@@ -153,6 +168,9 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
   $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.userSignedIn = function() {
     var _ref;
+    if ($location.path() === '/sign_in') {
+      return false;
+    }
     if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
@@ -392,7 +410,15 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 };
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
+  var successUpdate;
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      return $location.path('/dashboard');
+    } else {
+      return jQuery("#modal").modal("hide");
+    }
+  };
   return $scope.save = function() {
     var opportunity, showErrors;
     opportunity = $scope.opportunity;
@@ -404,10 +430,14 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.end_time = $("#opportunity_end_time").val();
     showErrors = function(errors) {
       var $alertError;
-      $("#modal form .alert-error").remove();
-      $alertError = $rootScope.alertError(errors);
-      $("#modal form").append($alertError);
-      return $("#modal .modal-body").scrollTop($("#modal form").height());
+      if ($rootScope.isMobile) {
+        return alert($rootScope.errorMessages(errors).join('\n'));
+      } else {
+        $alertError = $rootScope.alertError(errors);
+        $("#modal form .alert-error").remove();
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
+      }
     };
     if (opportunity._id) {
       return Auction.update({
@@ -416,7 +446,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         api_token: $rootScope.token.api_token
       }, function(data) {
         $rootScope.$emit('refreshOpportunity', opportunity);
-        return jQuery("#modal").modal("hide");
+        return successUpdate();
       }, function(content) {
         return showErrors(content.data.errors);
       });
@@ -425,7 +455,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
         opportunity: opportunity,
         api_token: $rootScope.token.api_token
       }, function(data) {
-        return jQuery("#modal").modal("hide");
+        return successUpdate();
       }, function(content) {
         return showErrors(content.data.errors);
       });
@@ -475,7 +505,15 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
   };
 };
 
-NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, FavoriteInvitation) {
+NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Company, FavoriteInvitation) {
+  var successUpdate;
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      return $location.path('/favorites');
+    } else {
+      return $rootScope.closeModal();
+    }
+  };
   $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
@@ -483,7 +521,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
       api_token: $rootScope.token.api_token
     }, {}, function() {
       $route.reload();
-      return $rootScope.closeModal();
+      return successUpdate();
     });
   };
   return $scope.findSupplier = function() {
@@ -509,7 +547,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
         favorite_invitation: $scope.invitation,
         api_token: $rootScope.token.api_token
       }, function() {
-        return $rootScope.closeModal();
+        return successUpdate();
       });
     };
   };
@@ -517,6 +555,21 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, Favorite, Company, Favori
 
 AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   var availableToCurrentCompany;
+  $scope.sortItems = [
+    {
+      value: "created_at,asc",
+      label: "Created (ascending)"
+    }, {
+      value: "created_at,desc",
+      label: "Created (descending)"
+    }, {
+      value: "bidding_ends_at,asc",
+      label: "Ends (ascending)"
+    }, {
+      value: "bidding_ends_at,desc",
+      label: "Ends (descending)"
+    }
+  ];
   availableToCurrentCompany = function(opportunity) {
     var _ref;
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
@@ -562,6 +615,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
       $scope.sortDirection = "asc";
       $scope.sortBy = sortBy;
     }
+    return $scope.reloadOpportunities();
+  };
+  $scope.sortMobileOpportunity = function() {
+    var sortOptions;
+    sortOptions = $scope.sortOption.split(",");
+    $scope.sortBy = sortOptions[0];
+    $scope.sortDirection = sortOptions[1];
     return $scope.reloadOpportunities();
   };
   return $scope.sortOpportunities('bidding_ends_at');
@@ -654,9 +714,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
-    api_token: $rootScope.token.api_token
-  });
-  $scope.favoriteCompanies = Favorite.query({
     api_token: $rootScope.token.api_token
   });
   $scope.query = $location.search().q;
@@ -770,9 +827,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return true;
     }
     return event.actor._id === actor_id;
-  };
-  $scope.setFavoriteFilter = function(company_id) {
-    return $scope.companyFilter = company_id;
   };
   setRegionFilter = function() {
     if ($scope.regionFilter) {
@@ -891,10 +945,12 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product) {
-  var region, token, _i, _len, _ref;
+  var region, successUpdate, token, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
-  $rootScope.selectedTab = "user-login";
+  if (!$rootScope.selectedTab) {
+    $rootScope.selectedTab = "user-login";
+  }
   token = $rootScope.token;
   Product.get({
     productHandle: 'subout-national-service',
@@ -902,12 +958,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }, function(data) {
     return $scope.product = data.product;
   });
-  console.log("user in SettingCtrl");
-  console.log($rootScope.user);
-  console.log($scope.userProfile);
-  console.log("companyProfile in SettingCtrl");
-  console.log($rootScope.company);
-  console.log($scope.companyProfile);
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -939,6 +989,13 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
   $scope.totalPrice = $scope.updateTotalPrice();
   $rootScope.setupFileUploader();
+  successUpdate = function() {
+    if ($rootScope.isMobile) {
+      return $location.path('/dashboard');
+    } else {
+      return $rootScope.closeModal();
+    }
+  };
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
     if ($scope.userProfile.password === $scope.userProfile.password_confirmation) {
@@ -950,7 +1007,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
         $scope.userProfile.password = '';
         $scope.userProfile.current_password = '';
         $rootScope.user = $scope.userProfile;
-        return $rootScope.closeModal();
+        return successUpdate();
       }, function(error) {
         return $scope.userProfileError = "Invalid password or email!";
       });
@@ -980,7 +1037,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       action: "update_regions"
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -994,7 +1051,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token
     }, function(company) {
       $rootScope.company = $scope.companyProfile;
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1017,7 +1074,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
           return $rootScope.regions = company.regions;
         }
       });
-      return $rootScope.closeModal();
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1031,14 +1088,17 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
       email: $scope.email,
       password: $scope.password
     }, function(token) {
-      $rootScope.token = token;
+      var promise;
       if (token.authorized) {
         $.cookie(AuthToken, token);
-        if ($rootScope.redirectToPath) {
-          return $location.path($rootScope.redirectToPath);
-        } else {
-          return $location.path("dashboard");
-        }
+        promise = Authorize.authenticate(token);
+        return promise.then(function() {
+          if ($rootScope.redirectToPath) {
+            return $location.path($rootScope.redirectToPath);
+          } else {
+            return $location.path("dashboard");
+          }
+        });
       } else {
         return $scope.message = token.message;
       }
@@ -1184,6 +1244,24 @@ subout.directive("whenScrolled", function() {
         return scope.$apply(attr.whenScrolled);
       }
     });
+  };
+});
+
+subout.directive("salesInfoMessages", function($rootScope) {
+  return {
+    link: function(scope, iElement, iAttrs) {
+      var variable;
+      variable = iAttrs["salesInfoMessages"];
+      return scope.$watch(variable, function() {
+        var messages;
+        messages = scope[variable];
+        if (messages && messages.length > 0) {
+          $rootScope.salesInfoMessageIdx = ($rootScope.salesInfoMessageIdx || 0) % messages.length;
+          iElement.text(messages[$rootScope.salesInfoMessageIdx]);
+          return $rootScope.salesInfoMessageIdx += 1;
+        }
+      });
+    }
   };
 });
 var Evaluators, evaluation, module;
@@ -1471,6 +1549,7 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
           if (company.state_by_state_subscriber) {
             $rootScope.regions = company.regions;
           }
+          $rootScope.salesInfoMessages = company.sales_info_messages;
           return defer.resolve();
         }, function() {});
       });

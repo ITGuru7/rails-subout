@@ -8457,16 +8457,15 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
-  color: #c7c6b3;
-}
-#page-settings .control-group .help-block.warning {
-  color: #b92a2a;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
 }
 .control-group .ng-pristine {
   border: solid 1px gray;
+}
+.control-group .help-block.warning {
+  color: #b92a2a;
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
@@ -8572,6 +8571,12 @@ div#opportunity-show .description .content {
 .display-message .display-message-subject {
   color: gray;
 }
+.display-message.top-banner {
+  margin-bottom: 20px;
+}
+.display-message.top-banner .display-message.sales-info {
+  margin-left: 20px;
+}
 .info-label-heading {
   margin: 20px 0 0;
   color: #69b645;
@@ -8588,9 +8593,13 @@ div#opportunity-show .description .content {
   background: url(/img/ajax-loader.gif) center right no-repeat;
   opacity: 0;
   float: right;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
 }
 #subout-loading.loading {
   opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
 }
 #content.loading {
   min-height: 100px;
