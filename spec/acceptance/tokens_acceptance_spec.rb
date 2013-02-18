@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource "Token" do
+resource "Authentication" do
   let!(:user) { FactoryGirl.create(:user, email: email, password: password, password_confirmation: password) }
 
   post "/api/v1/tokens.json" do
@@ -12,7 +12,7 @@ resource "Token" do
     let(:email) { "user@email.com" }
     let(:password) { "password" }
 
-    example_request "Create" do
+    example_request "Sign In" do
       status.should == 200
     end
   end

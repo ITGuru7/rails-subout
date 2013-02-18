@@ -4,6 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource "Opportunity" do
   let!(:company) { FactoryGirl.create(:company) }
   let!(:user) { FactoryGirl.create(:user, company: company) }
+  let!(:opportunity) { FactoryGirl.create(:opportunity, buyer: company) }
 
   post "/api/v1/auctions.json" do
     parameter :api_token, "Authentication token"
@@ -74,6 +75,19 @@ resource "Opportunity" do
       example_request "Create Quick Winnable" do
         status.should == 201
       end
+    end
+  end
+
+
+  put "/api/v1/auctions/:opportunity_id/cancel.json" do
+    parameter :api_token, "Authentication token"
+    parameter :opportunity_id, "Opportunity ID"
+
+    let(:api_token) { user.authentication_token }
+    let(:opportunity_id) { opportunity.id }
+
+    example_request "Cancel" do
+      status.should == 200
     end
   end
 end
