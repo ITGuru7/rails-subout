@@ -8559,7 +8559,14 @@ div#opportunity-show .description .content {
   color: white;
 }
 #available_opportunities td {
+  min-width: 70px;
   max-width: 300px;
+}
+#available_opportunities .welcome {
+  margin: 10px 0 20px;
+}
+#available_opportunities .pagination {
+  margin: 0 0 10px 0;
 }
 .display-message {
   font-size: 15px;

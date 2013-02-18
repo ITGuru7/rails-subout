@@ -575,6 +575,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
   };
   $scope.opportunities = [];
+  $scope.pages = [];
   $rootScope.channel.bind('event_created', function(event) {
     var affectedOpp;
     affectedOpp = _.find($scope.opportunities, function(opportunity) {
@@ -595,14 +596,38 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
     }
     return $scope.$apply();
   });
-  $scope.reloadOpportunities = function() {
-    return Opportunity.query({
+  $scope.loadMoreOpportunities = function(page) {
+    if (page == null) {
+      page = 1;
+    }
+    return Opportunity.paginate({
       api_token: $rootScope.token.api_token,
       sort_by: $scope.sortBy,
-      sort_direction: $scope.sortDirection
-    }, function(opportunities) {
-      return $scope.opportunities = opportunities;
+      sort_direction: $scope.sortDirection,
+      page: page
+    }, function(data) {
+      var _i, _ref, _results;
+      $scope.opportunities = data.opportunities;
+      $scope.page = data.opportunities_page;
+      $scope.max_page = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      return $scope.pages = (function() {
+        _results = [];
+        for (var _i = 1, _ref = $scope.max_page; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this);
     });
+  };
+  $scope.prevPage = function() {
+    return $scope.loadMoreOpportunities($scope.page - 1);
+  };
+  $scope.nextPage = function() {
+    return $scope.loadMoreOpportunities($scope.page + 1);
+  };
+  $scope.setPage = function(page) {
+    return $scope.loadMoreOpportunities(page);
+  };
+  $scope.reloadOpportunities = function() {
+    return $scope.loadMoreOpportunities(1);
   };
   $scope.sortOpportunities = function(sortBy) {
     if ($scope.sortBy === sortBy) {
@@ -1364,7 +1389,11 @@ angular.module("suboutServices", ["ngResource"]).factory("Auction", function($re
     }
   });
 }).factory("Opportunity", function($resource) {
-  return $resource("" + api_path + "/opportunities/:opportunityId", {}, {});
+  return $resource("" + api_path + "/opportunities/:opportunityId", {}, {
+    paginate: {
+      method: "GET"
+    }
+  });
 }).factory("MyBid", function($resource) {
   return $resource("" + api_path + "/bids", {}, {});
 }).factory("Region", function($resource) {

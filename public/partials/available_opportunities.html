@@ -1,8 +1,23 @@
 <div id="available_opportunities">
-  <div class="welcome display-message top-banner">
-    <span class="display-message-extra">Welcome</span>
-    <span class="company display-message-subject">{{company.name}}!</span>
-    <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+  <div class="clearfix">
+    <div class="welcome display-message top-banner pull-left">
+      <span class="display-message-extra">Welcome</span>
+      <span class="company display-message-subject">{{company.name}}!</span>
+      <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+    </div>
+    <div class="pagination pull-right">
+      <ul>
+        <li ng-class="{disabled: page == 1}">
+          <a href ng-click="prevPage()">« Prev</a>
+        </li>
+        <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+          <a ng-click="setPage(n)">{{n}}</a>
+        </li>
+        <li ng-class="{disabled: page == max_page}">
+          <a href ng-click="nextPage()">Next »</a>
+        </li>
+      </ul>
+    </div>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>
@@ -104,4 +119,17 @@
       </td>
     </tr>
   </table>
+  <div class="pagination pull-right">
+    <ul>
+      <li ng-class="{disabled: page == 1}">
+        <a href ng-click="prevPage()">« Prev</a>
+      </li>
+      <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+        <a ng-click="setPage(n)">{{n}}</a>
+      </li>
+      <li ng-class="{disabled: page == max_page}">
+        <a href ng-click="nextPage()">Next »</a>
+      </li>
+    </ul>
+  </div>
 </div>

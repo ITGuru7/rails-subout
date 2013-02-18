@@ -58,6 +58,8 @@ class Opportunity
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
 
+  paginates_per 30
+
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
       Notifier.delay.expired_auction_notification(opportunity.id)
