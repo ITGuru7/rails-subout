@@ -115,16 +115,16 @@
                   <div class="event-summary">
                     <span class="span3">
                       <i class="{{opportunity.icon}}"></i>
-                      <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
+                      <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
                       <span class="opportunity-name">
-                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}">
+                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
                           {{opportunity.name}}
                         </a>
                       </span>
-                      <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
-                      <span class="event-action">
+                      <span class="event-region" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
+                      <span class="event-action" ng-cloak>
                         {{actionDescription(action)}}
                       </span>
                       <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)"></a>
