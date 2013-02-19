@@ -5,7 +5,7 @@
       <span class="company display-message-subject">{{company.name}}!</span>
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
-    <div class="pagination pull-right">
+    <div class="pagination pull-right" ng-show="max_page > 1">
       <ul>
         <li ng-class="{disabled: page == 1}">
           <a href ng-click="prevPage()">« Prev</a>
@@ -119,7 +119,7 @@
       </td>
     </tr>
   </table>
-  <div class="pagination pull-right">
+  <div class="pagination pull-right" ng-show="max_page > 1">
     <ul>
       <li ng-class="{disabled: page == 1}">
         <a href ng-click="prevPage()">« Prev</a>
