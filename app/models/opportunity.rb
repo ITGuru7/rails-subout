@@ -63,7 +63,7 @@ class Opportunity
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
       Notifier.delay.expired_auction_notification(opportunity.id)
-      opportunity.update_attribute(:expired_notification_sent, true)
+      opportunity.set(:expired_notification_sent, true)
     end
   end
 
@@ -193,8 +193,9 @@ class Opportunity
       value = self.winning_bid.amount 
     else
       value = forward_auction? ? highest_bid_amount : lowest_bid_amount
+      value ||= 0
     end
-    update_attribute(:value, value)
+    self.set(:value, value)
   end
 
   def lowest_bid_amount

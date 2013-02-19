@@ -10,7 +10,6 @@ class OpportunityObserver < Mongoid::Observer
 
   def after_update(opportunity)
     return if opportunity.expired_notification_sent_changed?
-    return if opportunity.value_changed?
     return if opportunity.changes.blank?
 
     if opportunity.canceled_changed?
