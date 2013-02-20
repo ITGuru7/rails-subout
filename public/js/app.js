@@ -29,7 +29,7 @@ subout.run([
       var url;
       if (_gaq) {
         url = $location.path();
-        _gaq.push(['_trackPageview'], url);
+        _gaq.push(['_trackPageview', url]);
       }
       return $('#content').addClass('loading');
     });

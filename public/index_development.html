@@ -71,10 +71,15 @@
         googleAnalyticsKey = 'UA-38160184-1';
       } else if (hostname == "subouttest.herokuapp.com") {
         googleAnalyticsKey = 'UA-38160184-2';
+      } else if (hostname == "suboutdev.herokuapp.com") {
+        googleAnalyticsKey = "UA-38160184-4";
+      } else if (hostname === "suboutdemo.herokuapp.com") {
+        googleAnalyticsKey = "UA-38160184-5";
+      } else {
+        googleAnalyticsKey = 'UA-38160184-3';
       }
       if (googleAnalyticsKey) {
         _gaq.push(['_setAccount', googleAnalyticsKey]);
-        _gaq.push(['_trackPageview']);
         (function() {
           var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
           ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
