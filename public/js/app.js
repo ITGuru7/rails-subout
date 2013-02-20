@@ -981,7 +981,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     productHandle: 'subout-national-service',
     api_token: $rootScope.token.api_token
   }, function(data) {
-    return $scope.product = data.product;
+    return $scope.national_product = data.product;
   });
   $scope.companyProfile.allRegions = {};
   _ref = $scope.companyProfile.regions;
@@ -1176,10 +1176,12 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
       $scope.user.email = subscription.email;
       $scope.company.email = subscription.email;
       $scope.company.name = subscription.organization;
-      return $scope.company.gateway_subscription_id = subscription._id;
+      return $scope.company.chargify_id = subscription.subscription_id;
     }, function() {
       return $location.path("/sign_in").search({});
     });
+  } else if ($routeParams.chargify_id) {
+    $scope.company.chargify_id = $routeParams.chargify_id;
   } else {
     $location.path("/sign_in");
   }

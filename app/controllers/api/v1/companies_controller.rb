@@ -27,7 +27,12 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def create
     company = Company.new(params[:company])
-    company.created_from_subscription_id = params[:company]["gateway_subscription_id"]
+
+    chargify_id = params[:company][:chargify_id]
+    if chargify_id.present?
+      company.created_from_subscription = GatewaySubscription.where(subscription_id: chargify_id).first
+    end
+
     company.prelaunch = false
     if company.save
       respond_with_namespace(company)
