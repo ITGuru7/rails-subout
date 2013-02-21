@@ -7,7 +7,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
-    <link rel="stylesheet" href="/files/1361379053/css/app.css" />
+    <link rel="stylesheet" href="/files/1361467262/css/app.css" />
 <!--[if lte IE 7]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 <![endif]-->
@@ -21,33 +21,63 @@
       };
       eval_ = eval;
     </script>
-    <script src="/files/1361379053/js/vendor.js"></script>
-    <script src="/files/1361379053/js/app.js"></script>
+    <script src="/files/1361467262/js/vendor.js"></script>
+    <script src="/files/1361467262/js/app.js"></script>
   </head>
 
-  <body ng-controller="AppCtrl" data-subout-deploy="1361379053">
+  <body data-subout-deploy="1361467262">
     <div id="pageWrapper" class="container">
-      <div id="subout-navbar" class="navbar" ui-if="userSignedIn()">
-        <div class="navbar-inner row-fluid">
+      <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
+        <div class="navbar-inner row">
           <div class="span3">
-            <a class="brand" href="#">SubOut</a>
+            <a class="brand-logo" href="#">SubOut</a>
             <div id="subout-loading" class="loading-animation"></div>
           </div>
-          <div class="span9">
-            <div class="row-fluid">
-              <ul class="nav">
+          
+          
+            <ul ng-show="isMobile">
+              <li ng-show="currentPath()=='/dashboard'" ng-class="{brand: currentPath()=='/dashboard'} " class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
+                <span class="menu-title">Home</span>
+                <span class="menu-button" ></span>
+              </li>
+              <li ng-show="currentPath()=='/available_opportunities'" ng-class="{brand: currentPath()=='/available_opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
+                <span class="menu-title">Buy/Bid Now</span>
+                <span class="menu-button"></span>
+              </li>
+              <li ng-show="currentPath()=='/bids'" ng-class="{brand: currentPath()=='/bids'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
+                <span class="menu-title">My Bids</span>
+                <span class="menu-button"></span>
+              </li>
+              <li ng-show="currentPath()=='/opportunities'" ng-class="{brand: currentPath()=='/opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
+                <span class="menu-title">My Opportunities</span>
+                <span class="menu-button"></span>
+              </li>
+              <li ng-show="currentPath()=='/favorites'" ng-class="{brand: currentPath()=='/favorites'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
+                <span class="menu-title">Favorites</span>
+                <span class="menu-button"></span>
+              </li>
+            </ul>
+
+          
+          <!-- Be sure to leave the brand out there if you want it shown -->
+          <a class="brand" href="#"></a>
+
+          <div class="span8">
+            <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
+  
+              <ul class="nav mobile-nav">
                 <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
                 <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
                 <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
                 <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
                 <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
               </ul>
-              <div class="pull-right">
-                <div class="btn-group navbar-buttons">
-                  <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                  <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                  <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-                </div>
+            </div>
+            <div class="pull-right">
+              <div class="btn-group navbar-buttons">
+                <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
+                <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
               </div>
             </div>
           </div>
@@ -58,11 +88,12 @@
          <div id="modal-stage" ng-include="modal"></div>
       </div>
     </div>
-
+<!--
     <script type="text/javascript" src="//loader.engage.gsfn.us/loader.js"></script>
     <script type="text/javascript">
       if (typeof GSFN !== "undefined") { GSFN.loadWidget(3613,{"containerId":"getsat-widget-3613"}); }
     </script>
+-->    
     <script type="text/javascript">
       var _gaq = _gaq || [];
       var googleAnalyticsKey = null;
@@ -73,8 +104,10 @@
         googleAnalyticsKey = 'UA-38160184-2';
       } else if (hostname == "suboutdev.herokuapp.com") {
         googleAnalyticsKey = "UA-38160184-4";
-      } else if (hostname === "suboutdemo.herokuapp.com") {
+      } else if (hostname == "suboutdemo.herokuapp.com") {
         googleAnalyticsKey = "UA-38160184-5";
+      } else if (hostname == "www.lvh.me") {
+        googleAnalyticsKey = "UA-38160184-7";
       } else {
         googleAnalyticsKey = 'UA-38160184-3';
       }

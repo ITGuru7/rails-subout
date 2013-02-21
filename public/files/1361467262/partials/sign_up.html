@@ -67,6 +67,14 @@
       </div>
     </div>
 
+    <div class="control-group">
+      <label for="dot_number" class="control-label">DOT Number</label>
+      <div class="controls">
+        <input id="dot_number" type="text" name="dot_number" class="input-xlarge" ng:model="company.dot_number" />
+        <p class="help-block warning">Required for bidding.</p>
+      </div>
+    </div>
+
     <div class="control-group" ng-class="{error:signUpForm.fleet_size.$invalid}">
       <label for="fleet_size" class="control-label">Fleet Size *</label>
       <div class="controls">
