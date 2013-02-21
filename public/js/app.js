@@ -139,13 +139,13 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AppCtrl, AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $('#modal').on('hidden', function() {
-    var modalElement, modalScope;
+    var $scope, modalElement, modalScope;
     $scope = angular.element(document).scope();
     $scope.modal = '';
     $rootScope.opportunity = null;
@@ -402,7 +402,7 @@ AppCtrl = function($scope, $rootScope, $location, $appBrowser, $numberFormatter,
       opportunityId: opportunity._id
     });
   };
-};
+});
 
 WelcomePrelaunchCtrl = function(AuthToken) {
   return $.removeCookie(AuthToken);
@@ -1625,7 +1625,10 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
         userId: token.user_id,
         api_token: token.api_token
       }, function(company) {
-        return defer.resolve();
+        defer.resolve();
+        return setTimeout(function() {
+          return $rootScope.$apply();
+        }, 3000);
       });
       return promise;
     },
