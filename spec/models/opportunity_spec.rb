@@ -117,4 +117,54 @@ describe Opportunity do
       FactoryGirl.build(:opportunity, end_time: "25:00").should_not be_valid
     end
   end
+
+  describe "#companies_to_notify" do
+    let!(:ca_company) { FactoryGirl.create(:ca_company) }
+    let!(:ma_company) { FactoryGirl.create(:ma_company) }
+    let!(:ca_ma_company) do
+      company = FactoryGirl.create(:ma_company)
+      company.set(:regions, ["Massachusetts", "California"])
+      company
+    end
+    let!(:national_company) { FactoryGirl.create(:company) }
+    let!(:buyer) { FactoryGirl.create(:company) }
+    let!(:fav_company) do
+      company = FactoryGirl.create(:ma_company)
+      buyer.add_favorite_supplier!(company)
+      company.set(:regions, [])
+      company
+    end
+
+    context "when first created" do
+      it "notifies all companies based on current regions" do
+        opportunity = FactoryGirl.build(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts")
+        opportunity.companies_to_notify.to_a.should =~ [ma_company, ca_ma_company, national_company]
+      end
+    end
+
+    context "when regions have changed" do
+      it "notifies companies who don't have any of the previous regions" do
+        opportunity = FactoryGirl.create(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts")
+        opportunity.notified_regions.should == ["Massachusetts"]
+        opportunity.start_region = "California"
+        opportunity.end_region = "California"
+        opportunity.companies_to_notify.to_a.should =~ [ca_company]
+      end
+    end
+
+    context "when opportunity is favorite only" do
+      it "notifies to favorited companies" do
+        opportunity = FactoryGirl.build(:opportunity, buyer: buyer, for_favorites_only: true)
+        opportunity.companies_to_notify.to_a.should =~ [fav_company]
+      end
+    end
+
+    context "when opportunity was created as favorite only and is changed to not be anymore" do
+      it "notifies the companies who have the current regions but not any of the previous regions and are not in the buyers favorites" do
+        opportunity = FactoryGirl.create(:opportunity, buyer: buyer, for_favorites_only: true, start_region: "Massachusetts", end_region: "Massachusetts")
+        opportunity.for_favorites_only = false
+        opportunity.companies_to_notify.to_a.should =~ [ma_company, ca_ma_company, national_company]
+      end
+    end
+  end
 end

@@ -32,6 +32,9 @@ class Opportunity
   field :contact_phone, type: String
   field :value, type: BigDecimal, default: 0
 
+  #if the regions have been changed we keep track of the old ones here so we know who's already been notified
+  field :notified_regions, type: Array, default: [] 
+  field :favorites_notified, type: Boolean, default: false
   attr_accessor :viewer
 
   scope :active, -> { where(canceled: false) }
@@ -59,6 +62,43 @@ class Opportunity
   before_save :set_bidding_ends_at, unless: 'self.canceled'
 
   paginates_per 30
+
+  def companies_to_notify
+    options = []
+    if self.for_favorites_only?
+      options << {:id.in => self.buyer.favorite_supplier_ids}
+    else
+      options << {:subscription_plan => 'subout-national-service'}
+      options << {:subscription_plan => 'subout-partner'}
+      options << {:regions.in => regions}
+    end
+    Company.any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
+  end
+
+  def notified_companies
+    options = []
+    if notified_regions.present?
+      options << {:subscription_plan => 'subout-national-service'}
+      options << {:subscription_plan => 'subout-partner'}
+    end
+    options << {:regions.in => notified_regions}
+    options << {:id.in => self.buyer.favorite_supplier_ids} if favorites_notified?
+    Company.any_of(*options)
+  end
+
+  def notify_companies(event_type)
+    companies_to_notify.each do |company|
+      Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id)
+      Sms.new_opportunity(self, company) if company.notification_type && company.cell_phone
+    end
+
+    if self.for_favorites_only?
+      self.set(:favorites_notified, true)
+    else
+      notified_regions = (self.regions + self.notified_regions).uniq
+      self.set(:notified_regions, notified_regions) 
+    end
+  end
 
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|

@@ -27,5 +27,13 @@ FactoryGirl.define do
         company.save(callbacks: false)
       end
     end
+
+    factory :ny_company do
+      after :create do |company|
+        company.regions = ['New York']
+        company.subscription_plan = 'state-by-state-service'
+        company.save(callbacks: false)
+      end
+    end
   end
 end
