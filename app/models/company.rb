@@ -242,6 +242,38 @@ class Company
     self.save
   end
 
+  def auctions_count
+    auctions.count
+  end
+
+  def bids_count
+    bids.count
+  end
+
+  def self.csv_column_names
+    [
+      "_id","email", "name", "owner", "contact_name", "contact_phone", "created_at",
+      "last_sign_in_at", "subscription_plan", "regions", "auctions_count", "bids_count"
+    ]
+  end
+
+  def csv_value_for(column)
+    if column == "regions"
+      national_subscriber? ? "all" : regions
+    else
+      send(column)
+    end
+  end
+
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << csv_column_names
+      all.each do |item|
+        csv << csv_column_names.map { |column| item.csv_value_for(column) }
+      end
+    end
+  end
+
   private
 
   def validate_invitation

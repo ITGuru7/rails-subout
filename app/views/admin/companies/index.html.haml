@@ -1,4 +1,6 @@
 %h1 Companies
+.pull-right
+  = link_to "Download CSV", admin_companies_path(format: "csv", sort_by: @sort_by, sort_direction: @sort_direction), target: "_blank"
 
 %table#admin-companies.table.table-striped
   %thead

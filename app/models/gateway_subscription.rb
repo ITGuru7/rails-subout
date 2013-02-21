@@ -115,8 +115,8 @@ class GatewaySubscription
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
       csv << csv_column_names
-      all.each do |product|
-        csv << csv_column_names.map { |column| product.send(column) }
+      all.each do |item|
+        csv << csv_column_names.map { |column| item.send(column) }
       end
     end
   end
