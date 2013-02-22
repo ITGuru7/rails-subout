@@ -63,25 +63,13 @@
                 <div class="clearfix"></div>
               </section>
             </section>
-
-            <section id="favorite_companies" ng-show="favoriteCompanies.length > 0 && favoriteCompanies.length <= 10">
-              <section class="title"><h5>Favorites</h5></section>
-              <section class="content">
-                <ul>
-                  <li class="filter" ng-repeat="company in favoriteCompanies" ng-class="{active: $location.search().company_id == company._id}">
-                    <a ng-click="setFavoriteFilter(company._id)">{{company.name}}</a>
-                  </li>
-                </ul>
-              </section>
-            </section>
         </div>
         <div class="span9">
            <section id="activities" when-scrolled="loadMoreEvents()">
               <div id="toolbar">
                   <div class="row-fluid">
                       <div class="pull-left span4">
-                        <div class="display-message sales-info">{{salesInfoMessage}}</div>
-
+                        <div class="display-message sales-info" sales-info-messages="salesInfoMessages"></div>
                         <div class="info-label-heading">
                           <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
                           <span ng-hide="hasAnyFilter()">All Events:</span>
@@ -127,16 +115,16 @@
                   <div class="event-summary">
                     <span class="span3">
                       <i class="{{opportunity.icon}}"></i>
-                      <span class='created-at timeago' relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
+                      <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                     </span>
                     <span class="span9">
                       <span class="opportunity-name">
-                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}">
+                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
                           {{opportunity.name}}
                         </a>
                       </span>
-                      <span class="event-region">{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
-                      <span class="event-action">
+                      <span class="event-region" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
+                      <span class="event-action" ng-cloak>
                         {{actionDescription(action)}}
                       </span>
                       <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)"></a>
