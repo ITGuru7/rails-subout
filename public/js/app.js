@@ -1522,9 +1522,13 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     }
     return _ref = event.eventable.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
   };
+  Company.prototype.nationalSubscriber = function() {
+    var _ref;
+    return (_ref = this.subscription_plan) === "subout-national-service" || _ref === "subout-partner";
+  };
   Company.prototype.isLicensedToBidOnOpportunity = function(opportunity) {
     var _ref, _ref1, _ref2;
-    if (!this.state_by_state_subscriber) {
+    if (this.nationalSubscriber()) {
       return true;
     }
     if (_ref = opportunity.start_region, __indexOf.call(this.regions, _ref) >= 0) {

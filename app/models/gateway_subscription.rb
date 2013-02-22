@@ -5,7 +5,7 @@ class GatewaySubscription
   include Mongoid::Timestamps
 
   REGIONS = Chargify::Component.find(
-    :all, 
+    :all,
     :params => {
       :product_family_id => Chargify::ProductFamily.find_by_handle("subout").id
     }

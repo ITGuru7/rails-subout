@@ -182,7 +182,7 @@ class Company
     options << {:for_favorites_only => true, :buyer_id.in => self.favoriting_buyer_ids}
 
     if self.regions.present?
-      options << {:for_favorites_only => false, :start_region.in => self.regions} 
+      options << {:for_favorites_only => false, :start_region.in => self.regions}
       options << {:for_favorites_only => false, :end_region.in => self.regions}
     end
 
