@@ -19,8 +19,6 @@ end
 SUBOUT_DEPLOY_VERSION = `cat ./deploy.txt`.strip
 SUBOUT_APP_VERSION = 1.5
 
-require File.expand_path "./lib/api_version"
-
 module Subout
   class Application < Rails::Application
 
@@ -31,7 +29,7 @@ module Subout
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/docs)
+    config.autoload_paths += %W(#{config.root}/docs #{config.root}/lib)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
