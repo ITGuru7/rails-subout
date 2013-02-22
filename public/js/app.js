@@ -554,6 +554,11 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
 
 AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
   var availableToCurrentCompany;
+  $scope.opportunities = [];
+  $scope.pages = [];
+  $scope.startpage = 1;
+  $scope.endpage = 1;
+  $scope.maxpage = 1;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -573,8 +578,6 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
     var _ref;
     return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
   };
-  $scope.opportunities = [];
-  $scope.pages = [];
   $rootScope.channel.bind('event_created', function(event) {
     var affectedOpp;
     affectedOpp = _.find($scope.opportunities, function(opportunity) {
@@ -605,25 +608,29 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
       sort_direction: $scope.sortDirection,
       page: page
     }, function(data) {
-      var _i, _ref, _results;
+      var paginationNumPagesToShow, _i, _ref, _ref1, _results;
       $scope.opportunities = data.opportunities;
       $scope.page = data.opportunities_page;
-      $scope.max_page = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      $scope.maxPage = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      paginationNumPagesToShow = 10;
+      $scope.startPage = parseInt(($scope.page - 1) / paginationNumPagesToShow) * paginationNumPagesToShow + 1;
+      $scope.endPage = Math.min($scope.startPage + paginationNumPagesToShow - 1, $scope.maxPage);
       return $scope.pages = (function() {
         _results = [];
-        for (var _i = 1, _ref = $scope.max_page; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
+        for (var _i = _ref = $scope.startPage, _ref1 = $scope.endPage; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; _ref <= _ref1 ? _i++ : _i--){ _results.push(_i); }
         return _results;
       }).apply(this);
     });
   };
-  $scope.prevPage = function() {
-    return $scope.loadMoreOpportunities($scope.page - 1);
-  };
-  $scope.nextPage = function() {
-    return $scope.loadMoreOpportunities($scope.page + 1);
-  };
   $scope.setPage = function(page) {
-    return $scope.loadMoreOpportunities(page);
+    var _i, _ref, _results;
+    if (__indexOf.call((function() {
+      _results = [];
+      for (var _i = 1, _ref = $scope.maxPage; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
+      return _results;
+    }).apply(this), page) >= 0 && page !== $scope.page) {
+      return $scope.loadMoreOpportunities(page);
+    }
   };
   $scope.reloadOpportunities = function() {
     return $scope.loadMoreOpportunities(1);
@@ -653,9 +660,11 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   var filterWithQuery;
-  $scope.opportunities = Auction.query({
-    api_token: $rootScope.token.api_token
-  });
+  $scope.opportunities = [];
+  $scope.pages = [];
+  $scope.startPage = 1;
+  $scope.endPage = 1;
+  $scope.maxPage = 1;
   filterWithQuery = function(value) {
     var reg;
     reg = new RegExp($scope.opportunityQuery.toLowerCase());
@@ -663,7 +672,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
       return true;
     }
   };
-  return $scope.opportunityFilter = function(item) {
+  $scope.opportunityFilter = function(item) {
     if (!$scope.opportunityQuery) {
       return true;
     }
@@ -684,6 +693,39 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
     }
     return false;
   };
+  $scope.loadMoreOpportunities = function(page) {
+    if (page == null) {
+      page = 1;
+    }
+    return Auction.paginate({
+      api_token: $rootScope.token.api_token,
+      page: page
+    }, function(data) {
+      var paginationNumPagesToShow, _i, _ref, _ref1, _results;
+      $scope.opportunities = data.opportunities;
+      $scope.page = data.opportunities_page;
+      $scope.maxPage = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      paginationNumPagesToShow = 10;
+      $scope.startPage = parseInt(($scope.page - 1) / paginationNumPagesToShow) * paginationNumPagesToShow + 1;
+      $scope.endPage = Math.min($scope.startPage + paginationNumPagesToShow - 1, $scope.maxPage);
+      return $scope.pages = (function() {
+        _results = [];
+        for (var _i = _ref = $scope.startPage, _ref1 = $scope.endPage; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; _ref <= _ref1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this);
+    });
+  };
+  $scope.setPage = function(page) {
+    var _i, _ref, _results;
+    if (__indexOf.call((function() {
+      _results = [];
+      for (var _i = 1, _ref = $scope.maxPage; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
+      return _results;
+    }).apply(this), page) >= 0 && page !== $scope.page) {
+      return $scope.loadMoreOpportunities(page);
+    }
+  };
+  return $scope.loadMoreOpportunities(1);
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
@@ -1389,6 +1431,9 @@ suboutSvcs.factory("Auction", function($resource) {
     },
     update: {
       method: "PUT"
+    },
+    paginate: {
+      method: "GET"
     }
   });
 });

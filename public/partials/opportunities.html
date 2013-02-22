@@ -10,6 +10,25 @@
       <div class="icon-search"></div>
     </div>
   </div>
+  <div class="pagination pull-right" ng-show="maxPage > 1">
+    <ul>
+      <li ng-class="{disabled: page == 1}">
+        <a href ng-click="setPage(1)">« First</a>
+      </li>
+      <li ng-class="{disabled: startPage == 1}">
+        <a href ng-click="setPage(startPage - 10)">« Prev</a>
+      </li>
+      <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+        <a ng-click="setPage(n)">{{n}}</a>
+      </li>
+      <li ng-class="{disabled: endPage == maxPage}">
+        <a href ng-click="setPage(startPage + 10)">Next »</a>
+      </li>
+      <li ng-class="{disabled: page == maxPage}">
+        <a href ng-click="setPage(maxPage)">Last »</a>
+      </li>
+    </ul>
+  </div>
   <table ng-show="!isPhone" class="table">
     <tr>
       <th>Reference #</th>
@@ -69,4 +88,23 @@
       </td>
     </tr>
   </table>
+  <div class="pagination pull-right" ng-show="maxPage > 1">
+    <ul>
+      <li ng-class="{disabled: page == 1}">
+        <a href ng-click="setPage(1)">« First</a>
+      </li>
+      <li ng-class="{disabled: startPage == 1}">
+        <a href ng-click="setPage(startPage - 10)">« Prev</a>
+      </li>
+      <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+        <a ng-click="setPage(n)">{{n}}</a>
+      </li>
+      <li ng-class="{disabled: endPage == maxPage}">
+        <a href ng-click="setPage(startPage + 10)">Next »</a>
+      </li>
+      <li ng-class="{disabled: page == maxPage}">
+        <a href ng-click="setPage(maxPage)">Last »</a>
+      </li>
+    </ul>
+  </div>
 </div>

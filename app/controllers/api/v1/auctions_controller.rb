@@ -1,7 +1,14 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
   def index
-    @auctions = current_company.auctions.active.recent
-    respond_with_namespace(@auctions)
+    params[:page] ||= 1
+    opportunities = current_company.auctions.active.desc(:bidding_ends_at)
+    result = {
+      :opportunities_count =>  opportunities.count,
+      :opportunities_per_page => Opportunity.default_per_page,
+      :opportunities_page => params[:page].to_i,
+      :opportunities => opportunities.page(params[:page])
+    }
+    render json: result
   end
 
   def create
