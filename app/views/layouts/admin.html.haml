@@ -7,10 +7,15 @@
     = csrf_meta_tags
 
   %body
-    .navbar
+    .navbar.navbar-inverse
       .navbar-inner
         .container
           = link_to "Admin", admin_path, class: "brand"
+          .nav-collapse.collapse
+            %ul.nav
+              %li= link_to "Companies", admin_companies_path
+              %li= link_to "Subscriptions", admin_gateway_subscriptions_path
+              %li= link_to "Invitations", admin_favorite_invitations_path
     .container-fluid
       - if flash[:error]
         %p.alert.alert-error
