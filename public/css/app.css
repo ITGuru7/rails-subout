@@ -8549,6 +8549,10 @@ div#opportunity-show .description .content {
   .mobile-controls .cloudinary-fileupload {
     width: 100%;
   }
+  #activity-stream .event.expanded {
+    background: #e0f1db;
+    margin-bottom: 20px;
+  }
 }
 #subout-loading.loading-animation {
   width: 40px;
