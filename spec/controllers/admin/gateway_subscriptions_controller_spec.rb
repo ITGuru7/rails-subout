@@ -23,3 +23,15 @@ describe Admin::GatewaySubscriptionsController, "PUT resend_invitation" do
     response.should redirect_to(admin_gateway_subscriptions_path)
   end
 end
+
+describe Admin::GatewaySubscriptionsController, "GET edit" do
+  let!(:subscription) { FactoryGirl.create(:gateway_subscription) }
+
+  it "render a template" do
+    http_login
+
+    get :edit, id: subscription.id
+
+    response.should render_template("edit")
+  end
+end

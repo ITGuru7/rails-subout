@@ -70,7 +70,7 @@ Subout::Application.routes.draw do
 
   namespace :admin do
     get "/" => "base#index"
-    resources :gateway_subscriptions, only: [:index] do
+    resources :gateway_subscriptions, only: [:index, :edit, :update] do
       put 'resend_invitation', on: :member
     end
     resources :companies, only: [:index]

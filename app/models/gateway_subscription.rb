@@ -132,7 +132,7 @@ class GatewaySubscription
       end
       component.save unless component.enabled == was_enabled
     end
-    self.update_attributes(:regions => regions)
+    self.update_attributes(regions: regions)
   end
 
   def update_product!(product_handle)
@@ -143,5 +143,12 @@ class GatewaySubscription
     self.product_handle = product_handle
     set_regions
     self.save
+  end
+
+  def update_product_and_regions!(options)
+    update_product!(options[:product_handle]) if product_handle != options[:product_handle]
+    if product_handle == "state-by-state-service" and regions.sort != options[:regions].sort
+      update_regions!(options[:regions])
+    end
   end
 end

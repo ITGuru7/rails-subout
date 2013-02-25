@@ -8,8 +8,10 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
     # signup_success: when user sign up
     # component_allocation_change: when user upgrade state by state plan
 
-    if params["event"] == "signup_success"
-      payload = params["payload"]
+    event = params["event"]
+    payload = params["payload"]
+
+    if event == "signup_success"
       customer = payload["subscription"]["customer"]
 
       gw_subscription = GatewaySubscription.create(
@@ -23,7 +25,7 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       )
 
       if customer["reference"].present?
-        company = Company.find(customer["reference"]) 
+        company = Company.find(customer["reference"])
         unless company.created_from_subscription_id.present?
           company.created_from_subscription = gw_subscription
           company.set_subscription_info
@@ -33,7 +35,6 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
         Notifier.delay.subscription_confirmation(gw_subscription.id)
       end
     end
-
     render json: {}
   end
 
