@@ -50,6 +50,9 @@
           <div ng-show="opportunity.contact_phone">
             <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
           </div>
+          <!--<div>-->
+            <!--<span class="label-field">Bidding Ends: </span><span class="timeago" relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>-->
+          <!--</div>-->
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>

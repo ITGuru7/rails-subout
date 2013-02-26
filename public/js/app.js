@@ -1531,6 +1531,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     if (this.nationalSubscriber()) {
       return true;
     }
+    if (!this.regions) {
+      return false;
+    }
     if (_ref = opportunity.start_region, __indexOf.call(this.regions, _ref) >= 0) {
       return true;
     }
