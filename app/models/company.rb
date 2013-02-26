@@ -5,7 +5,6 @@ class Company
   field :name, type: String
   field :email, type: String
 
-
   field :fleet_size, type: String
   field :since, type: String
   field :owner, type: String
@@ -17,6 +16,7 @@ class Company
   field :logo_id
   field :abbreviated_name
   field :dot_number, type: String
+  field :insurance, type: String
   field :cell_phone, type: String
 
   field :favorite_supplier_ids, type: Array, default: []

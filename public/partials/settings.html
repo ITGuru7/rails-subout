@@ -92,13 +92,22 @@
             <div class="control-group">
               <label for="dot_number" class="control-label">DOT Number</label>
               <div class="controls">
-
-                <input id="dot_number" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.dot_number"
-                />
+                <input id="dot_number" type="text" class="input-xlarge" ng:model="companyProfile.dot_number" />
                 <p class="help-block warning">Required for bidding.</p>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="insurance" class="control-label">Insurance</label>
+              <div class="controls">
+                <select class="input-xlarge" ng-model="companyProfile.insurance">
+                  <option value=""></option>
+                  <option value="lt_1M">&lt; 1M</option>
+                  <option value="1M">1M</option>
+                  <option value="5M">5M</option>
+                  <option value="10M">10M</option>
+                  <option value="gt_10M">&gt; 10M</option>
+                </select>
               </div>
             </div>
 
