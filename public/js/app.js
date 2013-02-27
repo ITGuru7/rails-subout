@@ -728,7 +728,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   return $scope.loadMoreOpportunities(1);
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity) {
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Comment) {
   var reloadOpportunity;
   reloadOpportunity = function() {
     return $scope.opportunity = Opportunity.get({
@@ -759,7 +759,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
-  return $scope.selectWinner = function(bid) {
+  $scope.selectWinner = function(bid) {
     return Auction.select_winner({
       opportunityId: $scope.opportunity._id,
       action: 'select_winner',
@@ -770,6 +770,23 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
         api_token: $rootScope.token.api_token,
         opportunityId: $scope.opportunity._id
       });
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+  $scope.hideAlert = function() {
+    return $scope.errors = null;
+  };
+  return $scope.addComment = function() {
+    $scope.hideAlert();
+    return Comment.save({
+      comment: $scope.comment,
+      api_token: $rootScope.token.api_token,
+      opportunityId: $scope.opportunity._id
+    }, function(content) {
+      $scope.hideAlert();
+      $scope.opportunity.comments.push(content);
+      return $scope.comment.body = "";
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -1297,9 +1314,13 @@ CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
 
 subout.directive("relativeTime", function() {
   return {
-    link: function(scope, element, attr) {
-      return scope.$watch("event", function(val) {
-        return $(element).timeago();
+    link: function(scope, element, iAttrs) {
+      var variable;
+      variable = iAttrs["relativeTime"];
+      return scope.$watch(variable, function() {
+        if ($(element).attr('title') !== "") {
+          return $(element).timeago();
+        }
       });
     }
   };
@@ -1460,6 +1481,12 @@ suboutSvcs.factory("Product", function($resource) {
 
 suboutSvcs.factory("Bid", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
+    opportunityId: "@opportunityId"
+  }, {});
+});
+
+suboutSvcs.factory("Comment", function($resource) {
+  return $resource("" + api_path + "/opportunities/:opportunityId/comments", {
     opportunityId: "@opportunityId"
   }, {});
 });

@@ -8178,6 +8178,13 @@ div#opportunity-show .description .content {
 .bid-history td {
   max-width: 300px;
 }
+.comments .commenter {
+  padding-right: 10px;
+}
+.comments .comment-body {
+  color: #666550;
+  margin-bottom: 5px;
+}
 #search-listing {
   padding-left: 5px;
 }

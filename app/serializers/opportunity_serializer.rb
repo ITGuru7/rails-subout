@@ -8,6 +8,7 @@ class OpportunitySerializer < ActiveModel::Serializer
   has_one :buyer, serializer: ActorSerializer
 
   has_many :recent_bids, serializer: BidShortSerializer, key: "bids"
+  has_many :comments, serializer: CommentSerializer
 
   def winner
     return unless object.winning_bid_id
@@ -44,5 +45,9 @@ class OpportunitySerializer < ActiveModel::Serializer
     return nil unless object.win_it_now_price.present?
 
     "%.2f" % object.win_it_now_price
+  end
+
+  def bidding_ends_at
+    object.bidding_ends_at.getutc.iso8601
   end
 end

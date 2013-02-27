@@ -64,6 +64,7 @@ Subout::Application.routes.draw do
       resources :tags
       resources :opportunities do
         resources :bids
+        resources :comments
       end
     end
   end

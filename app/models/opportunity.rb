@@ -16,7 +16,7 @@ class Opportunity
   field :end_date, type: Date
   field :end_time, type: String
   field :bidding_duration_hrs, type: String
-  field :bidding_ends_at, type: DateTime
+  field :bidding_ends_at, type: Time
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
   field :win_it_now_price, type: BigDecimal
@@ -44,6 +44,7 @@ class Opportunity
 
   has_one :event, as: :eventable
   has_many :bids
+  embeds_many :comments
   belongs_to :winning_bid, :class_name => "Bid"
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
