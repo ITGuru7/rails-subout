@@ -28,9 +28,10 @@ gem 'bitly'
 gem "jquery-rails"
 gem "awesome_print"
 gem "chargify_api_ares"
+gem 'newrelic_rpm'
+gem 'newrelic_moped'
 
 group :production do
-  gem 'newrelic_rpm'
   gem "airbrake"
 end
 
