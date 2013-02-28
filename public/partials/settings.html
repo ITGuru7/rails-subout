@@ -212,8 +212,8 @@
           You subscribed national plan
         </div>
         <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="https://suboutvps.chargify.com/h/3289102/subscriptions/new?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
-          <a class="btn btn-primary" href="https://suboutvps.chargify.com/h/3289104/subscriptions/new?reference={{company._id}}">Upgrade to state by state plan</a>
+          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
+          <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">

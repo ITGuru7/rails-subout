@@ -1027,10 +1027,12 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
 };
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product) {
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
   var region, successUpdate, token, _i, _len, _ref;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
+  $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
+  $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl();
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
@@ -1840,6 +1842,39 @@ suboutSvcs.factory("$analytics", function($location) {
       if (_gaq) {
         url || (url = $location.url());
         return _gaq.push(['_trackPageview', url]);
+      }
+    }
+  };
+});
+
+suboutSvcs.factory("$config", function($location) {
+  return {
+    nationalSubscriptionUrl: function() {
+      switch ($location.host()) {
+        case "subouttest.herokuapp.com":
+          return "https://subouttest.chargify.com/h/3289099/subscriptions/new";
+        case "suboutdev.herokuapp.com":
+          return "https://suboutdev.chargify.com/h/3288752/subscriptions/new";
+        case "suboutdemo.herokuapp.com":
+          return "https://suboutdemo.chargify.com/h/3289094/subscriptions/new";
+        case "suboutapp.com":
+          return "https://subout.chargify.com/h/3267626/subscriptions/new";
+        default:
+          return "https://suboutvps.chargify.com/h/3289102/subscriptions/new";
+      }
+    },
+    stateByStateSubscriptionUrl: function() {
+      switch ($location.host()) {
+        case "subouttest.herokuapp.com":
+          return "https://subouttest.chargify.com/h/3289101/subscriptions/new";
+        case "suboutdev.herokuapp.com":
+          return "https://suboutdev.chargify.com/h/3288754/subscriptions/new";
+        case "suboutdemo.herokuapp.com":
+          return "https://suboutdemo.chargify.com/h/3289096/subscriptions/new";
+        case "suboutapp.com":
+          return "https://subout.chargify.com/h/3266718/subscriptions/new";
+        default:
+          return "https://suboutvps.chargify.com/h/3289104/subscriptions/new";
       }
     }
   };
