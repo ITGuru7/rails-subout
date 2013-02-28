@@ -151,4 +151,8 @@ class GatewaySubscription
       update_regions!(options[:regions])
     end
   end
+
+  def exists_on_chargify?
+    Chargify::Subscription.exists?(self.subscription_id)
+  end
 end
