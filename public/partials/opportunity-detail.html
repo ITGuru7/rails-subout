@@ -111,11 +111,11 @@
         </tr>
       </table>  
       <hr />
-      <h4>Comments</h4>
+      <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
+      <h4>{{opportunity.buyer.name}}'s Comments</h4>
       <ul class="comments">
         <li ng-repeat="comment in opportunity.comments">
           <div>
-            <span class="commenter">{{comment.commenter_name}}</span>
             <span class="timeago" relative-time="comment.created_at" title="{{comment.created_at}}">{{comment.created_at|date}}</span>
           </div>
           <div class="comment-body">{{comment.body}}</div>
@@ -129,7 +129,7 @@
               <li>{{error}}</li>
             </ul>
           </div>
-          <div class="control-group">
+          <div class="control-group" ng-show="opportunity.buyer_id == company._id">
             <label for="comment_body" class="control-label">New Comment: </label>
             <div class="controls">
               <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="input-xlarge">
