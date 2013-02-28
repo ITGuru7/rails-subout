@@ -1,4 +1,9 @@
 <div id="opportunity-show">
+  <div class="welcome display-message top-banner">
+    <span class="display-message-extra">Welcome</span>
+    <span class="company display-message-subject">{{company.name}}!</span>
+    <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+  </div>
   <div class="row-fluid">
     <div class="span3">
       <h5>OFFERED BY</h5>
@@ -22,7 +27,7 @@
         <div class="span8 details">
           <div ng-show="opportunity.winning_bid_id">
             <ul>
-              <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
+              <li ng-show="company._id == opportunity.buyer_id"><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
               <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
             </ul>
           </div>

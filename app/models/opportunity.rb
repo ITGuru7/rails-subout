@@ -31,6 +31,7 @@ class Opportunity
   field :tracking_id
   field :contact_phone, type: String
   field :value, type: BigDecimal, default: 0
+  field :reserve_amount, type: Integer
 
   #if the regions have been changed we keep track of the old ones here so we know who's already been notified
   field :notified_regions, type: Array, default: [] 
