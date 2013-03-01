@@ -1,8 +1,20 @@
 require 'spec_helper'
 
 describe Api::V1::CompaniesController do
-  let(:user) { FactoryGirl.create(:user) }
   let(:company) { FactoryGirl.create(:company) }
+  let(:user) { FactoryGirl.create(:user) }
+
+  describe "PUT 'update'" do
+    let(:company) { user.company }
+
+    it "doesn't change favoriting buyer ids" do
+      company.favoriting_buyer_ids.should == []
+      put :update, id: company.id, company: { favoriting_buyer_ids: ["123"] }, api_token: user.authentication_token, format: 'json'
+
+      response.should be_success
+      company.reload.favoriting_buyer_ids.should == []
+    end
+  end
 
   describe "GET 'search'" do
     it "searches company by email address" do

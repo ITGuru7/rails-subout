@@ -101,7 +101,7 @@ class Company
     self.favorite_supplier_ids << supplier.id
     self.save
 
-    supplier.favoriting_buyer_ids << self.id
+    supplier.favoriting_buyer_ids << Moped::BSON::ObjectId.from_string(self.id)
     supplier.save
 
     unless DEVELOPMENT_MODE

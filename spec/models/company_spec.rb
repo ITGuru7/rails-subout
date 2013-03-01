@@ -7,11 +7,16 @@ describe Company do
   end
 
   describe "#add_favorite_supplier!" do
+    let!(:supplier) {FactoryGirl.create(:company)}
+    let!(:buyer) {FactoryGirl.create(:company)}
     it 'adds the supplier to the favorite suppliers list' do
-      supplier = FactoryGirl.create(:company)
-      buyer = FactoryGirl.create(:company)
       buyer.add_favorite_supplier!(supplier)
       buyer.favorite_supplier_ids.should include(supplier.id)
+    end
+
+    it 'adds the buyer to the suppliers favoriting_buyers list' do
+      buyer.add_favorite_supplier!(supplier)
+      supplier.favoriting_buyer_ids.should include(buyer.id)
     end
   end
 
