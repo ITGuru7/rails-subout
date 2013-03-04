@@ -1569,7 +1569,7 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     if (_ref1 = opportunity.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
       return true;
     }
-    if (_ref2 = opportunity.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
+    if ((_ref2 = opportunity.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) && opportunity.for_favorites_only) {
       return true;
     }
     return false;
