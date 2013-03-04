@@ -16,6 +16,7 @@ class Bid
   validate :validate_opportunity_bidable, on: :create
   validate :validate_bidable_by_bidder, on: :create
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
+  validate :validate_reserve_met, on: :create
   validates :comment, length: { maximum: 255 }
 
   scope :recent, desc(:created_at)
@@ -82,6 +83,21 @@ class Bid
       min_amount = previous_bids.min(:amount)
       if min_amount && amount >= BigDecimal.new(min_amount.to_s)
         errors.add :amount, "cannot be higher than previous bid"
+      end
+    end
+  end
+
+  def validate_reserve_met
+    return unless opportunity
+    return unless opportunity.reserve_amount.present?
+
+    if opportunity.forward_auction?
+      if amount < opportunity.reserve_amount
+        errors.add :amount, "cannot be lower than reserve"
+      end
+    else
+      if amount > opportunity.reserve_amount
+        errors.add :amount, "cannot be higher than reserve"
       end
     end
   end

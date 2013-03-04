@@ -1338,6 +1338,28 @@ subout.directive("whenScrolled", function() {
   };
 });
 
+subout.directive("reserveNotMet", function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elem, iAttrs, ngModel) {
+      var variable;
+      variable = iAttrs["reserveNotMet"];
+      return scope.$watch(variable, function() {
+        return ngModel.$parsers.unshift(function(value) {
+          if (scope.opportunity.reserve_amount) {
+            if (scope.opportunity.forward_auction) {
+              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount >= value);
+            } else {
+              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount <= value);
+            }
+          }
+          return value;
+        });
+      });
+    }
+  };
+});
+
 subout.directive("salesInfoMessages", function($rootScope) {
   return {
     link: function(scope, iElement, iAttrs) {

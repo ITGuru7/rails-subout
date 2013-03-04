@@ -68,4 +68,24 @@ describe Bid do
       end
     end
   end
+
+  describe "validate_reserve_met" do
+    context "reverse auction" do
+      let(:opportunity) { FactoryGirl.create(:opportunity, reserve_amount: 1000) }
+
+      it "should be invalid if amount > reserve amount" do
+        bid = FactoryGirl.build(:bid, opportunity: opportunity, amount: 1001)
+        bid.should_not be_valid
+      end
+    end
+
+    context "forward auction" do
+      let(:opportunity) { FactoryGirl.create(:forward_auction, reserve_amount: 1000) }
+
+      it "should be invalid if amount < reserve amount" do
+        bid = FactoryGirl.build(:bid, opportunity: opportunity, amount: 999)
+        bid.should_not be_valid
+      end
+    end
+  end
 end
