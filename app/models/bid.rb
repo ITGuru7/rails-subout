@@ -17,6 +17,7 @@ class Bid
   validate :validate_bidable_by_bidder, on: :create
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
   validate :validate_reserve_met, on: :create
+  validate :validate_dot_number_of_bidder, on: :create
   validates :comment, length: { maximum: 255 }
 
   scope :recent, desc(:created_at)
@@ -99,6 +100,14 @@ class Bid
       if amount > opportunity.reserve_amount
         errors.add :amount, "cannot be higher than reserve"
       end
+    end
+  end
+
+  def validate_dot_number_of_bidder
+    return unless bidder
+
+    if bidder.dot_number.blank?
+      errors.add :bidder_id, "required DOT number to bid."
     end
   end
 end

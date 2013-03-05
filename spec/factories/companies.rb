@@ -7,6 +7,7 @@ FactoryGirl.define do
     street_address '33 Comm Ave'
     created_from_subscription {FactoryGirl.create(:gateway_subscription)}
     subscription_plan "subout-national-service"
+    dot_number "dot-number"
 
     factory :buyer, aliases: [:member_supplier] do
       member true

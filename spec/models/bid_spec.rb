@@ -88,4 +88,13 @@ describe Bid do
       end
     end
   end
+
+  describe "validate_dot_number_of_bidder" do
+    let(:bidder) { FactoryGirl.create(:company, dot_number: "") }
+    let(:opportunity) { FactoryGirl.create(:opportunity) }
+
+    it "should be invalid if bidder doesn't have dot number" do
+      FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
+    end
+  end
 end
