@@ -10,26 +10,28 @@ class Sms
       "Subout : A new opportunity now available ",
       "Subout : Something new just showed up ",
       "Subout : A new opportunity is available for you ",
-     
     ]
-
 
     begin
       bitly = Bitly.new("suboutdev", "R_8ba0587adb559eb9b2576826a915b557")
-      short_url = bitly.shorten("#{ENV['EXTERNAL_URL']}/#/opportunities/#{opportunity.reference_number}").short_url        
+      short_url = bitly.shorten("http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{opportunity.reference_number}").short_url
     rescue Exception => e
       puts e.backtrace
       short_url = ""    
     end
 
-    server = XMLRPC::Client.new(sms_url,sms_path)
     message = msg_bank.shuffle.first + "from #{opportunity.buyer.abbreviated_name}: #{opportunity.name} #{short_url}"
-
-    begin
-      server.call("sms.send", number_bank.shuffle.first, company.cell_phone, message, 1)
-    rescue Exception => e
-      puts e.backtrace
-      puts e.inspect
+    if Rails.env.production?
+      server = XMLRPC::Client.new(sms_url,sms_path)
+      begin
+        server.call("sms.send", number_bank.shuffle.first, company.cell_phone, message, 1)
+      rescue Exception => e
+        puts e.backtrace
+        puts e.inspect
+      end
+    else
+      puts "Sending SMS to #{company.name}"
+      puts message
     end
   end
 end

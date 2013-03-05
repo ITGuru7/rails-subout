@@ -42,7 +42,7 @@ Subout::Application.configure do
   else
     config.action_mailer.delivery_method = :test
   end
-  DEFAULT_HOST_WITH_PORT = "localhost:3000"
+  DEFAULT_HOST_WITH_PORT = "www.lvh.me:3000"
   DEVELOPMENT_MODE = ENV["DEV_SITE"].nil? ? false : true
   CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'suboutvps.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
