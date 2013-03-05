@@ -75,6 +75,20 @@
       </div>
     </div>
 
+    <div class="control-group">
+      <label for="insurance" class="control-label">Insurance</label>
+      <div class="controls">
+        <select class="input-xlarge" ng-model="company.insurance">
+          <option value=""></option>
+          <option value="lt_1M">&lt; 1M</option>
+          <option value="1M">1M</option>
+          <option value="5M">5M</option>
+          <option value="10M">10M</option>
+          <option value="gt_10M">&gt; 10M</option>
+        </select>
+      </div>
+    </div>
+
     <div class="control-group" ng-class="{error:signUpForm.fleet_size.$invalid}">
       <label for="fleet_size" class="control-label">Fleet Size *</label>
       <div class="controls">

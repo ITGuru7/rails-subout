@@ -1,8 +1,29 @@
 <div id="available_opportunities">
-  <div class="welcome display-message top-banner">
-    <span class="display-message-extra">Welcome</span>
-    <span class="company display-message-subject">{{company.name}}!</span>
-    <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+  <div class="clearfix">
+    <div class="welcome display-message top-banner pull-left">
+      <span class="display-message-extra">Welcome</span>
+      <span class="company display-message-subject">{{company.name}}!</span>
+      <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+    </div>
+    <div class="pagination pull-right" ng-show="maxPage > 1">
+      <ul>
+        <li ng-class="{disabled: page == 1}">
+          <a href ng-click="setPage(1)">« First</a>
+        </li>
+        <li ng-class="{disabled: startPage == 1}">
+          <a href ng-click="setPage(startPage - 10)">« Prev</a>
+        </li>
+        <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+          <a ng-click="setPage(n)">{{n}}</a>
+        </li>
+        <li ng-class="{disabled: endPage == maxPage}">
+          <a href ng-click="setPage(startPage + 10)">Next »</a>
+        </li>
+        <li ng-class="{disabled: page == maxPage}">
+          <a href ng-click="setPage(maxPage)">Last »</a>
+        </li>
+      </ul>
+    </div>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>
@@ -104,4 +125,23 @@
       </td>
     </tr>
   </table>
+  <div class="pagination pull-right" ng-show="maxPage > 1">
+    <ul>
+      <li ng-class="{disabled: page == 1}">
+        <a href ng-click="setPage(1)">« First</a>
+      </li>
+      <li ng-class="{disabled: startPage == 1}">
+        <a href ng-click="setPage(startPage - 10)">« Prev</a>
+      </li>
+      <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+        <a ng-click="setPage(n)">{{n}}</a>
+      </li>
+      <li ng-class="{disabled: endPage == maxPage}">
+        <a href ng-click="setPage(startPage + 10)">Next »</a>
+      </li>
+      <li ng-class="{disabled: page == maxPage}">
+        <a href ng-click="setPage(maxPage)">Last »</a>
+      </li>
+    </ul>
+  </div>
 </div>
