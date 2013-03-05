@@ -138,6 +138,14 @@
         </div>
       </div>
 
+      <div class="control-group">
+        <label for="opportunity_reserve_amount" class="control-label">Reserve amount</label>
+        <div class="controls">
+          <input id="opportunity_reserve_amount" ng-model="opportunity.reserve_amount" size="30" class="input-small">
+          <p class="help-block">ex: 1000</p>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button ng-click="save()" class="btn btn-primary" ng-disabled="newOpportunity.$invalid">
           Save Opportunity

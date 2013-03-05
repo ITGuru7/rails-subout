@@ -92,13 +92,22 @@
             <div class="control-group">
               <label for="dot_number" class="control-label">DOT Number</label>
               <div class="controls">
-
-                <input id="dot_number" 
-                type="text"
-                class="input-xlarge"
-                ng:model="companyProfile.dot_number"
-                />
+                <input id="dot_number" type="text" class="input-xlarge" ng:model="companyProfile.dot_number" />
                 <p class="help-block warning">Required for bidding.</p>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="insurance" class="control-label">Insurance</label>
+              <div class="controls">
+                <select class="input-xlarge" ng-model="companyProfile.insurance">
+                  <option value=""></option>
+                  <option value="lt_1M">&lt; 1M</option>
+                  <option value="1M">1M</option>
+                  <option value="5M">5M</option>
+                  <option value="10M">10M</option>
+                  <option value="gt_10M">&gt; 10M</option>
+                </select>
               </div>
             </div>
 
@@ -203,8 +212,8 @@
           You subscribed national plan
         </div>
         <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="https://suboutvps.chargify.com/h/3289102/subscriptions/new?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
-          <a class="btn btn-primary" href="https://suboutvps.chargify.com/h/3289104/subscriptions/new?reference={{company._id}}">Upgrade to state by state plan</a>
+          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
+          <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">
