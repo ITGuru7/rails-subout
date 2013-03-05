@@ -1348,9 +1348,9 @@ subout.directive("reserveNotMet", function() {
         return ngModel.$parsers.unshift(function(value) {
           if (scope.opportunity.reserve_amount) {
             if (scope.opportunity.forward_auction) {
-              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount >= value);
-            } else {
               ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount <= value);
+            } else {
+              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount >= value);
             }
           }
           return value;
