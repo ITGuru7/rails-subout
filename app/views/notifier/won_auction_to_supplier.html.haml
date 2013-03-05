@@ -1,0 +1,8 @@
+%p Dear #{@bid.bidder.name},
+%p 
+  Congratulations, your bid of $#{@bid.amount} on 
+  #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"}
+  was accepted as the winning bid.
+%p Please contact #{@buyer.contact_name} via #{@buyer.contact_phone} or #{@buyer.email} to complete this transaction.
+%p Sincerely,
+%p The Subout Team

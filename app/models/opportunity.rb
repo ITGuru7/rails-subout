@@ -32,6 +32,7 @@ class Opportunity
   field :contact_phone, type: String
   field :value, type: BigDecimal, default: 0
   field :reserve_amount, type: Integer
+  field :bidding_won_at, type: Time
 
   #if the regions have been changed we keep track of the old ones here so we know who's already been notified
   field :notified_regions, type: Array, default: [] 
@@ -120,7 +121,7 @@ class Opportunity
   def win!(bid_id)
     bid = self.bids.find(bid_id)
 
-    update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount)
+    update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount, bidding_won_at: Time.now)
     self.buyer.inc(:total_sales, bid.amount)
     bid.bidder.inc(:total_winnings, bid.amount)
 
