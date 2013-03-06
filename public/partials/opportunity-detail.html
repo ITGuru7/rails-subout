@@ -94,7 +94,7 @@
       <h4>Bid History</h4>
       <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
-          <td><strong>${{bid.amount}}</strong></td>
+          <td><strong>{{bid.amount | currency}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td>{{bid.comment}}</td>
@@ -104,7 +104,7 @@
 
       <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
         <tr>
-          <td><strong>${{bid.amount}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td><strong>{{bid.amount | currency}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
         </tr>
         <tr ng-show="opportunity.buyer._id == company._id">
           <td>
