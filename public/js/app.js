@@ -608,10 +608,11 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
       sort_direction: $scope.sortDirection,
       page: page
     }, function(data) {
-      var paginationNumPagesToShow, _i, _ref, _ref1, _results;
+      var meta, paginationNumPagesToShow, _i, _ref, _ref1, _results;
       $scope.opportunities = data.opportunities;
-      $scope.page = data.opportunities_page;
-      $scope.maxPage = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      meta = data.meta;
+      $scope.page = meta.opportunities_page;
+      $scope.maxPage = Math.ceil(meta.opportunities_count / meta.opportunities_per_page);
       paginationNumPagesToShow = 10;
       $scope.startPage = parseInt(($scope.page - 1) / paginationNumPagesToShow) * paginationNumPagesToShow + 1;
       $scope.endPage = Math.min($scope.startPage + paginationNumPagesToShow - 1, $scope.maxPage);

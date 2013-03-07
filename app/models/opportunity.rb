@@ -242,11 +242,11 @@ class Opportunity
   end
 
   def lowest_bid_amount
-    self.bids.asc(:amount).first.try(:amount)
+    self.bids.sort_by { |b| b.amount }.first.try(:amount)
   end
 
   def highest_bid_amount
-    self.bids.desc(:amount).first.try(:amount)
+    self.bids.sort_by { |b| -b.amount }.first.try(:amount)
   end
 
   private
