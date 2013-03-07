@@ -26,6 +26,7 @@ class GatewaySubscription
   attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
 
   before_create :set_regions
+  after_save :update_chargify_email, if: "self.email_changed?"
 
   scope :pending, -> { where(confirmed: false) }
   scope :recent, -> { desc(:created_at) }
@@ -154,5 +155,11 @@ class GatewaySubscription
 
   def exists_on_chargify?
     Chargify::Subscription.exists?(self.subscription_id)
+  end
+
+  def update_chargify_email
+    customer = Chargify::Customer.find(self.customer_id)
+    customer.email = self.email
+    customer.save
   end
 end

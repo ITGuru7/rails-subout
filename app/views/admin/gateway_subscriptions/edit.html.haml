@@ -1,13 +1,15 @@
 %h1= @subscription.name
 %h4
-  = "Email: #{@subscription.email}"
-  %br
   = "Organization: #{@subscription.organization}"
   %br
   = "Chargify ID: #{@subscription.subscription_id}"
 
 - if @subscription.exists_on_chargify?
   = form_for @subscription, url: admin_gateway_subscription_path(@subscription), html: { class: "form-horizontal edit_gateway_subscription" } do |f|
+    .control-group
+      = f.label :email, class: "control-label"
+      .controls
+        = f.text_field :email
     .control-group
       = f.label :product_handle, class: "control-label"
       .controls
