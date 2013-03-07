@@ -174,7 +174,7 @@
                               <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                             </div>
                             <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                              <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+                              <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
                             </div>
                           </div>
                           <div>

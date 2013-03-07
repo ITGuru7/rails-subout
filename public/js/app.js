@@ -1338,19 +1338,26 @@ subout.directive("whenScrolled", function() {
   };
 });
 
-subout.directive("reserveNotMet", function() {
+subout.directive("validateBidAmount", function() {
   return {
     require: 'ngModel',
     link: function(scope, elem, iAttrs, ngModel) {
       var variable;
-      variable = iAttrs["reserveNotMet"];
+      variable = iAttrs["validateBidAmount"];
       return scope.$watch(variable, function() {
         return ngModel.$parsers.unshift(function(value) {
           if (scope.opportunity.reserve_amount) {
             if (scope.opportunity.forward_auction) {
-              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount <= value);
+              ngModel.$setValidity("bid_amount", scope.opportunity.reserve_amount <= value);
             } else {
-              ngModel.$setValidity("bid_amount_reserve_not_met", scope.opportunity.reserve_amount >= value);
+              ngModel.$setValidity("bid_amount", scope.opportunity.reserve_amount >= value);
+            }
+          }
+          if (scope.opportunity.win_it_now_price) {
+            if (scope.opportunity.forward_auction) {
+              ngModel.$setValidity("bid_amount", scope.opportunity.win_it_now_price > value);
+            } else {
+              ngModel.$setValidity("bid_amount", scope.opportunity.win_it_now_price < value);
             }
           }
           return value;
