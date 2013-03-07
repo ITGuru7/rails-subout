@@ -8423,10 +8423,7 @@ div#opportunity-show .description .content {
   text-align: left;
   width: 140px;
 }
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
+#bid-new .ng-pristine .control-group .help-block {
   display: none;
 }
 #page-settings ul.nav-tabs li {

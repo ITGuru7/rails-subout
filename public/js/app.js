@@ -469,6 +469,39 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   $scope.$on('modalOpened', function() {
     return $scope.hideAlert();
   });
+  $scope.validateNumber = function(value) {
+    return /\d+(?:\.\d+)?/.test(value);
+  };
+  $scope.validateReserveAmount = function(value) {
+    if (isNaN(value)) {
+      return true;
+    }
+    value = parseFloat(value);
+    if ($scope.opportunity.reserve_amount) {
+      if ($scope.opportunity.forward_auction) {
+        return $scope.opportunity.reserve_amount <= value;
+      } else {
+        return $scope.opportunity.reserve_amount >= value;
+      }
+    } else {
+      return true;
+    }
+  };
+  $scope.validateWinItNowPrice = function(value) {
+    if (isNaN(value)) {
+      return true;
+    }
+    value = parseFloat(value);
+    if ($scope.opportunity.win_it_now_price) {
+      if ($scope.opportunity.forward_auction) {
+        return $scope.opportunity.win_it_now_price > value;
+      } else {
+        return $scope.opportunity.win_it_now_price < value;
+      }
+    } else {
+      return true;
+    }
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -1336,35 +1369,6 @@ subout.directive("whenScrolled", function() {
         return scope.$apply(attr.whenScrolled);
       }
     });
-  };
-});
-
-subout.directive("validateBidAmount", function() {
-  return {
-    require: 'ngModel',
-    link: function(scope, elem, iAttrs, ngModel) {
-      var variable;
-      variable = iAttrs["validateBidAmount"];
-      return scope.$watch(variable, function() {
-        return ngModel.$parsers.unshift(function(value) {
-          if (scope.opportunity.reserve_amount) {
-            if (scope.opportunity.forward_auction) {
-              ngModel.$setValidity("bid_amount", scope.opportunity.reserve_amount <= value);
-            } else {
-              ngModel.$setValidity("bid_amount", scope.opportunity.reserve_amount >= value);
-            }
-          }
-          if (scope.opportunity.win_it_now_price) {
-            if (scope.opportunity.forward_auction) {
-              ngModel.$setValidity("bid_amount", scope.opportunity.win_it_now_price > value);
-            } else {
-              ngModel.$setValidity("bid_amount", scope.opportunity.win_it_now_price < value);
-            }
-          }
-          return value;
-        });
-      });
-    }
   };
 });
 

@@ -24,9 +24,20 @@
       <div class="control-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid}">
         <label for="bid_amount" class="control-label">Bid Amount ($) *</label>
         <div class="controls">
-          <input type="number" id="bid_amount" name="bid_amount" required ng-model="bid.amount" size="10" maxlength="10" class="input-small" validate-bid-amount="opportunity">
+          <input type="text"
+                 id="bid_amount"
+                 name="bid_amount"
+                 required
+                 ng-model="bid.amount"
+                 ui-validate="{ only_numbers: validateNumber, reserve_amount: validateReserveAmount, win_it_now_price: validateWinItNowPrice}"
+                 size="10"
+                 maxlength="10"
+                 class="input-small">
+
           <span ng-show="opportunity.reserve_amount">(Reserve: {{opportunity.reserve_amount | currency}})</span>
-          <p class="help-block">Enter only numeric characters<span ng-show="opportunity.reserve_amount"> and ensure reserve met</span>.</p>
+          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block">Reserve not met.</p>
+          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
         </div>
       </div>
 

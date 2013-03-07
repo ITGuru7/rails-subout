@@ -44,7 +44,7 @@ class OpportunitySerializer < ActiveModel::Serializer
   def win_it_now_price
     return nil unless object.win_it_now_price.present?
 
-    "%.2f" % object.win_it_now_price
+    object.win_it_now_price.to_i
   end
 
   def bidding_ends_at

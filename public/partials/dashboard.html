@@ -163,7 +163,7 @@
                             <span>Reserve Amount: </span>{{event.eventable.reserve_amount | currency}}
                           </div>
                           <div ng-show="event.eventable.quick_winnable">
-                            <span>Buy now:</span> ${{event.eventable.win_it_now_price}}
+                            <span>Buy now:</span> {{event.eventable.win_it_now_price | currency}}
                           </div>
                         </div>
                       </div>
@@ -269,7 +269,7 @@
                     </tr>
                     <tr ng-show="!event.eventable.winning_bid_id && event.selected && event.eventable.quick_winnable">
                       <td>Buy now:</td>
-                      <td>${{event.eventable.win_it_now_price}}</td>
+                      <td>{{event.eventable.win_it_now_price | currency}}</td>
                     </tr>
                     <tr ng-show="event.selected && company.isLicensedToBidOnOpportunityOf(event) && event.eventable._id">
                       <td ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'" colspan='2'>

@@ -121,7 +121,7 @@
       <td class="table-header">Actions</td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now (<span ui-currency ng-model="opportunity.win_it_now_price"></span>)</a>
+        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
       </td>
     </tr>
   </table>
