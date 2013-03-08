@@ -8178,6 +8178,10 @@ div#opportunity-show .description .content {
 .bid-history td {
   max-width: 300px;
 }
+.comments .comment-body {
+  color: #666550;
+  margin-bottom: 5px;
+}
 #search-listing {
   padding-left: 5px;
 }
@@ -8219,7 +8223,7 @@ div#opportunity-show .description .content {
 #subout-navbar.navbar .nav {
   margin-right: 0;
 }
-#subout-navbar.navbar .brand {
+#subout-navbar.navbar .brand-logo {
   display: block;
   float: left;
   background-image: url("/img/logo_medium.png");
@@ -8419,10 +8423,7 @@ div#opportunity-show .description .content {
   text-align: left;
   width: 140px;
 }
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
+#bid-new .ng-pristine .control-group .help-block {
   display: none;
 }
 #page-settings ul.nav-tabs li {
@@ -8457,6 +8458,14 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
+}
+#page-settings h4 {
+  margin-bottom: 10px;
+}
+#page-settings .national-subscription .downgrade-instructions {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8499,6 +8508,42 @@ div#opportunity-show .description .content {
 .span10.mobileSelect {
   width: 100%;
 }
+#subout-navbar.mobile.navbar {
+  padding: 0 20px;
+}
+#subout-navbar.mobile.navbar .mobile-nav > li {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#subout-navbar.mobile .mobile-nav {
+  background-color: #eaeaea;
+}
+#subout-navbar.mobile.navbar li {
+  line-height: 0;
+  border-bottom: 1px solid #f8f8f8;
+  padding: 10px;
+  margin-left: 0;
+}
+#subout-navbar.mobile.navbar li a {
+  font-weight: normal;
+}
+#subout-navbar.mobile.navbar li.active a {
+  background-color: #eaeaea;
+  color: #000;
+  box-shadow: none;
+  text-decoration: underline;
+}
+#subout-navbar.mobile a.brand {
+  padding: 0;
+}
+#subout-navbar.mobile .navbar a.brand {
+  display: none;
+}
+#subout-navbar.mobile .navbar li.brand {
+  padding-left: 5px;
+  padding-right: 0px;
+  margin-left: 0px;
+}
 @media only screen and (max-device-width: 767px) {
   #content {
     padding: 10px 5% 0px 5%;
@@ -8513,6 +8558,37 @@ div#opportunity-show .description .content {
   .mobile-controls .cloudinary-fileupload {
     width: 100%;
   }
+  #activity-stream .event.expanded {
+    background: #e0f1db;
+    margin-bottom: 20px;
+  }
+}
+#subout-loading.loading-animation {
+  width: 40px;
+}
+.mobile-menu {
+  width: 92%;
+  height: 30px;
+  background-color: #f2f2f2;
+  position: relative;
+}
+.mobile-menu > a {
+  display: inline-block;
+}
+.mobile-menu .menu-button {
+  width: 38px;
+  height: 28px;
+  background: url(/img/menu-icon.png) no-repeat center 100%;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 12px;
+}
+.mobile-menu .menu-title {
+  line-height: 31px;
+  padding-left: 10px;
+  font-weight: normal;
+  color: #000;
 }
 .table-border {
   border: 1px solid #ccc;

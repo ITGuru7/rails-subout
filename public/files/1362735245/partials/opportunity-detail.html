@@ -1,4 +1,9 @@
 <div id="opportunity-show">
+  <div class="welcome display-message top-banner">
+    <span class="display-message-extra">Welcome</span>
+    <span class="company display-message-subject">{{company.name}}!</span>
+    <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
+  </div>
   <div class="row-fluid">
     <div class="span3">
       <h5>OFFERED BY</h5>
@@ -22,7 +27,7 @@
         <div class="span8 details">
           <div ng-show="opportunity.winning_bid_id">
             <ul>
-              <li><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
+              <li ng-show="company._id == opportunity.buyer_id"><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
               <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
             </ul>
           </div>
@@ -49,6 +54,12 @@
           </div>
           <div ng-show="opportunity.contact_phone">
             <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
+          </div>
+          <div>
+            <span class="label-field">Bidding Ends: </span><span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+          </div>
+          <div ng-show="opportunity.reserve_amount">
+            <span class="label-field">Reserve Amount: </span>{{opportunity.reserve_amount | currency}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
@@ -81,10 +92,9 @@
       <hr />
 
       <h4>Bid History</h4>
-      
       <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
-          <td><strong>${{bid.amount}}</strong></td>
+          <td><strong>{{bid.amount | currency}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td>{{bid.comment}}</td>
@@ -94,7 +104,7 @@
 
       <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
         <tr>
-          <td><strong>${{bid.amount}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td><strong>{{bid.amount | currency}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
         </tr>
         <tr ng-show="opportunity.buyer._id == company._id">
           <td>
@@ -108,6 +118,34 @@
           <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
         </tr>
       </table>  
+      <hr />
+      <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
+      <h4>{{opportunity.buyer.name}}'s Comments</h4>
+      <ul class="comments">
+        <li ng-repeat="comment in opportunity.comments">
+          <div>
+            <span class="timeago" relative-time="comment.created_at" title="{{comment.created_at}}">{{comment.created_at|date}}</span>
+          </div>
+          <div class="comment-body">{{comment.body}}</div>
+        </li>
+      </ul>
+      <div>
+        <form name="newComment" class="form-horizontal">
+          <div class="alert alert-error" ng-show="errors">
+            <a class="close" ng-click="hideAlert()">&times;</a>
+            <ul ng-repeat="error in errors">
+              <li>{{error}}</li>
+            </ul>
+          </div>
+          <div class="control-group" ng-show="opportunity.buyer_id == company._id">
+            <label for="comment_body" class="control-label">New Comment: </label>
+            <div class="controls">
+              <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="input-xlarge">
+              <button ng-click="addComment()" class="btn btn-success" ng-disabled="newComment.$invalid">Add</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

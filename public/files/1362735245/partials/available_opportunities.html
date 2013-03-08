@@ -5,16 +5,22 @@
       <span class="company display-message-subject">{{company.name}}!</span>
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
-    <div class="pagination pull-right" ng-show="max_page > 1">
+    <div class="pagination pull-right" ng-show="maxPage > 1">
       <ul>
         <li ng-class="{disabled: page == 1}">
-          <a href ng-click="prevPage()">« Prev</a>
+          <a href ng-click="setPage(1)">« First</a>
+        </li>
+        <li ng-class="{disabled: startPage == 1}">
+          <a href ng-click="setPage(startPage - 10)">« Prev</a>
         </li>
         <li ng-repeat="n in pages" ng-class="{active: n == page}" >
           <a ng-click="setPage(n)">{{n}}</a>
         </li>
-        <li ng-class="{disabled: page == max_page}">
-          <a href ng-click="nextPage()">Next »</a>
+        <li ng-class="{disabled: endPage == maxPage}">
+          <a href ng-click="setPage(startPage + 10)">Next »</a>
+        </li>
+        <li ng-class="{disabled: page == maxPage}">
+          <a href ng-click="setPage(maxPage)">Last »</a>
         </li>
       </ul>
     </div>
@@ -58,7 +64,7 @@
       </td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now (<span ui-currency ng-model="opportunity.win_it_now_price"></span>)</a>
+        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
       </td>
     </tr>
   </table>
@@ -115,20 +121,26 @@
       <td class="table-header">Actions</td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now (<span ui-currency ng-model="opportunity.win_it_now_price"></span>)</a>
+        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
       </td>
     </tr>
   </table>
-  <div class="pagination pull-right" ng-show="max_page > 1">
+  <div class="pagination pull-right" ng-show="maxPage > 1">
     <ul>
       <li ng-class="{disabled: page == 1}">
-        <a href ng-click="prevPage()">« Prev</a>
+        <a href ng-click="setPage(1)">« First</a>
+      </li>
+      <li ng-class="{disabled: startPage == 1}">
+        <a href ng-click="setPage(startPage - 10)">« Prev</a>
       </li>
       <li ng-repeat="n in pages" ng-class="{active: n == page}" >
         <a ng-click="setPage(n)">{{n}}</a>
       </li>
-      <li ng-class="{disabled: page == max_page}">
-        <a href ng-click="nextPage()">Next »</a>
+      <li ng-class="{disabled: endPage == maxPage}">
+        <a href ng-click="setPage(startPage + 10)">Next »</a>
+      </li>
+      <li ng-class="{disabled: page == maxPage}">
+        <a href ng-click="setPage(maxPage)">Last »</a>
       </li>
     </ul>
   </div>

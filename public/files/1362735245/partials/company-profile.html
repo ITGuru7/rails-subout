@@ -22,8 +22,13 @@
             </div>
            
             <div class="row-fluid">
-                <div class="span3">Regions:</div>
-                <div class="span9">{{other_company.regionNames()}}</div>
+                <div class="span3">DOT Number:</div>
+                <div class="span9"><a target="_blank" href="http://www.safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={{other_company.dot_number}}">{{other_company.dot_number}}</a></div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Insurance</div>
+                <div class="span9"><a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno={{other_company.dot_number}}">{{other_company.insurance}}</a></div>
             </div>
 
             <div class="row-fluid">
@@ -32,19 +37,16 @@
             </div>
 
             <div class="row-fluid">
-                <div class="span3">Since:</div>
-                <div class="span9">{{other_company.since}}</div>
-            </div>
-
-            <div class="row-fluid">
-                <div class="span3">Owner:</div>
-                <div class="span9">{{other_company.owner}}</div>
-            </div>
-
-            <div class="row-fluid">
                 <div class="span3">Contact:</div>
                 <div class="span9">
-                    <a href="mailto:{{other_company.email}}">{{other_company.contact}}</a>
+                  <a href="mailto:{{other_company.email}}">{{other_company.contact_name}} ({{other_company.email}})</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Contact Phone:</div>
+                <div class="span9">
+                  {{other_company.contact_phone}}
                 </div>
             </div>
 
