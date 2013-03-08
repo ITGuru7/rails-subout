@@ -87,8 +87,6 @@
                 />
               </div>
             </div>
-
-
             <div class="control-group">
               <label for="dot_number" class="control-label">DOT Number</label>
               <div class="controls">
@@ -96,7 +94,13 @@
                 <p class="help-block warning">Required for bidding.</p>
               </div>
             </div>
-
+            <div class="control-group">
+              <label for="has_ada_vehicles" class="control-label">Fleet includes ADA vehicles?</label>
+              <div class="controls">
+                <input id="has_ada_vehicles" type="checkbox" ng-model="companyProfile.has_ada_vehicles" value="1">
+                <p class="help-block warning">Required for bidding on ADA opportunities.</p>
+              </div>
+            </div>
             <div class="control-group">
               <label for="insurance" class="control-label">Insurance</label>
               <div class="controls">
@@ -198,18 +202,20 @@
                 </select>
               </div>
             </div>
-
             <div class="form-actions">
               <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
             </div>
-
           </fieldset>
         </form>
       </div>
 
       <div ng-class="{active:selectedTab == 'licensed-regions'}" class="tab-pane" id="licensed-regions">
-        <div ng-show="company.subscription_plan == 'subout-national-service' || company.subscription_plan == 'subout-partner'">
-          You subscribed national plan
+        <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
+        <div class="national-subscription" ng-show="company.subscription_plan == 'subout-national-service'">
+          <div class="text-centered">
+            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('state-by-state-service')">Downgrade to state by state plan</button>
+          </div>
+          <div class="downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
         </div>
         <div ng-show="company.subscription_plan == 'free'" class="text-centered">
           <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
@@ -217,7 +223,7 @@
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">
-            <button class="btn btn-primary" ng-click="upgradeToNationalPlan()">Upgrade to national plan for ${{national_product.price_in_cents/100}}</button>
+            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for ${{national_product.price_in_cents/100}}</button>
           </div>
           <hr/>
           <div style="float:right">
@@ -235,7 +241,7 @@
                       name="regions[{{ region_abbr }}]"
                       ng-model="companyProfile.allRegions[region_name]"
                       ng-change="updateTotalPrice()"
-                      ng-disabled="companyProfile.allRegions[region_name]"
+                      ng-disabled="companyProfile.allRegions[region_name] && companyProfile.upgraded_recently"
                       value="1">
                       {{region_name}}(${{regionPrice(region_name)}})
                   </div>

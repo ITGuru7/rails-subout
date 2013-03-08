@@ -315,6 +315,10 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
+    if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
+      $rootScope.setModal(suboutPartialPath('ada-required.html'));
+      return;
+    }
     $rootScope.bid = {};
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
@@ -1175,13 +1179,13 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
-  return $scope.upgradeToNationalPlan = function() {
+  return $scope.updateProduct = function(product) {
     if (!confirm("Are you sure?")) {
       return;
     }
     return Company.update_product({
       companyId: $rootScope.company._id,
-      product: "subout-national-service",
+      product: product,
       api_token: $rootScope.token.api_token,
       action: "update_product"
     }, function(company) {

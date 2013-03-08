@@ -8459,6 +8459,14 @@ div#opportunity-show .description .content {
 #page-settings .control-group .help-block {
   font-size: 13px;
 }
+#page-settings h4 {
+  margin-bottom: 10px;
+}
+#page-settings .national-subscription .downgrade-instructions {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+}
 .control-group .ng-invalid {
   border: solid 1px red;
 }

@@ -32,6 +32,9 @@ class Company
   field :total_sales, type: Integer, default: 0
   field :total_winnings, type: Integer, default: 0
 
+  field :last_upgraded_at, type: Time
+  field :has_ada_vehicles, type: Boolean, default: false
+
   #address stuff TODO ask Tom about this
   field :street_address, type: String
   field :zip_code, type: String
@@ -227,16 +230,21 @@ class Company
   end
 
   def update_regions!(regions)
-    if regions.nil?
-      errors.add(:base, "Regions cannot be nil")
-      return false
-    end
+    regions ||= []
+    upgrading = (regions - self.regions).present? 
+    self.last_upgraded_at = Time.now if upgrading
 
     self.created_from_subscription.update_regions!(regions)
-    self.update_attributes(regions: regions)
+    self.regions = regions
+    self.save
   end
 
   def update_product!(product)
+    products = ["free", "state-by-state-service", "subout-national-service"]
+
+    upgrading = products.index(product) > products.index(self.subscription_plan) 
+    self.last_upgraded_at = Time.now if upgrading 
+
     self.created_from_subscription.update_product!(product)
     set_subscription_info
     self.save
@@ -272,6 +280,11 @@ class Company
         csv << csv_column_names.map { |column| item.csv_value_for(column) }
       end
     end
+  end
+
+  def upgraded_recently?
+    last_upgraded_at = self.last_upgraded_at || self.created_at
+    last_upgraded_at > 1.month.ago
   end
 
   private
