@@ -93,7 +93,7 @@ class Opportunity
   def notify_companies(event_type)
     companies_to_notify.each do |company|
       Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id)
-      Sms.new_opportunity(self, company) if company.notification_type && company.cell_phone
+      Sms.new_opportunity(self, company) if company.cell_phone.present? && self.emergency?
     end
 
     if self.for_favorites_only?
@@ -102,6 +102,10 @@ class Opportunity
       notified_regions = (self.regions + self.notified_regions).uniq
       self.set(:notified_regions, notified_regions) 
     end
+  end
+
+  def emergency?
+    self.type == "Emergency"
   end
 
   def self.send_expired_notification
