@@ -46,7 +46,7 @@
           <div>
             <ul>
               <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
-              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>${{opportunity.win_it_now_price}}</li>
+              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>{{opportunity.win_it_now_price | currency}}</li>
             </ul>
           </div>
           <div>
