@@ -612,8 +612,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
     }
   ];
   availableToCurrentCompany = function(opportunity) {
-    var _ref;
-    return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && (!opportunity.for_favorites_only || (_ref = opportunity.buyer_id, __indexOf.call($rootScope.company.favoriting_buyer_ids, _ref) >= 0)) && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
+    return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
   };
   $rootScope.channel.bind('event_created', function(event) {
     var affectedOpp;
@@ -1595,11 +1594,11 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.isLicensedToBidOnOpportunity = function(opportunity) {
     var _ref, _ref1, _ref2;
-    if (this.nationalSubscriber()) {
-      return true;
-    }
     if (!this.regions) {
       return false;
+    }
+    if (this.nationalSubscriber()) {
+      return true;
     }
     if (_ref = opportunity.start_region, __indexOf.call(this.regions, _ref) >= 0) {
       return true;
@@ -1607,7 +1606,7 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     if (_ref1 = opportunity.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
       return true;
     }
-    if ((_ref2 = opportunity.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) && opportunity.for_favorites_only) {
+    if (_ref2 = opportunity.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
       return true;
     }
     return false;

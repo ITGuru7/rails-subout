@@ -177,12 +177,16 @@ class Company
     end
   end
 
+  def is_a_favorite_of?(other_company) 
+    self.favoriting_buyer_ids.include?(other_company.id)
+  end
+
   def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc')
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
 
     options = []
-    options << {:for_favorites_only => true, :buyer_id.in => self.favoriting_buyer_ids}
+    options << {:buyer_id.in => self.favoriting_buyer_ids}
 
     if self.regions.present?
       options << {:for_favorites_only => false, :start_region.in => self.regions}

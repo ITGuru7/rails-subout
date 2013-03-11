@@ -60,12 +60,10 @@ class Bid
       errors.add :bidder_id, "cannot bid on your own opportunity"
     end
 
-    if opportunity.for_favorites_only?
-      unless bidder.favoriting_buyer_ids.include?(opportunity.buyer_id)
+    unless bidder.is_a_favorite_of?(opportunity.buyer)
+      if opportunity.for_favorites_only?
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
-      end
-    else
-      unless bidder.subscribed?(opportunity.regions)
+      elsif !bidder.subscribed?(opportunity.regions)
         errors.add :bidder_id, "cannot bid on an opportunity within this region"
       end
     end
