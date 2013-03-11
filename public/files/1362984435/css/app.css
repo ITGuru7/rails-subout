@@ -8178,6 +8178,10 @@ div#opportunity-show .description .content {
 .bid-history td {
   max-width: 300px;
 }
+.comments .comment-body {
+  color: #666550;
+  margin-bottom: 5px;
+}
 #search-listing {
   padding-left: 5px;
 }
@@ -8419,10 +8423,7 @@ div#opportunity-show .description .content {
   text-align: left;
   width: 140px;
 }
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
+#bid-new .ng-pristine .control-group .help-block {
   display: none;
 }
 #page-settings ul.nav-tabs li {
@@ -8457,6 +8458,14 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
+}
+#page-settings h4 {
+  margin-bottom: 10px;
+}
+#page-settings .national-subscription .downgrade-instructions {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8548,6 +8557,10 @@ div#opportunity-show .description .content {
   }
   .mobile-controls .cloudinary-fileupload {
     width: 100%;
+  }
+  #activity-stream .event.expanded {
+    background: #e0f1db;
+    margin-bottom: 20px;
   }
 }
 #subout-loading.loading-animation {
