@@ -1,0 +1,5 @@
+%p Dear #{@buyer.name},
+%p You have received a new bid of #{number_to_currency(@bid.amount)} on #{link_to @opportunity.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@opportunity.reference_number}"} #{time_ago_in_words(@bid.created_at)}.
+%p To review this bid, please click #{link_to "here", "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@opportunity.reference_number}"}
+%p Sincerely,
+%p The SubOut Team

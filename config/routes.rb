@@ -11,6 +11,7 @@ Subout::Application.routes.draw do
   # this is used for cache busting locally
   if Rails.env.development?
     get '/files/:timestamp/:path' => 'static#asset', :constraints => { :path => /.+/ }
+    mount MailPreview => 'mail_view'
   end
 
   devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]

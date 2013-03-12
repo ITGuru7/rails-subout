@@ -1,0 +1,4 @@
+%p Dear #{@company.contact_name},
+%p A new opportunity has arrived in your region that you might want to explore, #{link_to @opportunity.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@opportunity.reference_number}"}. To take a closer look, click #{link_to "here", "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@opportunity.reference_number}"}.
+%p Sincerely,
+%p The SubOut Team

@@ -16,10 +16,10 @@ class Notifier < ActionMailer::Base
   end
 
   def new_bid(bid_id)
-    bid = Bid.find(bid_id)
-    @opportunity = bid.opportunity
+    @bid = Bid.find(bid_id)
+    @opportunity = @bid.opportunity
     @buyer = @opportunity.buyer
-    @bidder = bid.bidder
+    @bidder = @bid.bidder
 
     mail(subject: "New bid on: #{@opportunity.name}", to: @buyer.email)
   end
@@ -45,7 +45,7 @@ class Notifier < ActionMailer::Base
 
   def expired_auction_notification(auction_id)
     @auction = Opportunity.find(auction_id)
-
+    @poster = @auction.buyer
     mail(subject: "Your auction #{@auction.name} is expired", to: @auction.buyer.email)
   end
 

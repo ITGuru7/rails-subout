@@ -30,6 +30,7 @@ gem "awesome_print"
 gem "chargify_api_ares"
 gem 'newrelic_rpm'
 gem 'newrelic_moped'
+gem 'mail_view'
 
 group :production do
   gem "airbrake"
