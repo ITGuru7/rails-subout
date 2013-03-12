@@ -1217,7 +1217,6 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
     }, function(token) {
       var promise;
       if (token.authorized) {
-        $.cookie(AuthToken, token);
         promise = Authorize.authenticate(token);
         return promise.then(function() {
           if ($rootScope.redirectToPath) {
@@ -1255,7 +1254,7 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, Au
   };
 };
 
-SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken) {
+SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken, Authorize) {
   $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
@@ -1299,7 +1298,14 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
       company: $scope.company
     }, function() {
       $scope.errors = null;
-      return $location.path("/sign_in").search({});
+      return Token.save({
+        email: $scope.user.email,
+        password: $scope.user.password
+      }, function(token) {
+        return Authorize.authenticate(token).then(function() {
+          return $location.path("dashboard");
+        });
+      });
     }, function(content) {
       $scope.errors = $rootScope.errorMessages(content.data.errors);
       return $("body").scrollTop(0);
@@ -1715,6 +1721,7 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
     authenticate: function(token) {
       var defer, promise;
       defer = $q.defer();
+      $.cookie(AuthToken, token);
       this.tokenValue = token;
       $rootScope.token = token;
       $rootScope.pusher = new Pusher(token.pusher_key);
