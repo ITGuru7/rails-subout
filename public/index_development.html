@@ -23,6 +23,27 @@
     </script>
     <script src="/files/--DEPLOY--/js/vendor.js"></script>
     <script src="/files/--DEPLOY--/js/app.js"></script>
+<script type="text/ng-template" id="pagination">
+  <div class="pagination">
+    <ul>
+      <li ng-class="{disabled: page == 1}">
+        <a href ng-click="setPage(1)">« First</a>
+      </li>
+      <li ng-class="{disabled: startPage == 1}">
+        <a href ng-click="setPage(startPage - 10)">« Prev</a>
+      </li>
+      <li ng-repeat="n in pages" ng-class="{active: n == page}" >
+        <a ng-click="setPage(n)">{{n}}</a>
+      </li>
+      <li ng-class="{disabled: endPage == maxPage}">
+        <a href ng-click="setPage(startPage + 10)">Next »</a>
+      </li>
+      <li ng-class="{disabled: page == maxPage}">
+        <a href ng-click="setPage(maxPage)">Last »</a>
+      </li>
+    </ul>
+  </div>
+</script>
   </head>
 
   <body data-subout-deploy="--DEPLOY--">

@@ -593,7 +593,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
   var availableToCurrentCompany;
   $scope.opportunities = [];
   $scope.pages = [];
-  $scope.startpage = 1;
+  $scope.page = $location.search().page || 1;
   $scope.endpage = 1;
   $scope.maxpage = 1;
   $scope.sortItems = [
@@ -666,11 +666,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
       for (var _i = 1, _ref = $scope.maxPage; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
       return _results;
     }).apply(this), page) >= 0 && page !== $scope.page) {
-      return $scope.loadMoreOpportunities(page);
+      return $location.search({
+        page: page
+      });
     }
   };
   $scope.reloadOpportunities = function() {
-    return $scope.loadMoreOpportunities(1);
+    return $scope.loadMoreOpportunities($scope.page);
   };
   $scope.sortOpportunities = function(sortBy) {
     if ($scope.sortBy === sortBy) {
@@ -700,6 +702,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.opportunities = [];
   $scope.pages = [];
   $scope.startPage = 1;
+  $scope.page = $location.search().page || 1;
   $scope.endPage = 1;
   $scope.maxPage = 1;
   filterWithQuery = function(value) {
@@ -759,10 +762,12 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
       for (var _i = 1, _ref = $scope.maxPage; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
       return _results;
     }).apply(this), page) >= 0 && page !== $scope.page) {
-      return $scope.loadMoreOpportunities(page);
+      return $location.search({
+        page: page
+      });
     }
   };
-  return $scope.loadMoreOpportunities(1);
+  return $scope.loadMoreOpportunities($scope.page);
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Comment) {
