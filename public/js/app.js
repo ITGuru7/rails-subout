@@ -405,6 +405,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       bid: bid,
       api_token: $rootScope.token.api_token,
       opportunityId: opportunity._id
+    }, function() {
+      return jQuery("#modal").modal("hide");
     });
   };
 });
