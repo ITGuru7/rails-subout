@@ -48,10 +48,11 @@ subout.config([
   "$routeProvider", "$httpProvider", function($routeProvider, $httpProvider) {
     var oldTransformReq, resolveAuth;
     resolveAuth = {
-      requiresAuthentication: function(Authorize, $location) {
+      requiresAuthentication: function(Authorize, $location, $rootScope) {
         var response;
         response = Authorize.check();
         if (response === false) {
+          $rootScope.redirectToPath = $location.path();
           $location.path('/sign_in').replace();
           return false;
         } else {
