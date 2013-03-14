@@ -71,6 +71,7 @@ class Bid
 
   def validate_multiple_bids_on_the_same_opportunity
     return unless opportunity
+    return if errors[:amount]
 
     previous_bids = opportunity.bids.where(bidder_id: bidder.id, :id.ne => self.id)
     if opportunity.forward_auction?
@@ -89,6 +90,7 @@ class Bid
   def validate_reserve_met
     return unless opportunity
     return unless opportunity.reserve_amount.present?
+    return if errors[:amount]
 
     if opportunity.forward_auction?
       if amount < opportunity.reserve_amount

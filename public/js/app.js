@@ -475,7 +475,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     return $scope.hideAlert();
   });
   $scope.validateNumber = function(value) {
-    return /\d+(?:\.\d+)?/.test(value);
+    return /^\d+(?:\.\d+)?$/.test(value);
   };
   $scope.validateReserveAmount = function(value) {
     if (isNaN(value)) {
