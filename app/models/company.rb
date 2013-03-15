@@ -286,7 +286,7 @@ class Company
     end
   end
 
-  def upgraded_recently?
+  def upgraded_recently
     last_upgraded_at = self.last_upgraded_at || self.created_at
     last_upgraded_at > 1.month.ago
   end

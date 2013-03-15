@@ -253,6 +253,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return _results;
   })();
   $rootScope.regions = REGION_NAMES.slice(0);
+  $rootScope.allRegions = REGION_NAMES.slice(0);
   $rootScope.setupFileUploader = function() {
     var $fileUploader;
     $fileUploader = $("input.cloudinary-fileupload[type=file]");
@@ -1073,7 +1074,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var region, successUpdate, token, _i, _len, _ref;
+  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1088,13 +1089,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }, function(data) {
     return $scope.national_product = data.product;
   });
-  $scope.companyProfile.allRegions = {};
-  _ref = $scope.companyProfile.regions;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    region = _ref[_i];
-    $scope.companyProfile.allRegions[region] = true;
-  }
   $scope.regionPrice = function(region_name) {
+    var region;
     region = _.find($rootScope.REGION_PRICES, function(item) {
       return item.name === region_name;
     });
@@ -1105,19 +1101,35 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     }
   };
   $scope.updateTotalPrice = function() {
-    var is_enabled, totalPrice, _ref1;
+    var isEnabled, region, totalPrice, _ref;
     totalPrice = 0;
-    _ref1 = $scope.companyProfile.allRegions;
-    for (region in _ref1) {
-      is_enabled = _ref1[region];
-      if (is_enabled) {
+    _ref = $scope.companyProfile.allRegions;
+    for (region in _ref) {
+      isEnabled = _ref[region];
+      if (isEnabled) {
         totalPrice += $scope.regionPrice(region);
       }
     }
     $scope.totalPrice = totalPrice;
     return totalPrice;
   };
-  $scope.totalPrice = $scope.updateTotalPrice();
+  updateSelectedRegions = function() {
+    var region, _i, _len, _ref;
+    $scope.companyProfile.allRegions = {};
+    _ref = $rootScope.allRegions;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      region = _ref[_i];
+      $scope.companyProfile.allRegions[region] = __indexOf.call($scope.companyProfile.regions, region) >= 0;
+    }
+    return $scope.totalPrice = $scope.updateTotalPrice();
+  };
+  updateSelectedRegions();
+  updateCompanyAndCompanyProfile = function(company) {
+    $rootScope.company = company;
+    $rootScope.regions = company.regions;
+    $scope.companyProfile = angular.copy(company);
+    return updateSelectedRegions();
+  };
   $rootScope.setupFileUploader();
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -1146,19 +1158,18 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     }
   };
   $scope.saveLicensedRegions = function() {
-    var finalRegions, isEnabled, _ref1;
+    var finalRegions, isEnabled, region, _ref;
     if (!confirm("Are you sure?")) {
       return;
     }
     finalRegions = [];
-    _ref1 = $scope.companyProfile.allRegions;
-    for (region in _ref1) {
-      isEnabled = _ref1[region];
+    _ref = $scope.companyProfile.allRegions;
+    for (region in _ref) {
+      isEnabled = _ref[region];
       if (!!isEnabled) {
         finalRegions.push(region);
       }
     }
-    delete $scope.companyProfile.allRegions;
     $scope.companyProfile.regions = finalRegions;
     return Company.update_regions({
       companyId: $rootScope.company._id,
@@ -1166,7 +1177,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token,
       action: "update_regions"
     }, function(company) {
-      $rootScope.company = $scope.companyProfile;
+      updateCompanyAndCompanyProfile(company);
       return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
@@ -1196,15 +1207,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token,
       action: "update_product"
     }, function(company) {
-      $rootScope.company = Company.get({
-        companyId: $rootScope.token.company_id,
-        api_token: $rootScope.token.api_token
-      }, function(company) {
-        if (company.state_by_state_subscriber) {
-          return $rootScope.regions = company.regions;
-        }
-      });
-      return successUpdate();
+      return updateCompanyAndCompanyProfile(company);
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1645,6 +1648,15 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);
+  };
+  Company.prototype.subscribed = function(region) {
+    if (!this.regions) {
+      return false;
+    }
+    if (this.nationalSubscriber()) {
+      return true;
+    }
+    return __indexOf.call(this.regions, region) >= 0;
   };
   return Company;
 });

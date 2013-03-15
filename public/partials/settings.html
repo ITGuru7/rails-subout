@@ -219,16 +219,16 @@
           <div class="downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
         </div>
         <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for ${{national_product.price_in_cents/100}}</a><br><br>
+          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | currency}}</a><br><br>
           <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">
-            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for ${{national_product.price_in_cents/100}}</button>
+            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for {{national_product.price_in_cents/100 | currency}}</button>
           </div>
           <hr/>
           <div style="float:right">
-            <div class="total-price">Total price: ${{totalPrice}}</div>
+            <div class="total-price">Total price: {{totalPrice | currency}}</div>
           </div>
           <h4>Or add individual regions:</h4>
           <form name="settingsLicensedRegions" class="form-horizontal" novalidate>
@@ -242,7 +242,7 @@
                       name="regions[{{ region_abbr }}]"
                       ng-model="companyProfile.allRegions[region_name]"
                       ng-change="updateTotalPrice()"
-                      ng-disabled="companyProfile.allRegions[region_name] && companyProfile.upgraded_recently"
+                      ng-disabled="companyProfile.subscribed(region_name) && companyProfile.upgraded_recently"
                       value="1">
                       {{region_name}}(${{regionPrice(region_name)}})
                   </div>
