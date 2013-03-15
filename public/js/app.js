@@ -593,8 +593,9 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
   };
 };
 
-AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) {
+AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $filter) {
   var availableToCurrentCompany;
+  $scope.filterDepatureDate = null;
   $scope.opportunities = [];
   $scope.pages = [];
   $scope.page = $location.search().page || 1;
@@ -646,7 +647,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
       api_token: $rootScope.token.api_token,
       sort_by: $scope.sortBy,
       sort_direction: $scope.sortDirection,
-      page: page
+      page: page,
+      start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
     }, function(data) {
       var meta, paginationNumPagesToShow, _i, _ref, _ref1, _results;
       $scope.opportunities = data.opportunities;
@@ -698,7 +700,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity) 
     $scope.sortDirection = sortOptions[1];
     return $scope.reloadOpportunities();
   };
-  return $scope.sortOpportunities('bidding_ends_at');
+  $scope.dateOptions = {
+    dateFormat: 'mm/dd/yy'
+  };
+  $scope.sortOpportunities('bidding_ends_at');
+  return $scope.$watch("filterDepatureDate", function() {
+    return $scope.loadMoreOpportunities(1);
+  });
 };
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
@@ -1418,6 +1426,12 @@ module.filter("timestamp", function() {});
 module.filter("timestamp", function() {
   return function(input) {
     return new Date(input).getTime();
+  };
+});
+
+module.filter("stringToDate", function() {
+  return function(input) {
+    return Date.parse(input);
   };
 });
 

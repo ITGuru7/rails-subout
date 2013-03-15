@@ -181,9 +181,10 @@ class Company
     self.favoriting_buyer_ids.include?(other_company.id)
   end
 
-  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc')
+  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil)
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
+    start_date = nil if start_date == "null" or start_date.blank?
 
     options = []
     options << {:buyer_id.in => self.favoriting_buyer_ids}
@@ -192,8 +193,14 @@ class Company
       options << {:for_favorites_only => false, :start_region.in => self.regions}
       options << {:for_favorites_only => false, :end_region.in => self.regions}
     end
-
-    Opportunity.any_of(*options).where(canceled: false, :bidding_ends_at.gt => Time.now, winning_bid_id: nil, :buyer_id.ne => self.id).order_by(sort_by => sort_direction)
+    conditions = {
+      canceled: false,
+      :bidding_ends_at.gt => Time.now,
+      winning_bid_id: nil,
+      :buyer_id.ne => self.id
+    }
+    conditions[:start_date] = start_date if start_date
+    Opportunity.any_of(*options).where(conditions).order_by(sort_by => sort_direction)
   end
 
   def sales_info_messages

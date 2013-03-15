@@ -8639,7 +8639,7 @@ div#opportunity-show .description .content {
   max-width: 300px;
 }
 #available_opportunities .welcome {
-  margin: 10px 0 20px;
+  margin-bottom: 5px;
 }
 #available_opportunities .pagination {
   margin: 0 0 10px 0;

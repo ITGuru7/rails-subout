@@ -5,6 +5,11 @@
       <span class="company display-message-subject">{{company.name}}!</span>
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
+  </div>
+  <div>
+    <div class="pull-left">
+      <span>Depature Date:</span> <input type="text" ng-model="filterDepatureDate" ui-date="dateOptions">
+    </div>
     <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   </div>
   <table ng-show="!isPhone" class="table">
@@ -19,9 +24,14 @@
         <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
       </th>
       <th>
-        <a ng-click="sortOpportunities('bidding_ends_at')">Ends</a>
+        <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
         <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
         <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+      </th>
+      <th>
+        <a ng-click="sortOpportunities('start_date')">Departs</a>
+        <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+        <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
       </th>
       <th class="current-bid-amount">Bid Range</th>
       <th>Actions</th>
@@ -36,6 +46,10 @@
       </td>
       <td>
         <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+      </td>
+      <td>
+        <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
+
       </td>
       <td class="current-bid-amount">
         <span ng-show="opportunity.lowest_bid_amount">
