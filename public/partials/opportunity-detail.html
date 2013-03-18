@@ -65,7 +65,7 @@
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
           </div>
-          <div class="actions">
+          <div class="actions" ng-show="opportunity.buyer_id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Clone as new</a>
           </div>
           <div ng-show="company.isLicensedToBidOnOpportunity(opportunity)">
