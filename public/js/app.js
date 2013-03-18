@@ -322,6 +322,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       return;
     }
     $rootScope.bid = {};
+    if (opportunity.lowest_bid_amount) {
+      $rootScope.bid.amount = opportunity.lowest_bid_amount * 0.95;
+    } else if (opportunity.reserve_amount) {
+      $rootScope.bid.amount = opportunity.reserve_amount;
+    }
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
