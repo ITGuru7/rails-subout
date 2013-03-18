@@ -340,6 +340,17 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       opportunityId: opportunity._id
     });
   };
+  $rootScope.cloneOpportunity = function(opportunity) {
+    var property, _i, _len, _ref, _results;
+    $rootScope.opportunity = angular.copy(opportunity);
+    _ref = ["start_date", "start_time", "end_date", "end_time", "_id", "bids", "buyer", "tracking_id"];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      property = _ref[_i];
+      _results.push(delete $rootScope.opportunity[property]);
+    }
+    return _results;
+  };
   $rootScope.displayCompanyProfile = function(company_id) {
     $rootScope.other_company = Company.get({
       api_token: $rootScope.token.api_token,
