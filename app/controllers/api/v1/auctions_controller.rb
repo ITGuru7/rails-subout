@@ -1,14 +1,15 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
   def index
     params[:page] ||= 1
-    opportunities = current_company.auctions.active.desc(:bidding_ends_at)
-    result = {
+    sort_by = params[:sort_by] || "created_at"
+    sort_direction = params[:sort_direction] || "desc"
+    opportunities = current_company.auctions.active.order_by(sort_by => sort_direction)
+    meta = {
       :opportunities_count =>  opportunities.count,
       :opportunities_per_page => Opportunity.default_per_page,
       :opportunities_page => params[:page].to_i,
-      :opportunities => opportunities.page(params[:page])
     }
-    render json: result
+    render json: opportunities.page(params[:page]), root: "opportunities", meta: meta
   end
 
   def create

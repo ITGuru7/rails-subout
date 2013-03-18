@@ -19,9 +19,23 @@
       <th>Type</th>
       <th>Name</th>
       <th>Description</th>
-      <th>Ends</th>
-      <th>Winning Bidder</th>
-      <th>Amount</th>
+      <th>
+        <a ng-click="sortOpportunities('created_at')">Created</a>
+        <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+        <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+      </th>
+      <th>
+        <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
+        <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+        <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+      </th>
+      <th>
+        <a ng-click="sortOpportunities('start_date')">Departs</a>
+        <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+        <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+      </th>
+      <th class="current-bid-amount">Bid Range</th>
+      <th>Winning Bidder (Amount)</th>
     </tr>
     <tr ng-repeat="opportunity in opportunities | filter:opportunityFilter" >
       <td>{{opportunity.reference_number}}</td>
@@ -29,12 +43,22 @@
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
       <td>{{opportunity.description}}</td>
       <td>
+        <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>
+      </td>
+      <td>
         <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
       </td>
-      <td>{{opportunity.winner.name}}</td>
       <td>
-        <span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>
+        <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
       </td>
+      <td class="current-bid-amount">
+        <span ng-show="opportunity.lowest_bid_amount">
+          <span ui-currency ng-model="opportunity.lowest_bid_amount"></span>
+          /
+          <span ui-currency ng-model="opportunity.highest_bid_amount"></span>
+        </span>
+      </td>
+      <td><span ng-show="opportunity.winner">{{opportunity.winner.name}} (<span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>)</span></td>
     </tr>
   </table>
 

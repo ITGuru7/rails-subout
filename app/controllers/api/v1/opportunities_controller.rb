@@ -7,7 +7,6 @@ class Api::V1::OpportunitiesController < Api::V1::BaseController
       :opportunities_per_page => Opportunity.default_per_page,
       :opportunities_page => params[:page].to_i,
     }
-    #render json: result
     render json: opportunities.page(params[:page]), root: "opportunities", meta: meta
   end
 

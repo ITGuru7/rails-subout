@@ -751,12 +751,15 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
     }
     return Auction.paginate({
       api_token: $rootScope.token.api_token,
+      sort_by: $scope.sortBy,
+      sort_direction: $scope.sortDirection,
       page: page
     }, function(data) {
-      var paginationNumPagesToShow, _i, _ref, _ref1, _results;
+      var meta, paginationNumPagesToShow, _i, _ref, _ref1, _results;
       $scope.opportunities = data.opportunities;
-      $scope.page = data.opportunities_page;
-      $scope.maxPage = Math.ceil(data.opportunities_count / data.opportunities_per_page);
+      meta = data.meta;
+      $scope.page = meta.opportunities_page;
+      $scope.maxPage = Math.ceil(meta.opportunities_count / meta.opportunities_per_page);
       paginationNumPagesToShow = 10;
       $scope.startPage = parseInt(($scope.page - 1) / paginationNumPagesToShow) * paginationNumPagesToShow + 1;
       $scope.endPage = Math.min($scope.startPage + paginationNumPagesToShow - 1, $scope.maxPage);
@@ -766,6 +769,20 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
         return _results;
       }).apply(this);
     });
+  };
+  $scope.sortOpportunities = function(sortBy) {
+    if ($scope.sortBy === sortBy) {
+      if ($scope.sortDirection === "asc") {
+        $scope.sortDirection = "desc";
+      } else {
+        $scope.sortDirection = "asc";
+      }
+    } else {
+      $scope.sortDirection = "desc";
+      $scope.sortBy = sortBy;
+    }
+    $scope.page = 1;
+    return $scope.loadMoreOpportunities($scope.page);
   };
   $scope.setPage = function(page) {
     var _i, _ref, _results;
@@ -779,7 +796,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
       });
     }
   };
-  return $scope.loadMoreOpportunities($scope.page);
+  return $scope.sortOpportunities('created_at');
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Comment) {
