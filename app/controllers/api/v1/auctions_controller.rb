@@ -5,9 +5,9 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     sort_direction = params[:sort_direction] || "desc"
     opportunities = current_company.auctions.active.order_by(sort_by => sort_direction)
     meta = {
-      :opportunities_count =>  opportunities.count,
-      :opportunities_per_page => Opportunity.default_per_page,
-      :opportunities_page => params[:page].to_i,
+      :count =>  opportunities.count,
+      :per_page => Opportunity.default_per_page,
+      :page => params[:page].to_i,
     }
     render json: opportunities.page(params[:page]), root: "opportunities", meta: meta
   end

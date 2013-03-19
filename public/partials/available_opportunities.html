@@ -36,7 +36,7 @@
       <th class="current-bid-amount">Bid Range</th>
       <th>Actions</th>
     </tr>
-    <tr ng-repeat="opportunity in opportunities" >
+    <tr ng-repeat="opportunity in paginated_results" >
       <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
       <td>{{opportunity.type}}</td>
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>

@@ -37,7 +37,7 @@
       <th class="current-bid-amount">Bid Range</th>
       <th>Winning Bidder (Amount)</th>
     </tr>
-    <tr ng-repeat="opportunity in opportunities | filter:opportunityFilter" >
+    <tr ng-repeat="opportunity in paginated_results | filter:opportunityFilter" >
       <td>{{opportunity.reference_number}}</td>
       <td>{{opportunity.type}}</td>
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>

@@ -3,9 +3,9 @@ class Api::V1::OpportunitiesController < Api::V1::BaseController
     params[:page] ||= 1
     opportunities = current_company.available_opportunities(params[:sort_by], params[:sort_direction], params[:start_date])
     meta = {
-      :opportunities_count =>  opportunities.count,
-      :opportunities_per_page => Opportunity.default_per_page,
-      :opportunities_page => params[:page].to_i,
+      :count =>  opportunities.count,
+      :per_page => Opportunity.default_per_page,
+      :page => params[:page].to_i,
     }
     render json: opportunities.page(params[:page]), root: "opportunities", meta: meta
   end

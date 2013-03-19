@@ -3,9 +3,9 @@ class Api::V1::BidsController < Api::V1::BaseController
     params[:page] ||= 1
     bids = current_company.bids.recent
     meta = {
-      :bids_count =>  bids.count,
-      :bids_per_page => Bid.default_per_page,
-      :bids_page => params[:page].to_i,
+      :count =>  bids.count,
+      :per_page => Bid.default_per_page,
+      :page => params[:page].to_i,
     }
     render json: bids.page(params[:page]), root: "bids", meta: meta
   end
