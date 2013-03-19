@@ -1350,7 +1350,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
         password: $scope.user.password
       }, function(token) {
         return Authorize.authenticate(token).then(function() {
-          return $location.path("dashboard");
+          return $location.path("/dashboard").search({});
         });
       });
     }, function(content) {
