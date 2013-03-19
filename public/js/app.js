@@ -1468,10 +1468,19 @@ subout.directive("relativeTime", function() {
 
 subout.directive("whenScrolled", function() {
   return function(scope, element, attr) {
-    return $(window).scroll(function() {
+    var fn;
+    fn = function() {
       if ($(window).scrollTop() > $(document).height() - $(window).height() - 50) {
         return scope.$apply(attr.whenScrolled);
       }
+    };
+    scope.$on('$routeChangeStart', function() {
+      console.log('route changed');
+      fn = function() {};
+      return null;
+    });
+    return $(window).scroll(function() {
+      return fn();
     });
   };
 });
