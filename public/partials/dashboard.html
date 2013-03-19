@@ -153,11 +153,11 @@
                 <div>
                   <div ng-hide="event.eventable.winning_bid_id">
                     <div>
-                      <span>Bidding Ends:</span>
+                      <span>Bidding ends:</span>
                       <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
                     </div>
                     <div ng-show="event.eventable.reserve_amount">
-                      <span>Reserve Amount: </span>{{event.eventable.reserve_amount | currency}}
+                      <span>Starting price: </span>{{event.eventable.reserve_amount | currency}}
                     </div>
                     <div ng-show="event.eventable.quick_winnable">
                       <span>Buy now:</span> {{event.eventable.win_it_now_price | currency}}

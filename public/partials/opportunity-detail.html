@@ -56,10 +56,10 @@
             <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
           </div>
           <div>
-            <span class="label-field">Bidding Ends: </span><span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+            <span class="label-field">Bidding ends: </span><span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
           </div>
           <div ng-show="opportunity.reserve_amount">
-            <span class="label-field">Reserve Amount: </span>{{opportunity.reserve_amount | currency}}
+            <span class="label-field">Starting price: </span>{{opportunity.reserve_amount | currency}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>

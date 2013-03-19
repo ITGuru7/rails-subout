@@ -34,9 +34,9 @@
                  maxlength="10"
                  class="input-small">
 
-          <span ng-show="opportunity.reserve_amount">(Reserve: {{opportunity.reserve_amount | currency}})</span>
+          <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | currency}})</span>
           <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block">Reserve not met.</p>
+          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block">Starting price not met.</p>
           <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
         </div>
       </div>

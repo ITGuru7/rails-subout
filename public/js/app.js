@@ -321,12 +321,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
       return;
     }
-    $rootScope.bid = {};
-    if (opportunity.lowest_bid_amount) {
-      $rootScope.bid.amount = opportunity.lowest_bid_amount * 0.95;
-    } else if (opportunity.reserve_amount) {
-      $rootScope.bid.amount = opportunity.reserve_amount;
-    }
+    $rootScope.bid = {
+      amount: Opportunity.defaultBidAmountFor(opportunity)
+    };
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
@@ -1570,11 +1567,25 @@ suboutSvcs.factory("Auction", function($resource) {
 });
 
 suboutSvcs.factory("Opportunity", function($resource) {
-  return $resource("" + api_path + "/opportunities/:opportunityId", {}, {
+  var Opportunity;
+  Opportunity = $resource("" + api_path + "/opportunities/:opportunityId", {}, {
     paginate: {
       method: "GET"
     }
   });
+  Opportunity.defaultBidAmountFor = function(opportunity) {
+    if (opportunity.forward_auction && opportunity.highest_bid_amount) {
+      return opportunity.highest_bid_amount * 1.05;
+    }
+    if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
+      return opportunity.lowest_bid_amount * 0.95;
+    }
+    if (opportunity.reserve_amount) {
+      return opportunity.reserve_amount;
+    }
+    return null;
+  };
+  return Opportunity;
 });
 
 suboutSvcs.factory("MyBid", function($resource) {
