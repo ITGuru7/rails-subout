@@ -2,5 +2,4 @@
 %p #{@invitation.message}
 %p #{@buyer.name} has added your company#{"(#{@invitation.supplier_name})" if @invitation.supplier_name} as a favorite on subout.
 %p To accept this invitation, please click #{link_to "here", "http://#{DEFAULT_HOST_WITH_PORT}/#/sign_up?invitation_id=#{@invitation.id}"}
-%p Sincerely,
-%p The SubOut Team
+= render 'email_sig'

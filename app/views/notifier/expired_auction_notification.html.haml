@@ -1,4 +1,3 @@
 %p Dear #{@poster.name},
 %p Your auction #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"} has expired.
-%p Sincerely,
-%p The SubOut Team
+= render 'email_sig'
