@@ -536,10 +536,49 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   };
 };
 
-MyBidCtrl = function($scope, $rootScope, MyBid) {
-  return $scope.my_bids = MyBid.query({
-    api_token: $rootScope.token.api_token
-  });
+MyBidCtrl = function($scope, $rootScope, MyBid, $location) {
+  $scope.my_bids = [];
+  $scope.pages = [];
+  $scope.startPage = 1;
+  $scope.page = $location.search().page || 1;
+  $scope.endPage = 1;
+  $scope.maxPage = 1;
+  $scope.setPage = function(page) {
+    var _i, _ref, _results;
+    if (__indexOf.call((function() {
+      _results = [];
+      for (var _i = 1, _ref = $scope.maxPage; 1 <= _ref ? _i <= _ref : _i >= _ref; 1 <= _ref ? _i++ : _i--){ _results.push(_i); }
+      return _results;
+    }).apply(this), page) >= 0 && page !== $scope.page) {
+      return $location.search({
+        page: page
+      });
+    }
+  };
+  $scope.loadMoreBids = function(page) {
+    if (page == null) {
+      page = 1;
+    }
+    return MyBid.paginate({
+      api_token: $rootScope.token.api_token,
+      page: page
+    }, function(data) {
+      var meta, paginationNumPagesToShow, _i, _ref, _ref1, _results;
+      $scope.my_bids = data.bids;
+      meta = data.meta;
+      $scope.page = meta.bids_page;
+      $scope.maxPage = Math.ceil(meta.bids_count / meta.bids_per_page);
+      paginationNumPagesToShow = 10;
+      $scope.startPage = parseInt(($scope.page - 1) / paginationNumPagesToShow) * paginationNumPagesToShow + 1;
+      $scope.endPage = Math.min($scope.startPage + paginationNumPagesToShow - 1, $scope.maxPage);
+      return $scope.pages = (function() {
+        _results = [];
+        for (var _i = _ref = $scope.startPage, _ref1 = $scope.endPage; _ref <= _ref1 ? _i <= _ref1 : _i >= _ref1; _ref <= _ref1 ? _i++ : _i--){ _results.push(_i); }
+        return _results;
+      }).apply(this);
+    });
+  };
+  return $scope.loadMoreBids($scope.page);
 };
 
 FavoritesCtrl = function($scope, $rootScope, Favorite) {
@@ -612,8 +651,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.opportunities = [];
   $scope.pages = [];
   $scope.page = $location.search().page || 1;
-  $scope.endpage = 1;
-  $scope.maxpage = 1;
+  $scope.endPage = 1;
+  $scope.maxPage = 1;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -1589,7 +1628,11 @@ suboutSvcs.factory("Opportunity", function($resource) {
 });
 
 suboutSvcs.factory("MyBid", function($resource) {
-  return $resource("" + api_path + "/bids", {}, {});
+  return $resource("" + api_path + "/bids", {}, {
+    paginate: {
+      method: "GET"
+    }
+  });
 });
 
 suboutSvcs.factory("Region", function($resource) {

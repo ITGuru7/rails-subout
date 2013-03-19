@@ -5,6 +5,8 @@ class Bid
   field :amount, type: BigDecimal
   field :comment, type: String
 
+  paginates_per 30
+
   belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company"
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
