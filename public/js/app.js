@@ -731,6 +731,8 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
   $scope.pages = [];
   $scope.startPage = 1;
   $scope.page = $location.search().page || 1;
+  $scope.sortBy = $location.search().sort_by || "created_at";
+  $scope.sortDirection = $location.search().sort_direction || "desc";
   $scope.endPage = 1;
   $scope.maxPage = 1;
   filterWithQuery = function(value) {
@@ -797,8 +799,11 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
       $scope.sortDirection = "desc";
       $scope.sortBy = sortBy;
     }
-    $scope.page = 1;
-    return $scope.loadMoreOpportunities($scope.page);
+    return $location.search({
+      page: 1,
+      sort_by: $scope.sortBy,
+      sort_direction: $scope.sortDirection
+    });
   };
   $scope.setPage = function(page) {
     var _i, _ref, _results;
@@ -808,11 +813,13 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction) {
       return _results;
     }).apply(this), page) >= 0 && page !== $scope.page) {
       return $location.search({
-        page: page
+        page: page,
+        sort_by: $scope.sortBy,
+        sort_direction: $scope.sortDirection
       });
     }
   };
-  return $scope.sortOpportunities('created_at');
+  return $scope.loadMoreOpportunities($scope.page);
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Comment) {
