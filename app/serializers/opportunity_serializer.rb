@@ -3,12 +3,16 @@ class OpportunitySerializer < ActiveModel::Serializer
     :end_date, :end_time, :bidding_duration_hrs, :bidding_ends_at, :bidding_done, :quick_winnable, :bidable?, :image_id,
     :winning_bid_id, :win_it_now_price, :type, :canceled, :forward_auction, :winner, :tracking_id, :reference_number,
     :buyer_name, :buyer_abbreviated_name, :image_url, :large_image_url, :start_location, :end_location, :created_at, :status, :buyer_id, :contact_phone,
-    :highest_bid_amount, :lowest_bid_amount, :reserve_amount, :ada_required, :start_date
+    :highest_bid_amount, :lowest_bid_amount, :reserve_amount, :ada_required, :start_date, :icon
 
   has_one :buyer, serializer: ActorSerializer
 
   has_many :recent_bids, serializer: BidShortSerializer, key: "bids"
   has_many :comments, serializer: CommentSerializer
+
+  def icon
+    "icon-#{object.type.parameterize}"
+  end
 
   def winner
     return unless object.winning_bid_id

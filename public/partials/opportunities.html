@@ -39,7 +39,10 @@
     </tr>
     <tr ng-repeat="opportunity in paginated_results | filter:opportunityFilter" >
       <td>{{opportunity.reference_number}}</td>
-      <td>{{opportunity.type}}</td>
+      <td>
+        <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+        <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
+      </td>
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
       <td>{{opportunity.description}}</td>
       <td>
