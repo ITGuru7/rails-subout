@@ -8313,9 +8313,6 @@ div#opportunity-show .description .content {
   padding-left: 10px;
   line-height: 30px;
 }
-#activity-stream .event .event-summary span i {
-  margin-right: 5px;
-}
 #activity-stream .event .event-summary .event-region {
   font-weight: bold;
 }
@@ -8329,6 +8326,9 @@ div#opportunity-show .description .content {
   float: left;
   margin-right: 5px;
   max-width: 50%;
+}
+#activity-stream .event .event-summary .created-at {
+  margin-left: 5px;
 }
 #activity-stream .event .eventable-details {
   padding: 0 10px;
