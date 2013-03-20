@@ -19,7 +19,7 @@ class Opportunity
   field :bidding_ends_at, type: Time
   field :bidding_done, type: Boolean, default: false
   field :quick_winnable, type: Boolean, default: false
-  field :win_it_now_price, type: BigDecimal
+  field :win_it_now_price, type: Money
   field :winning_bid_id, type: String
   field :seats, type: Integer
   field :type, type: String
@@ -30,7 +30,7 @@ class Opportunity
   field :image_id
   field :tracking_id
   field :contact_phone, type: String
-  field :value, type: BigDecimal, default: 0
+  field :value, type: Money, default: 0
   field :reserve_amount, type: Integer
   field :bidding_won_at, type: Time
   field :ada_required, type: Boolean, default: false

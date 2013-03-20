@@ -2,7 +2,7 @@ class Bid
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :amount, type: BigDecimal
+  field :amount, type: Money
   field :comment, type: String
 
   paginates_per 30
