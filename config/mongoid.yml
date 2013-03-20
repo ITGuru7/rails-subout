@@ -8,6 +8,8 @@ production:
         - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
+  options:
+    identity_map_enabled: true
 
 suboutdemo:
   sessions:
@@ -19,6 +21,8 @@ suboutdemo:
         - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
+  options:
+    identity_map_enabled: true
 
 suboutdev:
   sessions:
@@ -30,6 +34,8 @@ suboutdev:
         - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
+  options:
+    identity_map_enabled: true
 
 subouttest:
   sessions:
@@ -41,6 +47,8 @@ subouttest:
         - <%= ENV['MONGO_DB_HOST'] %>
       options:
         safe: true
+  options:
+    identity_map_enabled: true
 
 development:
   # Configure available database sessions. (required)
@@ -66,7 +74,7 @@ development:
     # allow_dynamic_fields: true
 
     # Enable the identity map, needed for eager loading. (default: false)
-    # identity_map_enabled: false
+    identity_map_enabled: true
 
     # Includes the root model name in json serialization. (default: false)
     # include_root_in_json: false

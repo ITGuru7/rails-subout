@@ -11,7 +11,7 @@ class Event
 
   belongs_to :actor, :class_name => "Company"
   embeds_one :action, class_name: "EventAction"
-  belongs_to :eventable, :polymorphic => true
+  belongs_to :eventable, class_name: "Opportunity"
 
   paginates_per 30
   search_in eventable: :fulltext
