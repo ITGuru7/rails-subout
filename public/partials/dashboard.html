@@ -114,6 +114,7 @@
             <div class="event-summary">
               <span class="span3">
                 <i class="{{opportunity.icon}}"></i>
+                <i ng-show="opportunity.ada_required" class="ada-required"></i>
                 <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
               </span>
               <span class="span9">

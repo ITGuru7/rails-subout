@@ -8282,6 +8282,21 @@ div#opportunity-show .description .content {
 .icon-buy-or-sell-parts-and-vehicles:before {
   content: "\f013";
 }
+.icon-vehicle-needed,
+.icon-vehicle-for-hire,
+.icon-special,
+.icon-emergency,
+.icon-part,
+.icon-buy-or-sell-parts-and-vehicles {
+  vertical-align: middle;
+}
+.ada-required {
+  background-image: url('/img/ada-required.png');
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 .event h3.title {
   margin: 0px;
   padding: 0px;
