@@ -1,9 +1,10 @@
-<div id="bid-new">
+<div id="bids">
   <div class="welcome display-message top-banner">
     <span class="display-message-extra">Welcome</span>
     <span class="company display-message-subject">{{company.name}}!</span>
     <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
   </div>
+  <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   <table ng-show="!isPhone" class="table">
     <tr>
       <th>Opportunity</th>
@@ -11,9 +12,9 @@
       <th>Comment</th>
       <th>Date</th>
     </tr>
-    <tr ng-repeat="bid in my_bids" >
+    <tr ng-repeat="bid in paginated_results" >
       <td><a href="#/opportunities/{{bid.opportunity.reference_number}}">{{bid.opportunity.name}}</a></td>
-      <td>${{bid.amount}}</td>
+      <td>{{bid.amount | currency}}</td>
       <td>{{bid.comment}}</td>
       <td>{{bid.created_at | date}}</td>
     </tr>
@@ -37,4 +38,5 @@
       <td>{{bid.created_at | date}}</td>
     </tr>
   </table>
+  <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
 </div>

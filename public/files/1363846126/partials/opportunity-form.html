@@ -108,10 +108,10 @@
       </div>
 
       <div class="control-group">
-        <label for="opportunity_quick_winnable" class="checkbox">
+        <label for="opportunity_ada_required" class="checkbox">
           <div class="controls">
-            <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
-            Enable "Win it now?"
+            <input id="opportunity_ada_required" type="checkbox" ng-model="opportunity.ada_required" value="1">
+            ADA vehicle required?
           </div>
         </label>
 
@@ -128,13 +128,28 @@
             Sell?
           </div>
         </label>
+
+        <label for="opportunity_quick_winnable" class="checkbox">
+          <div class="controls">
+            <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
+            Enable "Win it now?"
+          </div>
+        </label>
       </div>
 
-      <div class="control-group">
+      <div class="control-group" ng-show="opportunity.quick_winnable">
         <label for="opportunity_win_it_now_price" class="control-label">Win it now price</label>
         <div class="controls">
           <input id="opportunity_win_it_now_price" ng-model="opportunity.win_it_now_price" size="30" class="input-small">
           <p class="help-block">ex: 500</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="opportunity_reserve_amount" class="control-label">Starting price</label>
+        <div class="controls">
+          <input id="opportunity_reserve_amount" ng-model="opportunity.reserve_amount" size="30" class="input-small">
+          <p class="help-block">ex: 1000</p>
         </div>
       </div>
 
