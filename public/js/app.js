@@ -420,6 +420,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       opportunityId: opportunity._id
     }, function() {
       return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return alert("An error occured on your bid!\n" + $rootScope.errorMessages(content.data.errors).join("\n"));
     });
   };
 });
