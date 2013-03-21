@@ -42,6 +42,7 @@ class Opportunity
 
   scope :active, -> { where(canceled: false) }
   scope :recent, -> { desc(:created_at) }
+  scope :won, -> { where(:winning_bid_id.ne => nil) }
 
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions
 
