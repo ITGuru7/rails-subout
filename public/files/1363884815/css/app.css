@@ -8282,6 +8282,21 @@ div#opportunity-show .description .content {
 .icon-buy-or-sell-parts-and-vehicles:before {
   content: "\f013";
 }
+.icon-vehicle-needed,
+.icon-vehicle-for-hire,
+.icon-special,
+.icon-emergency,
+.icon-part,
+.icon-buy-or-sell-parts-and-vehicles {
+  vertical-align: middle;
+}
+.ada-required {
+  background-image: url('/img/ada-required.png');
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 .event h3.title {
   margin: 0px;
   padding: 0px;
@@ -8298,9 +8313,6 @@ div#opportunity-show .description .content {
   padding-left: 10px;
   line-height: 30px;
 }
-#activity-stream .event .event-summary span i {
-  margin-right: 5px;
-}
 #activity-stream .event .event-summary .event-region {
   font-weight: bold;
 }
@@ -8314,6 +8326,9 @@ div#opportunity-show .description .content {
   float: left;
   margin-right: 5px;
   max-width: 50%;
+}
+#activity-stream .event .event-summary .created-at {
+  margin-left: 5px;
 }
 #activity-stream .event .eventable-details {
   padding: 0 10px;
@@ -8423,11 +8438,11 @@ div#opportunity-show .description .content {
   text-align: left;
   width: 140px;
 }
-#bid-new .control-group.error .help-block {
-  display: block;
-}
-#bid-new .control-group .help-block {
+#bid-new .ng-pristine .control-group .help-block {
   display: none;
+}
+#bids .pagination {
+  margin: 0 0 10px 0;
 }
 #page-settings ul.nav-tabs li {
   font-size: 18px;
@@ -8461,6 +8476,14 @@ div#opportunity-show .description .content {
 }
 #page-settings .control-group .help-block {
   font-size: 13px;
+}
+#page-settings h4 {
+  margin-bottom: 10px;
+}
+#page-settings .national-subscription .downgrade-instructions {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
@@ -8634,7 +8657,7 @@ div#opportunity-show .description .content {
   max-width: 300px;
 }
 #available_opportunities .welcome {
-  margin: 10px 0 20px;
+  margin-bottom: 5px;
 }
 #available_opportunities .pagination {
   margin: 0 0 10px 0;

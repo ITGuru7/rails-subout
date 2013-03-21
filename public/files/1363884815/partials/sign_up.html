@@ -76,6 +76,14 @@
     </div>
 
     <div class="control-group">
+      <label for="has_ada_vehicles" class="control-label">Fleet includes ADA vehicles?</label>
+      <div class="controls">
+        <input id="has_ada_vehicles" type="checkbox" ng-model="company.has_ada_vehicles" value="1">
+        <p class="help-block warning">Required for bidding on ADA opportunities.</p>
+      </div>
+    </div>
+
+    <div class="control-group">
       <label for="insurance" class="control-label">Insurance</label>
       <div class="controls">
         <select class="input-xlarge" ng-model="company.insurance">
