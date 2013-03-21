@@ -13,7 +13,16 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   end
 
   def create
-    @auction = Opportunity.new(params[:opportunity])
+    if params[:opportunity][:clone]
+      white_listed_fields = %W{
+        name type tracking_id description image_id contact_phone start_location end_location
+        start_date start_time end_date end_time bidding_duration_hrs ada_required for_favorites_only
+        forward_auction quick_winnable win_it_now_price reserve_amount
+      }
+      @auction = Opportunity.new(params[:opportunity].slice(*white_listed_fields))
+    else
+      @auction = Opportunity.new(params[:opportunity])
+    end
     @auction.buyer = current_company
 
     @auction.save
