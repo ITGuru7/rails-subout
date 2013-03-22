@@ -1,3 +1,5 @@
 %p Dear #{@poster.name},
-%p Your auction #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"} has expired.
+%p Your opportunity #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"} has expired.
+%p To create a new opportunity using similar data, please visit this hyperlink #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"}, then click on the 'duplicate' button to create a new opportunity.
+%p You may edit the opportunity prior to submitting it.
 = render 'email_sig'

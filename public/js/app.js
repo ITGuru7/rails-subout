@@ -799,6 +799,11 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
     return $scope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
       opportunityId: $routeParams.opportunity_reference_number
+    }, function(content) {
+      return true;
+    }, function(content) {
+      alert("Record not found");
+      return $location.path("/dashboard");
     });
   };
   reloadOpportunity();
