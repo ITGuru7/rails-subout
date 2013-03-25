@@ -1466,6 +1466,12 @@ module.filter("stringToDate", function() {
   };
 });
 
+module.filter("soShortDate", function($filter) {
+  return function(input) {
+    return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
+  };
+});
+
 module.filter("soCurrency", function($filter) {
   return function(input) {
     return $filter('currency')(input).replace(/\.\d\d/, "");

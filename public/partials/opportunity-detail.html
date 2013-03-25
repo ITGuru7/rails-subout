@@ -33,9 +33,9 @@
           </div>
           <div>
             <ul>
-              <li><span class="label-field">Origination time: </span>{{opportunity.start_date| date:'MM/dd/yy'}} {{opportunity.start_time}}</li>
+              <li><span class="label-field">Origination time: </span>{{opportunity.start_date | soShortDate}} {{opportunity.start_time}}</li>
               <li><span class="label-field">Origination location: </span>{{opportunity.start_location}}</li>
-              <li><span class="label-field">Arrival time: </span>{{opportunity.end_date| date:'MM/dd/yy'}} {{opportunity.end_time}}</li>
+              <li><span class="label-field">Arrival time: </span>{{opportunity.end_date | soShortDate}} {{opportunity.end_time}}</li>
               <li><span class="label-field">Arrival location: </span>{{opportunity.end_location}}</li>
             </ul>
           </div>
@@ -45,7 +45,7 @@
           </div>
           <div>
             <ul>
-              <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
+              <li><span class="label-field">Created: </span>{{opportunity.created_at | soShortDate}}</li>
               <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>{{opportunity.win_it_now_price | soCurrency}}</li>
             </ul>
           </div>
@@ -98,7 +98,7 @@
       <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>{{bid.amount | soCurrency}}</strong></td>
-          <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td>{{bid.comment}}</td>
           <td><a class='btn btn-primary btn-mini pull-right' ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
@@ -107,7 +107,7 @@
 
       <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
         <tr>
-          <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | soShortDate}}</strong></td>
         </tr>
         <tr ng-show="opportunity.buyer._id == company._id">
           <td>

@@ -145,8 +145,8 @@
                   <span class="label-field">Winning Amount: </span> <span>{{ event.eventable.winner.amount | soCurrency }}</span>
                 </div>
                 <div>
-                  <span>Departs:</span> {{event.eventable.start_date|date}} {{event.eventable.start_time}}<br />
-                  <span>Arrives:</span> {{event.eventable.end_date|date}} {{event.eventable.end_time}}
+                  <span>Departs:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
+                  <span>Arrives:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
                 </div>
                 <div>
                   <span>Created on:</span> {{event.eventable.created_at|date}}
