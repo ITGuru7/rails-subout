@@ -28,7 +28,7 @@
           <div ng-show="opportunity.winning_bid_id">
             <ul>
               <li ng-show="company._id == opportunity.buyer_id"><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
-              <li><span class="label-field">Winning amount: </span> <span ui-currency ng-model="opportunity.winner.amount"></span></li>
+              <li><span class="label-field">Winning amount: </span> <span>{{ opportunity.winner.amount | soCurrency }}</span></li>
             </ul>
           </div>
           <div>
@@ -46,7 +46,7 @@
           <div>
             <ul>
               <li><span class="label-field">Created: </span>{{opportunity.created_at| date:'MM/dd/yy'}}</li>
-              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>${{opportunity.win_it_now_price}}</li>
+              <li ng-show="opportunity.quick_winnable"><span class="label-field">Buy it now: </span>{{opportunity.win_it_now_price | soCurrency}}</li>
             </ul>
           </div>
           <div>
@@ -56,14 +56,17 @@
             <span class="label-field">Contact phone: </span>{{opportunity.contact_phone}}
           </div>
           <div>
-            <span class="label-field">Bidding Ends: </span><span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+            <span class="label-field">Bidding ends: </span><span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
           </div>
           <div ng-show="opportunity.reserve_amount">
-            <span class="label-field">Reserve Amount: </span>{{opportunity.reserve_amount | currency}}
+            <span class="label-field">Starting price: </span>{{opportunity.reserve_amount | soCurrency}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
+          </div>
+          <div class="actions" ng-show="opportunity.buyer_id == company._id">
+            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
           </div>
           <div ng-show="company.isLicensedToBidOnOpportunity(opportunity)">
             <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
@@ -94,7 +97,7 @@
       <h4>Bid History</h4>
       <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
-          <td><strong>{{bid.amount | currency}}</strong></td>
+          <td><strong>{{bid.amount | soCurrency}}</strong></td>
           <td>on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td>{{bid.comment}}</td>
@@ -104,7 +107,7 @@
 
       <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
         <tr>
-          <td><strong>{{bid.amount | currency}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
+          <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | date:'MM/dd/yy'}}</strong></td>
         </tr>
         <tr ng-show="opportunity.buyer._id == company._id">
           <td>
