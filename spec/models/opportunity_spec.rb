@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Opportunity do
   describe "validation" do
-    it { should allow_value("").for(:win_it_now_price) }
+    it { should allow_value(nil).for(:win_it_now_price) }
     it { should allow_value(1).for(:win_it_now_price) }
     it { should_not allow_value(0).for(:win_it_now_price) }
     it { should_not allow_value(-1).for(:win_it_now_price) }
@@ -164,6 +164,30 @@ describe Opportunity do
         opportunity = FactoryGirl.create(:opportunity, buyer: buyer, for_favorites_only: true, start_region: "Massachusetts", end_region: "Massachusetts")
         opportunity.for_favorites_only = false
         opportunity.companies_to_notify.to_a.should =~ [ma_company, ca_ma_company, national_company]
+      end
+    end
+  end
+
+  describe "validate reserve amount and win it now price" do
+    context "reverse auction" do
+      it "may be valid if reserve amount >= win it now price" do
+        FactoryGirl.build(:opportunity, quick_winnable: true, win_it_now_price: 500, reserve_amount: 500).should be_valid
+        FactoryGirl.build(:opportunity, quick_winnable: true, win_it_now_price: 500, reserve_amount: 501).should be_valid
+      end
+
+      it "is invalid when reserve amount < win it now price" do
+        FactoryGirl.build(:opportunity, quick_winnable: true, win_it_now_price: 501, reserve_amount: 500).should_not be_valid
+      end
+    end
+
+    context "forward auction" do
+      it "may be valid if reserve amount <= win it now price" do
+        FactoryGirl.build(:forward_auction, quick_winnable: true, win_it_now_price: 500, reserve_amount: 500).should be_valid
+        FactoryGirl.build(:forward_auction, quick_winnable: true, win_it_now_price: 501, reserve_amount: 500).should be_valid
+      end
+
+      it "is invalid when reserve amount > win it now price" do
+        FactoryGirl.build(:forward_auction, quick_winnable: true, win_it_now_price: 500, reserve_amount: 501).should_not be_valid
       end
     end
   end

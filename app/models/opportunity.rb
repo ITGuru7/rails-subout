@@ -63,6 +63,7 @@ class Opportunity
   validate :validate_buyer_region
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price
+  validate :validate_reseve_amount_and_win_it_now_price
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
 
@@ -289,5 +290,15 @@ class Opportunity
 
   def validate_win_it_now_price
     errors.add(:win_it_now_price, "cannot be blank in case 'Win it now?' option is enabled.") if self.quick_winnable && self.win_it_now_price.blank?
+  end
+
+  def validate_reseve_amount_and_win_it_now_price
+    return unless self.reserve_amount.present? and self.win_it_now_price.present?
+
+    if self.forward_auction?
+      errors.add(:reserve_amount, "cannot be more than win it now price") if self.reserve_amount > self.win_it_now_price
+    else
+      errors.add(:reserve_amount, "cannot be less than win it now price") if self.reserve_amount < self.win_it_now_price
+    end
   end
 end
