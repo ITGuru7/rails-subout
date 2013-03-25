@@ -8497,6 +8497,9 @@ div#opportunity-show .description .content {
 .control-group .help-block.warning {
   color: #b92a2a;
 }
+.warning {
+  color: #b92a2a;
+}
 .control-group.error .ng-pristine {
   border: solid 1px gray;
 }
