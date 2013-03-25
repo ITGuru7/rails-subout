@@ -7764,6 +7764,9 @@ input[type="color"],
 textarea {
   line-height: 28px;
 }
+.control-group.error .help-block {
+  color: #c7c6b3;
+}
 .help-block,
 .help-inline {
   color: #555555;
@@ -8380,10 +8383,6 @@ div#opportunity-show .description .content {
 #opportunity-form .modal-body .control-group {
   margin-bottom: 14px;
 }
-#opportunity-form .modal-body .control-group .help-block {
-  font-size: 13px;
-  color: #c7c6b3;
-}
 #opportunity-form .modal-body .control-group label .help-block {
   margin-top: 0;
   text-style: italic;
@@ -8491,11 +8490,18 @@ div#opportunity-show .description .content {
 .control-group .ng-pristine {
   border: solid 1px gray;
 }
+.control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
 .control-group .help-block.warning {
   color: #b92a2a;
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
+}
+.control-group.error .help-block.error {
+  color: #b92a2a;
 }
 #opportunities .search {
   border: 1px solid #000000;

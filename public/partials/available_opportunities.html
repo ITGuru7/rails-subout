@@ -55,14 +55,12 @@
       </td>
       <td class="current-bid-amount">
         <span ng-show="opportunity.lowest_bid_amount">
-          <span ui-currency ng-model="opportunity.lowest_bid_amount"></span>
-          /
-          <span ui-currency ng-model="opportunity.highest_bid_amount"></span>
+          {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
         </span>
       </td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
+        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
       </td>
     </tr>
   </table>
@@ -109,9 +107,7 @@
       <td class="table-header">Bid Range</td>
       <td class="current-bid-amount">
         <span ng-show="opportunity.lowest_bid_amount">
-          <span ui-currency ng-model="opportunity.lowest_bid_amount"></span>
-          /
-          <span ui-currency ng-model="opportunity.highest_bid_amount"></span>
+          {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
         </span>
       </td>
     </tr>
@@ -119,7 +115,7 @@
       <td class="table-header">Actions</td>
       <td>
         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
+        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
       </td>
     </tr>
   </table>

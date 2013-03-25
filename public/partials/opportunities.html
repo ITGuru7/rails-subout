@@ -56,12 +56,10 @@
       </td>
       <td class="current-bid-amount">
         <span ng-show="opportunity.lowest_bid_amount">
-          <span ui-currency ng-model="opportunity.lowest_bid_amount"></span>
-          /
-          <span ui-currency ng-model="opportunity.highest_bid_amount"></span>
+          {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
         </span>
       </td>
-      <td><span ng-show="opportunity.winner">{{opportunity.winner.name}} (<span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>)</span></td>
+      <td><span ng-show="opportunity.winner">{{opportunity.winner.name}} ({{ opportunity.winner.amount | soCurrency }})</span></td>
     </tr>
   </table>
 
@@ -95,7 +93,7 @@
     <tr>
       <td class="table-header">Amount</td>
       <td>
-        <span ng-show="opportunity.winner.name" ui-currency ng-model="opportunity.winner.amount"></span>
+        <span ng-show="opportunity.winner.name">{{ opportunity.winner.amount | soCurrency }}</span>
       </td>
     </tr>
   </table>

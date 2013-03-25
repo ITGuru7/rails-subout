@@ -244,7 +244,7 @@ class Opportunity
       value = forward_auction? ? highest_bid_amount : lowest_bid_amount
       value ||= 0
     end
-    self.set(:value, value)
+    self.set(:value, value.to_i * 100)
   end
 
   def lowest_bid_amount

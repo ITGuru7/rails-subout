@@ -213,23 +213,23 @@
       <div ng-class="{active:selectedTab == 'licensed-regions'}" class="tab-pane" id="licensed-regions">
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
         <div class="national-subscription" ng-show="company.subscription_plan == 'subout-national-service'">
-          <div>Subscription price: {{national_product.price_in_cents/100 | currency}}</div>
+          <div>Subscription price: {{national_product.price_in_cents/100 | soCurrency}}</div>
           <div class="text-centered">
             <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('state-by-state-service')">Downgrade to state by state plan</button>
           </div>
           <div class="downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
         </div>
         <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | currency}}</a><br><br>
+          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</a><br><br>
           <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">
-            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for {{national_product.price_in_cents/100 | currency}}</button>
+            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</button>
           </div>
           <hr/>
           <div style="float:right">
-            <div class="total-price">Total price: {{totalPrice | currency}}</div>
+            <div class="total-price">Total price: {{totalPrice | soCurrency}}</div>
           </div>
           <h4>Or add individual regions:</h4>
           <form name="settingsLicensedRegions" class="form-horizontal" novalidate>

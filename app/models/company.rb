@@ -205,9 +205,9 @@ class Company
 
   def sales_info_messages
     sales_messages = []
-    sales_messages << "#{ActionController::Base.helpers.number_to_currency(total_sales)} in sales" if total_sales > 0
-    sales_messages << "#{ActionController::Base.helpers.number_to_currency(total_winnings)} in winnings" if total_winnings > 0
-    sales_messages << "Bid on #{opportunities_bid_on.size} opportunities worth #{ActionController::Base.helpers.number_to_currency(opportunities_bid_on.sum(&:value))}" if bids.count > 0
+    sales_messages << "#{ActionController::Base.helpers.number_to_currency(total_sales, precision: 0)} in sales" if total_sales > 0
+    sales_messages << "#{ActionController::Base.helpers.number_to_currency(total_winnings, precision: 0)} in winnings" if total_winnings > 0
+    sales_messages << "Bid on #{opportunities_bid_on.size} opportunities worth #{ActionController::Base.helpers.number_to_currency(opportunities_bid_on.sum(&:value), precision: 0)}" if bids.count > 0
 
     sales_messages << "No activity so far" if sales_messages.empty?
 

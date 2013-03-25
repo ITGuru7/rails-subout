@@ -166,6 +166,15 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return;
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
+  $rootScope.validateNumber = function(value) {
+    return /^\d+$/.test(value);
+  };
+  $rootScope.validateOptionalNumber = function(value) {
+    if (!value) {
+      return true;
+    }
+    return /^\d*$/.test(value);
+  };
   $rootScope.userSignedIn = function() {
     var _ref;
     if ($location.path() === '/sign_in') {
@@ -491,9 +500,6 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
   $scope.$on('modalOpened', function() {
     return $scope.hideAlert();
   });
-  $scope.validateNumber = function(value) {
-    return /^\d+(?:\.\d+)?$/.test(value);
-  };
   $scope.validateReserveAmount = function(value) {
     if (isNaN(value)) {
       return true;
@@ -863,7 +869,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
   var setCompanyFilter, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
@@ -1046,7 +1052,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "bid_created":
-        return "received bid $" + action.details.amount;
+        return "received bid " + ($filter('soCurrency')(action.details.amount));
       default:
         return "" + (action.type.split('_').pop());
     }
@@ -1460,6 +1466,12 @@ module.filter("stringToDate", function() {
   };
 });
 
+module.filter("soCurrency", function($filter) {
+  return function(input) {
+    return $filter('currency')(input).replace(/\.\d\d/, "");
+  };
+});
+
 module.filter("websiteUrl", function() {
   return function(url) {
     if (/^https?/i.test(url)) {
@@ -1563,10 +1575,10 @@ suboutSvcs.factory("Opportunity", function($resource) {
   });
   Opportunity.defaultBidAmountFor = function(opportunity) {
     if (opportunity.forward_auction && opportunity.highest_bid_amount) {
-      return opportunity.highest_bid_amount * 1.05;
+      return parseInt(opportunity.highest_bid_amount * 1.05);
     }
     if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
-      return opportunity.lowest_bid_amount * 0.95;
+      return parseInt(opportunity.lowest_bid_amount * 0.95);
     }
     if (opportunity.reserve_amount) {
       return opportunity.reserve_amount;
