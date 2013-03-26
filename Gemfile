@@ -31,6 +31,7 @@ gem "chargify_api_ares"
 gem 'newrelic_rpm'
 gem 'newrelic_moped'
 gem 'mail_view'
+gem 'unicorn'
 
 group :production do
   gem "airbrake"
