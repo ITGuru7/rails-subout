@@ -87,13 +87,9 @@ GEM
       activeresource (>= 2.3.5)
     childprocess (0.3.7)
       ffi (~> 1.0, >= 1.0.6)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
     cloudinary (1.0.43)
       aws_cf_signer
       rest-client
-    cocaine (0.5.1)
-      climate_control (>= 0.0.3, < 1.0)
     coderay (1.0.8)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -191,11 +187,6 @@ GEM
     kiqstand (1.0.0)
       mongoid (~> 3.0)
       moped (~> 1.2)
-    kumade (0.8.2)
-      cocaine (>= 0.2.0)
-      heroku (~> 2.0)
-      rails (>= 2)
-      rake (>= 0.8.7)
     launchy (2.1.2)
       addressable (~> 2.3)
     libv8 (3.11.8.13)
@@ -399,7 +390,6 @@ DEPENDENCIES
   jquery-rails
   kaminari
   kiqstand
-  kumade
   mail_view
   mongoid
   mongoid_rails_migrations
