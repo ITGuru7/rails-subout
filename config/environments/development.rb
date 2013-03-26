@@ -44,6 +44,7 @@ Subout::Application.configure do
   end
   DEFAULT_HOST_WITH_PORT = "www.lvh.me:3000"
   DEVELOPMENT_MODE = ENV["DEV_SITE"].nil? ? false : true
-  CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'suboutvps.chargify.com'
+  CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'subout.chargify.com'
+  #CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'suboutvps.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
 end

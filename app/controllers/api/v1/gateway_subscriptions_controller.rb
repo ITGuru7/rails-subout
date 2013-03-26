@@ -21,7 +21,8 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
         :first_name => customer["first_name"],
         :last_name  => customer["last_name"],
         :organization  => customer["organization"],
-        :product_handle => payload["subscription"]["product"]["handle"]
+        :product_handle => payload["subscription"]["product"]["handle"],
+        :state => payload["subscription"]["state"]
       )
 
       if customer["reference"].present?
@@ -34,6 +35,10 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       else
         Notifier.delay.subscription_confirmation(gw_subscription.id)
       end
+    elsif event == "subscription_state_change"
+      subscription = payload["subscription"]
+      gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
+      gw_subscription.update_attribute(:state, subscription["state"])
     end
     render json: {}
   end

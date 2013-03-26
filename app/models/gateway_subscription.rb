@@ -20,16 +20,19 @@ class GatewaySubscription
   field :product_handle
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
+  field :state
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
 
-  attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization
+  attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
 
   before_create :set_regions
   after_save :update_chargify_email, if: "self.email_changed?"
 
   scope :pending, -> { where(confirmed: false) }
   scope :recent, -> { desc(:created_at) }
+
+  validates :subscription_id, uniqueness: true
 
   def self.region_prices
     return @region_prices if @region_prices

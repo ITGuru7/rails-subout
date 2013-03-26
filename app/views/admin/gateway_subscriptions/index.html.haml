@@ -13,6 +13,7 @@
 %table#subscriptions.table.table-striped
   %thead
     %tr
+      %th #
       %th
         Created Time<br>
         Identifier
@@ -28,10 +29,12 @@
       %th Regions
       %th Confirmed
       %th Sign up company
+      %th State
       %th Actions
   %tbody
-    - @subscriptions.each do |subscription|
+    - @subscriptions.each_with_index do |subscription, index|
       %tr
+        %td= index + 1
         %td
           #{subscription.created_at}<br>
           #{subscription.id}
@@ -48,6 +51,7 @@
         %td= subscription.regions if subscription.state_by_state_service?
         %td= subscription.confirmed
         %td= subscription.created_company_name
+        %td= subscription.state
         %td
           = link_to "Resend", resend_invitation_admin_gateway_subscription_path(subscription), method: "put", class: "btn btn-primary" unless subscription.created_company
           = link_to "Edit", edit_admin_gateway_subscription_path(subscription), method: "get", class: "btn"
