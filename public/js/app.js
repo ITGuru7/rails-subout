@@ -617,7 +617,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
     $scope.showInvitationForm = function() {
       $scope.showInvitation = true;
       $scope.invitation.supplier_email = $scope.supplierEmail;
-      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on Subout.";
+      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on SubOut.";
     };
     return $scope.sendInvitation = function() {
       return FavoriteInvitation.save({
