@@ -12,7 +12,7 @@ class Deploy < Thor
     return unless run_system("git checkout #{remote_server}")
     return unless run_system("git reset #{local_branch} --hard")
     return unless run_system("git push origin #{remote_server} -f")
-    return unless run_system("git push #{remote_server} #{local_branch}:master")
+    return unless run_system("git push #{remote_server} #{local_branch}:master -f")
     return unless run_system("git checkout master")
   end
 
