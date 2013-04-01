@@ -65,13 +65,16 @@ class TestDataGenerator
   end
 
   def national_subscription
-    GatewaySubscription.create(product_handle: "subout-national-service")
+    g = GatewaySubscription.new(product_handle: "subout-national-service")
+    g.save(validate: false)
+    g
   end
 
   def state_by_state_subscription
-    GatewaySubscription.create(product_handle: "state-by-state-service") do |subscription|
-      subscription.regions = demo_regions
-    end
+    g = GatewaySubscription.new(product_handle: "state-by-state-service")
+    g.regions = demo_regions
+    g.save(validate: false)
+    g
   end
 
   def create_subscription(type)
