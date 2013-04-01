@@ -5,8 +5,8 @@ class ChargifySanityChecker < Thor
   desc "check", "Check Chargify sanity"
   def check
     check_chargify_subscription_without_gateway_subscription
-    check_duplicate_chargify_subscriptions
     check_duplicate_gateway_subscriptions_with_same_chargify_subscription
+    check_duplicate_chargify_subscriptions
   end
 
   desc "fix_duplicate_gateway_subscriptions", "Fix duplicate gateway subscription"
@@ -68,7 +68,13 @@ class ChargifySanityChecker < Thor
   end
 
   def display_subscription(gateway_subscription)
-     puts "gw_id: #{gateway_subscription.id} plan: #{gateway_subscription.product_handle} #{gateway_subscription.regions.size} regions created_at: #{gateway_subscription.created_at} company: #{gateway_subscription.created_company.try(:name)}"
+    content = "gw_id: #{gateway_subscription.id} "
+    content += "plan: #{gateway_subscription.product_handle} "
+    content += "regions: #{gateway_subscription.regions.size} "
+    content += "created_at: #{gateway_subscription.created_at} "
+    content += "company: #{gateway_subscription.created_company.try(:name)} "
+    content += "state: #{gateway_subscription.state}"
+    puts content
   end
 
   def check_duplicate_gateway_subscriptions_with_same_chargify_subscription
