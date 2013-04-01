@@ -25,7 +25,7 @@
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_type.$invalid}">
         <label for="opportunity_type" class="control-label">Opportunity Type *</label>
         <div class="controls">
-          <select id="opportunity_type" name="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types" required>
+          <select id="opportunity_type" ng-change="setOpportunityForwardAuction()" name="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types" required>
           </select>
         </div>
       </div>
@@ -124,7 +124,7 @@
 
         <label for="opportunity_forward_auction" class="checkbox">
           <div class="controls">
-            <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1">
+            <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1" ng-disabled="opportunity.type == 'Vehicle Needed' || opportunity.type == 'Vehicle for Hire'">
             Sell?
           </div>
         </label>

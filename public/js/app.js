@@ -449,7 +449,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       return jQuery("#modal").modal("hide");
     }
   };
-  return $scope.save = function() {
+  $scope.save = function() {
     var opportunity, showErrors;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
@@ -489,6 +489,15 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(content) {
         return showErrors(content.data.errors);
       });
+    }
+  };
+  return $scope.setOpportunityForwardAuction = function() {
+    var type;
+    type = $scope.opportunity.type;
+    if (type === "Vehicle Needed") {
+      return $scope.opportunity.forward_auction = false;
+    } else if (type === "Vehicle for Hire") {
+      return $scope.opportunity.forward_auction = true;
     }
   };
 };
