@@ -1468,6 +1468,9 @@ module.filter("stringToDate", function() {
 
 module.filter("soShortDate", function($filter) {
   return function(input) {
+    if (!input) {
+      return "";
+    }
     return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
   };
 });
