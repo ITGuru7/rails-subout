@@ -8409,6 +8409,16 @@ div#opportunity-show .description .content {
 #dot-required .modal-body {
   color: #666550;
 }
+#upgrading-license-required .modal-header {
+  background-color: #69b645;
+}
+#upgrading-license-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#upgrading-license-required .modal-body {
+  color: #666550;
+}
 #bid-new .modal-header {
   background-color: #69b645;
 }

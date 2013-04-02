@@ -69,7 +69,7 @@ class Company
   validate :validate_subscription, :on => :create, if: "created_from_subscription_id.present?"
   validate :check_nils
 
-  before_create :set_subscription_info, if: "created_from_subscription_id.present?"
+  before_create :set_subscription_info
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
@@ -157,8 +157,13 @@ class Company
   end
 
   def set_subscription_info
-    self.subscription_plan = created_from_subscription.product_handle
-    self.regions = created_from_subscription.regions
+    if subscription = created_from_subscription
+      self.subscription_plan = subscription.product_handle
+      self.regions = subscription.regions
+    else
+      self.subscription_plan = "free"
+      self.regions = []
+    end
   end
 
   def last_sign_in_at

@@ -338,8 +338,12 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function() {
-    $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
-    return $rootScope.setupFileUploader();
+    if ($rootScope.company.isFreeUser()) {
+      return $rootScope.setModal(suboutPartialPath('upgrading-license-required.html'));
+    } else {
+      $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
+      return $rootScope.setupFileUploader();
+    }
   };
   $rootScope.displayNewFavoriteForm = function() {
     $rootScope.$broadcast('clearNewFavoriteForm');
@@ -1153,7 +1157,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return totalPrice;
   };
   updateSelectedRegions = function() {
-    var region, _i, _len, _ref;
+    var region, _base, _i, _len, _ref;
+    (_base = $scope.companyProfile).regions || (_base.regions = []);
     $scope.companyProfile.allRegions = {};
     _ref = $rootScope.allRegions;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1695,6 +1700,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.nationalSubscriber = function() {
     var _ref;
     return (_ref = this.subscription_plan) === "subout-national-service" || _ref === "subout-partner";
+  };
+  Company.prototype.isFreeUser = function() {
+    return this.subscription_plan === "free";
   };
   Company.prototype.isLicensedToBidOnOpportunity = function(opportunity) {
     var _ref, _ref1, _ref2;
