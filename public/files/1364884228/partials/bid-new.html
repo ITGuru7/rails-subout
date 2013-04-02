@@ -29,15 +29,15 @@
                  name="bid_amount"
                  required
                  ng-model="bid.amount"
-                 ui-validate="{ only_numbers: validateNumber, reserve_amount: validateReserveAmount, win_it_now_price: validateWinItNowPrice}"
+                 ui-validate="{ only_numbers: validateNumber, reserve_amount: validateReserveAmount, win_it_now_price: validateWinItNowPrice }"
                  size="10"
                  maxlength="10"
                  class="input-small">
 
-          <span ng-show="opportunity.reserve_amount">(Reserve: {{opportunity.reserve_amount | currency}})</span>
-          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block">Reserve not met.</p>
-          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
+          <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
+          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block error">Starting price not met.</p>
+          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block error">You can win now!</p>
         </div>
       </div>
 
@@ -53,7 +53,7 @@
           <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
             Bid Now
           </button>
-          <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
+          <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
         </div>
       </div>
     </form>
