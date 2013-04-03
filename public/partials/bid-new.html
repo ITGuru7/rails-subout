@@ -41,6 +41,24 @@
         </div>
       </div>
 
+      <div class="control-group" ng-class="{error:newBid.auto_bidding_limit.$invalid}">
+        <label for="bid_auto_bidding_limit" class="control-label">
+          <span ng-show="opportunity.forward_auction">Maximum</span><span ng-hide="opportunity.forward_auction">Minimum</span> Bid Amount ($)
+        </label>
+        <div class="controls">
+          <input type="text"
+                 id="bid_auto_bidding_limit"
+                 name="bid_auto_bidding_limit"
+                 ng-model="bid.auto_bidding_limit"
+                 ui-validate="{ only_numbers: validateOptionalNumber }"
+                 size="10"
+                 maxlength="10"
+                 class="input-small">
+
+          <p ng-show="newBid.auto_bidding_limit.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+        </div>
+      </div>
+
       <div class="control-group">
         <label for="bid_comment" class="control-label">Comment</label>
         <div class="controls">

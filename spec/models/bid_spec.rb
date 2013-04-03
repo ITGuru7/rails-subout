@@ -97,4 +97,111 @@ describe Bid do
       FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
     end
   end
+
+  describe "run_automatic_bidding" do
+    context "reverse auction" do
+      let(:opportunity) { FactoryGirl.create(:opportunity) }
+      context "when new bid amount is lower than bid amount but higher than auto bidding limit" do
+        it "updates bid amount a little lower than new bid amount" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 600)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 700)
+
+          old_bid.reload.amount.to_i.should == 699
+        end
+      end
+
+      context "when new bid amount is lower than auto bidding limit" do
+        it "updates bid amount as auto bidding limit" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 600)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 500)
+
+          old_bid.reload.amount.to_i.should == 600
+        end
+      end
+
+      context "when new bid amount is higher than bid amount" do
+        it "does not update" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 600)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 810)
+
+          old_bid.reload.amount.to_i.should == 800
+        end
+      end
+
+      context "when new bid has auto_bidding_limit" do
+        context "when new bid amount is lower than bid amount but higher than auto bidding limit" do
+          it "updates bid amount a little lower than new bid amount" do
+            old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 600)
+            new_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 750, auto_bidding_limit: 720)
+
+            old_bid.reload.amount.to_i.should == 719
+            new_bid.reload.amount.to_i.should == 720
+          end
+        end
+
+        context "when new bid amount is lower than auto bidding limit" do
+          it "updates bid amount as auto bidding limit" do
+            old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 600)
+            new_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 500, auto_bidding_limit: 400)
+
+            old_bid.reload.amount.to_i.should == 600
+            new_bid.reload.amount.to_i.should == 500
+          end
+        end
+      end
+    end
+
+    context "forward auction" do
+      let(:opportunity) { FactoryGirl.create(:forward_auction) }
+
+      context "when new bid amount is higher than bid amount but lower than auto bidding limit" do
+        it "updates bid amount a little higher than new bid amount" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 1000)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 900)
+
+          old_bid.reload.amount.to_i.should == 901
+        end
+      end
+
+      context "when new bid amount is higher than auto bidding limit" do
+        it "updates bid amount as auto bidding limit" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 1000)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 1200)
+
+          old_bid.reload.amount.to_i.should == 1000
+        end
+      end
+
+      context "when new bid amount is lower than bid amount" do
+        it "does not update" do
+          old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 1000)
+          FactoryGirl.create(:bid, opportunity: opportunity, amount: 700)
+
+          old_bid.reload.amount.to_i.should == 800
+        end
+      end
+
+      context "when new bid has auto_bidding_limit" do
+        context "when new bid amount is higher than bid amount but lower than auto bidding limit" do
+          it "updates bid amount a little higher than new bid amount" do
+            old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 1000)
+            new_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 920, auto_bidding_limit: 950)
+
+            old_bid.reload.amount.to_i.should == 951
+            new_bid.reload.amount.to_i.should == 950
+          end
+        end
+
+        context "when new bid amount is higher than auto bidding limit" do
+          it "updates bid amount as auto bidding limit" do
+            old_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 800, auto_bidding_limit: 1000)
+            new_bid = FactoryGirl.create(:bid, opportunity: opportunity, amount: 1200, auto_bidding_limit: 1300)
+
+            old_bid.reload.amount.to_i.should == 1000
+            new_bid.reload.amount.to_i.should == 1200
+          end
+        end
+      end
+    end
+  end
 end

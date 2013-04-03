@@ -4,7 +4,7 @@ class Bid
 
   field :amount, type: Money
   field :comment, type: String
-
+  field :auto_bidding_limit, type: Money
   paginates_per 30
 
   belongs_to :opportunity, :inverse_of => :bids
@@ -26,9 +26,14 @@ class Bid
   scope :by_amount, asc(:amount)
 
   after_create :win_quick_winable_opportunity
+  after_create :run_automatic_bidding
 
   def comment_as_seen_by(viewer)
     (viewer == bidder || viewer == opportunity.buyer) ? comment : ""
+  end
+
+  def bidding_limit_amount
+    auto_bidding_limit ? auto_bidding_limit : amount
   end
 
   private
@@ -110,6 +115,34 @@ class Bid
 
     if bidder.dot_number.blank?
       errors.add :bidder_id, "required DOT number to bid."
+    end
+  end
+
+  # Forward auction
+  # first  500, 800 => 701
+  # second 600, 700 => 700
+  # third  620, 650 => 650
+  #
+  # Reverse auction
+  # first  800, 500 => 599
+  # second 700, 600 => 600
+  # third  650, 620 => 620
+  def run_automatic_bidding
+    return unless opportunity.bids.size > 1
+
+    leading_bid_amount = opportunity.leading_bid_amount
+    opportunity.bids.select { |b| b.auto_bidding_limit.present? }.each do |bid|
+      if opportunity.forward_auction
+        if bid.amount < leading_bid_amount and bid.amount < bid.auto_bidding_limit
+          new_amount = [bid.auto_bidding_limit, leading_bid_amount].min
+          bid.update_attribute(:amount, new_amount)
+        end
+      else
+        if bid.amount > leading_bid_amount and bid.amount > bid.auto_bidding_limit
+          new_amount = [bid.auto_bidding_limit, leading_bid_amount].max
+          bid.update_attribute(:amount, new_amount)
+        end
+      end
     end
   end
 end

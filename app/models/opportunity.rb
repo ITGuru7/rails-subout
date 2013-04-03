@@ -158,6 +158,16 @@ class Opportunity
     bids.where(id: winning_bid_id).first
   end
 
+  def leading_bid_amount
+    if forward_auction
+      leading_bid, second_leading_bid = bids.sort_by { |b| -b.bidding_limit_amount }
+      [second_leading_bid.bidding_limit_amount + 1, leading_bid.bidding_limit_amount].min
+    else
+      leading_bid, second_leading_bid = bids.sort_by { |b| b.bidding_limit_amount }
+      [second_leading_bid.bidding_limit_amount - 1, leading_bid.bidding_limit_amount].max
+    end
+  end
+
   def bidding_ended?
     self.bidding_ends_at <= Time.now
   end
