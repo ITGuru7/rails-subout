@@ -1,7 +1,7 @@
 class OpportunitySerializer < ActiveModel::Serializer
   attributes :_id, :name, :description, :start_date, :start_time, :for_favorites_only, :start_region, :end_region,
     :end_date, :end_time, :bidding_duration_hrs, :bidding_ends_at, :bidding_done, :quick_winnable, :bidable?, :image_id,
-    :winning_bid_id, :win_it_now_price, :type, :canceled, :forward_auction, :winner, :tracking_id, :reference_number,
+    :winning_bid_id, :win_it_now_price, :type, :vehicle_type, :canceled, :forward_auction, :winner, :tracking_id, :reference_number,
     :buyer_name, :buyer_abbreviated_name, :image_url, :large_image_url, :start_location, :end_location, :created_at, :status, :buyer_id, :contact_phone,
     :highest_bid_amount, :lowest_bid_amount, :reserve_amount, :ada_required, :start_date, :icon
 

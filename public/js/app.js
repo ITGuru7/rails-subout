@@ -200,6 +200,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
+  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -651,6 +652,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.page = $location.search().page || 1;
   $scope.endPage = 1;
   $scope.maxPage = 1;
+  $scope.filterVehicleType = null;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -696,7 +698,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     return soPagination.paginate($scope, Opportunity, page, {
       sort_by: $scope.sortBy,
       sort_direction: $scope.sortDirection,
-      start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
+      start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
+      vehicle_type: $scope.filterVehicleType
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -733,7 +736,10 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     dateFormat: 'mm/dd/yy'
   };
   $scope.sortOpportunities('bidding_ends_at');
-  return $scope.$watch("filterDepatureDate", function() {
+  $scope.$watch("filterDepatureDate", function() {
+    return $scope.loadMoreOpportunities(1);
+  });
+  return $scope.$watch("filterVehicleType", function() {
     return $scope.loadMoreOpportunities(1);
   });
 };

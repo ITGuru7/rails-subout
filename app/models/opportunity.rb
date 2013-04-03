@@ -23,6 +23,7 @@ class Opportunity
   field :winning_bid_id, type: String
   field :seats, type: Integer
   field :type, type: String
+  field :vehicle_type, type: String
   field :canceled, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
   field :expired_notification_sent, type: Boolean, default: false
