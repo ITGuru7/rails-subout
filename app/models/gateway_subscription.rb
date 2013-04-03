@@ -151,8 +151,9 @@ class GatewaySubscription
 
   def update_product_and_regions!(options)
     update_product!(options[:product_handle]) if product_handle != options[:product_handle]
-    if product_handle == "state-by-state-service" and regions.sort != options[:regions].sort
-      update_regions!(options[:regions])
+    if product_handle == "state-by-state-service"
+      new_regions = options[:regions] || []
+      update_regions!(new_regions)
     end
   end
 
