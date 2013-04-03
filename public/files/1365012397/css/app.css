@@ -7742,7 +7742,6 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
-select,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -7758,11 +7757,18 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  height: 28px;
-  line-height: 28px;
+  height: 20px;
+  line-height: 20px;
+}
+select {
+  height: 30px;
+  line-height: 30px;
 }
 textarea {
   line-height: 28px;
+}
+.control-group.error .help-block {
+  color: #c7c6b3;
 }
 .help-block,
 .help-inline {
@@ -8380,10 +8386,6 @@ div#opportunity-show .description .content {
 #opportunity-form .modal-body .control-group {
   margin-bottom: 14px;
 }
-#opportunity-form .modal-body .control-group .help-block {
-  font-size: 13px;
-  color: #c7c6b3;
-}
 #opportunity-form .modal-body .control-group label .help-block {
   margin-top: 0;
   text-style: italic;
@@ -8408,6 +8410,16 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #dot-required .modal-body {
+  color: #666550;
+}
+#upgrading-license-required .modal-header {
+  background-color: #69b645;
+}
+#upgrading-license-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#upgrading-license-required .modal-body {
   color: #666550;
 }
 #bid-new .modal-header {
@@ -8436,7 +8448,7 @@ div#opportunity-show .description .content {
   float: left;
   padding-top: 5px;
   text-align: left;
-  width: 140px;
+  width: 155px;
 }
 #bid-new .ng-pristine .control-group .help-block {
   display: none;
@@ -8491,11 +8503,21 @@ div#opportunity-show .description .content {
 .control-group .ng-pristine {
   border: solid 1px gray;
 }
+.control-group .help-block {
+  font-size: 13px;
+  color: #c7c6b3;
+}
 .control-group .help-block.warning {
+  color: #b92a2a;
+}
+.warning {
   color: #b92a2a;
 }
 .control-group.error .ng-pristine {
   border: solid 1px gray;
+}
+.control-group.error .help-block.error {
+  color: #b92a2a;
 }
 #opportunities .search {
   border: 1px solid #000000;
