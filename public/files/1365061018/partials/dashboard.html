@@ -142,26 +142,29 @@
                   <div class="content">{{event.eventable.description}}</div>
                 </div>
                 <div class="winner" ng-show="event.eventable.winning_bid_id">
-                  <span class="label-field">Winning Amount: </span> <span ui-currency ng-model="event.eventable.winner.amount"></span>
+                  <span class="label-field">Winning Amount: </span> <span>{{ event.eventable.winner.amount | soCurrency }}</span>
                 </div>
                 <div>
-                  <span>Departs:</span> {{event.eventable.start_date|date}} {{event.eventable.start_time}}<br />
-                  <span>Arrives:</span> {{event.eventable.end_date|date}} {{event.eventable.end_time}}
+                  <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
+                  <span>Drop off:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
                 </div>
                 <div>
                   <span>Created on:</span> {{event.eventable.created_at|date}}
                 </div>
                 <div>
                   <div ng-hide="event.eventable.winning_bid_id">
-                    <div>
+                    <div ng-show="event.eventable.status == 'In progress'">
                       <span>Bidding ends:</span>
                       <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
                     </div>
+                    <div ng-hide="event.eventable.status == 'In progress'" class="warning">
+                      <span>Bidding ended</span>
+                    </div>
                     <div ng-show="event.eventable.reserve_amount">
-                      <span>Starting price: </span>{{event.eventable.reserve_amount | currency}}
+                      <span>Starting price: </span>{{event.eventable.reserve_amount | soCurrency}}
                     </div>
                     <div ng-show="event.eventable.quick_winnable">
-                      <span>Buy now:</span> {{event.eventable.win_it_now_price | currency}}
+                      <span>Buy now:</span> {{event.eventable.win_it_now_price | soCurrency}}
                     </div>
                   </div>
                 </div>
@@ -172,7 +175,7 @@
                         <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                       </div>
                       <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                        <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | currency}})</a>
+                        <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
                       </div>
                     </div>
                     <div>
@@ -243,7 +246,7 @@
               </tr>
               <tr ng-show="event.eventable.winning_bid_id && event.selected">
                 <td class="table-header">Winning Amount:</td>
-                <td class="table-header"><span ui-currency ng-model="event.eventable.winner.amount"></span></td>
+                <td class="table-header"><span>{{ event.eventable.winner.amount | soCurrency }}</span></td>
               </tr>
               <tr ng-show="event.selected">
                 <td class="table-header">Departs:</td>
@@ -263,7 +266,7 @@
               </tr>
               <tr ng-show="!event.eventable.winning_bid_id && event.selected && event.eventable.quick_winnable">
                 <td>Buy now:</td>
-                <td>{{event.eventable.win_it_now_price | currency}}</td>
+                <td>{{event.eventable.win_it_now_price | soCurrency}}</td>
               </tr>
               <tr ng-show="event.selected && company.isLicensedToBidOnOpportunityOf(event) && event.eventable._id">
                 <td ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'" colspan='2'>
