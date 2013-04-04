@@ -20,6 +20,7 @@ Subout::Application.routes.draw do
     namespace :v1 do
       resources :gateway_subscriptions do
         get :connect_company, on: :collection
+        get :update_account, on: :collection
       end
       resources :products
       resources :file_uploader_signatures, only: :new

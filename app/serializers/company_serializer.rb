@@ -30,6 +30,11 @@ class CompanySerializer < ActiveModel::Serializer
     scope.id == object.id
   end
 
+  def include_self_service_url?
+    return false unless scope
+    scope.id == object.id
+  end
+
   def self_service_url
     MyChargify.self_service_url(object.created_from_subscription.try(:subscription_id))
   end

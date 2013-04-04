@@ -3,6 +3,12 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
     redirect_to params[:company_id].present? ? "/#/sign_in" : "/#/sign_up?chargify_id=#{params[:chargify_id]}"
   end
 
+  def update_account
+    gs = GatewaySubscription.find_by(subscription_id: params[:chargify_id])
+    gs.update_attribute(:payment_state, "success") if gs.has_valid_credit_card?
+    redirect_to "/#/dashboard"
+  end
+
   def create
     # Event types
     # signup_success: when user sign up
@@ -46,6 +52,7 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
       gw_subscription.update_attribute(:payment_state, "success")
     end
+
     render json: {}
   end
 

@@ -327,6 +327,10 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
+    if ($rootScope.company.payment_state === 'failure') {
+      $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+      return;
+    }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
       return;

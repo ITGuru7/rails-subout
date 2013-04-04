@@ -8402,6 +8402,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+.instructions-modal .modal-header {
+  background-color: #69b645;
+}
+.instructions-modal .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+.instructions-modal .modal-body {
+  color: #666550;
+}
 #dot-required .modal-header {
   background-color: #69b645;
 }
@@ -8420,6 +8430,16 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #upgrading-license-required .modal-body {
+  color: #666550;
+}
+#update-credit-card .modal-header {
+  background-color: #69b645;
+}
+#update-credit-card .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#update-credit-card .modal-body {
   color: #666550;
 }
 #bid-new .modal-header {
