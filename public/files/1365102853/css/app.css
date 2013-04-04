@@ -7742,7 +7742,6 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
-select,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -7758,8 +7757,12 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  height: 28px;
-  line-height: 28px;
+  height: 20px;
+  line-height: 20px;
+}
+select {
+  height: 30px;
+  line-height: 30px;
 }
 textarea {
   line-height: 28px;
@@ -8399,6 +8402,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+.instructions-modal .modal-header {
+  background-color: #69b645;
+}
+.instructions-modal .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+.instructions-modal .modal-body {
+  color: #666550;
+}
 #dot-required .modal-header {
   background-color: #69b645;
 }
@@ -8407,6 +8420,26 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #dot-required .modal-body {
+  color: #666550;
+}
+#upgrading-license-required .modal-header {
+  background-color: #69b645;
+}
+#upgrading-license-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#upgrading-license-required .modal-body {
+  color: #666550;
+}
+#update-credit-card .modal-header {
+  background-color: #69b645;
+}
+#update-credit-card .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#update-credit-card .modal-body {
   color: #666550;
 }
 #bid-new .modal-header {
@@ -8435,7 +8468,7 @@ div#opportunity-show .description .content {
   float: left;
   padding-top: 5px;
   text-align: left;
-  width: 140px;
+  width: 155px;
 }
 #bid-new .ng-pristine .control-group .help-block {
   display: none;
@@ -8495,6 +8528,9 @@ div#opportunity-show .description .content {
   color: #c7c6b3;
 }
 .control-group .help-block.warning {
+  color: #b92a2a;
+}
+.warning {
   color: #b92a2a;
 }
 .control-group.error .ng-pristine {

@@ -200,6 +200,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
+  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -326,6 +327,10 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
+    if ($rootScope.company.payment_state === 'failure') {
+      $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+      return;
+    }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
       return;
@@ -338,8 +343,12 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function() {
-    $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
-    return $rootScope.setupFileUploader();
+    if ($rootScope.company.isFreeUser()) {
+      return $rootScope.setModal(suboutPartialPath('upgrading-license-required.html'));
+    } else {
+      $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
+      return $rootScope.setupFileUploader();
+    }
   };
   $rootScope.displayNewFavoriteForm = function() {
     $rootScope.$broadcast('clearNewFavoriteForm');
@@ -449,7 +458,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       return jQuery("#modal").modal("hide");
     }
   };
-  return $scope.save = function() {
+  $scope.save = function() {
     var opportunity, showErrors;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
@@ -491,6 +500,15 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       });
     }
   };
+  return $scope.setOpportunityForwardAuction = function() {
+    var type;
+    type = $scope.opportunity.type;
+    if (type === "Vehicle Needed") {
+      return $scope.opportunity.forward_auction = false;
+    } else if (type === "Vehicle for Hire") {
+      return $scope.opportunity.forward_auction = true;
+    }
+  };
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
@@ -510,6 +528,21 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
         return $scope.opportunity.reserve_amount <= value;
       } else {
         return $scope.opportunity.reserve_amount >= value;
+      }
+    } else {
+      return true;
+    }
+  };
+  $scope.validateAutoBiddingLimit = function(value) {
+    if (isNaN(value)) {
+      return true;
+    }
+    value = parseFloat(value);
+    if ($scope.bid.amount) {
+      if ($scope.opportunity.forward_auction) {
+        return $scope.bid.amount <= value;
+      } else {
+        return $scope.bid.amount >= value;
       }
     } else {
       return true;
@@ -617,7 +650,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
     $scope.showInvitationForm = function() {
       $scope.showInvitation = true;
       $scope.invitation.supplier_email = $scope.supplierEmail;
-      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on Subout.";
+      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on SubOut.";
     };
     return $scope.sendInvitation = function() {
       return FavoriteInvitation.save({
@@ -638,6 +671,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.page = $location.search().page || 1;
   $scope.endPage = 1;
   $scope.maxPage = 1;
+  $scope.filterVehicleType = null;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -683,7 +717,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     return soPagination.paginate($scope, Opportunity, page, {
       sort_by: $scope.sortBy,
       sort_direction: $scope.sortDirection,
-      start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
+      start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
+      vehicle_type: $scope.filterVehicleType
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -720,7 +755,10 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     dateFormat: 'mm/dd/yy'
   };
   $scope.sortOpportunities('bidding_ends_at');
-  return $scope.$watch("filterDepatureDate", function() {
+  $scope.$watch("filterDepatureDate", function() {
+    return $scope.loadMoreOpportunities(1);
+  });
+  return $scope.$watch("filterVehicleType", function() {
     return $scope.loadMoreOpportunities(1);
   });
 };
@@ -1144,7 +1182,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return totalPrice;
   };
   updateSelectedRegions = function() {
-    var region, _i, _len, _ref;
+    var region, _base, _i, _len, _ref;
+    (_base = $scope.companyProfile).regions || (_base.regions = []);
     $scope.companyProfile.allRegions = {};
     _ref = $rootScope.allRegions;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1466,6 +1505,15 @@ module.filter("stringToDate", function() {
   };
 });
 
+module.filter("soShortDate", function($filter) {
+  return function(input) {
+    if (!input) {
+      return "";
+    }
+    return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
+  };
+});
+
 module.filter("soCurrency", function($filter) {
   return function(input) {
     return $filter('currency')(input).replace(/\.\d\d/, "");
@@ -1677,6 +1725,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.nationalSubscriber = function() {
     var _ref;
     return (_ref = this.subscription_plan) === "subout-national-service" || _ref === "subout-partner";
+  };
+  Company.prototype.isFreeUser = function() {
+    return this.subscription_plan === "free";
   };
   Company.prototype.isLicensedToBidOnOpportunity = function(opportunity) {
     var _ref, _ref1, _ref2;
