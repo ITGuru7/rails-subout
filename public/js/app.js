@@ -529,6 +529,21 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       return true;
     }
   };
+  $scope.validateAutoBiddingLimit = function(value) {
+    if (isNaN(value)) {
+      return true;
+    }
+    value = parseFloat(value);
+    if ($scope.bid.amount) {
+      if ($scope.opportunity.forward_auction) {
+        return $scope.bid.amount <= value;
+      } else {
+        return $scope.bid.amount >= value;
+      }
+    } else {
+      return true;
+    }
+  };
   $scope.validateWinItNowPrice = function(value) {
     if (isNaN(value)) {
       return true;

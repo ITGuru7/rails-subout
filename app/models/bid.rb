@@ -20,6 +20,8 @@ class Bid
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
   validate :validate_reserve_met, on: :create
   validate :validate_dot_number_of_bidder, on: :create
+  validate :validate_auto_bidding_limit, on: :create
+  validate :validate_auto_bidding_limit_on_win_it_now_price, on: :create
   validates :comment, length: { maximum: 255 }
 
   scope :recent, desc(:created_at)
@@ -115,6 +117,34 @@ class Bid
 
     if bidder.dot_number.blank?
       errors.add :bidder_id, "required DOT number to bid."
+    end
+  end
+
+  def validate_auto_bidding_limit
+    return unless opportunity
+    return unless auto_bidding_limit.present?
+    return if errors[:amount].present?
+
+    if opportunity.forward_auction? and amount > auto_bidding_limit 
+      errors.add :auto_bidding_limit, "cannot be lower than amount."
+    end
+
+    if !opportunity.forward_auction? and amount < auto_bidding_limit 
+      errors.add :auto_bidding_limit, "cannot be higher than amount."
+    end
+  end
+
+  def validate_auto_bidding_limit_on_win_it_now_price
+    return unless opportunity
+    return unless auto_bidding_limit.present?
+    return unless opportunity.win_it_now_price.present?
+
+    if opportunity.forward_auction? and opportunity.win_it_now_price <= auto_bidding_limit
+      errors.add :auto_bidding_limit, "cannot be lower than win it now price."
+    end
+
+    if !opportunity.forward_auction? and opportunity.win_it_now_price >= auto_bidding_limit
+      errors.add :auto_bidding_limit, "cannot be higher than win it now price."
     end
   end
 

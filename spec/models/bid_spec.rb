@@ -98,6 +98,40 @@ describe Bid do
     end
   end
 
+  describe "validate_auto_bidding_limit" do
+    context "reverse auction" do
+      it "auto_bidding_limit should be lower than amount" do
+        opportunity = FactoryGirl.create(:opportunity)
+
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 100, auto_bidding_limit: 99).should be_valid
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 100, auto_bidding_limit: 101).should_not be_valid
+      end
+
+      it "auto_bidding_limit should be higher than win_it_now_price" do
+        opportunity = FactoryGirl.create(:opportunity, win_it_now_price: 100)
+
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 200, auto_bidding_limit: 101).should be_valid
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 200, auto_bidding_limit: 99).should_not be_valid
+      end
+    end
+
+    context "forward auction" do
+      it "auto_bidding_limit should be higher than amount" do
+        opportunity = FactoryGirl.create(:forward_auction)
+
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 100, auto_bidding_limit: 101).should be_valid
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 100, auto_bidding_limit: 99).should_not be_valid
+      end
+
+      it "auto_bidding_limit should be lower than win_it_now_price" do
+        opportunity = FactoryGirl.create(:forward_auction, win_it_now_price: 100)
+
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 50, auto_bidding_limit: 99).should be_valid
+        FactoryGirl.build(:bid, opportunity: opportunity, amount: 50, auto_bidding_limit: 101).should_not be_valid
+      end
+    end
+  end
+
   describe "run_automatic_bidding" do
     context "reverse auction" do
       let(:opportunity) { FactoryGirl.create(:opportunity) }
