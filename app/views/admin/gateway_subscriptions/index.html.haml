@@ -30,6 +30,7 @@
       %th Confirmed
       %th Sign up company
       %th State
+      %th Payment State
       %th Actions
   %tbody
     - @subscriptions.each_with_index do |subscription, index|
@@ -52,6 +53,7 @@
         %td= subscription.confirmed
         %td= subscription.created_company_name
         %td= subscription.state
+        %td= subscription.payment_state
         %td
           = link_to "Resend", resend_invitation_admin_gateway_subscription_path(subscription), method: "put", class: "btn btn-primary" unless subscription.created_company
           = link_to "Edit", edit_admin_gateway_subscription_path(subscription), method: "get", class: "btn"

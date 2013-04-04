@@ -26,7 +26,6 @@
             <div class="control-group" ng-class="{error:settingsUserLogin.current_password.$invalid}">
               <label for="current_password" class="control-label">Current Password *</label>
               <div class="controls">
-
                 <input id="current_password"
                 name="current_password"
                 type="password"
@@ -215,13 +214,10 @@
         <div class="national-subscription" ng-show="company.subscription_plan == 'subout-national-service'">
           <div>Subscription price: {{national_product.price_in_cents/100 | soCurrency}}</div>
           <div class="text-centered">
+            <br />
             <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('state-by-state-service')">Downgrade to state by state plan</button>
           </div>
           <div class="downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
-        </div>
-        <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</a><br><br>
-          <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
         </div>
         <div ng-show="company.subscription_plan == 'state-by-state-service'">
           <div class="text-centered">
@@ -255,6 +251,14 @@
               </div>
             </div>
           </form>
+        </div>
+        <div ng-show="company.subscription_plan == 'free'" class="text-centered">
+          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</a><br><br>
+          <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
+        </div>
+        <div ng-show="company.subscription_plan != 'free' && company.self_service_url" class="text-centered">
+          <br>
+          <a class="btn btn-primary" target="_blank" href="{{company.self_service_url}}">Update my credit card number</a>
         </div>
       </div>
     </div>

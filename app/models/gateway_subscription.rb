@@ -21,6 +21,7 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :regions, type: Array, default: []
   field :state
+  field :payment_state
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
 
@@ -159,6 +160,10 @@ class GatewaySubscription
 
   def exists_on_chargify?
     Chargify::Subscription.exists?(self.subscription_id)
+  end
+
+  def chargify_subscription
+    Chargify::Subscription.find(self.subscription_id)
   end
 
   def update_chargify_email

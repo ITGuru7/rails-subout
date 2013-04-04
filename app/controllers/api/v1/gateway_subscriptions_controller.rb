@@ -10,9 +10,10 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
 
     event = params["event"]
     payload = params["payload"]
+    subscription = payload["subscription"]
 
     if event == "signup_success"
-      customer = payload["subscription"]["customer"]
+      customer = subscription["customer"]
 
       gw_subscription = GatewaySubscription.create(
         :subscription_id => payload["subscription"]["id"],
@@ -36,9 +37,14 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
         Notifier.delay.subscription_confirmation(gw_subscription.id)
       end
     elsif event == "subscription_state_change"
-      subscription = payload["subscription"]
       gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
       gw_subscription.update_attribute(:state, subscription["state"])
+    elsif event == "payment_failure"
+      gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
+      gw_subscription.update_attribute(:payment_state, "failure")
+    elsif event == "payment_success"
+      gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
+      gw_subscription.update_attribute(:payment_state, "success")
     end
     render json: {}
   end

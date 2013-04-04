@@ -13,6 +13,13 @@ class MyChargify
   def self.get_components(subscription_id)
     self.get("/subscriptions/#{subscription_id}/components.json")
   end
+
+  def self.self_service_url(subscription_id)
+    return nil unless subscription_id.present?
+
+    token = Digest::SHA1.hexdigest("update_payment--#{subscription_id}--#{ENV["CHARGIFY_HOSTED_PAGE_TOKEN"]}")[0..9]
+    "https://#{CHARGIFY_URI}/update_payment/#{subscription_id}/#{token}"
+  end
 end
 
 #chargify = MyChargify.new
