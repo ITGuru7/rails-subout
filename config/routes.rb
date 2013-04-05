@@ -76,7 +76,12 @@ Subout::Application.routes.draw do
     resources :gateway_subscriptions, only: [:index, :edit, :update] do
       put 'resend_invitation', on: :member
     end
-    resources :companies, only: [:index]
+    resources :companies, only: [:index, :edit] do
+      member do
+        put "cancel_subscription"
+        put "add_as_a_favorite"
+      end
+    end
     resources :favorite_invitations, only: [:index] do
       put 'resend_invitation', on: :member
     end

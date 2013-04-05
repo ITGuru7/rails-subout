@@ -30,4 +30,5 @@
       = f.button :submit, class: "btn btn-danger"
       = link_to "Cancel", admin_gateway_subscriptions_path, class: "btn"
 - else
-  Subscription not found on Chargify
+  %p.alert.alert-error
+    Subscription not found on Chargify

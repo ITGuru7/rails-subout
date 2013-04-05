@@ -54,4 +54,6 @@
           = company.regions if company.state_by_state_subscriber?
         %td= company.auctions.count
         %td= company.bids.count
-        %td= link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json }
+        %td
+          = link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json }
+          = link_to "Edit", edit_admin_company_path(company), class: "btn"

@@ -106,11 +106,11 @@ class GatewaySubscription
   end
 
   def subscription_url
-    subscription_id.blank? ? "" : "https://subout.chargify.com/subscriptions/#{subscription_id}"
+    subscription_id.blank? ? "" : "https://#{CHARGIFY_URI}/subscriptions/#{subscription_id}"
   end
 
   def customer_url
-    customer_id.blank? ? "" : "https://subout.chargify.com/customers/#{customer_id}"
+    customer_id.blank? ? "" : "https://#{CHARGIFY_URI}/customers/#{customer_id}"
   end
 
   def self.csv_column_names
