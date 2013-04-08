@@ -17,6 +17,10 @@ class Api::V1::BaseController < ActionController::Base
 
   def current_user
     @current_user ||= User.find_by(authentication_token: params[:api_token])
+    if @current_user.access_locked?
+      raise Mongoid::Errors::DocumentNotFound.new(User, @current_user.id, @current_user.id)
+    end
+    @current_user
   end
 
   def current_company

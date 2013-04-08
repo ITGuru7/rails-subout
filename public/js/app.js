@@ -77,8 +77,7 @@ subout.config([
       controller: NewPasswordCtrl
     }).when("/password/edit", {
       templateUrl: suboutPartialPath("password-edit.html"),
-      controller: "EditPasswordCtrl",
-      resolve: resolveAuth
+      controller: "EditPasswordCtrl"
     }).when("/dashboard", {
       templateUrl: suboutPartialPath("dashboard.html"),
       controller: DashboardCtrl,

@@ -34,6 +34,7 @@ class Company
 
   field :last_upgraded_at, type: Time
   field :has_ada_vehicles, type: Boolean, default: false
+  field :locked_at, type: Time
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
@@ -303,6 +304,15 @@ class Company
   def upgraded_recently
     last_upgraded_at = self.last_upgraded_at || self.created_at
     last_upgraded_at > 1.month.ago
+  end
+
+  def access_locked?
+    self.locked_at.present?
+  end
+
+  def lock_access!
+    users.each(&:lock_access!)
+    self.update_attribute(:locked_at, Time.now)
   end
 
   private

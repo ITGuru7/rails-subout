@@ -119,6 +119,7 @@ describe Opportunity do
   end
 
   describe "#companies_to_notify" do
+    let!(:locked_company) { FactoryGirl.create(:ma_company, locked_at: Time.now) }
     let!(:ca_company) { FactoryGirl.create(:ca_company) }
     let!(:ma_company) { FactoryGirl.create(:ma_company) }
     let!(:ca_ma_company) do
@@ -127,7 +128,7 @@ describe Opportunity do
       company
     end
     let!(:national_company) { FactoryGirl.create(:company) }
-    let!(:buyer) { FactoryGirl.create(:company) }
+    let!(:buyer) { FactoryGirl.create(:ma_company) }
     let!(:fav_company) do
       company = FactoryGirl.create(:ma_company)
       buyer.add_favorite_supplier!(company)
@@ -164,6 +165,20 @@ describe Opportunity do
         opportunity = FactoryGirl.create(:opportunity, buyer: buyer, for_favorites_only: true, start_region: "Massachusetts", end_region: "Massachusetts")
         opportunity.for_favorites_only = false
         opportunity.companies_to_notify.to_a.should =~ [ma_company, ca_ma_company, national_company]
+      end
+    end
+
+    context "when company is locked" do
+      it "excludes the company" do
+        opportunity = FactoryGirl.build(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts")
+        opportunity.companies_to_notify.map(&:id).should_not include(locked_company.id)
+      end
+    end
+
+    context "when company is ther poster" do
+      it "excludes the company" do
+        opportunity = FactoryGirl.build(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts")
+        opportunity.companies_to_notify.map(&:id).should_not include(buyer.id)
       end
     end
   end

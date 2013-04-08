@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite]
+  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -14,6 +14,17 @@ class Admin::CompaniesController < Admin::BaseController
 
   def edit
     @subscription = @company.created_from_subscription
+  end
+
+  def lock_account
+    if subscription = @company.created_from_subscription
+      subscription.update_product_and_regions!(product_handle: "state-by-state-service", regions: [])
+      @company.set_subscription_info
+      @company.save
+    end
+
+    @company.lock_access!
+    redirect_to edit_admin_company_path(@company)
   end
 
   def cancel_subscription

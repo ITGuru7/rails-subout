@@ -79,6 +79,7 @@ Subout::Application.routes.draw do
     resources :companies, only: [:index, :edit] do
       member do
         put "cancel_subscription"
+        put "lock_account"
         put "add_as_a_favorite"
       end
     end

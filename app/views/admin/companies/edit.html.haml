@@ -1,11 +1,13 @@
-%h1 Company
+%h1 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
 
 - if @subscription && @subscription.exists_on_chargify?
   %ul
     %li Subscription: #{@company.subscription_plan}
     %li Regions: #{@company.regions.join(", ")}
   = link_to "Edit this subscription", edit_admin_gateway_subscription_path(@subscription), class: "btn" if @company.created_from_subscription_id
-  = link_to "Cancel this subscription", cancel_subscription_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to cancel this subscription?" if @company.regions.present?
+  - unless @company.access_locked?
+    = link_to "Cancel this subscription", cancel_subscription_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to cancel this subscription?" if @company.regions.present?
+    = link_to "Cancel and lock this account", lock_account_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to lock this account?"
 - else
   %p.alert.alert-error
     Subscription not found on Chargify

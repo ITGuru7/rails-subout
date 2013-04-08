@@ -79,7 +79,7 @@ class Opportunity
       options << {:subscription_plan => 'subout-partner'}
       options << {:regions.in => regions}
     end
-    Company.any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
+    Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
   end
 
   def notified_companies
