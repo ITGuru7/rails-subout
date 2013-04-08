@@ -45,7 +45,7 @@ class Opportunity
   scope :recent, -> { desc(:created_at) }
   scope :won, -> { where(:winning_bid_id.ne => nil) }
 
-  belongs_to :buyer, class_name: "Company", inverse_of: :auctions
+  belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
   has_one :event, as: :eventable
   has_many :bids
@@ -132,6 +132,7 @@ class Opportunity
     update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount, bidding_won_at: Time.now)
     self.buyer.inc(:total_sales, bid.amount)
     bid.bidder.inc(:total_winnings, bid.amount)
+    bid.bidder.inc(:total_won_bids_count)
 
     Notifier.delay.won_auction_to_buyer(self.id)
 

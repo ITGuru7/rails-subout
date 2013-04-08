@@ -31,6 +31,7 @@ class Company
 
   field :total_sales, type: Integer, default: 0
   field :total_winnings, type: Integer, default: 0
+  field :total_won_bids_count, type: Integer, default: 0
 
   field :last_upgraded_at, type: Time
   field :has_ada_vehicles, type: Boolean, default: false
@@ -172,7 +173,7 @@ class Company
   end
 
   def first_user
-    self.users.first
+    @first_user ||= self.users.to_a.first
   end
 
   def auth_token_hash
@@ -236,16 +237,7 @@ class Company
   end
 
   def self.sort(sort_by, direction)
-    dir = (direction == "asc") ? 1 : -1
-
-    case sort_by
-    when "auctions_count"
-      scoped.sort_by { |c| c.auctions.count * dir }
-    when "bids_count"
-      scoped.sort_by { |c| c.bids.count * dir }
-    else
-      scoped.order_by(sort_by => direction)
-    end
+    scoped.order_by(sort_by => direction)
   end
 
   def update_regions!(regions)
@@ -267,14 +259,6 @@ class Company
     self.created_from_subscription.update_product!(product)
     set_subscription_info
     self.save
-  end
-
-  def auctions_count
-    auctions.count
-  end
-
-  def bids_count
-    bids.count
   end
 
   def self.csv_column_names

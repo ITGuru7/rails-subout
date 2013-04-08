@@ -6,6 +6,7 @@
   %thead
     %tr
       %th #
+      %th ID
       %th Company Name<br>Owner
       %th Email<br>Contact
       %th
@@ -32,11 +33,14 @@
           = link_to "# Bids ^", admin_companies_path(sort_by: "bids_count", sort_direction: "desc")
         - else
           = link_to "# Bids v", admin_companies_path(sort_by: "bids_count", sort_direction: "asc")
+      %th Total Award Count
+      %th Total Award Amount
       %th Actions
   %tbody
     - @companies.each_with_index do |company, index|
       %tr
         %td= index + 1
+        %td= company.id
         %td
           = company.name
           %br
@@ -52,8 +56,10 @@
           = company.subscription_plan
           %br
           = company.regions if company.state_by_state_subscriber?
-        %td= company.auctions.count
-        %td= company.bids.count
+        %td= company.auctions_count
+        %td= company.bids_count
+        %td= company.total_won_bids_count
+        %td= number_to_currency(company.total_winnings)
         %td
           = link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json }
           = link_to "Edit", edit_admin_company_path(company), class: "btn"

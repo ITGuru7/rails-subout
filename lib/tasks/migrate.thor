@@ -18,4 +18,16 @@ class Migrate < Thor
       end
     end
   end
+
+  desc "update_counter_cache", "Update company counter cache"
+  def update_counter_cache
+    Company.all.each_with_index do |company, index|
+      company.set(:auctions_count, company.auctions.count)
+      company.set(:bids_count, company.bids.count)
+      bid_ids = company.bids.map(&:id)
+      won_bids_count = bid_ids.blank? ? 0 : Opportunity.in(winning_bid_id: bid_ids).count
+      company.set(:total_won_bids_count, won_bids_count)
+      puts "##{index} updated #{company.name}"
+    end
+  end
 end
