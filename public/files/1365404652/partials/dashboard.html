@@ -145,17 +145,20 @@
                   <span class="label-field">Winning Amount: </span> <span>{{ event.eventable.winner.amount | soCurrency }}</span>
                 </div>
                 <div>
-                  <span>Departs:</span> {{event.eventable.start_date|date}} {{event.eventable.start_time}}<br />
-                  <span>Arrives:</span> {{event.eventable.end_date|date}} {{event.eventable.end_time}}
+                  <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
+                  <span>Drop off:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
                 </div>
                 <div>
                   <span>Created on:</span> {{event.eventable.created_at|date}}
                 </div>
                 <div>
                   <div ng-hide="event.eventable.winning_bid_id">
-                    <div>
+                    <div ng-show="event.eventable.status == 'In progress'">
                       <span>Bidding ends:</span>
                       <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
+                    </div>
+                    <div ng-hide="event.eventable.status == 'In progress'" class="warning">
+                      <span>Bidding ended</span>
                     </div>
                     <div ng-show="event.eventable.reserve_amount">
                       <span>Starting price: </span>{{event.eventable.reserve_amount | soCurrency}}
