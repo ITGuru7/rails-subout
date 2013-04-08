@@ -1621,11 +1621,20 @@ suboutSvcs.factory("Opportunity", function($resource) {
     }
   });
   Opportunity.defaultBidAmountFor = function(opportunity) {
+    var amount;
     if (opportunity.forward_auction && opportunity.highest_bid_amount) {
-      return parseInt(opportunity.highest_bid_amount * 1.05);
+      amount = parseInt(opportunity.highest_bid_amount * 1.05);
+      if (opportunity.win_it_now_price && amount >= parseInt(opportunity.win_it_now_price)) {
+        amount = parseInt(opportunity.win_it_now_price) - 1;
+      }
+      return amount;
     }
     if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
-      return parseInt(opportunity.lowest_bid_amount * 0.95);
+      amount = parseInt(opportunity.lowest_bid_amount * 0.95);
+      if (opportunity.win_it_now_price && amount <= parseInt(opportunity.win_it_now_price)) {
+        amount = parseInt(opportunity.win_it_now_price) + 1;
+      }
+      return amount;
     }
     if (opportunity.reserve_amount) {
       return opportunity.reserve_amount;
