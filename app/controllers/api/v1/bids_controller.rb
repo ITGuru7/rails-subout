@@ -7,7 +7,7 @@ class Api::V1::BidsController < Api::V1::BaseController
       :per_page => Bid.default_per_page,
       :page => params[:page].to_i,
     }
-    render json: bids.page(params[:page]), root: "bids", meta: meta
+    render json: bids.includes(:opportunity).page(params[:page]), root: "bids", meta: meta
   end
 
   def create

@@ -5,6 +5,7 @@ class Bid
   field :amount, type: Money
   field :comment, type: String
   field :auto_bidding_limit, type: Money
+  
   paginates_per 30
 
   belongs_to :opportunity, :inverse_of => :bids
@@ -29,6 +30,14 @@ class Bid
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
+
+  def status
+    if opportunity.status == "Bidding won"
+      opportunity.winning_bid_id == id ? "Won" : "Not won"
+    else
+      "In progress"
+    end
+  end
 
   def comment_as_seen_by(viewer)
     (viewer == bidder || viewer == opportunity.buyer) ? comment : ""
