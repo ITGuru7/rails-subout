@@ -10,8 +10,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   def show
     @company = Company.find(params[:id])
     @serializer = CompanySerializer.new(@company, :scope => current_company)
-    render :json => @serializer
-    #respond_with_namespace(@company)
+    render json: @serializer
   end
 
   def search
