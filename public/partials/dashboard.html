@@ -157,7 +157,7 @@
                       <span>Bidding ends:</span>
                       <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
                     </div>
-                    <div ng-hide="event.eventable.status == 'In progress'" class="warning">
+                    <div ng-show="event.eventable.status && event.eventable.status != 'In progress'" class="warning">
                       <span>Bidding ended</span>
                     </div>
                     <div ng-show="event.eventable.reserve_amount">
