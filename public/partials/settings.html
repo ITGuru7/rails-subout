@@ -238,8 +238,8 @@
                       type="checkbox"
                       name="regions[{{ region_abbr }}]"
                       ng-model="companyProfile.allRegions[region_name]"
-                      ng-change="updateTotalPrice()"
-                      ng-disabled="companyProfile.subscribed(region_name) && companyProfile.upgraded_recently"
+                      ng-change="toggleSubscribedRegion()"
+                      ng-disabled="(selectedRegionsCount == 1 && companyProfile.allRegions[region_name]) || (companyProfile.subscribed(region_name) && companyProfile.upgraded_recently)"
                       value="1">
                       {{region_name}}(${{regionPrice(region_name)}})
                   </div>

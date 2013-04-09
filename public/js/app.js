@@ -1141,7 +1141,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions;
+  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1166,6 +1166,26 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     } else {
       return 0;
     }
+  };
+  updateSelectedRegionsCount = function() {
+    var isEnabled, region, _ref, _results;
+    $scope.selectedRegionsCount = 0;
+    _ref = $scope.companyProfile.allRegions;
+    _results = [];
+    for (region in _ref) {
+      isEnabled = _ref[region];
+      if (isEnabled) {
+        _results.push($scope.selectedRegionsCount += 1);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+  updateSelectedRegionsCount();
+  $scope.toggleSubscribedRegion = function() {
+    $scope.updateTotalPrice();
+    return updateSelectedRegionsCount();
   };
   $scope.updateTotalPrice = function() {
     var isEnabled, region, totalPrice, _ref;
