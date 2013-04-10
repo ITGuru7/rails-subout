@@ -135,7 +135,7 @@ class Opportunity
     update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount, bidding_won_at: Time.now)
     self.buyer.inc(:total_sales, bid.amount)
     bid.bidder.inc(:total_winnings, bid.amount)
-    bid.bidder.inc(:total_won_bids_count)
+    bid.bidder.inc(:total_won_bids_count, 1)
 
     Notifier.delay.won_auction_to_buyer(self.id)
 
