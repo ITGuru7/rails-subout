@@ -10,6 +10,8 @@ describe Opportunity do
     it { should allow_value("1").for(:bidding_duration_hrs) }
     it { should_not allow_value("0").for(:bidding_duration_hrs) }
     it { should_not allow_value("-1").for(:bidding_duration_hrs) }
+    it { should allow_value("Sedan").for(:vehicle_type) }
+    it { should_not allow_value("Truck").for(:vehicle_type) }
   end
 
   describe "#win!" do

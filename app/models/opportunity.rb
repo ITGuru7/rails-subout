@@ -66,6 +66,7 @@ class Opportunity
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
+  validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"] }
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
 
