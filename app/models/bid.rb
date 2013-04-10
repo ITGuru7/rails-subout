@@ -23,6 +23,7 @@ class Bid
   validate :validate_dot_number_of_bidder, on: :create
   validate :validate_auto_bidding_limit, on: :create
   validate :validate_auto_bidding_limit_on_win_it_now_price, on: :create
+  validate :validate_ada_required, on: :create
   validates :comment, length: { maximum: 255 }
 
   scope :recent, desc(:created_at)
@@ -156,6 +157,14 @@ class Bid
 
     if !opportunity.forward_auction? and opportunity.win_it_now_price >= auto_bidding_limit
       errors.add :auto_bidding_limit, "cannot be higher than win it now price."
+    end
+  end
+
+  def validate_ada_required
+    return unless opportunity
+
+    if opportunity.ada_required? and !bidder.has_ada_vehicles?
+      errors.add :bidder_id, "should have ADA vehicles to bid on ADA opportunities."
     end
   end
 

@@ -238,4 +238,13 @@ describe Bid do
       end
     end
   end
+
+  describe "validate_has_ada_vehicles_of_bidder" do
+    let(:bidder) { FactoryGirl.create(:company, has_ada_vehicles: false) }
+    let(:opportunity) { FactoryGirl.create(:opportunity, ada_required: true) }
+
+    it "should be invalid if bidder doesn't have ada vehicles" do
+      FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
+    end
+  end
 end
