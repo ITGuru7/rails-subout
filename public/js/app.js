@@ -2113,7 +2113,8 @@ suboutSvcs.factory("soPagination", function($rootScope, $location) {
         return $location.search({
           page: page,
           sort_by: $scope.sortBy,
-          sort_direction: $scope.sortDirection
+          sort_direction: $scope.sortDirection,
+          query: $scope.query
         });
       }
     }
