@@ -1155,22 +1155,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       return 0;
     }
   };
-  updateSelectedRegionsCount = function() {
-    var isEnabled, region, _ref, _results;
-    $scope.selectedRegionsCount = 0;
-    _ref = $scope.companyProfile.allRegions;
-    _results = [];
-    for (region in _ref) {
-      isEnabled = _ref[region];
-      if (isEnabled) {
-        _results.push($scope.selectedRegionsCount += 1);
-      } else {
-        _results.push(void 0);
-      }
-    }
-    return _results;
-  };
-  updateSelectedRegionsCount();
   $scope.toggleSubscribedRegion = function() {
     $scope.updateTotalPrice();
     return updateSelectedRegionsCount();
@@ -1200,6 +1184,22 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.totalPrice = $scope.updateTotalPrice();
   };
   updateSelectedRegions();
+  updateSelectedRegionsCount = function() {
+    var isEnabled, region, _ref, _results;
+    $scope.selectedRegionsCount = 0;
+    _ref = $scope.companyProfile.allRegions;
+    _results = [];
+    for (region in _ref) {
+      isEnabled = _ref[region];
+      if (isEnabled) {
+        _results.push($scope.selectedRegionsCount += 1);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+  updateSelectedRegionsCount();
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
     $rootScope.regions = company.regions;
