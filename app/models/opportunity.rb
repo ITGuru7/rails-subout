@@ -2,6 +2,7 @@ class Opportunity
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Token
+  include Mongoid::Search
 
   token field_name: :reference_number, retry: 5, length: 7, contains: :upper_alphanumeric
 
@@ -67,6 +68,8 @@ class Opportunity
   validate :validate_reseve_amount_and_win_it_now_price
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
+
+  search_in :reference_number, :name, :description
 
   paginates_per 30
 

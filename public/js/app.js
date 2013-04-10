@@ -763,42 +763,28 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
 };
 
 OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination) {
-  var filterWithQuery;
   $scope.opportunities = [];
   $scope.pages = [];
   $scope.startPage = 1;
   $scope.page = $location.search().page || 1;
   $scope.sortBy = $location.search().sort_by || "created_at";
   $scope.sortDirection = $location.search().sort_direction || "desc";
+  $scope.query = $location.search().query;
   $scope.endPage = 1;
   $scope.maxPage = 1;
-  filterWithQuery = function(value) {
-    var reg;
-    reg = new RegExp($scope.opportunityQuery.toLowerCase());
-    if (value && reg.test(value.toLowerCase())) {
-      return true;
+  $scope.fullTextSearch = function(event) {
+    var query;
+    if ($scope.query && $scope.query !== "") {
+      query = $scope.query;
+    } else {
+      query = null;
     }
-  };
-  $scope.opportunityFilter = function(item) {
-    if (!$scope.opportunityQuery) {
-      return true;
-    }
-    if (filterWithQuery(item.reference_number)) {
-      return true;
-    }
-    if (filterWithQuery(item.type)) {
-      return true;
-    }
-    if (filterWithQuery(item.name)) {
-      return true;
-    }
-    if (filterWithQuery(item.description)) {
-      return true;
-    }
-    if (item.winner && filterWithQuery(item.winner.name)) {
-      return true;
-    }
-    return false;
+    return $location.search({
+      page: 1,
+      sort_by: $scope.sortBy,
+      sort_direction: $scope.sortDirection,
+      query: query
+    });
   };
   $scope.loadMoreOpportunities = function(page) {
     if (page == null) {
@@ -806,7 +792,8 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
     }
     return soPagination.paginate($scope, Auction, page, {
       sort_by: $scope.sortBy,
-      sort_direction: $scope.sortDirection
+      sort_direction: $scope.sortDirection,
+      query: $scope.query
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -830,7 +817,8 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
     return $location.search({
       page: 1,
       sort_by: $scope.sortBy,
-      sort_direction: $scope.sortDirection
+      sort_direction: $scope.sortDirection,
+      query: $scope.query
     });
   };
   return $scope.loadMoreOpportunities($scope.page);

@@ -34,6 +34,8 @@ class Bid
   def status
     if opportunity.status == "Bidding won"
       opportunity.winning_bid_id == id ? "Won" : "Not won"
+    elsif opportunity.status == "Bidding ended"
+      "Closed"
     else
       "In progress"
     end

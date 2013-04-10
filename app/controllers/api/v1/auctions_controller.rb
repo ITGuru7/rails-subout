@@ -3,7 +3,9 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     params[:page] ||= 1
     sort_by = params[:sort_by] || "created_at"
     sort_direction = params[:sort_direction] || "desc"
+    query = params[:query] == "undefined" ? nil : params[:query]
     opportunities = current_company.auctions.active.order_by(sort_by => sort_direction)
+    opportunities = opportunities.search(query) if query.present?
     meta = {
       :count =>  opportunities.count,
       :per_page => Opportunity.default_per_page,

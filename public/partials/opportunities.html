@@ -6,7 +6,7 @@
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
     <div class="search pull-right span4">
-      <input ng-model="opportunityQuery" placeholder="Search opportunities for..."/>
+      <input ng-model="query" ui-keypress="{13:'fullTextSearch()'}" placeholder="Search opportunities for..."/>
       <div class="icon-search"></div>
     </div>
   </div>
@@ -37,7 +37,7 @@
       <th class="current-bid-amount">Bid Range</th>
       <th>Winning Bidder (Amount)</th>
     </tr>
-    <tr ng-repeat="opportunity in paginated_results | filter:opportunityFilter" >
+    <tr ng-repeat="opportunity in paginated_results" >
       <td>{{opportunity.reference_number}}</td>
       <td>
         <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
@@ -63,7 +63,7 @@
     </tr>
   </table>
 
-  <table ng-show="isPhone" class="table table-border" ng-repeat="opportunity in opportunities | filter:opportunityFilter">
+  <table ng-show="isPhone" class="table table-border" ng-repeat="opportunity in opportunities">
     <tr>
       <td class="table-header reference-number">Reference #</td>
       <td>{{opportunity.reference_number}}</td>
