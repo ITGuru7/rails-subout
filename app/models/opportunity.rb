@@ -130,7 +130,7 @@ class Opportunity
   end
 
   def win!(bid_id)
-    bid = self.bids.find(bid_id)
+    bid = self.bids.active.find(bid_id)
 
     update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount, bidding_won_at: Time.now)
     self.buyer.inc(:total_sales, bid.amount)
@@ -146,13 +146,13 @@ class Opportunity
   end
 
   def bid_loser_ids
-    bidder_ids = self.bids.map(&:bidder_id)
+    bidder_ids = self.bids.active.map(&:bidder_id)
     bidder_ids.reject! { |bidder_id| bidder_id == winning_bid.bidder_id }
     bidder_ids.uniq
   end
 
   def update!(options)
-    if bids.any?
+    if bids.active.any?
       errors.add(:base, "Opportunity cannot be updated if it already has a bid")
     else
       update_attributes(options)
@@ -160,15 +160,15 @@ class Opportunity
   end
 
   def winning_bid
-    bids.where(id: winning_bid_id).first
+    bids.active.where(id: winning_bid_id).first
   end
 
   def leading_bid_amount
     if forward_auction
-      leading_bid, second_leading_bid = bids.sort_by { |b| -b.bidding_limit_amount }
+      leading_bid, second_leading_bid = bids.active.sort_by { |b| -b.bidding_limit_amount }
       [second_leading_bid.bidding_limit_amount + 1, leading_bid.bidding_limit_amount].min
     else
-      leading_bid, second_leading_bid = bids.sort_by { |b| b.bidding_limit_amount }
+      leading_bid, second_leading_bid = bids.active.sort_by { |b| b.bidding_limit_amount }
       [second_leading_bid.bidding_limit_amount - 1, leading_bid.bidding_limit_amount].max
     end
   end
@@ -226,11 +226,11 @@ class Opportunity
 
   def editable?
     return false if self.canceled?
-    not(self.bids.exists?)
+    not(self.bids.active.exists?)
   end
 
   def recent_bids
-    result = self.bids.recent.map do |bid|
+    result = self.bids.active.recent.map do |bid|
       bid.opportunity = self # to prevent loading opportunity again from db while serializing see BidShortSerializer#comment
       bid
     end
@@ -264,11 +264,11 @@ class Opportunity
   end
 
   def lowest_bid_amount
-    self.bids.sort_by { |b| b.amount }.first.try(:amount)
+    self.bids.active.sort_by { |b| b.amount }.first.try(:amount)
   end
 
   def highest_bid_amount
-    self.bids.sort_by { |b| -b.amount }.first.try(:amount)
+    self.bids.active.sort_by { |b| -b.amount }.first.try(:amount)
   end
 
   private

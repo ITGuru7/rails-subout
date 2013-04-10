@@ -5,6 +5,7 @@ class Bid
   field :amount, type: Money
   field :comment, type: String
   field :auto_bidding_limit, type: Money
+  field :canceled, type: Boolean, default: false
   
   paginates_per 30
 
@@ -26,14 +27,17 @@ class Bid
   validate :validate_ada_required, on: :create
   validates :comment, length: { maximum: 255 }
 
-  scope :recent, desc(:created_at)
-  scope :by_amount, asc(:amount)
+  scope :active, -> { where(canceled: false) }
+  scope :recent, -> { desc(:created_at) }
+  scope :by_amount, -> { asc(:amount) }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
 
   def status
-    if opportunity.status == "Bidding won"
+    if canceled?
+      "Canceled"
+    elsif opportunity.status == "Bidding won"
       opportunity.winning_bid_id == id ? "Won" : "Not won"
     elsif opportunity.status == "Bidding ended"
       "Closed"
@@ -48,6 +52,15 @@ class Bid
 
   def bidding_limit_amount
     auto_bidding_limit ? auto_bidding_limit : amount
+  end
+
+  def cancel
+    if created_at < 5.minutes.ago
+      errors.add(:base, "You cannot cancel a bid after 5 minutes")
+      false
+    else
+      update_attribute(:canceled, true)
+    end
   end
 
   private
@@ -94,7 +107,7 @@ class Bid
     return unless opportunity
     return if errors[:amount].present?
 
-    previous_bids = opportunity.bids.where(bidder_id: bidder.id, :id.ne => self.id)
+    previous_bids = opportunity.bids.active.where(bidder_id: bidder.id, :id.ne => self.id)
     if opportunity.forward_auction?
       max_amount = previous_bids.map(&:amount).max
       if max_amount && amount <= BigDecimal.new(max_amount.to_s)
@@ -178,10 +191,10 @@ class Bid
   # second 700, 600 => 600
   # third  650, 620 => 620
   def run_automatic_bidding
-    return unless opportunity.bids.size > 1
+    return unless opportunity.bids.active.size > 1
 
     leading_bid_amount = opportunity.leading_bid_amount
-    opportunity.bids.select { |b| b.auto_bidding_limit.present? }.each do |bid|
+    opportunity.bids.active.select { |b| b.auto_bidding_limit.present? }.each do |bid|
       if opportunity.forward_auction
         if bid.amount < leading_bid_amount and bid.amount < bid.auto_bidding_limit
           new_amount = [bid.auto_bidding_limit, leading_bid_amount].min

@@ -61,7 +61,10 @@ Subout::Application.routes.draw do
 
       resources :regions
 
-      resources :bids
+      resources :bids do
+        put :cancel, on: :member
+      end
+
       resources :filters
       resources :tags
       resources :opportunities do

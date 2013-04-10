@@ -18,6 +18,13 @@ class Api::V1::BidsController < Api::V1::BaseController
     respond_with_namespace(bid.opportunity, bid)
   end
 
+  def cancel
+    bid = current_company.bids.find(params[:id])
+    bid.cancel
+
+    respond_with_namespace(bid.opportunity, bid)
+  end
+
   private
 
   helper_method :opportunity

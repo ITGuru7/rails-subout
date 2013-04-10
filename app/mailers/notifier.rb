@@ -16,12 +16,13 @@ class Notifier < ActionMailer::Base
   end
 
   def new_bid(bid_id)
-    @bid = Bid.find(bid_id)
-    @opportunity = @bid.opportunity
-    @buyer = @opportunity.buyer
-    @bidder = @bid.bidder
+    if @bid = Bid.active.where(id: bid_id).first
+      @opportunity = @bid.opportunity
+      @buyer = @opportunity.buyer
+      @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.email)
+      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.email)
+    end
   end
 
   def won_auction_to_buyer(opportunity_id)

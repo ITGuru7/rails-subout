@@ -247,4 +247,18 @@ describe Bid do
       FactoryGirl.build(:bid, opportunity: opportunity, bidder: bidder).should_not be_valid
     end
   end
+  
+  describe "cancel" do
+    it "should set canceled field as true" do
+      bid = FactoryGirl.create(:bid)
+      bid.cancel.should be_true
+      bid.reload.canceled.should be_true
+    end
+
+    it "should not cancel if it's older than 5 mins" do
+      bid = FactoryGirl.create(:bid, created_at: 10.minutes.ago)
+      bid.cancel.should be_false
+      bid.reload.canceled.should be_false
+    end
+  end
 end

@@ -824,8 +824,14 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
   return $scope.loadMoreOpportunities($scope.page);
 };
 
-OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bid, Auction, Opportunity, Comment) {
-  var reloadOpportunity;
+OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
+  var fiveMinutes, reloadOpportunity, updateFiveMinutesAgo;
+  fiveMinutes = 5 * 60 * 1000;
+  updateFiveMinutesAgo = function() {
+    $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
+    return $timeout(updateFiveMinutesAgo, 5000);
+  };
+  updateFiveMinutesAgo();
   reloadOpportunity = function() {
     return $scope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
@@ -867,10 +873,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
       bid_id: bid._id,
       api_token: $rootScope.token.api_token
     }, {}, function(content) {
-      return $scope.opportunity = Opportunity.get({
-        api_token: $rootScope.token.api_token,
-        opportunityId: $scope.opportunity._id
-      });
+      return reloadOpportunity();
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -878,7 +881,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
-  return $scope.addComment = function() {
+  $scope.addComment = function() {
     $scope.hideAlert();
     return Comment.save({
       comment: $scope.comment,
@@ -890,6 +893,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, Bi
       return $scope.comment.body = "";
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+  return $scope.cancelBid = function(bid) {
+    if (!confirm("Are you sure to cancel your bid?")) {
+      return;
+    }
+    return MyBid.cancel({
+      bidId: bid._id,
+      action: 'cancel',
+      api_token: $rootScope.token.api_token
+    }, function(content) {
+      return reloadOpportunity();
+    }, function(content) {
+      return alert($rootScope.errorMessages(content.data.errors).join("\n"));
     });
   };
 };
@@ -1653,9 +1670,15 @@ suboutSvcs.factory("Opportunity", function($resource) {
 });
 
 suboutSvcs.factory("MyBid", function($resource) {
-  return $resource("" + api_path + "/bids", {}, {
+  return $resource("" + api_path + "/bids/:bidId/:action", {
+    bidId: '@bidId',
+    action: '@action'
+  }, {
     paginate: {
       method: "GET"
+    },
+    cancel: {
+      method: "PUT"
     }
   });
 });
