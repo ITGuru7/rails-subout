@@ -166,7 +166,7 @@ class Opportunity
   end
 
   def winning_bid
-    bids.active.where(id: winning_bid_id).first
+    Bid.where(id: winning_bid_id, opportunity_id: id).first
   end
 
   def leading_bid_amount
