@@ -133,7 +133,12 @@ class Opportunity
   def win!(bid_id)
     bid = self.bids.active.find(bid_id)
 
-    update_attributes(bidding_done: true, winning_bid_id: bid.id, value: bid.amount, bidding_won_at: Time.now)
+    self.bidding_done = true
+    self.winning_bid_id = bid.id
+    self.value = bid.amount
+    self.bidding_won_at = Time.now
+    self.save(validate: false) # when poster select winner, the start date validation may be failed
+
     self.buyer.inc(:total_sales, bid.amount)
     bid.bidder.inc(:total_winnings, bid.amount)
     bid.bidder.inc(:total_won_bids_count, 1)
