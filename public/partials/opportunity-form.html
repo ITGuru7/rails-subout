@@ -88,6 +88,15 @@
         </div>
       </div>
 
+      <div class="control-group">
+        <label for="opportunity_trip_type" class="control-label">Trip Type</label>
+        <div class="controls">
+          <select id="opportunity_trip_type" name="opportunity_trip_type" ng-model="opportunity.trip_type" ng-options="t for t in TRIP_TYPES">
+            <option value=""></option>
+          </select>
+        </div>
+      </div>
+
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_start_date.$invalid}">
         <label for="opportunity_start_date" class="control-label">Pick up date *</label>
         <div class="controls">

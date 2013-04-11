@@ -12,6 +12,8 @@ describe Opportunity do
     it { should_not allow_value("-1").for(:bidding_duration_hrs) }
     it { should allow_value("Sedan").for(:vehicle_type) }
     it { should_not allow_value("Truck").for(:vehicle_type) }
+    it { should allow_value("One way").for(:trip_type) }
+    it { should_not allow_value("Three ways").for(:trip_type) }
   end
 
   describe "#win!" do

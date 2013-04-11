@@ -199,6 +199,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
+  $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",

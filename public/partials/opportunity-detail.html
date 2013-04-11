@@ -39,6 +39,9 @@
               <li><span class="label-field">Drop off location: </span>{{opportunity.end_location}}</li>
             </ul>
           </div>
+          <div ng-show="opportunity.trip_type">
+            <span class="label-field">Trip Type: </span>{{opportunity.trip_type}}
+          </div>
           <div ng-show="opportunity.vehicle_type">
             <span class="label-field">Vehicle Type: </span>{{opportunity.vehicle_type}}
           </div>
