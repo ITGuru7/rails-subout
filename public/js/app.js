@@ -1484,7 +1484,6 @@ subout.directive("whenScrolled", function() {
       }
     };
     scope.$on('$routeChangeStart', function() {
-      console.log('route changed');
       fn = function() {};
       return null;
     });
