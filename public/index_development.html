@@ -47,7 +47,7 @@
   </head>
 
   <body data-subout-deploy="--DEPLOY--">
-    <div id="pageWrapper" class="container">
+  <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
         <div class="navbar-inner row">
           <div class="span3">

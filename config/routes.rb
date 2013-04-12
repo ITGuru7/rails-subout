@@ -28,6 +28,7 @@ Subout::Application.routes.draw do
         put "update", on: :collection
       end
       resources :tokens
+      resources :settings
       resources :users  do
         collection do
           post :account
@@ -89,5 +90,6 @@ Subout::Application.routes.draw do
     resources :favorite_invitations, only: [:index] do
       put 'resend_invitation', on: :member
     end
+    resources :settings, only: [:index, :update, :edit]
   end
 end

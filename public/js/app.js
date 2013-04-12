@@ -1308,8 +1308,11 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken, Authorize) {
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken, Authorize, Setting) {
   $.removeCookie(AuthToken);
+  $scope.marketing_message = Setting.get({
+    key: "marketing_message"
+  });
   return $scope.signIn = function() {
     return Token.save({
       email: $scope.email,
@@ -1617,6 +1620,12 @@ var api_path, suboutSvcs,
 api_path = "/api/v1";
 
 suboutSvcs = angular.module("suboutServices", ["ngResource"]);
+
+suboutSvcs.factory("Setting", function($resource) {
+  return $resource("" + api_path + "/settings/:key", {
+    key: '@key'
+  });
+});
 
 suboutSvcs.factory("Auction", function($resource) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {

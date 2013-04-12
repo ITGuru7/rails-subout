@@ -7870,6 +7870,58 @@ body {
   position: relative;
   background: #FFFFFF;
 }
+#pageWrapper.signin {
+  height: 666px;
+}
+#pageWrapper.signin #buy-sell-connect {
+  background-color: #8bc76f;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(40%, #93cb7a), to(#69b645));
+  background-image: -webkit-linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-image: -moz-linear-gradient(top, #ffffff, #93cb7a 4000%, #69b645);
+  background-image: -o-linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-image: linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ff69b645', GradientType=0);
+  -webkit-box-shadow: #eeeeee;
+  -moz-box-shadow: #eeeeee;
+  box-shadow: #eeeeee;
+  text-shadow: 0 1px 2px #000000;
+  height: 260px;
+  text-align: center;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1.5em;
+}
+#pageWrapper.signin #buy-sell-connect .inner {
+  padding: 75px 0px;
+}
+#pageWrapper.signin #marketing-message {
+  width: 560px;
+  margin: 0px auto;
+  color: #f9b474;
+  font-size: 20px;
+  line-height: 1.5em;
+  font-style: italic;
+}
+#pageWrapper.signin #marketing-message .inner {
+  padding: 0px;
+  margin-left: 160px;
+}
+#pageWrapper.signin #marketing-message a {
+  color: #f9b474;
+  text-decoration: none;
+}
+#pageWrapper.signin #content {
+  padding: 0px;
+}
+#pageWrapper.signin #logo {
+  position: absolute;
+  margin-left: 3em;
+}
+#pageWrapper.signin #header {
+  min-height: 70px;
+  position: relative;
+}
 .inner {
   padding: 0px 3%;
 }
@@ -7941,7 +7993,15 @@ body {
 #sign-up-form {
   max-width: 560px;
   margin: 0px auto;
-  margin-bottom: 40px;
+}
+#sign-in-form legend,
+#sign-up-form legend {
+  border: none;
+}
+#sign-in-form .form-actions,
+#sign-up-form .form-actions {
+  background: none;
+  border: none;
 }
 #dashboard section.title {
   margin-bottom: 10px;
