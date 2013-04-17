@@ -61,5 +61,5 @@
         %td= company.total_won_bids_count
         %td= number_to_currency(company.total_winnings)
         %td
-          = link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json }
+          = link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json } unless company.access_locked?
           = link_to "Edit", edit_admin_company_path(company), class: "btn"
