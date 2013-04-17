@@ -28,6 +28,7 @@ class Company
   field :regions, type: Array, default: []
 
   field :notification_type, default: 'Individual'
+  field :notification_email
 
   field :total_sales, type: Integer, default: 0
   field :total_winnings, type: Integer, default: 0
@@ -83,6 +84,10 @@ class Company
     errors.add(:favoriting_buyer_ids, "is not defined") if favoriting_buyer_ids.nil?
   end
 
+  def notifiable_email
+    return email if notification_email.blank?
+    notification_email
+  end
 
   def self.notified_recipients_by(opportunity)
     options = []

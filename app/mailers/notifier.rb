@@ -5,7 +5,7 @@ class Notifier < ActionMailer::Base
     @buyer = Company.find(buyer_id)
     @supplier = Company.find(supplier_id)
 
-    mail(subject: "[SubOut] Favorite Invitation from #{@buyer.name}", to: @supplier.email)
+    mail(subject: "[SubOut] Favorite Invitation from #{@buyer.name}", to: @supplier.notifiable_email)
   end
 
   def send_unknown_favorite_invitation(invitation_id)
@@ -21,7 +21,7 @@ class Notifier < ActionMailer::Base
       @buyer = @opportunity.buyer
       @bidder = @bid.bidder
 
-      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.email)
+      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.notifiable_email)
     end
   end
 
@@ -31,26 +31,26 @@ class Notifier < ActionMailer::Base
     @poster = @auction.buyer
     @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] #{@bid.bidder.name} has won the bidding on #{@auction.name}", to: @auction.buyer.email)
+    mail(subject: "[SubOut] #{@bid.bidder.name} has won the bidding on #{@auction.name}", to: @auction.buyer.notifiable_email)
   end
 
   def won_auction_to_supplier(opportunity_id)
     @auction = Opportunity.find(opportunity_id)
     @bid = @auction.winning_bid
     @buyer = @auction.buyer
-    mail(subject: "[SubOut] You won the bidding on #{@auction.name}", to: @bid.bidder.email)
+    mail(subject: "[SubOut] You won the bidding on #{@auction.name}", to: @bid.bidder.notifiable_email)
   end
 
   def finished_auction_to_bidder(opportunity_id, bidder_id)
     @auction = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)
-    mail(subject: "[SubOut] You didn't win the bidding on #{@auction.name}.", to: @bidder.email)
+    mail(subject: "[SubOut] You didn't win the bidding on #{@auction.name}.", to: @bidder.notifiable_email)
   end
 
   def expired_auction_notification(auction_id)
     @auction = Opportunity.find(auction_id)
     @poster = @auction.buyer
-    mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @auction.buyer.email)
+    mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @auction.buyer.notifiable_email)
   end
 
   def subscription_confirmation(subscription_id)
@@ -64,16 +64,16 @@ class Notifier < ActionMailer::Base
     return if @opportunity.canceled?
 
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] new opportunity arrived", to: @company.email)
+    mail(subject: "[SubOut] new opportunity arrived", to: @company.notifiable_email)
   end
 
   def updated_licensed_regions(company_id)
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] updated licensed regions", to: @company.email)
+    mail(subject: "[SubOut] updated licensed regions", to: @company.notifiable_email)
   end
 
   def updated_product(company_id)
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] updated subscription product", to: @company.email)
+    mail(subject: "[SubOut] updated subscription product", to: @company.notifiable_email)
   end
 end

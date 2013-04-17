@@ -190,6 +190,12 @@
                 </select>
               </div>
             </div>
+            <div class="control-group">
+              <label for="notification_email" class="control-label">Notification Email</label>
+              <div class="controls">
+                <input id="notification_email" name="notification_email" type="text" class="input-xlarge" ng:model="companyProfile.notification_email" />
+              </div>
+            </div>
             <div class="form-actions">
               <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
             </div>
