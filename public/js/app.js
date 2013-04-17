@@ -688,27 +688,27 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     }
   ];
   availableToCurrentCompany = function(opportunity) {
-    return opportunity.buyer_id !== $rootScope.company._id && opportunity.status === 'In progress' && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
+    return opportunity.buyer_id !== $rootScope.company._id && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
   };
   $rootScope.channel.bind('event_created', function(event) {
     var affectedOpp;
-    affectedOpp = _.find($scope.opportunities, function(opportunity) {
+    affectedOpp = _.find($scope.paginated_results, function(opportunity) {
       return opportunity._id === event.eventable._id;
     });
     if (availableToCurrentCompany(event.eventable)) {
-      if (affectedOpp) {
-        $scope.opportunities[$scope.opportunities.indexOf(affectedOpp)] = event.eventable;
-      } else {
-        $scope.opportunities.unshift(event.eventable);
-      }
-    } else {
-      if (affectedOpp) {
-        $scope.opportunities = _.reject($scope.opportunities, function(opportunity) {
-          return opportunity._id === affectedOpp._id;
+      if (affectedOpp && event.eventable.status === 'In progress') {
+        return Opportunity.get({
+          api_token: $rootScope.token.api_token,
+          opportunityId: event.eventable._id
+        }, function(opportunity) {
+          return $scope.paginated_results[$scope.paginated_results.indexOf(affectedOpp)] = opportunity;
         });
+      } else {
+        return $scope.reloadOpportunities();
       }
+    } else if (affectedOpp) {
+      return $scope.reloadOpportunities();
     }
-    return $scope.$apply();
   });
   $scope.loadMoreOpportunities = function(page) {
     if (page == null) {

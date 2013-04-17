@@ -50,7 +50,7 @@ class Opportunity
 
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
-  has_one :event, as: :eventable
+  # has_one :event, as: :eventable
   has_many :bids
   embeds_many :comments
   belongs_to :winning_bid, :class_name => "Bid"

@@ -172,7 +172,7 @@
                   <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
                     <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
                       <div>
-                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                       </div>
                       <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
                         <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
