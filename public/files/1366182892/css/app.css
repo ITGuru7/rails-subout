@@ -7742,7 +7742,6 @@ div.data-items {
 div.data-items span.data {
   font-weight: bold;
 }
-select,
 input[type="text"],
 input[type="password"],
 input[type="datetime"],
@@ -7758,8 +7757,12 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  height: 28px;
-  line-height: 28px;
+  height: 20px;
+  line-height: 20px;
+}
+select {
+  height: 30px;
+  line-height: 30px;
 }
 textarea {
   line-height: 28px;
@@ -7867,6 +7870,58 @@ body {
   position: relative;
   background: #FFFFFF;
 }
+#pageWrapper.signin {
+  height: 666px;
+}
+#pageWrapper.signin #buy-sell-connect {
+  background-color: #8bc76f;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(40%, #93cb7a), to(#69b645));
+  background-image: -webkit-linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-image: -moz-linear-gradient(top, #ffffff, #93cb7a 4000%, #69b645);
+  background-image: -o-linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-image: linear-gradient(#ffffff, #93cb7a 40%, #69b645);
+  background-repeat: no-repeat;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ff69b645', GradientType=0);
+  -webkit-box-shadow: #eeeeee;
+  -moz-box-shadow: #eeeeee;
+  box-shadow: #eeeeee;
+  text-shadow: 0 1px 2px #000000;
+  height: 260px;
+  text-align: center;
+  color: #fff;
+  font-size: 40px;
+  line-height: 1.5em;
+}
+#pageWrapper.signin #buy-sell-connect .inner {
+  padding: 75px 0px;
+}
+#pageWrapper.signin #marketing-message {
+  width: 560px;
+  margin: 0px auto;
+  color: #f9b474;
+  font-size: 20px;
+  line-height: 1.5em;
+  font-style: italic;
+}
+#pageWrapper.signin #marketing-message .inner {
+  padding: 0px;
+  margin-left: 160px;
+}
+#pageWrapper.signin #marketing-message a {
+  color: #f9b474;
+  text-decoration: none;
+}
+#pageWrapper.signin #content {
+  padding: 0px;
+}
+#pageWrapper.signin #logo {
+  position: absolute;
+  margin-left: 3em;
+}
+#pageWrapper.signin #header {
+  min-height: 70px;
+  position: relative;
+}
 .inner {
   padding: 0px 3%;
 }
@@ -7938,7 +7993,15 @@ body {
 #sign-up-form {
   max-width: 560px;
   margin: 0px auto;
-  margin-bottom: 40px;
+}
+#sign-in-form legend,
+#sign-up-form legend {
+  border: none;
+}
+#sign-in-form .form-actions,
+#sign-up-form .form-actions {
+  background: none;
+  border: none;
 }
 #dashboard section.title {
   margin-bottom: 10px;
@@ -8399,6 +8462,16 @@ div#opportunity-show .description .content {
   margin: 0;
   padding-top: 5px;
 }
+.instructions-modal .modal-header {
+  background-color: #69b645;
+}
+.instructions-modal .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+.instructions-modal .modal-body {
+  color: #666550;
+}
 #dot-required .modal-header {
   background-color: #69b645;
 }
@@ -8407,6 +8480,26 @@ div#opportunity-show .description .content {
   font-weight: normal;
 }
 #dot-required .modal-body {
+  color: #666550;
+}
+#upgrading-license-required .modal-header {
+  background-color: #69b645;
+}
+#upgrading-license-required .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#upgrading-license-required .modal-body {
+  color: #666550;
+}
+#update-credit-card .modal-header {
+  background-color: #69b645;
+}
+#update-credit-card .modal-header h3 {
+  color: white;
+  font-weight: normal;
+}
+#update-credit-card .modal-body {
   color: #666550;
 }
 #bid-new .modal-header {
@@ -8435,7 +8528,7 @@ div#opportunity-show .description .content {
   float: left;
   padding-top: 5px;
   text-align: left;
-  width: 140px;
+  width: 155px;
 }
 #bid-new .ng-pristine .control-group .help-block {
   display: none;
