@@ -185,6 +185,14 @@ describe Opportunity do
         opportunity.companies_to_notify.map(&:id).should_not include(buyer.id)
       end
     end
+
+    context "when company does not have the vehicle" do
+      it "excludes the company" do
+        ma_company.set(:vehicles, ["Sedan"])
+        opportunity = FactoryGirl.build(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts", vehicle_type: "Bus")
+        opportunity.companies_to_notify.to_a.should =~ [ca_ma_company, national_company]
+      end
+    end
   end
 
   describe "validate reserve amount and win it now price" do

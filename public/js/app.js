@@ -1147,7 +1147,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount;
+  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1291,7 +1291,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
-  return $scope.updateProduct = function(product) {
+  $scope.updateProduct = function(product) {
     if (!confirm("Are you sure?")) {
       return;
     }
@@ -1305,6 +1305,22 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
+  };
+  vehicleOptions = function() {
+    return _.difference($scope.VEHICLE_TYPES, $scope.companyProfile.vehicles);
+  };
+  $scope.vehicleOptions = vehicleOptions();
+  $scope.addVehicle = function() {
+    var _base;
+    (_base = $scope.companyProfile).vehicles || (_base.vehicles = []);
+    $scope.companyProfile.vehicles.push($scope.newVehicle);
+    return $scope.vehicleOptions = vehicleOptions();
+  };
+  return $scope.removeVehicle = function(vehicle) {
+    $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
+      return vehicle === item;
+    });
+    return $scope.vehicleOptions = vehicleOptions();
   };
 };
 

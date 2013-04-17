@@ -36,6 +36,7 @@ class Company
   field :last_upgraded_at, type: Time
   field :has_ada_vehicles, type: Boolean, default: false
   field :locked_at, type: Time
+  field :vehicles, type: Array, default: []
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String

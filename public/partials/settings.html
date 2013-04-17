@@ -8,6 +8,7 @@
     <ul class="nav nav-tabs">
       <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
       <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
+      <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
       <li ng-class="{active:selectedTab == 'licensed-regions'}"><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
     </ul>
     <div class="tab-content">
@@ -93,13 +94,7 @@
                 <p class="help-block warning">Required for bidding.</p>
               </div>
             </div>
-            <div class="control-group">
-              <label for="has_ada_vehicles" class="control-label">Fleet includes ADA vehicles?</label>
-              <div class="controls">
-                <input id="has_ada_vehicles" type="checkbox" ng-model="companyProfile.has_ada_vehicles" value="1">
-                <p class="help-block warning">Required for bidding on ADA opportunities.</p>
-              </div>
-            </div>
+
             <div class="control-group">
               <label for="insurance" class="control-label">Insurance</label>
               <div class="controls">
@@ -124,13 +119,6 @@
                   <div class="bar" style="width: 0%;"></div>
                 </div>
                 <img class="image-preview" ng-src="{{companyProfile.logo_url}}"/>
-              </div>
-            </div>
-
-            <div class="control-group" ng-class="{error:settingsCompanyProfile.fleet_size.$invalid}">
-              <label for="fleet-size" class="control-label">Fleet Size *</label>
-              <div class="controls">
-                <input id="fleet-size" name="fleet_size" type="text" class="input-xlarge" ng:model="companyProfile.fleet_size" required />
               </div>
             </div>
 
@@ -209,6 +197,47 @@
         </form>
       </div>
 
+      <div ng-class="{active:selectedTab == 'fleet'}" class="tab-pane modal-content" id="fleet">
+        <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
+          <fieldset>
+            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+
+            <div class="control-group">
+              <label for="has_ada_vehicles" class="control-label">Fleet includes ADA vehicles?</label>
+              <div class="controls">
+                <input id="has_ada_vehicles" type="checkbox" ng-model="companyProfile.has_ada_vehicles" value="1">
+                <p class="help-block warning">Required for bidding on ADA opportunities.</p>
+              </div>
+            </div>
+
+            <div class="control-group" ng-class="{error:settingsCompanyProfile.fleet_size.$invalid}">
+              <label for="fleet-size" class="control-label">Fleet Size *</label>
+              <div class="controls">
+                <input id="fleet-size" name="fleet_size" type="text" class="input-xlarge" ng:model="companyProfile.fleet_size" required />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="vehicle-type" class="control-label">Vehicle Type</label>
+              <div class="controls">
+                <ul>
+                  <li ng-repeat="vehicle in companyProfile.vehicles">
+                    {{vehicle}} <a ng-click="removeVehicle(vehicle)" class="icon icon-trash"></a>
+                  </li>
+                </ul>
+                <select id="vehicle-type" name="vehicle-type" ng-model="newVehicle" ng-options="t for t in vehicleOptions">
+                  <option value="">Select</option>
+                </select>
+                <button class="btn" ng-click="addVehicle()">Add</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
       <div ng-class="{active:selectedTab == 'licensed-regions'}" class="tab-pane" id="licensed-regions">
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
         <div class="national-subscription" ng-show="company.subscription_plan == 'subout-national-service'">

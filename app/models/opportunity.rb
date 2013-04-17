@@ -86,7 +86,8 @@ class Opportunity
       options << {:subscription_plan => 'subout-partner'}
       options << {:regions.in => regions}
     end
-    Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
+    companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
+    companies.select { |c| notify_to_vehicle_owner?(c.vehicles) }
   end
 
   def notified_companies
@@ -324,5 +325,11 @@ class Opportunity
     else
       errors.add(:reserve_amount, "cannot be less than win it now price") if self.reserve_amount < self.win_it_now_price
     end
+  end
+
+  def notify_to_vehicle_owner?(vehicles)
+    return true if vehicles.blank?
+    return true if vehicle_type.blank?
+    vehicles.include?(vehicle_type)
   end
 end
