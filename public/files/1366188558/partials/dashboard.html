@@ -157,7 +157,7 @@
                       <span>Bidding ends:</span>
                       <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
                     </div>
-                    <div ng-hide="event.eventable.status == 'In progress'" class="warning">
+                    <div ng-show="event.eventable.status && event.eventable.status != 'In progress'" class="warning">
                       <span>Bidding ended</span>
                     </div>
                     <div ng-show="event.eventable.reserve_amount">
@@ -172,7 +172,7 @@
                   <div ng-show="company.isLicensedToBidOnOpportunityOf(event)">
                     <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
                       <div>
-                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                       </div>
                       <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
                         <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>

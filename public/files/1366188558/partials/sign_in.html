@@ -1,11 +1,6 @@
 <header id="header">
-    <div class="inner">
-        <div class="row-fluid">
-            <div class="span6">
-                <div id="logo"><img src="/img/logo.png"></div>
-            </div>
-        </div>
-    </div>
+    <div id="logo"><img src="/img/logo.png"></div>
+    <div id="marketing-message"><div class="inner" ng-bind-html-unsafe="marketing_message.value"></div></div>
 </header>
 
 <div class="alert alert-error" ng:show="isOldBrowser">
@@ -16,11 +11,13 @@
   By continuing with your current browser you acknowledge that your experience on this website may be degraded.
 </div>
 
-<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal well">
+<form id="sign-in-form" ng:submit="signIn()" name="signInForm" class="form-horizontal">
 	<fieldset>
-		<legend>
-			Sign In
-		</legend>
+    <div class="controls">
+      <legend>
+        Welcome! Please Sign In
+      </legend>
+    </div>
 		<p class="alert alert-error" ng:show="message">{{message}}</p>
 		<div class="control-group">
             <label for="email" class="control-label">Email</label>
@@ -52,3 +49,9 @@
         </div>
 	</fieldset>
 </form>
+<div id="buy-sell-connect">
+  <div class="inner">
+  Buy.Sell.Connect.<br/>
+  It's time to get on board.
+  </div>
+</div>
