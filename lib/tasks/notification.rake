@@ -9,6 +9,7 @@ namespace :subout do
       opportunity.save(validate: false)
     end
   end
+
   task :fix_broken_chargify => :environment do
     Company.each do |company|
       email = company.email

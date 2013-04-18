@@ -26,6 +26,7 @@
           = link_to "# Ops ^", admin_companies_path(sort_by: "auctions_count", sort_direction: "desc")
         - else
           = link_to "# Ops v", admin_companies_path(sort_by: "auctions_count", sort_direction: "asc")
+      %th # Expired Ops
       %th
         - if @sort_by != "bids_count"
           = link_to "# Bids", admin_companies_path(sort_by: "bids_count", sort_direction: "desc")
@@ -56,6 +57,7 @@
           = company.subscription_plan
           %br
           = company.regions if company.state_by_state_subscriber?
+        %td= company.auctions_expired_count
         %td= company.auctions_count
         %td= company.bids_count
         %td= company.total_won_bids_count

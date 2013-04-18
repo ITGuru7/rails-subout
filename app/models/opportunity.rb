@@ -47,6 +47,7 @@ class Opportunity
   scope :recent, -> { desc(:created_at) }
   scope :won, -> { where(:winning_bid_id.ne => nil) }
   scope :by_region, ->(region) { where(start_region: region) }
+  scope :expired, -> { where(expired_notification_sent: true) }
 
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
@@ -121,6 +122,7 @@ class Opportunity
 
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
+      opportunity.buyer.inc(:auctions_expired_count, 1)
       Notifier.delay.expired_auction_notification(opportunity.id)
       opportunity.set(:expired_notification_sent, true)
     end

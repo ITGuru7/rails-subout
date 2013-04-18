@@ -48,6 +48,7 @@ class Company
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
   field :auctions_count, type: Integer, default: 0
+  field :auctions_expired_count, type: Integer, default: 0
   field :bids_count, type: Integer, default: 0
 
   scope :recent, -> { desc(:created_at) }
