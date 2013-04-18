@@ -1,6 +1,7 @@
 class Company
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   field :name, type: String
   field :email, type: String
@@ -79,6 +80,8 @@ class Company
   before_create :set_subscription_info
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
+
+  search_in :name, :email
 
   def check_nils
     errors.add(:favorite_supplier_ids, "is not defined") if favorite_supplier_ids.nil?

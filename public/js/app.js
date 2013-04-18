@@ -615,8 +615,12 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
   };
 };
 
-NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Company, FavoriteInvitation) {
+NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Company, FavoriteInvitation, soValidateEmail) {
   var successUpdate;
+  $scope.companyNotFound = false;
+  $scope.showInvitation = false;
+  $scope.foundCompanies = [];
+  $scope.invitation = {};
   successUpdate = function() {
     if ($rootScope.isMobile) {
       return $location.path('/favorites');
@@ -624,7 +628,6 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
       return $rootScope.closeModal();
     }
   };
-  $scope.invitation = {};
   $scope.addToFavorites = function(company) {
     return Favorite.save({
       supplier_id: company._id,
@@ -635,26 +638,23 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
     });
   };
   return $scope.findSupplier = function() {
-    if ($scope.supplierEmail === $rootScope.company.email) {
+    if ($scope.supplierQuery === $rootScope.company.email) {
       return true;
     }
-    Company.search({
-      email: $scope.supplierEmail,
+    $scope.foundCompanies = Company.search({
+      query: $scope.supplierQuery,
       api_token: $rootScope.token.api_token,
       action: "search"
-    }, {}, function(company) {
-      $scope.showCompany = true;
-      $scope.companyNotFound = false;
-      return $scope.foundCompany = company;
-    }, function(error) {
-      $scope.showCompany = false;
-      return $scope.companyNotFound = true;
+    }, function(companies) {
+      $scope.companyNotFound = companies.length === 0;
+      if (soValidateEmail($scope.supplierQuery) && $scope.companyNotFound) {
+        $scope.showInvitation = true;
+        $scope.invitation.supplier_email = $scope.supplierQuery;
+        return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on SubOut.";
+      } else {
+        return $scope.showInvitation = false;
+      }
     });
-    $scope.showInvitationForm = function() {
-      $scope.showInvitation = true;
-      $scope.invitation.supplier_email = $scope.supplierEmail;
-      return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on SubOut.";
-    };
     return $scope.sendInvitation = function() {
       return FavoriteInvitation.save({
         favorite_invitation: $scope.invitation,
@@ -1652,6 +1652,14 @@ suboutSvcs.factory("Setting", function($resource) {
   });
 });
 
+suboutSvcs.factory("soValidateEmail", function() {
+  return function(email) {
+    var re;
+    re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
+});
+
 suboutSvcs.factory("Auction", function($resource) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId',
@@ -1757,7 +1765,8 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     },
     search: {
       method: "GET",
-      action: "search"
+      action: "search",
+      isArray: true
     },
     update_regions: {
       method: "PUT",

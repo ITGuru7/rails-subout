@@ -14,8 +14,8 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   end
 
   def search
-    @company = Company.find_by(email: params[:email])
-    respond_with_namespace(@company)
+    @companies = Company.search(params[:query]).limit(20)
+    render json: @companies
   end
 
   def update
