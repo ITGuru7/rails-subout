@@ -609,7 +609,7 @@ FavoritesCtrl = function($scope, $rootScope, Favorite) {
       favoriteId: company._id
     }, function() {
       var index;
-      index = $scope.favoriteCompanies.indexOf(company);
+      index = _.indexOf($scope.favoriteCompanies, company);
       return $scope.favoriteCompanies.splice(index, 1);
     });
   };
