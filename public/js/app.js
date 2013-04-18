@@ -1141,9 +1141,15 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.clearRegionFilter = function() {
     return $scope.regionFilter = $scope.filterValue;
   };
-  return $scope.clearCompanyFilter = function() {
+  $scope.clearCompanyFilter = function() {
     return $scope.companyFilter = $scope.filterValue;
   };
+  return $rootScope.$watch(function() {
+    return $location.absUrl();
+  }, function(newPath, oldPath) {
+    $scope.query = $location.search().q;
+    return $scope.refreshEvents();
+  });
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
