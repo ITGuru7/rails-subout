@@ -11,6 +11,9 @@
         <input id="supplier_email" required type="email" placeholder="Supplier Email" ng-model="supplierEmail" />
         <button class="btn btn-primary" ng-disabled="newFavorite.$invalid" ng-click="findSupplier(foundCompany)">Find Supplier</button>
       </form>
+      <div ng-show="supplierEmail == company.email">
+        You couldn't add yourself. Please make sure email address.
+      </div>
       <div ng-show="showCompany">
         {{foundCompany.name}}
         <a ng-click="addToFavorites(foundCompany)">Add to Favorites</a>

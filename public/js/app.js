@@ -635,6 +635,9 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
     });
   };
   return $scope.findSupplier = function() {
+    if ($scope.supplierEmail === $rootScope.company.email) {
+      return true;
+    }
     Company.search({
       email: $scope.supplierEmail,
       api_token: $rootScope.token.api_token,
