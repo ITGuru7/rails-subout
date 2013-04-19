@@ -675,6 +675,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.endPage = 1;
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
+  $scope.filterTripType = null;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -721,7 +722,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       sort_by: $scope.sortBy,
       sort_direction: $scope.sortDirection,
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
-      vehicle_type: $scope.filterVehicleType
+      vehicle_type: $scope.filterVehicleType,
+      trip_type: $scope.filterTripType
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -759,6 +761,9 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   };
   $scope.sortOpportunities('bidding_ends_at');
   $scope.$watch("filterDepatureDate", function() {
+    return $scope.loadMoreOpportunities(1);
+  });
+  $scope.$watch("filterVehicleType", function() {
     return $scope.loadMoreOpportunities(1);
   });
   return $scope.$watch("filterVehicleType", function() {

@@ -200,11 +200,12 @@ class Company
     self.favoriting_buyer_ids.include?(other_company.id)
   end
 
-  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil)
+  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil, trip_type=nil)
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
     start_date = nil if start_date == "null" or start_date.blank?
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
+    trip_type = nil if trip_type == "null" or trip_type.blank?
 
     options = []
     options << {:buyer_id.in => self.favoriting_buyer_ids}
@@ -221,6 +222,7 @@ class Company
     }
     conditions[:start_date] = start_date if start_date
     conditions[:vehicle_type] = vehicle_type if vehicle_type
+    conditions[:trip_type] = trip_type if trip_type
     Opportunity.any_of(*options).where(conditions).order_by(sort_by => sort_direction)
   end
 
