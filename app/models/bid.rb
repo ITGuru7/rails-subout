@@ -177,7 +177,7 @@ class Bid
     return unless opportunity
 
     if opportunity.ada_required? and !bidder.has_ada_vehicles?
-      errors.add :bidder_id, "should have ADA vehicles to bid on ADA opportunities."
+      errors.add :base, "Please indicate that your fleet includes ADA vehicles before continuing."
     end
   end
 
