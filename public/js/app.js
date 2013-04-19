@@ -766,7 +766,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.$watch("filterVehicleType", function() {
     return $scope.loadMoreOpportunities(1);
   });
-  return $scope.$watch("filterVehicleType", function() {
+  return $scope.$watch("filterTripType", function() {
     return $scope.loadMoreOpportunities(1);
   });
 };
