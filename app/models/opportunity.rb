@@ -24,8 +24,8 @@ class Opportunity
   field :winning_bid_id, type: String
   field :seats, type: Integer
   field :type, type: String
-  field :vehicle_type, type: String
-  field :trip_type, type: String
+  field :vehicle_type, type: String, default: ""
+  field :trip_type, type: String, default: ""
   field :canceled, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
   field :expired_notification_sent, type: Boolean, default: false
@@ -69,8 +69,10 @@ class Opportunity
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
-  validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"] }
-  validates :trip_type, inclusion: { in: [nil, "One way", "Round trip", "Over the road"] }
+
+  #TODO this validation doesn't work correctly, if we enable this, it doesn't save any vehicle_type or trip_type
+  #validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"] }
+  #validates :trip_type, inclusion: { in: [nil, "One way", "Round trip", "Over the road"] }
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
 
