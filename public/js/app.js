@@ -1328,6 +1328,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     var _base;
     (_base = $scope.companyProfile).vehicles || (_base.vehicles = []);
     $scope.companyProfile.vehicles.push($scope.newVehicle);
+    $scope.newVehicle = "";
     return $scope.vehicleOptions = vehicleOptions();
   };
   return $scope.removeVehicle = function(vehicle) {

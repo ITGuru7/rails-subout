@@ -235,7 +235,7 @@
                 <select id="vehicle-type" name="vehicle-type" ng-model="newVehicle" ng-options="t for t in vehicleOptions">
                   <option value="">Select</option>
                 </select>
-                <button class="btn" ng-click="addVehicle()">Add</button>
+                <button class="btn" ng-click="addVehicle()" ng-disabled="!newVehicle">Add</button>
               </div>
             </div>
 
