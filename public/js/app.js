@@ -924,6 +924,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.query = $location.search().q;
   $scope.filter = null;
   $scope.opportunity = null;
+  $scope.events = [];
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
@@ -934,6 +935,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     if ($scope.noMoreEvents || $scope.loading) {
       return;
     }
+    console.log("loading");
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
@@ -952,6 +954,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     });
   };
   $scope.refreshEvents = function(callback) {
+    console.log("refresh Events");
     $scope.events = [];
     $scope.currentPage = 1;
     $scope.noMoreEvents = false;
@@ -1035,26 +1038,22 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   setRegionFilter = function() {
     if ($scope.regionFilter) {
-      $location.search('region', $scope.regionFilter);
+      return $location.search('region', $scope.regionFilter);
     } else {
-      $location.search('region', null);
+      return $location.search('region', null);
     }
-    return $scope.refreshEvents();
   };
   setCompanyFilter = function() {
     if ($scope.companyFilter) {
-      $location.search('company_id', $scope.companyFilter);
+      return $location.search('company_id', $scope.companyFilter);
     } else {
-      $location.search('company_id', null);
+      return $location.search('company_id', null);
     }
-    return $scope.refreshEvents();
   };
-  $scope.$watch("regions", function() {
-    $scope.regionFilter = $location.search().region;
-    $scope.$watch("regionFilter", setRegionFilter);
-    $scope.companyFilter = $location.search().company_id;
-    return $scope.$watch("companyFilter", setCompanyFilter);
-  });
+  $scope.regionFilter = $location.search().region;
+  $scope.$watch("regionFilter", setRegionFilter);
+  $scope.companyFilter = $location.search().company_id;
+  $scope.$watch("companyFilter", setCompanyFilter);
   $scope.setOpportunityTypeFilter = function(opportunity_type) {
     if ($location.search().opportunity_type === opportunity_type) {
       $location.search('opportunity_type', null);
@@ -1151,6 +1150,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $location.absUrl();
   }, function(newPath, oldPath) {
     $scope.query = $location.search().q;
+    console.log("refresh events");
     return $scope.refreshEvents();
   });
 };
