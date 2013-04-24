@@ -7870,6 +7870,9 @@ body {
   position: relative;
   background: #FFFFFF;
 }
+#ratingForm .question {
+  margin-bottom: 10px;
+}
 #pageWrapper.signin {
   height: 666px;
 }

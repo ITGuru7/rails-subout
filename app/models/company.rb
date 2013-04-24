@@ -59,6 +59,9 @@ class Company
   belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company
   belongs_to :created_from_subscription, class_name: 'GatewaySubscription', inverse_of: :created_company
 
+  has_many :ratings_given, class_name: 'Rating', inverse_of: :rater 
+  has_many :ratings_taken, class_name: 'Rating', inverse_of: :ratee
+
   has_many :users
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :bids, foreign_key: 'bidder_id'

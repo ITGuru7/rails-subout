@@ -1,0 +1,4 @@
+%p Dear #{@bidder.name},
+%p This is trip competion confirmation email for the opportunity #{link_to @auction.name, "http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{@auction.reference_number}"}
+%p Please click #{link_to "here", "http://#{DEFAULT_HOST_WITH_PORT}/#/ratings/#{@rating.id}"} to write feedback to #{@poster.name}
+= render 'email_sig'

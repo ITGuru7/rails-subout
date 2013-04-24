@@ -53,6 +53,33 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @auction.buyer.notifiable_email)
   end
 
+  def completed_auction_notification_to_buyer(opportunity_id)
+    @auction = Opportunity.find(opportunity_id)
+    @bid = @auction.winning_bid
+    @poster = @auction.buyer
+    @bidder = @bid.bidder
+
+    @rating = Rating.where(rater_id: @poster.id, ratee_id: @bidder.id).first
+    @rating = Rating.create(rater_id: @poster.id, ratee_id: @bidder.id) if @rating.blank?
+    @rating.unlock!
+
+    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @auction.buyer.notifiable_email)
+  end
+
+  def completed_auction_notification_to_supplier(opportuninty_id)
+    @auction = Opportunity.find(auction_id)
+    @bid = @auction.winning_bid
+    @poster = @auction.buyer
+    @bidder = @bid.bidder
+
+    @rating = Rating.where(rater_id: @bidder.id, ratee_id: @poster.id).first
+    @rating = Rating.create(rater_id: @bidder.id, ratee_id: @poster.id) if @rating.blank?
+    @rating.editable = true
+    @rating.save
+
+    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bid.bidder.notifiable_email)
+  end
+
   def subscription_confirmation(subscription_id)
     @subscription = GatewaySubscription.find(subscription_id)
 

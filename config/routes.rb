@@ -72,6 +72,8 @@ Subout::Application.routes.draw do
         resources :bids
         resources :comments
       end
+
+      resources :ratings
     end
   end
 

@@ -103,6 +103,10 @@ subout.config([
       templateUrl: suboutPartialPath("favorites.html"),
       controller: FavoritesCtrl,
       resolve: resolveAuth
+    }).when("/companies/:company_id", {
+      templateUrl: suboutPartialPath("company-detail.html"),
+      controller: CompanyProfileCtrl,
+      resolve: resolveAuth
     }).when("/welcome-prelaunch", {
       templateUrl: suboutPartialPath("welcome-prelaunch.html"),
       controller: WelcomePrelaunchCtrl,
@@ -940,7 +944,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     if ($scope.noMoreEvents || $scope.loading) {
       return;
     }
-    console.log("loading");
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
@@ -959,7 +962,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     });
   };
   $scope.refreshEvents = function(callback) {
-    console.log("refresh Events");
     $scope.events = [];
     $scope.currentPage = 1;
     $scope.noMoreEvents = false;
@@ -1155,7 +1157,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $location.absUrl();
   }, function(newPath, oldPath) {
     $scope.query = $location.search().q;
-    console.log("refresh events");
     return $scope.refreshEvents();
   });
 };
@@ -1447,7 +1448,40 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   };
 };
 
-CompanyProfileCtrl = function($rootScope, $scope, $timeout, Favorite) {
+CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
+  var company_id;
+  $scope.stars = [1, 2, 3, 4, 5];
+  $scope.rating = {};
+  if ($rootScope.other_company) {
+    company_id = $rootScope.other_company.id;
+  }
+  if ($routeParams.company_id) {
+    company_id = $routeParams.company_id;
+  }
+  if ($routeParams.company_id) {
+    $rootScope.other_company = Company.get({
+      api_token: $rootScope.token.api_token,
+      companyId: company_id
+    }, function(company) {
+      return $scope.rating = company.ratingFromCompany($rootScope.company);
+    }, function(error) {
+      return $location.path("/dashboard");
+    });
+  }
+  $scope.updateRating = function() {
+    console.log($scope.rating);
+    return Rating.update({
+      ratingId: $scope.rating._id,
+      rating: $scope.rating,
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      return $location.search({
+        reload: new Date().getTime()
+      });
+    }, function(content) {
+      return console.log("rating updated failed");
+    });
+  };
   return $scope.addToFavorites = function(company) {
     $scope.notice = null;
     return Favorite.save({
@@ -1686,6 +1720,22 @@ suboutSvcs.factory("Auction", function($resource) {
   });
 });
 
+suboutSvcs.factory("Rating", function($resource) {
+  var r1, r2;
+  r2 = $resource("" + api_path + "/ratings/search/:rateeId", {
+    rateeId: '@rateeId'
+  });
+  r1 = $resource("" + api_path + "/ratings/:ratingId", {
+    ratingId: '@ratingId'
+  }, {
+    update: {
+      method: "PUT"
+    }
+  });
+  r1.search = r2.get.bind(r2);
+  return r1;
+});
+
 suboutSvcs.factory("Opportunity", function($resource) {
   var Opportunity;
   Opportunity = $resource("" + api_path + "/opportunities/:opportunityId", {}, {
@@ -1788,6 +1838,16 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       return this.regions.join(', ');
     } else {
       return "Nationwide";
+    }
+  };
+  Company.prototype.ratingFromCompany = function(company) {
+    var r, _i, _len, _ref;
+    _ref = this.ratings_taken;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      r = _ref[_i];
+      if (r.rater._id === company._id) {
+        return r;
+      }
     }
   };
   Company.prototype.canBeAddedAsFavorite = function(company) {
