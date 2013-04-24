@@ -66,17 +66,15 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @auction.buyer.notifiable_email)
   end
 
-  def completed_auction_notification_to_supplier(opportuninty_id)
-    @auction = Opportunity.find(auction_id)
+  def completed_auction_notification_to_supplier(opportunity_id)
+    @auction = Opportunity.find(opportunity_id)
     @bid = @auction.winning_bid
     @poster = @auction.buyer
     @bidder = @bid.bidder
 
     @rating = Rating.where(rater_id: @bidder.id, ratee_id: @poster.id).first
     @rating = Rating.create(rater_id: @bidder.id, ratee_id: @poster.id) if @rating.blank?
-    @rating.editable = true
-    @rating.save
-
+    @rating.unlock!
     mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bid.bidder.notifiable_email)
   end
 

@@ -57,7 +57,6 @@ class Opportunity
   has_many :bids
   embeds_many :comments
   belongs_to :winning_bid, :class_name => "Bid"
-  belongs_to :rating, :class_name => "Rating", inverse_of: "auction"
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
   validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true
@@ -134,7 +133,7 @@ class Opportunity
   end
 
   def self.send_completed_notification
-    where(:ends_at.lte => Time.now, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
+    where(:end_date.lte => Date.today, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
       Notifier.delay.completed_auction_notification_to_buyer(opportunity.id)
       Notifier.delay.completed_auction_notification_to_supplier(opportunity.id)
       opportunity.set(:completed_notification_sent, true)
