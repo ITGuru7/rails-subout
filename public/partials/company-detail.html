@@ -68,11 +68,9 @@
               <div class="span9">{{detailed_company.tpa}}</div>
           </div>
 
-          <hr/>
-
-          <h5>Rating from you</h5>
-          
-          <form name="newRating" id="ratingForm" class="form-horizontal" novalidate>
+          <form name="newRating" id="ratingForm" class="form-horizontal" novalidate ng-show="rating.editable">
+            <hr/>
+            <h5>Rating from you</h5>
             <div class="row-fluid question">
                 <div class="span3">1. Communication</div>
                 <div class="span3">
@@ -149,10 +147,10 @@
             </div>
           </form>
 
-          <hr />
 
-          <h5>RATINGS THIS COMPANY TAKEN</h5>
-          <div id="ratings">
+          <div id="ratings" ng-show="detailed_company.ratings_taken.length">
+            <hr />
+            <h5>RATINGS THIS COMPANY TAKEN</h5>
             <div ng-repeat="r in detailed_company.ratings_taken" class="row-fluid" ng-show="r.score" >
               <div class="span3">
                 <a data-toggle="modal" href="#modal"  ng-click="displayCompanyProfile(r.rater._id)">{{r.rater.name}}</a> gave <a ng-click="displayRating(r)">({{r.score}}) score</a>

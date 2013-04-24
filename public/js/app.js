@@ -394,11 +394,13 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     });
   };
   $rootScope.displayCompanyProfile = function(company_id) {
-    $rootScope.other_company = Company.get({
+    return Company.get({
       api_token: $rootScope.token.api_token,
       companyId: company_id
+    }, function(company) {
+      $rootScope.other_company = company;
+      return $rootScope.setModal(suboutPartialPath('company-profile.html'));
     });
-    return $rootScope.setModal(suboutPartialPath('company-profile.html'));
   };
   $rootScope.dateOptions = {
     dateFormat: 'mm/dd/yy'
