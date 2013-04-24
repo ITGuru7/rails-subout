@@ -55,6 +55,7 @@ class Company
   scope :recent, -> { desc(:created_at) }
 
   attr_accessor :password, :password_confirmation
+  attr_protected :ratings_taken
 
   belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company
   belongs_to :created_from_subscription, class_name: 'GatewaySubscription', inverse_of: :created_company

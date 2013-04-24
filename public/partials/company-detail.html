@@ -15,60 +15,57 @@
     <section class="section-content">
       <div class="row-fluid">
         <div class="span3">
-            <h4>{{other_company.name}}</h4>
-            <div ng-show="other_company.score">
-                <span ng-repeat="s in stars" ng-class="{ hide: s > Math.ceil(other_company.score) }"> * </span>
-                ( {{other_company.score}} )
+            <h4>{{detailed_company.name}}</h4>
+            <div ng-show="detailed_company.score">
+              <span ng-repeat="s in stars" ng-class="{ hide: s > detailed_company.score }"> <img src="/img/icon-star.jpg"> </span>
+                ( {{detailed_company.score}} )
             </div>
-            <div><img ng-show="other_company.logo" class="logo" ng-src="{{other_company.logo}}" /></div>
-            <div>
-              <a href="mailto:{{other_company.email}}">{{other_company.contact_name}} ({{other_company.email}})</a>
-            </div>
-            <div class="add-to-favorites" ng-show="other_company.canBeAddedAsFavorite(company)">
-              <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
+            <div><img ng-show="detailed_company.logo" class="logo" ng-src="{{detailed_company.logo}}" /></div>
+            <div class="add-to-favorites" ng-show="detailed_company.canBeAddedAsFavorite(company)">
+              <a ng-click="addToFavorites(detailed_company)">Add to Favorites</a>
             </div>
         </div>
        
         <div class="span9">
           <div class="row-fluid">
               <div class="span3">DOT Number:</div>
-              <div class="span9"><a target="_blank" href="http://www.safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={{other_company.dot_number}}">{{other_company.dot_number}}</a></div>
+              <div class="span9"><a target="_blank" href="http://www.safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={{detailed_company.dot_number}}">{{detailed_company.dot_number}}</a></div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">Insurance</div>
-              <div class="span9"><a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno={{other_company.dot_number}}">{{other_company.insurance}}</a></div>
+              <div class="span9"><a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno={{detailed_company.dot_number}}">{{detailed_company.insurance}}</a></div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">Fleet Size:</div>
-              <div class="span9">{{other_company.fleet_size}}</div>
+              <div class="span9">{{detailed_company.fleet_size}}</div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">Contact:</div>
               <div class="span9">
-                <a href="mailto:{{other_company.email}}">{{other_company.contact_name}} ({{other_company.email}})</a>
+                <a href="mailto:{{detailed_company.email}}">{{detailed_company.contact_name}} ({{detailed_company.email}})</a>
               </div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">Contact Phone:</div>
               <div class="span9">
-                {{other_company.contact_phone}}
+                {{detailed_company.contact_phone}}
               </div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">Website:</div>
               <div class="span9">
-                  <a href="{{other_company.website | websiteUrl}}" target="_blank">{{other_company.website}}</a>
+                  <a href="{{detailed_company.website | websiteUrl}}" target="_blank">{{detailed_company.website}}</a>
               </div>
           </div>
 
           <div class="row-fluid">
               <div class="span3">TPA:</div>
-              <div class="span9">{{other_company.tpa}}</div>
+              <div class="span9">{{detailed_company.tpa}}</div>
           </div>
 
           <hr/>
@@ -79,7 +76,7 @@
             <div class="row-fluid question">
                 <div class="span3">1. Communication</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.communication }"> * </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.communication }"> <img src="/img/icon-star.jpg">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_communication" name="rating_communication" ng-model="rating.communication" ng-options="s for s in stars" required>
@@ -90,7 +87,7 @@
             <div class="row-fluid question">
                 <div class="span3">2. Punctuality</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.punctuality }"> * </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.punctuality }"> <img src="/img/icon-star.jpg">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_punctuality" name="rating_punctuality" ng-model="rating.punctuality" ng-options="s for s in stars" required>
@@ -99,9 +96,9 @@
                 </div>
             </div>
             <div class="row-fluid question">
-                <div class="span3">3. ease of Payment</div>
+                <div class="span3">3. Ease of Payment</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.ease_of_payment }"> * </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.ease_of_payment }"> <img src="/img/icon-star.jpg">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_ease_of_payment" name="rating_ease_of_payment" ng-model="rating.ease_of_payment" ng-options="s for s in stars" required>
@@ -112,7 +109,7 @@
             <div class="row-fluid question">
                 <div class="span3">4. Over all experience</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.over_all_experience }"> * </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.over_all_experience }"> <img src="/img/icon-star.jpg">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_over_all_experience" name="rating_over_all_experience" ng-model="rating.over_all_experience" ng-options="s for s in stars" required>
@@ -123,7 +120,7 @@
             <div class="row-fluid question">
                 <div class="span3">5. How likely are you to use this company again</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.like_again }"> * </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.like_again }"> <img src="/img/icon-star.jpg">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_like_again" name="rating_like_again" ng-model="rating.like_again" ng-options="s for s in stars">
@@ -156,12 +153,13 @@
 
           <h5>RATINGS THIS COMPANY TAKEN</h5>
           <div id="ratings">
-            <div ng-repeat="r in other_company.ratings_taken" class="row-fluid" ng-show="r.score" >
+            <div ng-repeat="r in detailed_company.ratings_taken" class="row-fluid" ng-show="r.score" >
               <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > Math.ceil(r.score) }"> * </span>
-                  <span class="pull-right">( {{r.score}} )</span>
+                <a data-toggle="modal" href="#modal"  ng-click="displayCompanyProfile(r.rater._id)">{{r.rater.name}}</a> gave <a ng-click="displayRating(r)">({{r.score}}) score</a>
               </div>
-              <div class="span3">from {{r.rater.name}}</div>
+              <div class="span9">
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > r.score }"> <img src="/img/icon-star.jpg">  </span>
+              </div>
             </div>
           </div>
         </div>

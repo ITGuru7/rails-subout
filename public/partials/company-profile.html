@@ -61,6 +61,13 @@
                 <div class="span3">TPA:</div>
                 <div class="span9">{{other_company.tpa}}</div>
             </div>
+            <div ng-show="other_company.score" class="row-fluid">
+              <div class="span3">Score:</div>
+              <div class="span9">
+                <span ng-repeat="s in stars" ng-class="{ hide: s > other_company.score }"> <img src="/img/icon-star.jpg"> </span>
+                ( {{other_company.score}} )
+              </div>
+            </div>
         </section>
     </div>
 </div>

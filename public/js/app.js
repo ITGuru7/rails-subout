@@ -105,7 +105,7 @@ subout.config([
       resolve: resolveAuth
     }).when("/companies/:company_id", {
       templateUrl: suboutPartialPath("company-detail.html"),
-      controller: CompanyProfileCtrl,
+      controller: CompanyDetailCtrl,
       resolve: resolveAuth
     }).when("/welcome-prelaunch", {
       templateUrl: suboutPartialPath("welcome-prelaunch.html"),
@@ -143,11 +143,12 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
+  $rootScope.stars = [1, 2, 3, 4, 5];
   $('#modal').on('hidden', function() {
     var $scope, modalElement, modalScope;
     $scope = angular.element(document).scope();
@@ -373,6 +374,24 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       delete $rootScope.opportunity[property];
     }
     return $rootScope.opportunity.clone = true;
+  };
+  $rootScope.displayRating = function(rating) {
+    return alert("Not implemented yet, I think that it should display popup with rating details.");
+  };
+  $rootScope.addToFavorites = function(company) {
+    $scope.notice = null;
+    return Favorite.save({
+      supplier_id: company._id,
+      api_token: $rootScope.token.api_token
+    }, {}, function() {
+      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
+      company.favoriting_buyer_ids.push($rootScope.company._id);
+      $scope.notice = "Successfully added to favorites.";
+      return $timeout(function() {
+        $scope.notice = null;
+        return $("#modal").modal("hide");
+      }, 2000);
+    });
   };
   $rootScope.displayCompanyProfile = function(company_id) {
     $rootScope.other_company = Company.get({
@@ -1448,28 +1467,22 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   };
 };
 
-CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
+CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
-  $scope.stars = [1, 2, 3, 4, 5];
   $scope.rating = {};
-  if ($rootScope.other_company) {
-    company_id = $rootScope.other_company.id;
+  company_id = $routeParams.company_id;
+  if (!company_id) {
+    $location.path("/dashboard");
   }
-  if ($routeParams.company_id) {
-    company_id = $routeParams.company_id;
-  }
-  if ($routeParams.company_id) {
-    $rootScope.other_company = Company.get({
-      api_token: $rootScope.token.api_token,
-      companyId: company_id
-    }, function(company) {
-      return $scope.rating = company.ratingFromCompany($rootScope.company);
-    }, function(error) {
-      return $location.path("/dashboard");
-    });
-  }
-  $scope.updateRating = function() {
-    console.log($scope.rating);
+  $scope.detailed_company = Company.get({
+    api_token: $rootScope.token.api_token,
+    companyId: company_id
+  }, function(company) {
+    return $scope.rating = company.ratingFromCompany($rootScope.company);
+  }, function(error) {
+    return $location.path("/dashboard");
+  });
+  return $scope.updateRating = function() {
     return Rating.update({
       ratingId: $scope.rating._id,
       rating: $scope.rating,
@@ -1482,21 +1495,10 @@ CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $time
       return console.log("rating updated failed");
     });
   };
-  return $scope.addToFavorites = function(company) {
-    $scope.notice = null;
-    return Favorite.save({
-      supplier_id: company._id,
-      api_token: $rootScope.token.api_token
-    }, {}, function() {
-      company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
-      company.favoriting_buyer_ids.push($rootScope.company._id);
-      $scope.notice = "Successfully added to favorites.";
-      return $timeout(function() {
-        $scope.notice = null;
-        return $("#modal").modal("hide");
-      }, 2000);
-    });
-  };
+};
+
+CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
+  return true;
 };
 
 (function() {
