@@ -323,6 +323,12 @@ class Company
     users.each(&:unlock_access!)
     self.update_attribute(:locked_at, nil)
   end
+  
+  def change_emails!(email)
+    self.update_attribute(:email, email)
+    self.created_from_subscription.update_attribute(:email, email)
+    self.users.first.update_attribute(:email, email)
+  end
 
   private
 

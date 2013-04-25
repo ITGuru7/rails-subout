@@ -22,3 +22,11 @@
 = form_tag add_as_a_favorite_admin_company_path(@company), method: "put", class: "form-horizontal" do
   = select_tag "company_id", options_from_collection_for_select(Company.not_in(_id: @company.favoriting_buyer_ids), "id", "name")
   = submit_tag "Add", class: "btn"
+
+%h3 Email
+= form_tag change_emails_admin_company_path(@company), method: "put", class: "form-horizontal" do
+  = text_field_tag "email", @company.email
+  = submit_tag "Submit", class: "btn"
+%p
+  %strong Notice:
+  This email will be applied to company, subscription and user.

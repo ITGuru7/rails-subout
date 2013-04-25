@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account, :unlock_account]
+  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -14,6 +14,11 @@ class Admin::CompaniesController < Admin::BaseController
 
   def edit
     @subscription = @company.created_from_subscription
+  end
+
+  def change_emails
+    @company.change_emails!(params[:email])
+    redirect_to edit_admin_company_path(@company), notice: 'All emails were updated successfully.'
   end
 
   def lock_account

@@ -88,6 +88,7 @@ Subout::Application.routes.draw do
         put "lock_account"
         put "unlock_account"
         put "add_as_a_favorite"
+        put "change_emails"
       end
     end
     resources :favorite_invitations, only: [:index] do
