@@ -10,10 +10,15 @@ class CompanySerializer < ActiveModel::Serializer
   def score
     return 0.0 if object.ratings_taken.blank?
     sum = 0.0
+    count = 0
+
     object.ratings_taken.each{|rating|
       sum = sum + rating.score
+      count = count + 1 if rating.score != 0
     }
-    sum / object.ratings_taken.count
+
+    return 0.0 if count == 0
+    return sum / count 
   end
 
   def logo_url

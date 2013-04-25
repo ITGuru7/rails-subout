@@ -1,7 +1,7 @@
 class Api::V1::OpportunitiesController < Api::V1::BaseController
   def index
     params[:page] ||= 1
-    opportunities = current_company.available_opportunities(params[:sort_by], params[:sort_direction], params[:start_date], params[:vehicle_type], params[:trip_type])
+    opportunities = current_company.available_opportunities(params[:sort_by], params[:sort_direction], params[:start_date], params[:vehicle_type], params[:trip_type], params[:query])
     meta = {
       :count =>  opportunities.count,
       :per_page => Opportunity.default_per_page,
