@@ -7873,9 +7873,6 @@ body {
 #ratingForm .question {
   margin-bottom: 10px;
 }
-#pageWrapper.signin {
-  height: 666px;
-}
 #pageWrapper.signin #buy-sell-connect {
   background-color: #8bc76f;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(40%, #93cb7a), to(#69b645));
@@ -7990,7 +7987,7 @@ body {
   color: #85c265;
 }
 #content {
-  padding: 10px 40px 0px 40px;
+  padding: 10px 40px 20px 40px;
 }
 #sign-in-form,
 #sign-up-form {
