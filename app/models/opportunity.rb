@@ -129,7 +129,7 @@ class Opportunity
   end
 
   def self.send_expired_notification
-    where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
+    where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false, winning_bid_id: nil).each do |opportunity|
       opportunity.buyer.inc(:auctions_expired_count, 1)
       Notifier.delay.expired_auction_notification(opportunity.id)
       opportunity.set(:expired_notification_sent, true)

@@ -57,8 +57,8 @@
           = company.subscription_plan
           %br
           = company.regions if company.state_by_state_subscriber?
-        %td= company.auctions_expired_count
         %td= company.auctions_count
+        %td= company.auctions_expired_count
         %td= company.bids_count
         %td= company.total_won_bids_count
         %td= number_to_currency(company.total_winnings)

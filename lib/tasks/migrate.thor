@@ -26,8 +26,16 @@ class Migrate < Thor
       company.set(:bids_count, company.bids.count)
       bid_ids = company.bids.map(&:id)
       won_bids_count = bid_ids.blank? ? 0 : Opportunity.in(winning_bid_id: bid_ids).count
+
+      won_bids_amount = 0
+      Opportunity.in(winning_bid_id: bid_ids).each do |opportunity|
+        won_bids_amount+= opportunity.winning_bid.amount
+      end
       company.set(:total_won_bids_count, won_bids_count)
+      company.set(:total_winnings, won_bids_amount)
+      company.set(:auctions_expired_count, company.auctions.where(:bidding_ends_at.lte => Time.now, winning_bid_id: nil).count)
       puts "##{index} updated #{company.name}"
     end
   end
+
 end
