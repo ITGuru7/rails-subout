@@ -1,4 +1,4 @@
-%h1 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
+%h2 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
 
 - if @subscription && @subscription.exists_on_chargify?
   %ul

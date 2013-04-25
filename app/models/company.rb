@@ -18,6 +18,7 @@ class Company
   field :abbreviated_name
   field :dot_number, type: String
   field :insurance, type: String
+  field :payment_method, type: String
   field :cell_phone, type: String
 
   field :favorite_supplier_ids, type: Array, default: []

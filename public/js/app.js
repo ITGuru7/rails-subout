@@ -205,6 +205,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return window.location.reload(true);
   };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
+  $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Bank/Wire Transfer", "Invoice", "Fax-Credit Card"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",

@@ -3,7 +3,7 @@ class CompanySerializer < ActiveModel::Serializer
     :fleet_size, :since, :owner, :contact_name, :tpa, :abbreviated_name, :contact_phone,
     :bids_count, :opportunities_count, :state_by_state_subscriber?, :favoriting_buyer_ids, :self_service_url,
     :dot_number, :cell_phone, :sales_info_messages, :subscription_plan, :insurance, :upgraded_recently, :has_ada_vehicles, :payment_state, 
-    :vehicles, :notification_email, :score
+    :vehicles, :notification_email, :score, :payment_method
 
   has_many :ratings_taken, serializer: RatingSerializer
 
