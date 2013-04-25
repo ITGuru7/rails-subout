@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account]
+  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account, :unlock_account]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -24,6 +24,11 @@ class Admin::CompaniesController < Admin::BaseController
     end
 
     @company.lock_access!
+    redirect_to edit_admin_company_path(@company)
+  end
+
+  def unlock_account
+    @company.unlock_access!
     redirect_to edit_admin_company_path(@company)
   end
 

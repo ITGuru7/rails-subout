@@ -319,6 +319,11 @@ class Company
     self.update_attribute(:locked_at, Time.now)
   end
 
+  def unlock_access!
+    users.each(&:unlock_access!)
+    self.update_attribute(:locked_at, nil)
+  end
+
   private
 
   def validate_invitation
