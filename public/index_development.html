@@ -81,12 +81,11 @@
 
           
           <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="#"></a>
+          <!--<a class="brand" href="#"></a>-->
 
           <div class="span8">
             <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
-  
-              <ul class="nav mobile-nav">
+              <ul id="menu" class="nav mobile-nav">
                 <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
                 <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
                 <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
@@ -94,13 +93,12 @@
                 <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
               </ul>
             </div>
-            <div class="pull-right">
-              <div class="btn-group navbar-buttons">
-                <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-              </div>
-            </div>
+            <ul id="top-links">
+              <li><a href="#/help">Help</a></li>
+              <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+              <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+              <li><a ng-click="signOut()">Sign Out</a></li>
+            </ul>
           </div>
         </div>
       </div>

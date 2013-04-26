@@ -72,6 +72,9 @@ subout.config([
     }).when("/sign_up", {
       templateUrl: suboutPartialPath("sign_up.html"),
       controller: SignUpCtrl
+    }).when("/help", {
+      templateUrl: suboutPartialPath("help.html"),
+      controller: HelpCtrl
     }).when("/password/new", {
       templateUrl: suboutPartialPath("password-new.html"),
       controller: NewPasswordCtrl
@@ -143,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
@@ -1518,6 +1521,10 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
 };
 
 CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
+  return true;
+};
+
+HelpCtrl = function() {
   return true;
 };
 
