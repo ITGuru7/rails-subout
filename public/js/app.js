@@ -1184,7 +1184,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleOptions;
+  var paymentOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1354,11 +1354,28 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.newVehicle = "";
     return $scope.vehicleOptions = vehicleOptions();
   };
-  return $scope.removeVehicle = function(vehicle) {
+  $scope.removeVehicle = function(vehicle) {
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
     return $scope.vehicleOptions = vehicleOptions();
+  };
+  paymentOptions = function() {
+    return _.difference($scope.PAYMENT_METHODS, $scope.companyProfile.payments);
+  };
+  $scope.paymentOptions = paymentOptions();
+  $scope.addPayment = function() {
+    var _base;
+    (_base = $scope.companyProfile).payments || (_base.payments = []);
+    $scope.companyProfile.payments.push($scope.newPayment);
+    $scope.newPayment = "";
+    return $scope.paymentOptions = paymentOptions();
+  };
+  return $scope.removePayment = function(payment) {
+    $scope.companyProfile.payments = _.reject($scope.companyProfile.payments, function(item) {
+      return payment === item;
+    });
+    return $scope.paymentOptions = paymentOptions();
   };
 };
 

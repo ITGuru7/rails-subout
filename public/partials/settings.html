@@ -199,11 +199,17 @@
             </div>
 
             <div class="control-group" ng-class="{error:settingsCompanyProfile.payment_method.$invalid}">
-              <label for="payment_method" class="control-label">Payment Method *</label>
+              <label for="payment_method" class="control-label">Payment methods</label>
               <div class="controls">
-                <select id="payment_method" name="payment_method" ng:model="companyProfile.payment_method" ng-options="t for t in PAYMENT_METHODS" required>
-                  <option value=""></option>
+                <ul>
+                  <li ng-repeat="payment in companyProfile.payments">
+                    {{payment}} <a ng-click="removePayment(payment)" class="icon icon-trash"></a>
+                  </li>
+                </ul>
+                <select id="payment_method" name="payment_method" ng-model="newPayment" ng-options="t for t in paymentOptions">
+                  <option value="">Select</option>
                 </select>
+                <button class="btn" ng-click="addPayment()" ng-disabled="!newPayment">Add</button>
               </div>
             </div>
 

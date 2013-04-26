@@ -18,7 +18,6 @@ class Company
   field :abbreviated_name
   field :dot_number, type: String
   field :insurance, type: String
-  field :payment_method, type: String
   field :cell_phone, type: String
 
   field :favorite_supplier_ids, type: Array, default: []
@@ -40,6 +39,7 @@ class Company
   field :has_ada_vehicles, type: Boolean, default: false
   field :locked_at, type: Time
   field :vehicles, type: Array, default: []
+  field :payments, type: Array, default: []
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
