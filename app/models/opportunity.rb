@@ -111,9 +111,7 @@ class Opportunity
       Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id)
       Sms.new_opportunity(self, company) if company.cell_phone.present? && self.emergency?
       user = company.users.first
-      user.mobile_keys.each do |mobile_key|
-        # TODO: send mobile push notification
-      end
+      user.push_message_to_phones({ alert: "#{self.name}", id: self.id })
     end
 
     if self.for_favorites_only?

@@ -32,6 +32,7 @@ gem 'newrelic_rpm'
 gem 'newrelic_moped'
 gem 'mail_view'
 gem 'unicorn'
+gem 'urbanairship'
 
 group :production do
   gem "airbrake"
