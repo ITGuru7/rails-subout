@@ -7,7 +7,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
-    <link rel="stylesheet" href="/files/1366188558/css/app.css" />
+    <link rel="stylesheet" href="/files/1367220440/css/app.css" />
 <!--[if lte IE 7]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 <![endif]-->
@@ -21,8 +21,8 @@
       };
       eval_ = eval;
     </script>
-    <script src="/files/1366188558/js/vendor.js"></script>
-    <script src="/files/1366188558/js/app.js"></script>
+    <script src="/files/1367220440/js/vendor.js"></script>
+    <script src="/files/1367220440/js/app.js"></script>
 <script type="text/ng-template" id="pagination">
   <div class="pagination">
     <ul>
@@ -46,7 +46,7 @@
 </script>
   </head>
 
-  <body data-subout-deploy="1366188558">
+  <body data-subout-deploy="1367220440">
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
         <div class="navbar-inner row">
@@ -81,12 +81,11 @@
 
           
           <!-- Be sure to leave the brand out there if you want it shown -->
-          <a class="brand" href="#"></a>
+          <!--<a class="brand" href="#"></a>-->
 
           <div class="span8">
             <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
-  
-              <ul class="nav mobile-nav">
+              <ul id="menu" class="nav mobile-nav">
                 <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
                 <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
                 <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
@@ -94,13 +93,12 @@
                 <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
               </ul>
             </div>
-            <div class="pull-right">
-              <div class="btn-group navbar-buttons">
-                <a ng-show="!isMobile" href="#modal" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                <a ng-show="isMobile" href="#/settings" class="btn btn-inverse" data-toggle="modal" ng-click="displaySettings()"><i class="icon-wrench"></i>Settings</a>
-                <a class="btn btn-inverse" ng-click="signOut()"><i class="icon-off"></i>Sign Out</a>
-              </div>
-            </div>
+            <ul id="top-links">
+              <li><a href="#/help">Help</a></li>
+              <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+              <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+              <li><a ng-click="signOut()">Sign Out</a></li>
+            </ul>
           </div>
         </div>
       </div>

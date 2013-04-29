@@ -29,7 +29,7 @@
                  name="bid_amount"
                  required
                  ng-model="bid.amount"
-                 ui-validate="{ only_numbers: validateNumber, reserve_amount: validateReserveAmount, win_it_now_price: validateWinItNowPrice }"
+                 ui-validate="{ only_numbers: 'validateNumber($value)', reserve_amount: 'validateReserveAmount($value)', win_it_now_price: 'validateWinItNowPrice($value)' }"
                  size="10"
                  maxlength="10"
                  class="input-small">
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="control-group" ng-class="{error:newBid.auto_bidding_limit.$invalid}">
+      <div class="control-group" ng-class="{error:newBid.bid_auto_bidding_limit.$invalid}">
         <label for="bid_auto_bidding_limit" class="control-label">
           <span ng-show="opportunity.forward_auction">Maximum</span><span ng-hide="opportunity.forward_auction">Minimum</span> Bid Amount ($)
         </label>
@@ -50,17 +50,22 @@
                  id="bid_auto_bidding_limit"
                  name="bid_auto_bidding_limit"
                  ng-model="bid.auto_bidding_limit"
-                 ui-validate="{ only_numbers: validateOptionalNumber }"
+                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)', win_it_now_price: 'validateWinItNowPrice($value)', bid_amount: 'validateAutoBiddingLimit($value)' }"
                  size="10"
                  maxlength="10"
                  class="input-small">
 
-          <p ng-show="newBid.auto_bidding_limit.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="help-block error">
+            <span ng-show="opportunity.forward_auction">Maximum amount cannot be lower than bid amount.</span>
+            <span ng-hide="opportunity.forward_auction">Minimum amount cannot be higher than bid amount.</span>
+          </p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.win_it_now_price" class="help-block error">You can win now!</p>
         </div>
       </div>
 
       <div class="control-group">
-        <label for="bid_comment" class="control-label">Comment</label>
+        <label for="bid_comment" class="control-label">Brag about your company here</label>
         <div class="controls">
           <input type="text" id="bid_comment" name="bid_comment" ng-model="bid.comment" class="input-xlarge">
         </div>
