@@ -13,6 +13,6 @@ class Admin::SettingsController < Admin::BaseController
   private
 
   def load_setting
-    @setting = Setting.find_by(key: params[:id])
+    @setting = Setting.find_or_create_by(key: params[:id])
   end
 end
