@@ -9,7 +9,7 @@ class Api::V1::TokensController < Api::V1::BaseController
       elsif user.valid_password?(params[:password])
         if params[:deviceToken]
           key = params[:deviceToken]
-          device_type = params[:device_type]
+          device_type = params[:deviceType]
 
           user.mobile_keys.find_or_create_by(key: key, device_type: device_type)
         end

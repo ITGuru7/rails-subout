@@ -107,12 +107,20 @@ class Opportunity
   end
 
   def notify_companies(event_type)
+    android_keys = []
+    ios_keys = []
+
     companies_to_notify.each do |company|
       Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id)
       Sms.new_opportunity(self, company) if company.cell_phone.present? && self.emergency?
+
       user = company.users.first
-      user.push_message_to_phones({ alert: "#{self.name}", id: self.id })
+      android_keys += user.mobile_keys.android.pluck(:key)
+      ios_keys += user.mobile_keys.ios.pluck(:key)
     end
+
+    MobileKey.push_message_to_android(android_keys, {alert: self.name, extra:{id: self.id}}) if android_keys.any?
+    MobileKey.push_message_to_ios(ios_keys, {alert: self.name, id: self.id}) if ios_keys.any?
 
     if self.for_favorites_only?
       self.set(:favorites_notified, true)

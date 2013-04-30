@@ -68,11 +68,4 @@ class User
     }
   end
 
-  def push_message_to_phones(message)
-    android_keys = mobile_keys.android.pluck(:key)
-    MobileKey.push_message_to_android(android_keys, message) if android_keys.any?
-
-    ios_keys = mobile_keys.ios.pluck(:key)
-    MobileKey.push_message_to_ios(ios_keys, message) if ios_keys.any?
-  end
 end
