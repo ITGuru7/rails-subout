@@ -1,0 +1,84 @@
+<div id="bid-new" ng-controller="BidNewCtrl">
+  <div class="modal-header">
+    <button data-dismiss="modal" class="close" type="button">
+      x
+    </button>
+    <h3>Bid</h3>
+  </div>
+  <div class="modal-body modal-content">
+    <form name="newBid" class="form-horizontal">
+      <div class="alert alert-error" ng-show="errors">
+        <a class="close" ng-click="hideAlert()">&times;</a>
+        <ul ng-repeat="error in errors">
+          <li>{{error}}</li>
+        </ul>
+      </div>
+
+      <div class="control-group oportunity_name">
+        <label class="control-label">Opportunity</label>
+        <div class="controls opportunity-name">
+          <h4>{{opportunity.name}}</h4>
+        </div>
+      </div>
+
+      <div class="control-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid}">
+        <label for="bid_amount" class="control-label">Bid Amount ($) *</label>
+        <div class="controls">
+          <input type="text"
+                 id="bid_amount"
+                 name="bid_amount"
+                 required
+                 ng-model="bid.amount"
+                 ui-validate="{ only_numbers: 'validateNumber($value)', reserve_amount: 'validateReserveAmount($value)', win_it_now_price: 'validateWinItNowPrice($value)' }"
+                 size="10"
+                 maxlength="10"
+                 class="input-small">
+
+          <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
+          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block error">Starting price not met.</p>
+          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block error">You can win now!</p>
+        </div>
+      </div>
+
+      <div class="control-group" ng-class="{error:newBid.bid_auto_bidding_limit.$invalid}">
+        <label for="bid_auto_bidding_limit" class="control-label">
+          <span ng-show="opportunity.forward_auction">Maximum</span><span ng-hide="opportunity.forward_auction">Minimum</span> Bid Amount ($)
+        </label>
+        <div class="controls">
+          <input type="text"
+                 id="bid_auto_bidding_limit"
+                 name="bid_auto_bidding_limit"
+                 ng-model="bid.auto_bidding_limit"
+                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)', win_it_now_price: 'validateWinItNowPrice($value)', bid_amount: 'validateAutoBiddingLimit($value)' }"
+                 size="10"
+                 maxlength="10"
+                 class="input-small">
+
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="help-block error">
+            <span ng-show="opportunity.forward_auction">Maximum amount cannot be lower than bid amount.</span>
+            <span ng-hide="opportunity.forward_auction">Minimum amount cannot be higher than bid amount.</span>
+          </p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.win_it_now_price" class="help-block error">You can win now!</p>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="bid_comment" class="control-label">Brag about your company here</label>
+        <div class="controls">
+          <input type="text" id="bid_comment" name="bid_comment" ng-model="bid.comment" class="input-xlarge">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div>
+          <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
+            Bid Now
+          </button>
+          <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

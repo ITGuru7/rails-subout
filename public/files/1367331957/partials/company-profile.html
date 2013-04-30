@@ -1,0 +1,76 @@
+<div id="company-profile" ng-controller="CompanyProfileCtrl">
+    <div class="modal-header">
+        <button data-dismiss="modal" class="close" type="button">
+            x
+        </button>
+        <h3>PROFILE</h3>
+        <div class="add-to-favorites" ng-show="other_company.canBeAddedAsFavorite(company)">
+          <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
+        </div>
+    </div>
+    <div class="alert alert-info" ng-show="notice">
+      {{notice}}
+    </div>
+    <div class="modal-body modal-content">
+        <section class="section-content">
+            <div class="row-fluid">
+                <div class="span6">
+                    <h4>{{other_company.name}}</h4>
+                </div>
+                <div class="span6"><img ng-show="company.logo" class="logo" ng-src="{{company.logo}}" />
+                </div>
+            </div>
+           
+            <div class="row-fluid">
+                <div class="span3">DOT Number:</div>
+                <div class="span9"><a target="_blank" href="http://www.safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&original_query_param=NAME&query_string={{other_company.dot_number}}">{{other_company.dot_number}}</a></div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Insurance</div>
+                <div class="span9"><a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno={{other_company.dot_number}}">{{other_company.insurance}}</a></div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Fleet Size:</div>
+                <div class="span9">{{other_company.fleet_size}}</div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Contact:</div>
+                <div class="span9">
+                  <a href="mailto:{{other_company.email}}">{{other_company.contact_name}} ({{other_company.email}})</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Contact Phone:</div>
+                <div class="span9">
+                  {{other_company.contact_phone}}
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">Website:</div>
+                <div class="span9">
+                    <a href="{{other_company.website | websiteUrl}}" target="_blank">{{other_company.website}}</a>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span3">TPA:</div>
+                <div class="span9">{{other_company.tpa}}</div>
+            </div>
+            <div ng-show="other_company.score" class="row-fluid">
+              <div class="span3">Score:</div>
+              <div class="span9">
+                <span ng-repeat="s in stars" ng-class="{ hide: s > other_company.score }"> <img src="/img/icon-star.jpg"> </span>
+                ( {{other_company.score}} )
+              </div>
+            </div>
+            <div><a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a></div>
+        </section>
+    </div>
+</div>
+<script>
+</script>
