@@ -119,8 +119,8 @@ class Opportunity
       ios_keys += user.mobile_keys.ios.pluck(:key)
     end
 
-    MobileKey.push_message_to_android(android_keys, {alert: self.name, extra:{id: self.id}}) if android_keys.any?
-    MobileKey.push_message_to_ios(ios_keys, {alert: self.name, id: self.id}) if ios_keys.any?
+    MobileKey.push_message_to_android(android_keys.uniq, {alert: self.name, extra:{id: self.id}}) if android_keys.any?
+    MobileKey.push_message_to_ios(ios_keys.uniq, {alert: self.name, id: self.id}) if ios_keys.any?
 
     if self.for_favorites_only?
       self.set(:favorites_notified, true)
