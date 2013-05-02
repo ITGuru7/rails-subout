@@ -62,9 +62,10 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     "Discover",
     "American Express",
     "Check/Money Order",
+    "Company Check",
     "Bank/Wire Transfer",
     "Invoice",
-    "Fax-Credit Card"
+    "Paypal"
   ]
 
   $rootScope.VEHICLE_TYPES = [
