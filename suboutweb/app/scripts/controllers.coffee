@@ -153,9 +153,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
       previewUrl = (data) ->
         $.cloudinary.url data.result.public_id,
           format: data.result.format,
-          crop: 'scale',
-          width: 200
-
       setImageUpload = (data) ->
         $("form .image-preview").attr('src', previewUrl(data)).show()
         $("form .file-upload-public-id").val(data.result.public_id)
@@ -475,6 +472,10 @@ NewFavoriteCtrl = ($scope, $rootScope, $route, $location, Favorite, Company, Fav
         action: "search"
       },
       (companies) ->
+        companies = _.reject(companies, (c)->
+          return c._id == $rootScope.company._id
+        )
+
         $scope.companyNotFound = companies.length is 0
         if soValidateEmail($scope.supplierQuery) and $scope.companyNotFound
           $scope.showInvitation = true

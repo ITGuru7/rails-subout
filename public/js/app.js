@@ -294,9 +294,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
       });
       previewUrl = function(data) {
         return $.cloudinary.url(data.result.public_id, {
-          format: data.result.format,
-          crop: 'scale',
-          width: 200
+          format: data.result.format
         });
       };
       setImageUpload = function(data) {
@@ -675,6 +673,9 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
       api_token: $rootScope.token.api_token,
       action: "search"
     }, function(companies) {
+      companies = _.reject(companies, function(c) {
+        return c._id === $rootScope.company._id;
+      });
       $scope.companyNotFound = companies.length === 0;
       if (soValidateEmail($scope.supplierQuery) && $scope.companyNotFound) {
         $scope.showInvitation = true;
