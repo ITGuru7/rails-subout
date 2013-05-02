@@ -677,7 +677,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
         return c._id === $rootScope.company._id;
       });
       $scope.companyNotFound = companies.length === 0;
-      if (soValidateEmail($scope.supplierQuery) && $scope.companyNotFound) {
+      if ($scope.companyNotFound) {
         $scope.showInvitation = true;
         $scope.invitation.supplier_email = $scope.supplierQuery;
         return $scope.invitation.message = "" + $rootScope.company.name + " would like to add you as a favorite supplier on SubOut.";

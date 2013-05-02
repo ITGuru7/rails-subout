@@ -477,7 +477,7 @@ NewFavoriteCtrl = ($scope, $rootScope, $route, $location, Favorite, Company, Fav
         )
 
         $scope.companyNotFound = companies.length is 0
-        if soValidateEmail($scope.supplierQuery) and $scope.companyNotFound
+        if $scope.companyNotFound
           $scope.showInvitation = true
           $scope.invitation.supplier_email = $scope.supplierQuery
           $scope.invitation.message = "#{$rootScope.company.name} would like to add you as a favorite supplier on SubOut."
