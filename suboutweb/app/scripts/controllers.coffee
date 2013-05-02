@@ -927,6 +927,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.refreshEvents()
 
 SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $config) ->
+  console.log $rootScope.company
   $scope.userProfile = angular.copy($rootScope.user)
   $scope.companyProfile = angular.copy($rootScope.company)
 

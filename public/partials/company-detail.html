@@ -20,7 +20,7 @@
               <span ng-repeat="s in stars" ng-class="{ hide: s > detailed_company.score }"> <img src="/img/icon-star.jpg"> </span>
                 ( {{detailed_company.score}} )
             </div>
-            <div><img ng-show="detailed_company.logo" class="logo" ng-src="{{detailed_company.logo}}" /></div>
+            <div><img ng-show="detailed_company.logo_url" class="logo" ng-src="{{detailed_company.logo_url}}" /></div>
             <div class="add-to-favorites" ng-show="detailed_company.canBeAddedAsFavorite(company)">
               <a ng-click="addToFavorites(detailed_company)">Add to Favorites</a>
             </div>

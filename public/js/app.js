@@ -1188,6 +1188,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
   var paymentOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleOptions;
+  console.log($rootScope.company);
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();

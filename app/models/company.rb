@@ -3,6 +3,7 @@ class Company
   include Mongoid::Timestamps
   include Mongoid::Search
 
+  attr_protected :logo_url
   field :name, type: String
   field :email, type: String
 
