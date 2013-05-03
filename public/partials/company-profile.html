@@ -64,7 +64,10 @@
             <div ng-show="other_company.score" class="row-fluid">
               <div class="span3">Score:</div>
               <div class="span9">
-                <span ng-repeat="s in stars" ng-class="{ hide: s > other_company.score }"> <img src="/img/icon-star.jpg"> </span>
+                <span ng-repeat="s in stars" ng-class="{ hide: s > other_company.score }"> 
+                  <img src="/img/icon-star.png">
+                  <img src="/img/icon-star-half.png" ui-if="other_company.score - s > 0 && other_company.score - s < 1">  
+                </span>
                 ( {{other_company.score}} )
               </div>
             </div>
