@@ -158,7 +158,7 @@
       <div class="control-group" ng-show="opportunity.quick_winnable" ng-class="{error:newOpportunity.win_it_now_price.$invalid}">
         <label for="opportunity_win_it_now_price" class="control-label">Win it now price</label>
         <div class="controls">
-          <input id="opportunity_win_it_now_price" name="win_it_now_price" ng-model="opportunity.win_it_now_price" ui-validate="{ win_it_now_price: validateOptionalNumber }" size="30" class="input-small">
+          <input id="opportunity_win_it_now_price" name="win_it_now_price" ng-model="opportunity.win_it_now_price" ui-validate="{ win_it_now_price: 'validateOptionalNumber($value)' }" size="30" class="input-small">
           <p ng-show="newOpportunity.win_it_now_price.$invalid" class="help-block error">Enter only numeric characters.</p>
           <p class="help-block">eg: 1000</p>
         </div>
@@ -167,7 +167,7 @@
       <div class="control-group" ng-class="{error:newOpportunity.reserve_amount.$invalid}">
         <label for="opportunity_reserve_amount" class="control-label">Starting price</label>
         <div class="controls">
-          <input id="opportunity_reserve_amount" name="reserve_amount" ng-model="opportunity.reserve_amount" ui-validate="{ reserve_amount: validateOptionalNumber }" size="30" class="input-small">
+          <input id="opportunity_reserve_amount" name="reserve_amount" ng-model="opportunity.reserve_amount" ui-validate="{ reserve_amount: 'validateOptionalNumber($value)' }" size="30" class="input-small">
           <p ng-show="newOpportunity.reserve_amount.$invalid" class="help-block error">Enter only numeric characters.</p>
           <p class="help-block">eg: 1000</p>
         </div>

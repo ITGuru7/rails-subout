@@ -17,7 +17,7 @@
                 <div class="span6">
                     <h4>{{other_company.name}}</h4>
                 </div>
-                <div class="span6"><img ng-show="company.logo" class="logo" ng-src="{{company.logo}}" />
+                <div class="span6"><img ng-show="company.logo_url" class="logo" ng-src="{{company.logo_url}}" />
                 </div>
             </div>
            
@@ -61,6 +61,17 @@
                 <div class="span3">TPA:</div>
                 <div class="span9">{{other_company.tpa}}</div>
             </div>
+            <div ng-show="other_company.score" class="row-fluid">
+              <div class="span3">Score:</div>
+              <div class="span9">
+                <span ng-repeat="s in stars" ng-class="{ hide: s > other_company.score }"> 
+                  <img src="/img/icon-star.png">
+                  <img src="/img/icon-star-half.png" ui-if="other_company.score - s > 0 && other_company.score - s < 1">  
+                </span>
+                ( {{other_company.score}} )
+              </div>
+            </div>
+            <div><a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a></div>
         </section>
     </div>
 </div>

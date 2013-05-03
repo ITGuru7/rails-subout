@@ -7870,8 +7870,8 @@ body {
   position: relative;
   background: #FFFFFF;
 }
-#pageWrapper.signin {
-  height: 666px;
+#ratingForm .question {
+  margin-bottom: 10px;
 }
 #pageWrapper.signin #buy-sell-connect {
   background-color: #8bc76f;
@@ -7987,7 +7987,7 @@ body {
   color: #85c265;
 }
 #content {
-  padding: 10px 40px 0px 40px;
+  padding: 10px 40px 20px 40px;
 }
 #sign-in-form,
 #sign-up-form {
@@ -8274,6 +8274,24 @@ div#opportunity-show .description .content {
   border-bottom: 8px solid #c7c6b3;
   padding: 0 40px;
 }
+#subout-navbar.navbar #top-links {
+  position: absolute;
+  right: 20px;
+}
+#subout-navbar.navbar #top-links li + li {
+  border-left: 1px solid #69b645;
+}
+#subout-navbar.navbar #top-links li {
+  padding: 0px 10px;
+  height: 15px;
+  line-height: 10px;
+  margin-top: 10px;
+  float: left;
+}
+#subout-navbar.navbar #top-links li a {
+  display: block;
+  color: #666550;
+}
 #subout-navbar.navbar .navbar-inner {
   padding: 0;
   border: 0;
@@ -8299,16 +8317,20 @@ div#opportunity-show .description .content {
   padding: 0;
   margin: 15px 0 0 0;
 }
-#subout-navbar.navbar li {
+#subout-navbar.navbar #menu {
+  margin-top: 20px;
+}
+#subout-navbar.navbar #menu li {
   line-height: 40px;
   font-size: 18px;
 }
-#subout-navbar.navbar li a {
-  padding: 25px 15px 15px;
+#subout-navbar.navbar #menu li a {
+  padding: 15px 20px;
+  line-height: 30px;
   color: #666550;
   text-shadow: none;
 }
-#subout-navbar.navbar li.active a {
+#subout-navbar.navbar #menu li.active a {
   background-color: #69b645;
   color: white;
 }
@@ -8518,17 +8540,21 @@ div#opportunity-show .description .content {
 #bid-new .control-group .opportunity-name h4 {
   margin: 5px 0;
 }
+#bid-new .controls {
+  margin-left: 210px;
+}
 #bid-new .form-actions {
   border: 0;
   background-color: white;
   margin: 0;
   padding-top: 5px;
+  padding-left: 210px;
 }
 #bid-new .form-horizontal .control-label {
   float: left;
   padding-top: 5px;
   text-align: left;
-  width: 155px;
+  width: 210px;
 }
 #bid-new .ng-pristine .control-group .help-block {
   display: none;
