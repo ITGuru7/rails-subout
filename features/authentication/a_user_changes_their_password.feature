@@ -1,5 +1,4 @@
 Feature: A user changes their password feature
-
   @javascript
   Scenario:
     Given I am signed in as a buyer "Boston Bus"
