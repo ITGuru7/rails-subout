@@ -1131,6 +1131,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     switch (action.type) {
       case "bid_created":
         return "received bid " + ($filter('soCurrency')(action.details.amount));
+      case "bid_canceled":
+        return "received bid cancelation " + ($filter('soCurrency')(action.details.amount));
       default:
         return "" + (action.type.split('_').pop());
     }

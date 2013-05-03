@@ -880,6 +880,8 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     switch action.type
       when "bid_created"
         "received bid #{$filter('soCurrency')(action.details.amount)}"
+      when "bid_canceled"
+        "received bid cancelation #{$filter('soCurrency')(action.details.amount)}"
       else
         "#{action.type.split('_').pop()}"
 
