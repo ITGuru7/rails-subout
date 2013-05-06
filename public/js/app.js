@@ -1933,6 +1933,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     return this.isLicensedToBidOnOpportunity(event.eventable);
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
+    if (opportunity.type === 'Emergency') {
+      return true;
+    }
     if (!opportunity.status) {
       return false;
     }

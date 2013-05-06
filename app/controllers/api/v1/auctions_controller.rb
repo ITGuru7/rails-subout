@@ -60,7 +60,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def cancel
     @auction = Opportunity.find(params[:id])
-    if @auction.editable?
+    if @auction.editable? or @auction.emergency?
       @auction.cancel!
       render json: {}
     else
