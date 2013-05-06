@@ -837,6 +837,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   setCompanyFilter = ->
     if $scope.companyFilter
       $location.search('company_id', $scope.companyFilter)
+      $location.search('event_type', 'opportunity_created')
     else
       $location.search('company_id', null)
 

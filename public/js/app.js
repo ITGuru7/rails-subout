@@ -1078,7 +1078,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   setCompanyFilter = function() {
     if ($scope.companyFilter) {
-      return $location.search('company_id', $scope.companyFilter);
+      $location.search('company_id', $scope.companyFilter);
+      return $location.search('event_type', 'opportunity_created');
     } else {
       return $location.search('company_id', null);
     }
