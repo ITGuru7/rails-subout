@@ -7854,6 +7854,7 @@ ul li {
 a,
 a:active {
   outline: none;
+  cursor: pointer;
 }
 h5 {
   text-transform: uppercase;
