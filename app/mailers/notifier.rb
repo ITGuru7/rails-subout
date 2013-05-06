@@ -21,7 +21,7 @@ class Notifier < ActionMailer::Base
       @buyer = @opportunity.buyer
       @bidder = @bid.bidder
 
-      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.notifiable_email)
+      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.notifiable_email) if @buyer.notifiable?
     end
   end
 
@@ -31,26 +31,27 @@ class Notifier < ActionMailer::Base
     @poster = @auction.buyer
     @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] #{@bid.bidder.name} has won the bidding on #{@auction.name}", to: @auction.buyer.notifiable_email)
+    mail(subject: "[SubOut] #{@bid.bidder.name} has won the bidding on #{@auction.name}", to: @poster.notifiable_email) if @poster.notifiable?
   end
 
   def won_auction_to_supplier(opportunity_id)
     @auction = Opportunity.find(opportunity_id)
     @bid = @auction.winning_bid
     @buyer = @auction.buyer
-    mail(subject: "[SubOut] You won the bidding on #{@auction.name}", to: @bid.bidder.notifiable_email)
+    @bidder = @bid.bidder
+    mail(subject: "[SubOut] You won the bidding on #{@auction.name}", to: @bidder.notifiable_email) if @bidder.notifiable?
   end
 
   def finished_auction_to_bidder(opportunity_id, bidder_id)
     @auction = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)
-    mail(subject: "[SubOut] You didn't win the bidding on #{@auction.name}.", to: @bidder.notifiable_email)
+    mail(subject: "[SubOut] You didn't win the bidding on #{@auction.name}.", to: @bidder.notifiable_email) if @bidder.notifiable?
   end
 
   def expired_auction_notification(auction_id)
     @auction = Opportunity.find(auction_id)
     @poster = @auction.buyer
-    mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @auction.buyer.notifiable_email)
+    mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @poster.notifiable_email) if @poster.notifiable?
   end
 
   def completed_auction_notification_to_buyer(opportunity_id)
@@ -63,7 +64,7 @@ class Notifier < ActionMailer::Base
     @rating = Rating.create(rater_id: @poster.id, ratee_id: @bidder.id) if @rating.blank?
     @rating.unlock!
 
-    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @auction.buyer.notifiable_email)
+    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @poster.notifiable_email) if @poster.notifiable?
   end
 
   def completed_auction_notification_to_supplier(opportunity_id)
@@ -75,7 +76,7 @@ class Notifier < ActionMailer::Base
     @rating = Rating.where(rater_id: @bidder.id, ratee_id: @poster.id).first
     @rating = Rating.create(rater_id: @bidder.id, ratee_id: @poster.id) if @rating.blank?
     @rating.unlock!
-    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bid.bidder.notifiable_email)
+    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bidder.notifiable_email) if @bidder.notifiable?
   end
 
   def subscription_confirmation(subscription_id)

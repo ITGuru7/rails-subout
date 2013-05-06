@@ -99,6 +99,10 @@ class Company
     notification_email
   end
 
+  def notifiable?
+    notification_type != "None"
+  end
+
   def self.notified_recipients_by(opportunity)
     options = []
     if opportunity.for_favorites_only?
