@@ -14,15 +14,3 @@
       %tr
         %th Total Awarded $
         %td= number_to_currency(Opportunity.won.sum(&:value))
-
-%h3 Awarded by States
-%table.table.table-striped.table-bordered
-  %tr
-    %th State
-    %th Total Awarded #
-    %th Total Awarded $
-  - GatewaySubscription.region_names.each do |region|
-    %tr
-      %td= region
-      %td= number_with_delimiter(Opportunity.by_region(region).won.count)
-      %td= number_to_currency(Opportunity.by_region(region).won.sum(&:value))

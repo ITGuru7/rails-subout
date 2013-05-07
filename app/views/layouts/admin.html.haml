@@ -5,7 +5,6 @@
     = stylesheet_link_tag    "admin", :media => "all"
     = javascript_include_tag "admin"
     = csrf_meta_tags
-
   %body
     .navbar.navbar-inverse
       .navbar-inner
@@ -16,6 +15,7 @@
               %li= link_to "Companies", admin_companies_path
               %li= link_to "Subscriptions", admin_gateway_subscriptions_path
               %li= link_to "Favorite Invitations", admin_favorite_invitations_path
+              %li= link_to "Revenues", admin_revenues_path
               %li= link_to "Marketing Message", edit_admin_setting_path("marketing_message")
     .container-fluid
       - if flash[:error]

@@ -57,6 +57,23 @@ class GatewaySubscription
     REGIONS.map {|s| s.name }
   end
 
+  def self.revenues(options)
+    result = Hash.new
+    region_names.each do |region|
+      tmp_value = Hash.new
+      tmp_value[:posted_oppor_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).count
+      tmp_value[:total_awarded_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).won.count
+      tmp_value[:total_awarded_amount] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).won.sum(&:value)
+      result[region] = tmp_value
+    end
+
+    if options[:sort_order] == 'asc'
+      result.sort_by{ |key, value| value[options[:sort_by].to_sym] }
+    else
+      result.sort_by{ |key, value| value[options[:sort_by].to_sym] }.reverse
+    end
+  end
+
   def set_regions
     unless DEVELOPMENT_MODE
       if state_by_state_service?

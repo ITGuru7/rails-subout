@@ -26,6 +26,7 @@ gem 'geocoder'
 gem 'mongoid_search'
 gem 'bitly'
 gem "jquery-rails"
+gem 'jquery-ui-rails'
 gem "awesome_print"
 gem "chargify_api_ares"
 gem 'newrelic_rpm'

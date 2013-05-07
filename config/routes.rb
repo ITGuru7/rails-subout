@@ -94,6 +94,7 @@ Subout::Application.routes.draw do
     resources :favorite_invitations, only: [:index] do
       put 'resend_invitation', on: :member
     end
+    resources :revenues, only: [:index]
     resources :settings, only: [:index, :update, :edit]
   end
 end

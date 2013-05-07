@@ -12,8 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.datepicker
 //= require jquery/jquery.cookie
 //= require jquery/jquery.maxlength
 //= require admin/global
 //= require_tree ./admin
-
+$(function() {
+    $('.datepicker').datepicker({"autoclose": true, "dateFormat": "yy-mm-dd"});
+});
