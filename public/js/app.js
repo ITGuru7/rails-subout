@@ -152,6 +152,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $rootScope.stars = [1, 2, 3, 4, 5];
+  $rootScope.regionFilter = "";
   $('#modal').on('hidden', function() {
     var $scope, modalElement, modalScope;
     $scope = angular.element(document).scope();
@@ -771,7 +772,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       sort_direction: $scope.sortDirection,
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
-      trip_type: $scope.filterTripType
+      trip_type: $scope.filterTripType,
+      region: $rootScope.regionFilter
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -1088,6 +1090,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   setRegionFilter = function() {
+    $rootScope.regionFilter = $scope.regionFilter;
     if ($scope.regionFilter) {
       return $location.search('region', $scope.regionFilter);
     } else {
@@ -1209,7 +1212,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, Vehicle, $config) {
-  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleTypeOptions;
+  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleCounts, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1380,9 +1383,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
-    var vehicle, _i, _len, _ref, _results;
+    var vehicle, _i, _len, _ref;
     _ref = $scope.companyProfile.vehicles;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       vehicle = _ref[_i];
       if (!vehicle._id) {
@@ -1392,24 +1394,37 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
         });
       }
       if (vehicle._id) {
-        _results.push(Vehicle.update({
+        Vehicle.update({
           api_token: $rootScope.token.api_token,
           id: vehicle._id,
           vehicle: vehicle
-        }));
-      } else {
-        _results.push(void 0);
+        });
       }
     }
-    return _results;
+    return $scope.saveCompanyProfile();
   };
-  $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count;
-  $scope.vehicle_count = $scope.companyProfile.vehicles.length;
-  $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count;
+  vehicleCounts = function() {
+    $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count;
+    $scope.vehicle_count = $scope.companyProfile.vehicles.length;
+    return $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count;
+  };
+  $scope.$watch("companyProfile.plan_type", function() {
+    return vehicleCounts();
+  });
+  $scope.$watch("companyProfile.vehicles", function() {
+    return vehicleCounts();
+  });
   $scope.removeVehicle = function(vehicle) {
-    return $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
+    $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
+    console.log(vehicle);
+    if (vehicle._id) {
+      return Vehicle["delete"]({
+        api_token: $rootScope.token.api_token,
+        id: vehicle._id
+      });
+    }
   };
   $scope.removeVehicleType = function(vehicle_type) {
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, function(item) {

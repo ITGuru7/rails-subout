@@ -2,6 +2,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
   Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) ->
 
   $rootScope.stars = [1,2,3,4,5]
+  $rootScope.regionFilter = ""
 
   $('#modal').on('hidden', () ->
     $scope = angular.element(document).scope()
@@ -521,6 +522,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.maxPage = 1
   $scope.filterVehicleType = null
   $scope.filterTripType = null
+
   $scope.sortItems = [
     {
       value: "created_at,asc"
@@ -570,6 +572,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
+        region: $rootScope.regionFilter
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -843,6 +846,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     event.actor._id is actor_id
 
   setRegionFilter = ->
+    $rootScope.regionFilter =  $scope.regionFilter
     if $scope.regionFilter
       $location.search('region', $scope.regionFilter)
     else
@@ -1086,13 +1090,24 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Veh
     for vehicle in $scope.companyProfile.vehicles
       Vehicle.save({ api_token: $rootScope.token.api_token, vehicle: vehicle }) unless vehicle._id
       Vehicle.update({ api_token: $rootScope.token.api_token, id: vehicle._id, vehicle: vehicle }) if vehicle._id
+    $scope.saveCompanyProfile()
+  
+  vehicleCounts = ()->
+    $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count
+    $scope.vehicle_count = $scope.companyProfile.vehicles.length
+    $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count
 
-  $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count
-  $scope.vehicle_count = $scope.companyProfile.vehicles.length
-  $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count
+  $scope.$watch "companyProfile.plan_type", ->
+    vehicleCounts()
+
+  $scope.$watch "companyProfile.vehicles", ->
+    vehicleCounts()
 
   $scope.removeVehicle = (vehicle) ->
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, (item) -> vehicle is item)
+    console.log vehicle
+    Vehicle.delete({ api_token: $rootScope.token.api_token, id: vehicle._id}) if vehicle._id
+
 
   $scope.removeVehicleType = (vehicle_type) ->
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, (item) -> vehicle_type is item)

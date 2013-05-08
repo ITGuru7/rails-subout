@@ -11,4 +11,10 @@ class Api::V1::VehiclesController < Api::V1::BaseController
     vehicle.update_attributes(params[:vehicle])
     render json: {}
   end
+
+  def destroy
+    vehicle = Vehicle.find(params[:id])
+    vehicle.delete
+    render json: {}
+  end
 end
