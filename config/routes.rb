@@ -74,6 +74,7 @@ Subout::Application.routes.draw do
       end
 
       resources :ratings
+      resources :vehicles
     end
   end
 

@@ -93,7 +93,7 @@ class Opportunity
       options << {:regions.in => regions}
     end
     companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
-    companies.select { |c| notify_to_vehicle_owner?(c.vehicles) }
+    companies.select { |c| notify_to_vehicle_owner?(c.vehicle_types) }
   end
 
   def notified_companies
@@ -352,9 +352,9 @@ class Opportunity
     end
   end
 
-  def notify_to_vehicle_owner?(vehicles)
-    return true if vehicles.blank?
+  def notify_to_vehicle_owner?(vehicle_types)
+    return true if vehicle_types.blank?
     return true if vehicle_type.blank?
-    vehicles.include?(vehicle_type)
+    vehicle_types.include?(vehicle_type)
   end
 end

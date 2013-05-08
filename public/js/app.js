@@ -207,6 +207,24 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
+  $rootScope.planTypeLabel = function(plan_type) {
+    return plan_type + ' $' + $rootScope.PLAN_DETAILS[plan_type].price + ' for ' + $rootScope.PLAN_DETAILS[plan_type].vehicle_count + ' vehicles';
+  };
+  $rootScope.PLAN_TYPES = ["Professional", "Intermediate", "Beginner"];
+  $rootScope.PLAN_DETAILS = {
+    "Professional": {
+      vehicle_count: 10,
+      price: 149
+    },
+    "Intermediate": {
+      vehicle_count: 5,
+      price: 49
+    },
+    "Beginner": {
+      vehicle_count: 2,
+      price: 29
+    }
+  };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
@@ -1190,9 +1208,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   });
 };
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var paymentOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleOptions;
-  console.log($rootScope.company);
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, Vehicle, $config) {
+  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1351,39 +1368,71 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
-  vehicleOptions = function() {
-    return _.difference($scope.VEHICLE_TYPES, $scope.companyProfile.vehicles);
+  vehicleTypeOptions = function() {
+    return _.difference($scope.VEHICLE_TYPES, $scope.companyProfile.vehicle_types);
   };
-  $scope.vehicleOptions = vehicleOptions();
-  $scope.addVehicle = function() {
+  $scope.vehicleTypeOptions = vehicleTypeOptions();
+  $scope.addVehicleType = function() {
     var _base;
-    (_base = $scope.companyProfile).vehicles || (_base.vehicles = []);
-    $scope.companyProfile.vehicles.push($scope.newVehicle);
-    $scope.newVehicle = "";
-    return $scope.vehicleOptions = vehicleOptions();
+    (_base = $scope.companyProfile).vehicle_types || (_base.vehicle_types = []);
+    $scope.companyProfile.vehicle_types.push($scope.newVehicleType);
+    $scope.newVehicleType = "";
+    return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
+  $scope.saveVehicles = function() {
+    var vehicle, _i, _len, _ref, _results;
+    _ref = $scope.companyProfile.vehicles;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      vehicle = _ref[_i];
+      if (!vehicle._id) {
+        Vehicle.save({
+          api_token: $rootScope.token.api_token,
+          vehicle: vehicle
+        });
+      }
+      if (vehicle._id) {
+        _results.push(Vehicle.update({
+          api_token: $rootScope.token.api_token,
+          id: vehicle._id,
+          vehicle: vehicle
+        }));
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+  $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count;
+  $scope.vehicle_count = $scope.companyProfile.vehicles.length;
+  $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count;
   $scope.removeVehicle = function(vehicle) {
-    $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
+    return $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
-    return $scope.vehicleOptions = vehicleOptions();
   };
-  paymentOptions = function() {
-    return _.difference($scope.PAYMENT_METHODS, $scope.companyProfile.payments);
-  };
-  $scope.paymentOptions = paymentOptions();
-  $scope.addPayment = function() {
-    var _base;
-    (_base = $scope.companyProfile).payments || (_base.payments = []);
-    $scope.companyProfile.payments.push($scope.newPayment);
-    $scope.newPayment = "";
-    return $scope.paymentOptions = paymentOptions();
-  };
-  return $scope.removePayment = function(payment) {
-    $scope.companyProfile.payments = _.reject($scope.companyProfile.payments, function(item) {
-      return payment === item;
+  $scope.removeVehicleType = function(vehicle_type) {
+    $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, function(item) {
+      return vehicle_type === item;
     });
-    return $scope.paymentOptions = paymentOptions();
+    return $scope.vehicleTypeOptions = vehicleTypeOptions();
+  };
+  paymentMethodOptions = function() {
+    return _.difference($scope.PAYMENT_METHODS, $scope.companyProfile.payment_methods);
+  };
+  $scope.paymentMethodOptions = paymentMethodOptions();
+  $scope.addPaymentMethod = function() {
+    var _base;
+    (_base = $scope.companyProfile).payment_methods || (_base.payment_methods = []);
+    $scope.companyProfile.payment_methods.push($scope.newPaymentMethod);
+    $scope.newPaymentMethod = "";
+    return $scope.paymentMethodOptions = paymentMethodOptions();
+  };
+  return $scope.removePaymentMethod = function(payment_method) {
+    $scope.companyProfile.payment_methods = _.reject($scope.companyProfile.payment_methods, function(item) {
+      return payment_method === item;
+    });
+    return $scope.paymentMethodOptions = paymentMethodOptions();
   };
 };
 
@@ -1768,6 +1817,16 @@ suboutSvcs.factory("Rating", function($resource) {
   });
   r1.search = r2.get.bind(r2);
   return r1;
+});
+
+suboutSvcs.factory("Vehicle", function($resource) {
+  return $resource("" + api_path + "/vehicles/:id", {
+    id: '@id'
+  }, {
+    update: {
+      method: "PUT"
+    }
+  });
 });
 
 suboutSvcs.factory("Opportunity", function($resource) {

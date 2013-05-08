@@ -50,6 +50,20 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     window.location = "#/sign_in"
     window.location.reload(true)
 
+  $rootScope.planTypeLabel = (plan_type)->
+    plan_type + ' $' + $rootScope.PLAN_DETAILS[plan_type].price + ' for ' + $rootScope.PLAN_DETAILS[plan_type].vehicle_count + ' vehicles'
+
+  $rootScope.PLAN_TYPES = [
+    "Professional",
+    "Intermediate",
+    "Beginner"
+  ]
+
+  $rootScope.PLAN_DETAILS =
+    "Professional": {vehicle_count: 10, price: 149}
+    "Intermediate": {vehicle_count: 5, price: 49}
+    "Beginner": {vehicle_count: 2, price: 29}
+
   $rootScope.TRIP_TYPES = [
     "One way",
     "Round trip",
@@ -931,8 +945,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.query = $location.search().q
     $scope.refreshEvents()
 
-SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $config) ->
-  console.log $rootScope.company
+SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Vehicle, $config) ->
   $scope.userProfile = angular.copy($rootScope.user)
   $scope.companyProfile = angular.copy($rootScope.company)
 
@@ -1058,35 +1071,47 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 
-  vehicleOptions = ->
-    _.difference($scope.VEHICLE_TYPES, $scope.companyProfile.vehicles)
+  vehicleTypeOptions = ->
+    _.difference($scope.VEHICLE_TYPES, $scope.companyProfile.vehicle_types)
 
-  $scope.vehicleOptions = vehicleOptions()
+  $scope.vehicleTypeOptions = vehicleTypeOptions()
 
-  $scope.addVehicle = ->
-    $scope.companyProfile.vehicles ||= []
-    $scope.companyProfile.vehicles.push($scope.newVehicle)
-    $scope.newVehicle = ""
-    $scope.vehicleOptions = vehicleOptions()
+  $scope.addVehicleType = ->
+    $scope.companyProfile.vehicle_types ||= []
+    $scope.companyProfile.vehicle_types.push($scope.newVehicleType)
+    $scope.newVehicleType = ""
+    $scope.vehicleTypeOptions = vehicleTypeOptions()
+
+  $scope.saveVehicles = ->
+    for vehicle in $scope.companyProfile.vehicles
+      Vehicle.save({ api_token: $rootScope.token.api_token, vehicle: vehicle }) unless vehicle._id
+      Vehicle.update({ api_token: $rootScope.token.api_token, id: vehicle._id, vehicle: vehicle }) if vehicle._id
+
+  $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count
+  $scope.vehicle_count = $scope.companyProfile.vehicles.length
+  $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count
 
   $scope.removeVehicle = (vehicle) ->
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, (item) -> vehicle is item)
-    $scope.vehicleOptions = vehicleOptions()
 
-  paymentOptions = ->
-    _.difference($scope.PAYMENT_METHODS, $scope.companyProfile.payments)
+  $scope.removeVehicleType = (vehicle_type) ->
+    $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, (item) -> vehicle_type is item)
+    $scope.vehicleTypeOptions = vehicleTypeOptions()
 
-  $scope.paymentOptions = paymentOptions()
+  paymentMethodOptions = ->
+    _.difference($scope.PAYMENT_METHODS, $scope.companyProfile.payment_methods)
 
-  $scope.addPayment = ->
-    $scope.companyProfile.payments ||= []
-    $scope.companyProfile.payments.push($scope.newPayment)
-    $scope.newPayment = ""
-    $scope.paymentOptions = paymentOptions()
+  $scope.paymentMethodOptions = paymentMethodOptions()
 
-  $scope.removePayment = (payment) ->
-    $scope.companyProfile.payments = _.reject($scope.companyProfile.payments, (item) -> payment is item)
-    $scope.paymentOptions = paymentOptions()
+  $scope.addPaymentMethod = ->
+    $scope.companyProfile.payment_methods ||= []
+    $scope.companyProfile.payment_methods.push($scope.newPaymentMethod)
+    $scope.newPaymentMethod = ""
+    $scope.paymentMethodOptions = paymentMethodOptions()
+
+  $scope.removePaymentMethod = (payment_method) ->
+    $scope.companyProfile.payment_methods = _.reject($scope.companyProfile.payment_methods, (item) -> payment_method is item)
+    $scope.paymentMethodOptions = paymentMethodOptions()
 
 SignInCtrl = ($scope, $rootScope, $location,
   Token, Company, User, AuthToken, Authorize, Setting) ->

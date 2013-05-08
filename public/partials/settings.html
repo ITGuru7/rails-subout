@@ -9,7 +9,7 @@
       <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
       <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
       <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
-      <li ng-class="{active:selectedTab == 'licensed-regions'}"><a href="#licensed-regions" data-toggle="tab">Licensed Regions</a></li>
+      <li ng-class="{active:selectedTab == 'vehicles'}"><a href="#vehicles" data-toggle="tab">Vehicles</a></li>
     </ul>
     <div class="tab-content">
       <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane modal-content" id="user-login">
@@ -202,14 +202,14 @@
               <label for="payment_method" class="control-label">Payment methods</label>
               <div class="controls">
                 <ul>
-                  <li ng-repeat="payment in companyProfile.payments">
-                    {{payment}} <a ng-click="removePayment(payment)" class="icon icon-trash"></a>
+                  <li ng-repeat="payment_method in companyProfile.payment_methods">
+                    {{payment_method}} <a ng-click="removePaymentMethod(payment_method)" class="icon icon-trash"></a>
                   </li>
                 </ul>
-                <select id="payment_method" name="payment_method" ng-model="newPayment" ng-options="t for t in paymentOptions">
+                <select id="payment_method" name="payment_method" ng-model="newPaymentMethod" ng-options="t for t in paymentMethodOptions">
                   <option value="">Select</option>
                 </select>
-                <button class="btn" ng-click="addPayment()" ng-disabled="!newPayment">Add</button>
+                <button class="btn" ng-click="addPaymentMethod()" ng-disabled="!newPaymentMethod">Add</button>
               </div>
             </div>
 
@@ -244,14 +244,14 @@
               <label for="vehicle-type" class="control-label">Vehicle Type</label>
               <div class="controls">
                 <ul>
-                  <li ng-repeat="vehicle in companyProfile.vehicles">
-                    {{vehicle}} <a ng-click="removeVehicle(vehicle)" class="icon icon-trash"></a>
+                  <li ng-repeat="vehicle_type in companyProfile.vehicle_types">
+                    {{vehicle_type}} <a ng-click="removeVehicleType(vehicle_type)" class="icon icon-trash"></a>
                   </li>
                 </ul>
-                <select id="vehicle-type" name="vehicle-type" ng-model="newVehicle" ng-options="t for t in vehicleOptions">
+                <select id="vehicle-type" name="vehicle-type" ng-model="newVehicleType" ng-options="t for t in vehicleTypeOptions">
                   <option value="">Select</option>
                 </select>
-                <button class="btn" ng-click="addVehicle()" ng-disabled="!newVehicle">Add</button>
+                <button class="btn" ng-click="addVehicleType()" ng-disabled="!newVehicleType">Add</button>
               </div>
             </div>
 
@@ -261,57 +261,62 @@
           </fieldset>
         </form>
       </div>
-      <div ng-class="{active:selectedTab == 'licensed-regions'}" class="tab-pane" id="licensed-regions">
-        <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
-        <div class="national-subscription" ng-show="company.subscription_plan == 'subout-national-service'">
-          <div>Subscription price: {{national_product.price_in_cents/100 | soCurrency}}</div>
-          <div class="text-centered">
-            <br />
-            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('state-by-state-service')">Downgrade to state by state plan</button>
+      <div ng-class="{active:selectedTab == 'roadside-assisted-busses'}" class="tab-pane modal-content" id="vehicles">
+
+        <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-init="" novalidate>
+          <div ng-show="vehicles_diff < 0" class="alert alert-error">
+            Please remove {{ -1 * vehicles_diff }} vehicles.
           </div>
-          <div class="downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
-        </div>
-        <div ng-show="company.subscription_plan == 'state-by-state-service'">
-          <div class="text-centered">
-            <button class="btn btn-primary" ng-click="updateProduct('subout-national-service')">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</button>
+          <div class="control-group">
+            <label for="plan_type" class="control-label">Choose a Plan</label>
+            <div class="controls">
+              <select id="plan_type" name="plan_type" ng-model="companyProfile.plan_type" ng-options="planTypeLabel(p) for p in PLAN_TYPES" required>
+                <option value="">-- chose a plan --</option>
+              </select>
+              <br />
+              <div ng-show="companyProfile.plan_type">You can manage maximum {{ vehicle_count_max }} vehicles</div>
+              You have {{ vehicle_count }} vehicles now.
+            </div>
           </div>
-          <hr/>
-          <div style="float:right">
-            <div class="total-price">Total price: {{totalPrice | soCurrency}}</div>
-          </div>
-          <h4>Or add individual regions:</h4>
-          <form name="settingsLicensedRegions" class="form-horizontal" novalidate>
-            <div class="region-checkboxes">
-              <fieldset class="regions-table">
-                <label ng-repeat="(region_name, region_abbr) in ALL_REGIONS" for="input-region-{{region_abbr}}" class="checkbox">
-                  <div>
-                    <input
-                      id="input-region-{{region_abbr}}"
-                      type="checkbox"
-                      name="regions[{{ region_abbr }}]"
-                      ng-model="companyProfile.allRegions[region_name]"
-                      ng-change="toggleSubscribedRegion()"
-                      ng-disabled="(selectedRegionsCount == 1 && companyProfile.allRegions[region_name]) || (companyProfile.subscribed(region_name) && companyProfile.upgraded_recently)"
-                      value="1">
-                      {{region_name}}(${{regionPrice(region_name)}})
-                  </div>
-                </label>
-              </fieldset>
-              <div class="form-actions">
-                <button class="btn btn-primary" ng-click="saveLicensedRegions()">Save</button>
-                <button class="btn cancel" data-dismiss="modal">Cancel</button>
+          <hr />
+          <fieldset ng-repeat="vehicle in companyProfile.vehicles">
+            <div class="row-fluid">
+                <a ng-click="removeVehicle(vehicle)">Remove vehicle</a>
+            </div>
+            <div class="control-group">
+              <label for="vehicle_year" class="control-label">Vehicle's year</label>
+              <div class="controls">
+                <input id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" type="text" class="input-xlarge" required />
               </div>
             </div>
-          </form>
-        </div>
-        <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" href="{{nationalSubscriptionUrl}}?reference={{company._id}}">Upgrade to national plan for {{national_product.price_in_cents/100 | soCurrency}}</a><br><br>
-          <a class="btn btn-primary" href="{{stateByStateSubscriptionUrl}}?reference={{company._id}}">Upgrade to state by state plan</a>
-        </div>
-        <div ng-show="company.subscription_plan != 'free' && company.self_service_url" class="text-centered">
-          <br>
-          <a class="btn btn-primary" href="{{company.self_service_url}}">Update my credit card number</a>
-        </div>
+            <div class="control-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
+              <label for="vehicle_make" class="control-label">Vehicle's Make</label>
+              <div class="controls">
+                <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="input-xlarge" required />
+              </div>
+            </div>
+            <div class="control-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
+              <label for="vehicle_model" class="control-label">Vehicle's Model</label>
+              <div class="controls">
+                <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="input-xlarge" required />
+              </div>
+            </div>
+            <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
+              <label for="vehicle_vin" class="control-label">Last 8 Of Truck VIN</label>
+              <div class="controls">
+                <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
+              </div>
+            </div>
+            <hr />
+          </fieldset>
+          <div class="form-actions" ng-class="{error:newVehicle.vehicle_make.$invalid}" >
+            <div ng-show="vehicles_diff > 0">
+              {{ vehicles_diff }} vehicles are still available. <br />
+              <a ng-click="companyProfile.vehicles.push({})">Add New Vehicle</a> <br/><br/>
+            </div>
+            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

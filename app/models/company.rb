@@ -3,7 +3,7 @@ class Company
   include Mongoid::Timestamps
   include Mongoid::Search
 
-  attr_protected :logo_url
+  attr_protected :logo_url, :vehicles
   field :name, type: String
   field :email, type: String
 
@@ -39,8 +39,9 @@ class Company
   field :last_upgraded_at, type: Time
   field :has_ada_vehicles, type: Boolean, default: false
   field :locked_at, type: Time
-  field :vehicles, type: Array, default: []
-  field :payments, type: Array, default: []
+  field :vehicle_types, type: Array, default: []
+  field :payment_methods, type: Array, default: []
+  field :plan_type
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
@@ -66,6 +67,7 @@ class Company
   has_many :ratings_taken, class_name: 'Rating', inverse_of: :ratee
 
   has_many :users
+  has_many :vehicles
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :bids, foreign_key: 'bidder_id'
 
