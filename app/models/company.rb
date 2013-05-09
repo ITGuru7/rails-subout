@@ -221,7 +221,6 @@ class Company
     region = nil if region == "null" or region.blank?
 
     options = []
-    options << {:buyer_id.in => self.favoriting_buyer_ids}
 
     #if self.regions.present?
     #  options << {:for_favorites_only => false, :start_region.in => self.regions}
@@ -232,6 +231,7 @@ class Company
     options << {:end_region => region} if region
 
     conditions = {
+      :buyer_id.in => self.favoriting_buyer_ids,
       canceled: false,
       :bidding_ends_at.gt => Time.now,
       winning_bid_id: nil,
@@ -241,6 +241,7 @@ class Company
     conditions[:vehicle_type] = vehicle_type if vehicle_type
     conditions[:trip_type] = trip_type if trip_type
     opportunities = Opportunity.any_of(*options).where(conditions)
+    
     opportunities = opportunities.search(query) if query.present?
     opportunities.order_by(sort_by => sort_direction)
   end

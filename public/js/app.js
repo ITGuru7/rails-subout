@@ -725,6 +725,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
+  $scope.filterRegion = $rootScope.regionFilter;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -773,7 +774,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
       trip_type: $scope.filterTripType,
-      region: $rootScope.regionFilter
+      region: $scope.filterRegion
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -810,14 +811,25 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     dateFormat: 'mm/dd/yy'
   };
   $scope.sortOpportunities('bidding_ends_at');
-  $scope.$watch("filterDepatureDate", function() {
-    return $scope.loadMoreOpportunities(1);
+  $scope.$watch("filterDepatureDate", function(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      return $scope.loadMoreOpportunities(1);
+    }
   });
-  $scope.$watch("filterVehicleType", function() {
-    return $scope.loadMoreOpportunities(1);
+  $scope.$watch("filterVehicleType", function(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      return $scope.loadMoreOpportunities(1);
+    }
   });
-  return $scope.$watch("filterTripType", function() {
-    return $scope.loadMoreOpportunities(1);
+  $scope.$watch("filterTripType", function(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      return $scope.loadMoreOpportunities(1);
+    }
+  });
+  return $scope.$watch("filterRegion", function(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      return $scope.loadMoreOpportunities(1);
+    }
   });
 };
 

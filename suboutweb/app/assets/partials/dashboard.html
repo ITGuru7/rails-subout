@@ -33,7 +33,7 @@
         <section  ng-show="!isMobile" class="content">
           <select class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
-            <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+            <option ng-repeat="r in allRegions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>

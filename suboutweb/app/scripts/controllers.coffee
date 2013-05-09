@@ -522,7 +522,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.maxPage = 1
   $scope.filterVehicleType = null
   $scope.filterTripType = null
-
+  $scope.filterRegion = $rootScope.regionFilter
   $scope.sortItems = [
     {
       value: "created_at,asc"
@@ -572,7 +572,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
-        region: $rootScope.regionFilter
+        region: $scope.filterRegion
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -599,12 +599,20 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.dateOptions = {dateFormat: 'mm/dd/yy'}
 
   $scope.sortOpportunities('bidding_ends_at')
-  $scope.$watch "filterDepatureDate", ->
-    $scope.loadMoreOpportunities(1)
-  $scope.$watch "filterVehicleType", ->
-    $scope.loadMoreOpportunities(1)
-  $scope.$watch "filterTripType", ->
-    $scope.loadMoreOpportunities(1)
+
+  $scope.$watch "filterDepatureDate",(oldValue, newValue) ->
+    if(oldValue != newValue)
+      $scope.loadMoreOpportunities(1)
+  $scope.$watch "filterVehicleType", (oldValue, newValue) ->
+    if(oldValue != newValue)
+      $scope.loadMoreOpportunities(1)
+  $scope.$watch "filterTripType", (oldValue, newValue) ->
+    if(oldValue != newValue)
+      $scope.loadMoreOpportunities(1)
+  $scope.$watch "filterRegion", (oldValue, newValue) ->
+    if(oldValue != newValue)
+      $scope.loadMoreOpportunities(1)
+
 OpportunityCtrl = ($scope, $rootScope, $location, Auction, soPagination) ->
   $scope.opportunities = []
   $scope.pages = []
