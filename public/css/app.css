@@ -8033,6 +8033,10 @@ body {
   background-color: #69b645;
   border: 1px solid #69b645;
 }
+#dashboard .pill.region {
+  background-color: #f89406;
+  border: 1px solid #f89406;
+}
 #dashboard .clear-filters {
   text-decoration: none;
   background-color: #378bac;

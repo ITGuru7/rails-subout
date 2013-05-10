@@ -33,7 +33,7 @@
         <section  ng-show="!isMobile" class="content">
           <select class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
-            <option ng-repeat="r in allRegions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+            <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
@@ -91,8 +91,8 @@
             <div class="pill" ng-show="$location.search().event_type">
               {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
             </div>
-            <div class="pill" ng-show="$location.search().region">
-              {{$location.search().region}}<button type="button" ng-click="clearRegionFilter()" class="close">×</button>
+            <div class="pill region" ng-repeat="region in company.regions">
+              {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
             <div class="pill" ng-show="$location.search().company_id">
               {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>

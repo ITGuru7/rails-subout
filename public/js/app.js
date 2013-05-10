@@ -152,7 +152,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $rootScope.stars = [1, 2, 3, 4, 5];
-  $rootScope.regionFilter = "";
+  $rootScope.regionFilters = [];
   $('#modal').on('hidden', function() {
     var $scope, modalElement, modalScope;
     $scope = angular.element(document).scope();
@@ -728,7 +728,6 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
-  $scope.filterRegion = $rootScope.regionFilter;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -776,8 +775,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       sort_direction: $scope.sortDirection,
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
-      trip_type: $scope.filterTripType,
-      region: $scope.filterRegion
+      trip_type: $scope.filterTripType
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -824,12 +822,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       return $scope.loadMoreOpportunities(1);
     }
   });
-  $scope.$watch("filterTripType", function(oldValue, newValue) {
-    if (oldValue !== newValue) {
-      return $scope.loadMoreOpportunities(1);
-    }
-  });
-  return $scope.$watch("filterRegion", function(oldValue, newValue) {
+  return $scope.$watch("filterTripType", function(oldValue, newValue) {
     if (oldValue !== newValue) {
       return $scope.loadMoreOpportunities(1);
     }
@@ -986,7 +979,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
-  var setCompanyFilter, setRegionFilter, updatePreviousEvents;
+  var regionFilterOptions, setCompanyFilter, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -995,6 +988,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filter = null;
   $scope.opportunity = null;
   $scope.events = [];
+  $scope.regionFilterOptions = [];
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
@@ -1008,6 +1002,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
+    if ($scope.company.regions) {
+      queryOptions.regions = $scope.company.regions;
+    }
     queryOptions.page = $scope.currentPage;
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
@@ -1105,11 +1102,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return event.actor._id === actor_id;
   };
   setRegionFilter = function() {
-    $rootScope.regionFilter = $scope.regionFilter;
     if ($scope.regionFilter) {
-      return $location.search('region', $scope.regionFilter);
-    } else {
-      return $location.search('region', null);
+      return $scope.company.regions.push($scope.regionFilter);
     }
   };
   setCompanyFilter = function() {
@@ -1120,6 +1114,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return $location.search('company_id', null);
     }
   };
+  regionFilterOptions = function() {
+    return _.difference($rootScope.allRegions, $rootScope.company.regions);
+  };
+  $scope.$watch("company.regions.length", function() {
+    $scope.regionFilterOptions = regionFilterOptions();
+    return $scope.refreshEvents();
+  });
   $scope.regionFilter = $location.search().region;
   $scope.$watch("regionFilter", setRegionFilter);
   $scope.companyFilter = $location.search().company_id;
@@ -1202,6 +1203,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.fullTextSearch();
   };
   $scope.hasAnyFilter = function() {
+    if ($scope.company.regions && $scope.company.regions.length > 0) {
+      return true;
+    }
     return !_.isEmpty($location.search());
   };
   $scope.filterValue = $rootScope.isMobile ? '' : null;
@@ -1209,11 +1213,17 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     $scope.query = "";
     $scope.companyFilter = $scope.filterValue;
     $scope.regionFilter = $scope.filterValue;
+    $scope.company.regions = [];
     $location.search({});
     return $scope.refreshEvents();
   };
   $scope.clearRegionFilter = function() {
-    return $scope.regionFilter = $scope.filterValue;
+    return $rootScope.company.regions = [];
+  };
+  $scope.removeRegionFilter = function(region) {
+    return $rootScope.company.regions = _.reject($rootScope.company.regions, function(item) {
+      return region === item;
+    });
   };
   $scope.clearCompanyFilter = function() {
     return $scope.companyFilter = $scope.filterValue;

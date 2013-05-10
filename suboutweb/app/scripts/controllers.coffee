@@ -2,7 +2,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
   Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) ->
 
   $rootScope.stars = [1,2,3,4,5]
-  $rootScope.regionFilter = ""
+  $rootScope.regionFilters = []
 
   $('#modal').on('hidden', () ->
     $scope = angular.element(document).scope()
@@ -519,7 +519,6 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.maxPage = 1
   $scope.filterVehicleType = null
   $scope.filterTripType = null
-  $scope.filterRegion = $rootScope.regionFilter
   $scope.sortItems = [
     {
       value: "created_at,asc"
@@ -569,7 +568,6 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
-        region: $scope.filterRegion
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -604,9 +602,6 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
     if(oldValue != newValue)
       $scope.loadMoreOpportunities(1)
   $scope.$watch "filterTripType", (oldValue, newValue) ->
-    if(oldValue != newValue)
-      $scope.loadMoreOpportunities(1)
-  $scope.$watch "filterRegion", (oldValue, newValue) ->
     if(oldValue != newValue)
       $scope.loadMoreOpportunities(1)
 
@@ -758,7 +753,9 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.filter = null
   $scope.opportunity = null
   $scope.events = []
+  $scope.regionFilterOptions = []
   #$scope.regions = $rootScope.regions.slice(0)
+
 
   Company.query
     api_token: $rootScope.token.api_token
@@ -772,6 +769,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
+    queryOptions.regions = $scope.company.regions if $scope.company.regions
 
     queryOptions.page = $scope.currentPage
 
@@ -851,11 +849,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     event.actor._id is actor_id
 
   setRegionFilter = ->
-    $rootScope.regionFilter =  $scope.regionFilter
-    if $scope.regionFilter
-      $location.search('region', $scope.regionFilter)
-    else
-      $location.search('region', null)
+    $scope.company.regions.push($scope.regionFilter) if $scope.regionFilter
 
   setCompanyFilter = ->
     if $scope.companyFilter
@@ -863,6 +857,13 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       $location.search('event_type', 'opportunity_created')
     else
       $location.search('company_id', null)
+
+  regionFilterOptions = ->
+    _.difference($rootScope.allRegions, $rootScope.company.regions)
+
+  $scope.$watch "company.regions.length", ()->
+    $scope.regionFilterOptions = regionFilterOptions()
+    $scope.refreshEvents()
 
   $scope.regionFilter = $location.search().region
   $scope.$watch "regionFilter", setRegionFilter
@@ -931,6 +932,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.fullTextSearch()
 
   $scope.hasAnyFilter = ->
+    return true if $scope.company.regions && $scope.company.regions.length > 0
     not _.isEmpty($location.search())
 
   $scope.filterValue = if $rootScope.isMobile then '' else null
@@ -939,11 +941,15 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.query = ""
     $scope.companyFilter = $scope.filterValue
     $scope.regionFilter = $scope.filterValue
+    $scope.company.regions = []
     $location.search({})
     $scope.refreshEvents()
   
   $scope.clearRegionFilter = ->
-    $scope.regionFilter = $scope.filterValue
+    $rootScope.company.regions = []
+
+  $scope.removeRegionFilter = (region)->
+    $rootScope.company.regions = _.reject($rootScope.company.regions, (item) -> region is item)
 
   $scope.clearCompanyFilter = ->
     $scope.companyFilter = $scope.filterValue

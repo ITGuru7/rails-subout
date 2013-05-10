@@ -183,7 +183,7 @@ class Company
   end
 
   def set_subscription_info
-    if subscription = created_from_subscription
+    if subscription == created_from_subscription
       self.subscription_plan = subscription.product_handle
       self.regions = subscription.regions
     else
@@ -212,13 +212,13 @@ class Company
     self.favoriting_buyer_ids.include?(other_company.id)
   end
 
-  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil, trip_type=nil, query=nil, region=nil)
+  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil, trip_type=nil, query=nil, regions=nil)
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
     start_date = nil if start_date == "null" or start_date.blank?
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
-    region = nil if region == "null" or region.blank?
+    regions = nil if regions == "null" or regions.blank?
 
     options = []
 
@@ -227,8 +227,8 @@ class Company
     #  options << {:for_favorites_only => false, :end_region.in => self.regions}
     #end
     
-    options << {:start_region => region} if region
-    options << {:end_region => region} if region
+    options << {:start_region.in => self.regions}
+    options << {:end_region.in => self.regions}
 
     conditions = {
       :buyer_id.in => self.favoriting_buyer_ids,
