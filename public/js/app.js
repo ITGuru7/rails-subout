@@ -208,22 +208,25 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
-  $rootScope.planTypeLabel = function(plan_type) {
-    return plan_type + ' $' + $rootScope.PLAN_DETAILS[plan_type].price + ' for ' + $rootScope.PLAN_DETAILS[plan_type].vehicle_count + ' vehicles';
-  };
-  $rootScope.PLAN_TYPES = ["Professional", "Intermediate", "Beginner"];
+  $rootScope.PLAN_TYPES = ["basic", "pro", "super"];
   $rootScope.PLAN_DETAILS = {
-    "Professional": {
-      vehicle_count: 10,
-      price: 149
+    "super": {
+      price: 199,
+      more_vehicles: 1,
+      count: 2,
+      roadside_assistance: 1
     },
-    "Intermediate": {
-      vehicle_count: 5,
-      price: 49
+    "pro": {
+      price: 199,
+      more_vehicles: 0,
+      count: 2,
+      roadside_assistance: 1
     },
-    "Beginner": {
-      vehicle_count: 2,
-      price: 29
+    "basic": {
+      price: 149,
+      more_vehicles: 0,
+      count: 0,
+      roadside_assistance: 0
     }
   };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
@@ -1416,21 +1419,33 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.saveCompanyProfile();
   };
   vehicleCounts = function() {
-    $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count;
-    $scope.vehicle_count = $scope.companyProfile.vehicles.length;
-    return $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count;
+    $scope.plan_detail = null;
+    $scope.vehicle_count = 0;
+    $scope.vehicles_diff = 0;
+    if ($scope.companyProfile.plan_type) {
+      $scope.plan_detail = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type];
+    }
+    if ($scope.companyProfile.vehicles) {
+      $scope.vehicle_count = $scope.companyProfile.vehicles.length;
+    }
+    if ($scope.plan_detail) {
+      return $scope.vehicles_diff = $scope.vehicle_count - $scope.plan_detail.count;
+    }
   };
   $scope.$watch("companyProfile.plan_type", function() {
     return vehicleCounts();
   });
-  $scope.$watch("companyProfile.vehicles", function() {
+  $scope.$watch("companyProfile.vehicles.length", function() {
     return vehicleCounts();
   });
+  vehicleCounts();
+  $scope.addVehicle = function(vehicle) {
+    return $scope.companyProfile.vehicles.push(vehicle);
+  };
   $scope.removeVehicle = function(vehicle) {
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
-    console.log(vehicle);
     if (vehicle._id) {
       return Vehicle["delete"]({
         api_token: $rootScope.token.api_token,

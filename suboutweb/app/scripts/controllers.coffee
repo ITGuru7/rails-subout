@@ -51,19 +51,16 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     window.location = "#/sign_in"
     window.location.reload(true)
 
-  $rootScope.planTypeLabel = (plan_type)->
-    plan_type + ' $' + $rootScope.PLAN_DETAILS[plan_type].price + ' for ' + $rootScope.PLAN_DETAILS[plan_type].vehicle_count + ' vehicles'
-
   $rootScope.PLAN_TYPES = [
-    "Professional",
-    "Intermediate",
-    "Beginner"
+    "basic",
+    "pro",
+    "super"
   ]
 
   $rootScope.PLAN_DETAILS =
-    "Professional": {vehicle_count: 10, price: 149}
-    "Intermediate": {vehicle_count: 5, price: 49}
-    "Beginner": {vehicle_count: 2, price: 29}
+    "super": { price: 199, more_vehicles: 1, count: 2, roadside_assistance: 1 }
+    "pro": { price: 199, more_vehicles: 0, count: 2, roadside_assistance: 1 }
+    "basic": { price: 149, more_vehicles: 0, count: 0, roadside_assistance: 0 }
 
   $rootScope.TRIP_TYPES = [
     "One way",
@@ -1101,19 +1098,26 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Veh
     $scope.saveCompanyProfile()
   
   vehicleCounts = ()->
-    $scope.vehicle_count_max = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type].vehicle_count
-    $scope.vehicle_count = $scope.companyProfile.vehicles.length
-    $scope.vehicles_diff = $scope.vehicle_count_max - $scope.vehicle_count
+    $scope.plan_detail = null
+    $scope.vehicle_count = 0
+    $scope.vehicles_diff = 0
+    $scope.plan_detail = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type] if $scope.companyProfile.plan_type
+    $scope.vehicle_count = $scope.companyProfile.vehicles.length if $scope.companyProfile.vehicles
+    $scope.vehicles_diff = $scope.vehicle_count - $scope.plan_detail.count if $scope.plan_detail
 
   $scope.$watch "companyProfile.plan_type", ->
     vehicleCounts()
 
-  $scope.$watch "companyProfile.vehicles", ->
+  $scope.$watch "companyProfile.vehicles.length", ->
     vehicleCounts()
+
+  vehicleCounts()
+
+  $scope.addVehicle = (vehicle)->
+    $scope.companyProfile.vehicles.push(vehicle)
 
   $scope.removeVehicle = (vehicle) ->
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, (item) -> vehicle is item)
-    console.log vehicle
     Vehicle.delete({ api_token: $rootScope.token.api_token, id: vehicle._id}) if vehicle._id
 
 

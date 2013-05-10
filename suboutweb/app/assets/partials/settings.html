@@ -263,58 +263,62 @@
       </div>
       <div ng-class="{active:selectedTab == 'roadside-assisted-busses'}" class="tab-pane modal-content" id="vehicles">
 
-        <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-init="" novalidate>
-          <div ng-show="vehicles_diff < 0" class="alert alert-error">
-            Please remove {{ -1 * vehicles_diff }} vehicles.
-          </div>
+        <form name="vehicleForm" id="vehicleForm" class="form-horizontal" novalidate>
+
           <div class="control-group">
             <label for="plan_type" class="control-label">Choose a Plan</label>
             <div class="controls">
-              <select id="plan_type" name="plan_type" ng-model="companyProfile.plan_type" ng-options="planTypeLabel(p) for p in PLAN_TYPES" required>
+              <select id="plan_type" name="plan_type" ng-model="companyProfile.plan_type" ng-options="p for p in PLAN_TYPES" required>
                 <option value="">-- chose a plan --</option>
               </select>
               <br />
-              <div ng-show="companyProfile.plan_type">You can manage maximum {{ vehicle_count_max }} vehicles</div>
-              You have {{ vehicle_count }} vehicles now.
+              <div ng-show="vehicle_count">You have {{ vehicle_count }} vehicles now.</div>
             </div>
           </div>
-          <hr />
-          <fieldset ng-repeat="vehicle in companyProfile.vehicles">
-            <div class="row-fluid">
-                <a ng-click="removeVehicle(vehicle)">Remove vehicle</a>
+
+          <div ui-if="plan_detail">
+            <div ng-show="vehicles_diff > 0 && !plan_detail.more_vehicles" class="alert alert-error">
+              Please remove {{ vehicles_diff }} vehicles.
             </div>
-            <div class="control-group">
-              <label for="vehicle_year" class="control-label">Vehicle's year</label>
-              <div class="controls">
-                <input id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" type="text" class="input-xlarge" required />
-              </div>
-            </div>
-            <div class="control-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
-              <label for="vehicle_make" class="control-label">Vehicle's Make</label>
-              <div class="controls">
-                <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="input-xlarge" required />
-              </div>
-            </div>
-            <div class="control-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
-              <label for="vehicle_model" class="control-label">Vehicle's Model</label>
-              <div class="controls">
-                <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="input-xlarge" required />
-              </div>
-            </div>
-            <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
-              <label for="vehicle_vin" class="control-label">Last 8 Of Truck VIN</label>
-              <div class="controls">
-                <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
-              </div>
-            </div>
+
             <hr />
-          </fieldset>
-          <div class="form-actions" ng-class="{error:newVehicle.vehicle_make.$invalid}" >
-            <div ng-show="vehicles_diff > 0">
-              {{ vehicles_diff }} vehicles are still available. <br />
-              <a ng-click="companyProfile.vehicles.push({})">Add New Vehicle</a> <br/><br/>
+            <div ng-repeat="vehicle in companyProfile.vehicles">
+              <div class="row-fluid">
+                  <a ng-click="removeVehicle(vehicle)">Remove vehicle</a>
+              </div>
+              <div class="control-group">
+                <label for="vehicle_year" class="control-label">Vehicle's year</label>
+                <div class="controls">
+                  <input id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" type="text" class="input-xlarge" required />
+                </div>
+              </div>
+              <div class="control-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
+                <label for="vehicle_make" class="control-label">Vehicle's Make</label>
+                <div class="controls">
+                  <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="input-xlarge" required />
+                </div>
+              </div>
+              <div class="control-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
+                <label for="vehicle_model" class="control-label">Vehicle's Model</label>
+                <div class="controls">
+                  <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="input-xlarge" required />
+                </div>
+              </div>
+              <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
+                <label for="vehicle_vin" class="control-label">Last 8 Of Truck VIN</label>
+                <div class="controls">
+                  <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
+                </div>
+              </div>
+              <hr />
             </div>
-            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
+
+            <div ng-show="vehicles_diff < 0 || plan_detail.more_vehicles">
+              <a ng-click="addVehicle({})">Add New Vehicle</a> <br/><br/>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid && vehicle_diff > 0">Save</button>
           </div>
         </form>
       </div>
