@@ -4,12 +4,8 @@ class GatewaySubscription
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  REGIONS = Chargify::Component.find(
-    :all,
-    :params => {
-      :product_family_id => Chargify::ProductFamily.find_by_handle("subout").id
-    }
-  )
+  REGION_NAMES = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York' , 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', '
+    Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas' , 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
 
   field :email
   field :first_name
@@ -18,16 +14,15 @@ class GatewaySubscription
   field :subscription_id
   field :customer_id
   field :product_handle
+  field :vehicle_count, type: Integer, default: 0
   field :confirmed, type: Boolean, default: false
-  field :regions, type: Array, default: []
   field :state
   field :payment_state
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
 
-  attr_accessible :regions, :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
+  attr_accessible :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
 
-  before_create :set_regions
   after_save :update_chargify_email, if: "self.email_changed?"
 
   scope :pending, -> { where(confirmed: false) }
@@ -35,31 +30,9 @@ class GatewaySubscription
 
   validates :subscription_id, uniqueness: true
 
-  def self.region_prices
-    return @region_prices if @region_prices
-
-    #@region_prices = {}
-    #REGIONS.each do |region|
-      #@region_prices[region.name] = region.unit_price.to_i
-    #end
-
-    #@region_prices
-
-    @region_prices = REGIONS.map do |region|
-      {
-        name: region.name,
-        price: region.unit_price.to_i
-      }
-    end
-  end
-
-  def self.region_names
-    REGIONS.map {|s| s.name }
-  end
-
   def self.revenues(options)
     result = Hash.new
-    region_names.each do |region|
+    GatewaySubscription::REGION_NAMES.each do |region|
       tmp_value = Hash.new
       tmp_value[:posted_oppor_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).count
       tmp_value[:total_awarded_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).won.count
@@ -74,30 +47,12 @@ class GatewaySubscription
     end
   end
 
-  def set_regions
-    unless DEVELOPMENT_MODE
-      if state_by_state_service?
-        response = MyChargify.get_components(subscription_id)
-        self.regions = response.map{|c| c["component"]["name"] if c["component"]["enabled"]}.compact unless response.nil?
-      else
-        self.regions = self.class.region_names
-      end
-    else
-      self.regions = self.class.region_names
-      self.product_handle = 'state-by-state-service'
-    end
-  end
-
   def confirm!
     update_attribute(:confirmed, true)
   end
 
   def pending?
     !confirmed
-  end
-
-  def state_by_state_service?
-    product_handle == 'state-by-state-service'
   end
 
   def company_last_sign_in_at
@@ -131,7 +86,7 @@ class GatewaySubscription
   end
 
   def self.csv_column_names
-    ["_id","email", "name", "organization", "subscription_url", "customer_url", "product_handle", "regions", "confirmed", "created_company_name"]
+    ["_id","email", "name", "organization", "subscription_url", "customer_url", "product_handle", "confirmed", "created_company_name"]
   end
 
   def self.to_csv(options = {})
@@ -143,18 +98,16 @@ class GatewaySubscription
     end
   end
 
-  def update_regions!(regions)
+  def update_vehicle_count!(vehicle_count)
+    return if self.product_handle != 'subout-pro-service' 
+
     sub = Chargify::Subscription.find(self.subscription_id)
-    sub.components.each do |component|
-      was_enabled = component.enabled
-      if regions.include?(component.name)
-        component.enabled = true
-      else
-        component.enabled = false
-      end
-      component.save unless component.enabled == was_enabled
-    end
-    self.update_attributes(regions: regions)
+    bus_component = sub.components.first
+    bus_component.allocated_quantity = vehicle_count > 2 ? vehicle_count - 2 : 0
+    bus_component.save
+
+    self.vehicle_count = vehicle_count
+    self.save
   end
 
   def update_product!(product_handle)
@@ -163,15 +116,13 @@ class GatewaySubscription
     sub.save
 
     self.product_handle = product_handle
-    set_regions
     self.save
   end
 
-  def update_product_and_regions!(options)
+  def update_product_and_vehicle_count!(options)
     update_product!(options[:product_handle])
-    if product_handle == "state-by-state-service"
-      new_regions = options[:regions] || []
-      update_regions!(new_regions)
+    if product_handle == "subout-pro-service" and options[:vehicle_count] 
+      update_vehicle_count!(options[:vehicle_count])
     end
   end
 

@@ -179,7 +179,7 @@ describe Opportunity do
       end
     end
 
-    context "when company is ther poster" do
+    context "when company is the poster" do
       it "excludes the company" do
         opportunity = FactoryGirl.build(:opportunity, buyer: buyer, start_region: "Massachusetts", end_region: "Massachusetts")
         opportunity.companies_to_notify.map(&:id).should_not include(buyer.id)

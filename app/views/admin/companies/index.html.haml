@@ -55,8 +55,6 @@
         %td= time_ago_in_words(company.last_sign_in_at) + " ago" if company.last_sign_in_at
         %td
           = company.subscription_plan
-          %br
-          = company.regions if company.state_by_state_subscriber?
         %td= company.auctions_count
         %td= company.auctions_expired_count
         %td= company.bids_count

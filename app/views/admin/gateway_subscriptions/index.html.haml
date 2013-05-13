@@ -26,7 +26,6 @@
         Subscription ID<br>
         Customer ID
       %th Subscription plan
-      %th Regions
       %th Confirmed
       %th Sign up company
       %th State
@@ -49,7 +48,6 @@
             %br
             = link_to "Cus #{subscription.customer_id}", subscription.customer_url, target: "_blank"
         %td= subscription.product_handle
-        %td= subscription.regions if subscription.state_by_state_service?
         %td= subscription.confirmed
         %td= subscription.created_company_name
         %td= subscription.state

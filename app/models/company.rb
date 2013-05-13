@@ -41,7 +41,6 @@ class Company
   field :locked_at, type: Time
   field :vehicle_types, type: Array, default: []
   field :payment_methods, type: Array, default: []
-  field :plan_type
 
   #address stuff TODO ask Tom about this
   field :street_address, type: String
@@ -105,19 +104,6 @@ class Company
     notification_type != "None"
   end
 
-  def self.notified_recipients_by(opportunity)
-    options = []
-    if opportunity.for_favorites_only?
-      options << {:id.in => opportunity.buyer.favorite_supplier_ids}
-    else
-      options << {:subscription_plan => 'subout-national-service'}
-      options << {:subscription_plan => 'subout-partner'}
-      options << {:regions.in => opportunity.regions}
-    end
-
-    Company.any_of(*options).excludes(id: opportunity.buyer_id, notification_type: 'None')
-  end
-
   def favorite_suppliers
     Company.where(:id.in => self.favorite_supplier_ids)
   end
@@ -150,13 +136,12 @@ class Company
     end
   end
 
-  def state_by_state_subscriber?
-    subscription_plan == 'state-by-state-service'
+  def subout_pro_subscriber?
+    subscription_plan == 'subout-pro-service'
   end
 
-  def national_subscriber?
-    subscription_plan == 'subout-national-service' ||
-    subscription_plan == 'subout-partner'
+  def subout_basic_subscriber?
+    subscription_plan == 'subout-basic-service'  
   end
 
   def create_initial_user!
@@ -168,27 +153,16 @@ class Company
     self.created_from_invitation.buyer
   end
 
-  def subscribed?(regions)
-    return true if self.national_subscriber?
-    if (regions & self.regions).empty?
-      return false
-    else
-      return true
-    end
-  end
-
   def self.companies_for(company)
     company.abbreviated_name = "Self"
     [company] + Company.ne(id: company.id).to_a
   end
 
   def set_subscription_info
-    if subscription == created_from_subscription
+    if subscription = created_from_subscription
       self.subscription_plan = subscription.product_handle
-      self.regions = subscription.regions
     else
       self.subscription_plan = "free"
-      self.regions = []
     end
   end
 
@@ -276,21 +250,17 @@ class Company
 
   def update_regions!(regions)
     regions ||= []
-    upgrading = (regions - self.regions).present? 
-    self.last_upgraded_at = Time.now if upgrading
-
-    self.created_from_subscription.update_regions!(regions)
     self.regions = regions
     self.save
   end
 
   def update_product!(product)
-    products = ["free", "state-by-state-service", "subout-national-service"]
+    products = ["free", "subout-basic-service", "subout-pro-service"]
 
     upgrading = products.index(product) > products.index(self.subscription_plan) 
     self.last_upgraded_at = Time.now if upgrading 
 
-    self.created_from_subscription.update_product!(product)
+    self.created_from_subscription.update_product!(product) if self.created_from_subscription 
     set_subscription_info
     self.save
   end
@@ -298,16 +268,12 @@ class Company
   def self.csv_column_names
     [
       "_id","email", "name", "owner", "contact_name", "contact_phone", "created_at",
-      "last_sign_in_at", "subscription_plan", "regions", "auctions_count", "bids_count"
+      "last_sign_in_at", "subscription_plan", "auctions_count", "bids_count"
     ]
   end
 
   def csv_value_for(column)
-    if column == "regions"
-      national_subscriber? ? "all" : regions
-    else
-      send(column)
-    end
+    send(column)
   end
 
   def self.to_csv(options = {})

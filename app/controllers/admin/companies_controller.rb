@@ -23,7 +23,8 @@ class Admin::CompaniesController < Admin::BaseController
 
   def lock_account
     if subscription = @company.created_from_subscription
-      subscription.update_product_and_regions!(product_handle: "state-by-state-service", regions: [])
+      subscription.update_product_and_vehicle_count(product_handle: "free", vehicle_count: 0)
+      @company.vehicles.destroy_all
       @company.set_subscription_info
       @company.save
     end
@@ -33,13 +34,19 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def unlock_account
+    if subscription = @company.created_from_subscription
+      subscription.update_product_and_vehicle_count(product_handle: "subout-basic-service", vehicle_count: 0)
+      @company.set_subscription_info
+      @company.save
+    end
     @company.unlock_access!
     redirect_to edit_admin_company_path(@company)
   end
 
   def cancel_subscription
     if subscription = @company.created_from_subscription
-      subscription.update_product_and_regions!(product_handle: "state-by-state-service", regions: [])
+      subscription.update_product_and_vehicle_count(product_handle: "free", vehicle_count: 0)
+      @company.vehicles.destroy_all
       @company.set_subscription_info
       @company.save
     end

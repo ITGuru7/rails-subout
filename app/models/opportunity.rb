@@ -68,7 +68,6 @@ class Opportunity
   validates_presence_of :end_date
   validates_presence_of :start_location
   validate :validate_locations
-  validate :validate_buyer_region
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
@@ -88,8 +87,6 @@ class Opportunity
     if self.for_favorites_only?
       options << {:id.in => self.buyer.favorite_supplier_ids}
     else
-      options << {:subscription_plan => 'subout-national-service'}
-      options << {:subscription_plan => 'subout-partner'}
       options << {:regions.in => regions}
     end
     companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
@@ -98,10 +95,6 @@ class Opportunity
 
   def notified_companies
     options = []
-    if notified_regions.present?
-      options << {:subscription_plan => 'subout-national-service'}
-      options << {:subscription_plan => 'subout-partner'}
-    end
     options << {:regions.in => notified_regions}
     options << {:id.in => self.buyer.favorite_supplier_ids} if favorites_notified?
     Company.any_of(*options)
@@ -230,13 +223,6 @@ class Opportunity
     else
       self.start_region = "Massachusetts" unless self.start_region
       self.end_region = "Massachusetts" unless self.end_region
-    end
-  end
-
-  def validate_buyer_region
-    return unless buyer
-    unless buyer.subscribed?(regions) || DEVELOPMENT_MODE
-      errors.add :buyer_id, "cannot create an opportunity within this region"
     end
   end
 

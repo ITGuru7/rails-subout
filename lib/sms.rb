@@ -1,7 +1,9 @@
 class Sms
+  
+  SMS_URL = ENV['SMS_URL'] || "api.smscloud.com"
+  SMS_PATH = ENV['SMS_PATH'] || "/xmlrpc?apiVersion=1.0&key=359B97E0832315A68655C73EB3323E52937CC401"
+
   def self.new_opportunity(opportunity, company)
-    sms_url = ENV['SMS_URL'] || "api.smscloud.com"
-    sms_path = ENV['SMS_PATH'] || "/xmlrpc?apiVersion=1.0&key=359B97E0832315A68655C73EB3323E52937CC401"
 
     number_bank = %w(12052674927 12055336910 12055336913 12055336915 12055336909)
     msg_bank = [
@@ -22,7 +24,7 @@ class Sms
 
     message = msg_bank.shuffle.first + "from #{opportunity.buyer.abbreviated_name}: #{opportunity.name} #{short_url}"
     if Rails.env.production?
-      server = XMLRPC::Client.new(sms_url,sms_path)
+      server = XMLRPC::Client.new(Sms::SMS_URL, Sms::SMS_PATH)
       begin
         server.call("sms.send", number_bank.shuffle.first, company.cell_phone, message, 1)
       rescue Exception => e
@@ -32,6 +34,17 @@ class Sms
     else
       puts "Sending SMS to #{company.name}"
       puts message
+    end
+  end
+
+  def self.test(phone_number, message)
+    number_bank = %w(12052674927 12055336910 12055336913 12055336915 12055336909)
+    server = XMLRPC::Client.new(Sms::SMS_URL, Sms::SMS_PATH)
+    begin
+      server.call("sms.send", number_bank.shuffle.first, phone_number, message, 1)
+    rescue Exception => e
+      puts e.backtrace
+      puts e.inspect
     end
   end
 end

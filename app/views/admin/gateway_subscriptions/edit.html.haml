@@ -13,18 +13,7 @@
     .control-group
       = f.label :product_handle, class: "control-label"
       .controls
-        = f.select :product_handle, ["subout-national-service", "state-by-state-service", "subout-partner"], include_blank: false
-    .subscription-regions
-      .control-label
-        = f.label :regions
-      .control-group
-        .check-all
-          = check_box_tag "toggle_check_all", true
-          = label_tag "toggle_check_all", "Check All"
-        - GatewaySubscription.region_prices.each do |region|
-          .controls
-            = check_box_tag "gateway_subscription[regions][]", region[:name], @subscription.regions.include?(region[:name]), id: "gateway_subscription_regions_#{region[:name].tr(" ", "_")}"
-            = label_tag "gateway_subscription_regions_#{region[:name].tr(" ", "_")}", "#{region[:name]} ($#{region[:price]})"
+        = f.select :product_handle, ["free", "subout-basic-service", "subout-pro-service"], include_blank: false
 
     .control-group
       = f.button :submit, class: "btn btn-danger"

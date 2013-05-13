@@ -97,8 +97,6 @@ class Bid
     unless bidder.is_a_favorite_of?(opportunity.buyer)
       if opportunity.for_favorites_only?
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
-      elsif !bidder.subscribed?(opportunity.regions)
-        errors.add :bidder_id, "cannot bid on an opportunity within this region"
       end
     end
   end

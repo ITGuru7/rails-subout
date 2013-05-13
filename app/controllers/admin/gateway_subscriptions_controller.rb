@@ -22,7 +22,7 @@ class Admin::GatewaySubscriptionsController < Admin::BaseController
   def update
     @subscription = GatewaySubscription.find(params[:id])
     @subscription.update_attributes(params[:gateway_subscription])
-    @subscription.update_product_and_regions!(params[:gateway_subscription])
+    @subscription.update_product!(params[:gateway_subscription][:product_handle])
     if company = @subscription.created_company
       company.set_subscription_info
       company.save

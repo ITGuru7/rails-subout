@@ -54,7 +54,6 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       gw_subscription.update_attribute(:payment_state, "success")
     end
 
-    render json: {}
   end
 
   def show
