@@ -7,7 +7,7 @@ class Admin::SettingsController < Admin::BaseController
 
   def update
     @setting.update_attributes(params[:setting])
-    redirect_to edit_admin_setting_path(@setting)
+    redirect_to :back, notice: "#{@setting} was updated successfully."
   end
 
   private

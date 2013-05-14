@@ -1216,7 +1216,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleCounts, vehicleTypeOptions;
+  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleCounts, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1239,62 +1239,28 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }, function(data) {
     return $scope.subout_pro_product = data.product;
   });
-  $scope.regionPrice = function(region_name) {
-    var region;
-    region = _.find($rootScope.REGION_PRICES, function(item) {
-      return item.name === region_name;
-    });
-    if (region) {
-      return region.price;
-    } else {
-      return 0;
-    }
-  };
-  $scope.toggleSubscribedRegion = function() {
-    $scope.updateTotalPrice();
-    return updateSelectedRegionsCount();
-  };
-  $scope.updateTotalPrice = function() {
-    var isEnabled, region, totalPrice, _ref;
-    totalPrice = 0;
-    _ref = $scope.companyProfile.allRegions;
-    for (region in _ref) {
-      isEnabled = _ref[region];
-      if (isEnabled) {
-        totalPrice += $scope.regionPrice(region);
-      }
+  $scope.updateTotalPrice = function(starting_price) {
+    var totalPrice;
+    totalPrice = starting_price;
+    if ($scope.companyProfile.vehicles.length > 2) {
+      totalPrice = totalPrice + ($scope.companyProfile.vehicles.length - 2) * 50;
     }
     $scope.totalPrice = totalPrice;
     return totalPrice;
   };
   updateSelectedRegions = function() {
-    var region, _base, _i, _len, _ref;
+    var region, _base, _i, _len, _ref, _results;
     (_base = $scope.companyProfile).regions || (_base.regions = []);
     $scope.companyProfile.allRegions = {};
     _ref = $rootScope.allRegions;
+    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       region = _ref[_i];
-      $scope.companyProfile.allRegions[region] = __indexOf.call($scope.companyProfile.regions, region) >= 0;
-    }
-    return $scope.totalPrice = $scope.updateTotalPrice();
-  };
-  updateSelectedRegions();
-  updateSelectedRegionsCount = function() {
-    var isEnabled, region, _ref, _results;
-    $scope.selectedRegionsCount = 0;
-    _ref = $scope.companyProfile.allRegions;
-    _results = [];
-    for (region in _ref) {
-      isEnabled = _ref[region];
-      if (isEnabled) {
-        _results.push($scope.selectedRegionsCount += 1);
-      } else {
-        _results.push(void 0);
-      }
+      _results.push($scope.companyProfile.allRegions[region] = __indexOf.call($scope.companyProfile.regions, region) >= 0);
     }
     return _results;
   };
-  updateSelectedRegionsCount();
+  updateSelectedRegions();
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
     $rootScope.regions = company.regions;
@@ -1328,7 +1294,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       return $scope.userProfileError = "The new password and password confirmation are not identical.";
     }
   };
-  $scope.saveLicensedRegions = function() {
+  $scope.saveFavoritedRegions = function() {
     var finalRegions, isEnabled, region, _ref;
     if (!confirm("Are you sure?")) {
       return;
@@ -1981,28 +1947,6 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.isFreeUser = function() {
     return this.subscription_plan === "free";
   };
-  Company.prototype.isLicensedToBidOnOpportunity = function(opportunity) {
-    var _ref, _ref1, _ref2;
-    if (!this.regions) {
-      return false;
-    }
-    if (this.nationalSubscriber()) {
-      return true;
-    }
-    if (_ref = opportunity.start_region, __indexOf.call(this.regions, _ref) >= 0) {
-      return true;
-    }
-    if (_ref1 = opportunity.end_region, __indexOf.call(this.regions, _ref1) >= 0) {
-      return true;
-    }
-    if (_ref2 = opportunity.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref2) >= 0) {
-      return true;
-    }
-    return false;
-  };
-  Company.prototype.isLicensedToBidOnOpportunityOf = function(event) {
-    return this.isLicensedToBidOnOpportunity(event.eventable);
-  };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (opportunity.type === 'Emergency') {
       return true;
@@ -2023,15 +1967,6 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);
-  };
-  Company.prototype.subscribed = function(region) {
-    if (!this.regions) {
-      return false;
-    }
-    if (this.nationalSubscriber()) {
-      return true;
-    }
-    return __indexOf.call(this.regions, region) >= 0;
   };
   return Company;
 });

@@ -1,0 +1,11 @@
+%p Dear Admin,
+%p #{@company.name} removed vehicle.
+%p 
+  Year: #{@vehicle.year}
+  %br
+  Make: #{@vehicle.make}
+  %br
+  Model: #{@vehicle.model}
+  %br
+  Last 8 of Vehicle Vin: #{@vehicle.vin}
+= render 'email_sig'

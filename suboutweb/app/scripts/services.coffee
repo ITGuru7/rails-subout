@@ -112,18 +112,6 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::isFreeUser = ->
     this.subscription_plan is "free"
 
-  Company::isLicensedToBidOnOpportunity = (opportunity) ->
-    return false unless this.regions #this should only happen when the company hasn't loaded yet
-
-    return true if this.nationalSubscriber()
-    return true if opportunity.start_region in this.regions
-    return true if opportunity.end_region in this.regions
-    return true if opportunity.buyer_id in this.favoriting_buyer_ids
-    false
-
-  Company::isLicensedToBidOnOpportunityOf = (event) ->
-    this.isLicensedToBidOnOpportunity(event.eventable)
-
   Company::canCancelOrEdit = (opportunity) ->
     return true if opportunity.type is 'Emergency'
     return false unless opportunity.status
@@ -136,11 +124,6 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
 
   Company::addFavoriteBuyerId = (buyerId) ->
     this.favoriting_buyer_ids.push(buyerId)
-
-  Company::subscribed = (region) ->
-    return false unless this.regions # company is not loaded yet
-    return true if this.nationalSubscriber()
-    region in this.regions
     
   Company
 

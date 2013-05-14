@@ -102,4 +102,19 @@ class Notifier < ActionMailer::Base
     @company = Company.find(company_id)
     mail(subject: "[SubOut] updated subscription product", to: @company.notifiable_email)
   end
+
+  def new_vehicle(vehicle_id)
+    if @vehicle = Vehicle.find(vehicle_id) 
+      @company = @vehicle.company
+
+      mail(subject: "[SubOut] New vehicle on: #{@company.name}", to: Setting.admin_email)
+    end
+  end
+
+  def remove_vehicle(vehicle, company_id)
+    @vehicle = vehicle
+    @company = Company.find(company_id) 
+
+    mail(subject: "[SubOut] Vehicle is removed on: #{@company.name}", to: Setting.admin_email)
+  end
 end

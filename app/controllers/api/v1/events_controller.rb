@@ -11,8 +11,6 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = events.where(:actor_id => params[:company_id]) if params[:company_id]
     events = events.search(params[:q])
 
-    current_company.update_regions!(regions) unless params[:regions].nil?
-
     render json: events
   end
 end

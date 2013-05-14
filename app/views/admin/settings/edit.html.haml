@@ -1,11 +1,14 @@
-%h3 Edit #{@setting.key.titleize}
+%h3= @setting.to_s
+.span7
+  = form_for @setting, url: admin_setting_path(@setting), html: { class: "form-horizontal" } do |f|
+    .control-group
+      = f.label :value, @setting.label, class: "control-label"
+      .controls
+        - if @setting.key == 'marketing_message'
+          = f.text_area :value, class: "input-xlarge", rows: 5, data: { maxlength: 100 }
+        - else
+          = f.text_field :value
 
-= form_for @setting, url: admin_setting_path(@setting), html: { class: "form-horizontal" } do |f|
-  .control-group
-    = f.label :value, "Content", class: "control-label"
-    .controls
-      = f.text_area :value, class: "input-xxlarge", rows: 5, data: { maxlength: 100 }
-
-  .control-group
-    = f.submit "Save", class: "btn btn-danger"
-    = link_to "Cancel", edit_admin_setting_path(@setting), class: "btn"
+    .control-group.pull-right
+      = f.submit "Save", class: "btn btn-danger"
+      = link_to "Cancel", edit_admin_setting_path(@setting), class: "btn"

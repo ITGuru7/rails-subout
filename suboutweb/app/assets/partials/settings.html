@@ -9,6 +9,7 @@
       <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
       <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
       <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
+      <li ng-class="{active:selectedTab == 'favorited-regions'}"><a href="#favorited-regions" data-toggle="tab">Regions</a></li>
       <li ng-class="{active:selectedTab == 'vehicles'}"><a href="#vehicles" data-toggle="tab">Vehicles</a></li>
     </ul>
     <div class="tab-content">
@@ -261,6 +262,32 @@
           </fieldset>
         </form>
       </div>
+
+      <div ng-class="{active:selectedTab == 'favorited-regions'}" class="tab-pane modal-content" id="favorited-regions">
+        <h4>Favorited Regions:</h4>
+        <form name="settingsFavoritedRegions" class="form-horizontal" novalidate>
+          <div class="region-checkboxes">
+            <fieldset class="regions-table">
+              <label ng-repeat="(region_name, region_abbr) in ALL_REGIONS" for="input-region-{{region_abbr}}" class="checkbox">
+                <div>
+                  <input
+                    id="input-region-{{region_abbr}}"
+                    type="checkbox"
+                    name="regions[{{ region_abbr }}]"
+                    ng-model="companyProfile.allRegions[region_name]"
+                    value="1">
+                    {{region_name}}
+                </div>
+              </label>
+            </fieldset>
+            <div class="form-actions">
+              <button class="btn btn-primary" ng-click="saveFavoritedRegions()">Save</button>
+              <button class="btn cancel" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
       <div ng-class="{active:selectedTab == 'roadside-assisted-busses'}" class="tab-pane modal-content" id="vehicles">
 
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>

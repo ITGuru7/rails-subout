@@ -972,20 +972,9 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
     (data) ->
       $scope.subout_pro_product = data.product
 
-  $scope.regionPrice = (region_name) ->
-    region = _.find $rootScope.REGION_PRICES, (item) ->
-      item.name is region_name
-    if region then region.price else 0
-
-
-  $scope.toggleSubscribedRegion = ->
-    $scope.updateTotalPrice()
-    updateSelectedRegionsCount()
-
-  $scope.updateTotalPrice = ->
-    totalPrice = 0
-    for region, isEnabled of $scope.companyProfile.allRegions
-      totalPrice += $scope.regionPrice(region) if isEnabled
+  $scope.updateTotalPrice = (starting_price)->
+    totalPrice = starting_price
+    totalPrice = totalPrice + ($scope.companyProfile.vehicles.length - 2) * 50 if $scope.companyProfile.vehicles.length > 2
     $scope.totalPrice = totalPrice
     totalPrice
 
@@ -994,14 +983,8 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
     $scope.companyProfile.allRegions = {}
     for region in $rootScope.allRegions
       $scope.companyProfile.allRegions[region] = region in $scope.companyProfile.regions
-    $scope.totalPrice = $scope.updateTotalPrice()
   updateSelectedRegions()
 
-  updateSelectedRegionsCount = ->
-    $scope.selectedRegionsCount = 0
-    for region, isEnabled of $scope.companyProfile.allRegions
-      $scope.selectedRegionsCount += 1 if isEnabled
-  updateSelectedRegionsCount()
 
   updateCompanyAndCompanyProfile = (company) ->
     $rootScope.company = company
@@ -1036,7 +1019,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
       $scope.userProfileError =
         "The new password and password confirmation are not identical."
 
-  $scope.saveLicensedRegions = ->
+  $scope.saveFavoritedRegions = ->
     return unless confirm("Are you sure?")
     finalRegions = []
 

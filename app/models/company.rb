@@ -254,18 +254,21 @@ class Company
     self.save
   end
 
-  def update_vehicles!(vehicles)
-    vehicles ||= []
+  def update_vehicles!(vehicle_list)
+    vehicle_list ||= []
+    
+    vehicles.not_in(id: vehicle_list.map{|v| v[:_id]}).destroy_all
 
-    vehicles.each do |vehicle|
+    vehicle_list.each do |vehicle|
       v = Vehicle.where(id: vehicle[:_id]).first
       if v
         v.update_attributes(vehicle)
       else
-         self.vehicles << Vehicle.create(vehicle)
+        self.vehicles << Vehicle.create(vehicle)
       end
     end
     self.save
+
     update_vehicle_count()
   end
 
@@ -276,6 +279,8 @@ class Company
     if subscription.vehicle_count != self.vehicles.count
       subscription.update_vehicle_count!(self.vehicles.count)
     end
+
+    true
   end
 
   def update_product!(product)
