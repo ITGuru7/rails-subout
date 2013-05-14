@@ -254,11 +254,36 @@ class Company
     self.save
   end
 
+  def update_vehicles!(vehicles)
+    vehicles ||= []
+
+    vehicles.each do |vehicle|
+      v = Vehicle.where(id: vehicle[:_id]).first
+      if v
+        v.update_attributes(vehicle)
+      else
+         self.vehicles << Vehicle.create(vehicle)
+      end
+    end
+    self.save
+    update_vehicle_count()
+  end
+
+  def update_vehicle_count()
+    subscription = self.created_from_subscription
+    return unless subscription
+
+    if subscription.vehicle_count != self.vehicles.count
+      subscription.update_vehicle_count!(self.vehicles.count)
+    end
+  end
+
   def update_product!(product)
     products = ["free", "subout-basic-service", "subout-pro-service"]
 
     upgrading = products.index(product) > products.index(self.subscription_plan) 
     self.last_upgraded_at = Time.now if upgrading 
+    self.vehicles.destroy_all if product != 'subout-pro-service'
 
     self.created_from_subscription.update_product!(product) if self.created_from_subscription 
     set_subscription_info
@@ -332,4 +357,5 @@ class Company
   def confirm_subscription!
     self.created_from_subscription.confirm!
   end
+
 end

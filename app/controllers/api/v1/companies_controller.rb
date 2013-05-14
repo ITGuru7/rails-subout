@@ -47,4 +47,20 @@ class Api::V1::CompaniesController < Api::V1::BaseController
       render json: { errors: current_company.errors.full_messages }, status: 423
     end
   end
+
+  def update_regions
+    if current_company.update_regions!(params[:company][:regions])
+      render json: current_company.reload
+    else
+      render json: { errors: current_company.errors.full_messages }, status: 422
+    end
+  end
+
+  def update_vehicles
+    if current_company.update_vehicles!(params[:company][:vehicles])
+      render json: current_company.reload
+    else
+      render json: { errors: current_company.errors.full_messages }, status: 422
+    end
+  end
 end

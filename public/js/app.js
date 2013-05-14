@@ -208,27 +208,6 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     window.location = "#/sign_in";
     return window.location.reload(true);
   };
-  $rootScope.PLAN_TYPES = ["basic", "pro", "super"];
-  $rootScope.PLAN_DETAILS = {
-    "super": {
-      price: 199,
-      more_vehicles: 1,
-      count: 2,
-      roadside_assistance: 1
-    },
-    "pro": {
-      price: 199,
-      more_vehicles: 0,
-      count: 2,
-      roadside_assistance: 1
-    },
-    "basic": {
-      price: 149,
-      more_vehicles: 0,
-      count: 0,
-      roadside_assistance: 0
-    }
-  };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
@@ -1236,21 +1215,29 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   });
 };
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, Vehicle, $config) {
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
   var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateSelectedRegionsCount, vehicleCounts, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
   $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl();
+  $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
+  $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl();
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
   token = $rootScope.token;
   Product.get({
-    productHandle: 'subout-national-service',
+    productHandle: 'subout-basic-service',
     api_token: $rootScope.token.api_token
   }, function(data) {
-    return $scope.national_product = data.product;
+    return $scope.subout_basic_product = data.product;
+  });
+  Product.get({
+    productHandle: 'subout-pro-service',
+    api_token: $rootScope.token.api_token
+  }, function(data) {
+    return $scope.subout_pro_product = data.product;
   });
   $scope.regionPrice = function(region_name) {
     var region;
@@ -1408,38 +1395,22 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
-    var vehicle, _i, _len, _ref;
-    _ref = $scope.companyProfile.vehicles;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      vehicle = _ref[_i];
-      if (!vehicle._id) {
-        Vehicle.save({
-          api_token: $rootScope.token.api_token,
-          vehicle: vehicle
-        });
-      }
-      if (vehicle._id) {
-        Vehicle.update({
-          api_token: $rootScope.token.api_token,
-          id: vehicle._id,
-          vehicle: vehicle
-        });
-      }
-    }
+    Company.update_vehicles({
+      companyId: $rootScope.company._id,
+      company: $scope.companyProfile,
+      api_token: $rootScope.token.api_token,
+      action: "update_vehicles"
+    }, function(company) {
+      return updateCompanyAndCompanyProfile(company);
+    }, function(error) {
+      return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
+    });
     return $scope.saveCompanyProfile();
   };
   vehicleCounts = function() {
-    $scope.plan_detail = null;
     $scope.vehicle_count = 0;
-    $scope.vehicles_diff = 0;
-    if ($scope.companyProfile.plan_type) {
-      $scope.plan_detail = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type];
-    }
     if ($scope.companyProfile.vehicles) {
-      $scope.vehicle_count = $scope.companyProfile.vehicles.length;
-    }
-    if ($scope.plan_detail) {
-      return $scope.vehicles_diff = $scope.vehicle_count - $scope.plan_detail.count;
+      return $scope.vehicle_count = $scope.companyProfile.vehicles.length;
     }
   };
   $scope.$watch("companyProfile.plan_type", function() {
@@ -1453,15 +1424,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.companyProfile.vehicles.push(vehicle);
   };
   $scope.removeVehicle = function(vehicle) {
-    $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
+    return $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
-    if (vehicle._id) {
-      return Vehicle["delete"]({
-        api_token: $rootScope.token.api_token,
-        id: vehicle._id
-      });
-    }
   };
   $scope.removeVehicleType = function(vehicle_type) {
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, function(item) {
@@ -1871,16 +1836,6 @@ suboutSvcs.factory("Rating", function($resource) {
   return r1;
 });
 
-suboutSvcs.factory("Vehicle", function($resource) {
-  return $resource("" + api_path + "/vehicles/:id", {
-    id: '@id'
-  }, {
-    update: {
-      method: "PUT"
-    }
-  });
-});
-
 suboutSvcs.factory("Opportunity", function($resource) {
   var Opportunity;
   Opportunity = $resource("" + api_path + "/opportunities/:opportunityId", {}, {
@@ -1972,6 +1927,10 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     update_regions: {
       method: "PUT",
       action: "update_regions"
+    },
+    update_vehicles: {
+      method: "PUT",
+      action: "update_vehicles"
     },
     update_product: {
       method: "PUT",
@@ -2329,6 +2288,34 @@ suboutSvcs.factory("$analytics", function($location) {
 
 suboutSvcs.factory("$config", function($location) {
   return {
+    suboutBasicSubscriptionUrl: function() {
+      switch ($location.host()) {
+        case "subouttest.herokuapp.com":
+          return "https://subouttest.chargify.com/h/3289099/subscriptions/new";
+        case "suboutdev.herokuapp.com":
+          return "https://suboutdev.chargify.com/h/3288752/subscriptions/new";
+        case "suboutdemo.herokuapp.com":
+          return "https://suboutdemo.chargify.com/h/3289094/subscriptions/new";
+        case "suboutapp.com":
+          return "https://subout.chargify.com/h/3267626/subscriptions/new";
+        default:
+          return "https://suboutvps.chargify.com/h/3307351/subscriptions/new";
+      }
+    },
+    suboutProSubscriptionUrl: function() {
+      switch ($location.host()) {
+        case "subouttest.herokuapp.com":
+          return "https://subouttest.chargify.com/h/3289099/subscriptions/new";
+        case "suboutdev.herokuapp.com":
+          return "https://suboutdev.chargify.com/h/3288752/subscriptions/new";
+        case "suboutdemo.herokuapp.com":
+          return "https://suboutdemo.chargify.com/h/3289094/subscriptions/new";
+        case "suboutapp.com":
+          return "https://subout.chargify.com/h/3267626/subscriptions/new";
+        default:
+          return "https://suboutvps.chargify.com/h/3307356/subscriptions/new";
+      }
+    },
     nationalSubscriptionUrl: function() {
       switch ($location.host()) {
         case "subouttest.herokuapp.com":

@@ -51,17 +51,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     window.location = "#/sign_in"
     window.location.reload(true)
 
-  $rootScope.PLAN_TYPES = [
-    "basic",
-    "pro",
-    "super"
-  ]
-
-  $rootScope.PLAN_DETAILS =
-    "super": { price: 199, more_vehicles: 1, count: 2, roadside_assistance: 1 }
-    "pro": { price: 199, more_vehicles: 0, count: 2, roadside_assistance: 1 }
-    "basic": { price: 149, more_vehicles: 0, count: 0, roadside_assistance: 0 }
-
   $rootScope.TRIP_TYPES = [
     "One way",
     "Round trip",
@@ -960,21 +949,28 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.query = $location.search().q
     $scope.refreshEvents()
 
-SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Vehicle, $config) ->
+SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $config) ->
   $scope.userProfile = angular.copy($rootScope.user)
   $scope.companyProfile = angular.copy($rootScope.company)
 
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl()
   $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl()
+  $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl()
+  $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl()
 
   $rootScope.selectedTab = "user-login" unless $rootScope.selectedTab
   token = $rootScope.token
   
   Product.get
-    productHandle: 'subout-national-service'
+    productHandle: 'subout-basic-service'
     api_token: $rootScope.token.api_token
     (data) ->
-      $scope.national_product = data.product
+      $scope.subout_basic_product = data.product
+  Product.get
+    productHandle: 'subout-pro-service'
+    api_token: $rootScope.token.api_token
+    (data) ->
+      $scope.subout_pro_product = data.product
 
   $scope.regionPrice = (region_name) ->
     region = _.find $rootScope.REGION_PRICES, (item) ->
@@ -1098,18 +1094,21 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Veh
     $scope.vehicleTypeOptions = vehicleTypeOptions()
 
   $scope.saveVehicles = ->
-    for vehicle in $scope.companyProfile.vehicles
-      Vehicle.save({ api_token: $rootScope.token.api_token, vehicle: vehicle }) unless vehicle._id
-      Vehicle.update({ api_token: $rootScope.token.api_token, id: vehicle._id, vehicle: vehicle }) if vehicle._id
+    Company.update_vehicles
+      companyId: $rootScope.company._id
+      company: $scope.companyProfile
+      api_token: $rootScope.token.api_token
+      action: "update_vehicles"
+      (company) ->
+        updateCompanyAndCompanyProfile(company)
+      (error) ->
+        $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
+
     $scope.saveCompanyProfile()
   
   vehicleCounts = ()->
-    $scope.plan_detail = null
     $scope.vehicle_count = 0
-    $scope.vehicles_diff = 0
-    $scope.plan_detail = $rootScope.PLAN_DETAILS[$scope.companyProfile.plan_type] if $scope.companyProfile.plan_type
     $scope.vehicle_count = $scope.companyProfile.vehicles.length if $scope.companyProfile.vehicles
-    $scope.vehicles_diff = $scope.vehicle_count - $scope.plan_detail.count if $scope.plan_detail
 
   $scope.$watch "companyProfile.plan_type", ->
     vehicleCounts()
@@ -1124,8 +1123,6 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Veh
 
   $scope.removeVehicle = (vehicle) ->
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, (item) -> vehicle is item)
-    Vehicle.delete({ api_token: $rootScope.token.api_token, id: vehicle._id}) if vehicle._id
-
 
   $scope.removeVehicleType = (vehicle_type) ->
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, (item) -> vehicle_type is item)

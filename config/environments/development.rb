@@ -46,5 +46,6 @@ Subout::Application.configure do
   DEVELOPMENT_MODE = ENV["DEV_SITE"].nil? ? false : true
   CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'suboutvps.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
+  CHARGIFY_FREE_SIGN_UP_KEY = '3307848'
   ENV["CHARGIFY_HOSTED_PAGE_TOKEN"] ||= "EzERWllF6fCU5e98nlfF"
 end

@@ -57,6 +57,8 @@ Subout::Application.routes.draw do
       resources :companies do
         get :search, on: :collection
         put :update_product, on: :member
+        put :update_regions, on: :member
+        put :update_vehicles, on: :member
       end
 
       resources :bids do

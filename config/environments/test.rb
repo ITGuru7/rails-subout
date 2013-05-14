@@ -45,4 +45,5 @@ Subout::Application.configure do
   DEVELOPMENT_MODE = true
   CHARGIFY_URI = 'subouttest.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
+  CHARGIFY_FREE_SIGN_UP_KEY = '3307848'
 end

@@ -30,11 +30,6 @@ suboutSvcs.factory "Rating", ($resource) ->
   r1.search = r2.get.bind(r2)
   r1
 
-suboutSvcs.factory "Vehicle", ($resource) ->
-  $resource "#{api_path}/vehicles/:id",
-    {id:'@id'},
-    update: {method: "PUT"}
-
 suboutSvcs.factory "Opportunity", ($resource) ->
   Opportunity = $resource "#{api_path}/opportunities/:opportunityId",
     {},
@@ -88,6 +83,7 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
     update: {method: "PUT"}
     search: {method: "GET", action: "search", isArray: true}
     update_regions: {method: "PUT", action: "update_regions"}
+    update_vehicles: {method: "PUT", action: "update_vehicles"}
     update_product: {method: "PUT", action: "update_product"}
 
   Company::regionNames = ->
@@ -355,6 +351,20 @@ suboutSvcs.factory "$analytics", ($location) ->
 
 suboutSvcs.factory "$config", ($location) ->
   {
+    suboutBasicSubscriptionUrl: ->
+      switch $location.host()
+        when "subouttest.herokuapp.com" then "https://subouttest.chargify.com/h/3289099/subscriptions/new"
+        when "suboutdev.herokuapp.com" then "https://suboutdev.chargify.com/h/3288752/subscriptions/new"
+        when "suboutdemo.herokuapp.com" then "https://suboutdemo.chargify.com/h/3289094/subscriptions/new"
+        when "suboutapp.com" then "https://subout.chargify.com/h/3267626/subscriptions/new"
+        else "https://suboutvps.chargify.com/h/3307351/subscriptions/new"
+    suboutProSubscriptionUrl: ->
+      switch $location.host()
+        when "subouttest.herokuapp.com" then "https://subouttest.chargify.com/h/3289099/subscriptions/new"
+        when "suboutdev.herokuapp.com" then "https://suboutdev.chargify.com/h/3288752/subscriptions/new"
+        when "suboutdemo.herokuapp.com" then "https://suboutdemo.chargify.com/h/3289094/subscriptions/new"
+        when "suboutapp.com" then "https://subout.chargify.com/h/3267626/subscriptions/new"
+        else "https://suboutvps.chargify.com/h/3307356/subscriptions/new"
     nationalSubscriptionUrl: ->
       switch $location.host()
         when "subouttest.herokuapp.com" then "https://subouttest.chargify.com/h/3289099/subscriptions/new"

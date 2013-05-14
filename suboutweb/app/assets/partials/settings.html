@@ -264,20 +264,44 @@
       <div ng-class="{active:selectedTab == 'roadside-assisted-busses'}" class="tab-pane modal-content" id="vehicles">
 
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
-        <div class="text-centered">
-          <button class="btn btn-primary" ng-click="updateProduct('subout-basic-service')">Upgrade to subout basic plan $149/month</button>
-          <br />
-          <br />
-          <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" >Upgrade to subout pro plan $199/month + 2 busses</button>
+
+        <!--subout pro plan-->
+
+        <div class="subout-pro-subscription" ng-show="company.subscription_plan == 'subout-pro-service'">
+          <div>Subscription price: {{subout_pro_product.price_in_cents/100 | soCurrency}}</div>
+          <div>You can manage 2 roadside assitance buses, addtional buses will be charged $50 per a bus.</div>
+          <div class="alert alert-info downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
+          <div class="text-centered">
+            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('subout-basic-service')">Downgrade to subout basic plan</button>
+            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('free')">Downgrade to subout free plan</button>
+            <br>
+            <br>
+          </div>
         </div>
 
-        <form name="vehicleForm" id="vehicleForm" class="form-horizontal" novalidate ng-show="company.subscription_plan == 'subout-pro-service'">
-          <div ui-if="plan_detail">
-            <div ng-show="vehicles_diff > 0 && !plan_detail.more_vehicles" class="alert alert-error">
-              Please remove {{ vehicles_diff }} vehicles.
-            </div>
+        <!--subout basic plan-->
 
-            <hr />
+        <div class="subout-basic-subscription" ng-show="company.subscription_plan == 'subout-basic-service'">
+          <div>Subscription price: {{subout_basic_product.price_in_cents/100 | soCurrency}}</div>
+          <div class="text-centered">
+            <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')">Upgrade to subout pro plan</button>
+          </div>
+        </div>
+
+        <!--free plan-->
+
+        <div ng-show="company.subscription_plan == 'free'" class="text-centered">
+          <a class="btn btn-primary" href="{{suboutProSubscriptionUrl}}?reference={{company._id}}">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</a><br><br>
+          <a class="btn btn-primary" href="{{suboutBasicSubscriptionUrl}}?reference={{company._id}}">Upgrade to subout basic plan</a>
+        </div>
+
+        <div ng-show="company.self_service_url" class="text-centered">
+          <a class="btn btn-primary" href="{{company.self_service_url}}">Update my credit card number</a>
+        </div>
+        <hr />
+
+        <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-show="company.subscription_plan == 'subout-pro-service'" novalidate>
+          <div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
               <div class="row-fluid">
                   <a ng-click="removeVehicle(vehicle)">Remove vehicle</a>
@@ -309,12 +333,12 @@
               <hr />
             </div>
 
-            <div ng-show="vehicles_diff < 0 || plan_detail.more_vehicles">
+            <div>
               <a ng-click="addVehicle({})">Add New Vehicle</a> <br/><br/>
             </div>
           </div>
-          <div class="form-actions">
-            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid && vehicle_diff > 0">Save</button>
+          <div class="form-actions" ng-show="companyProfile.vehicles.length > 0">
+            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
           </div>
         </form>
       </div>
