@@ -111,9 +111,9 @@ class Notifier < ActionMailer::Base
     end
   end
 
-  def remove_vehicle(vehicle, company_id)
+  def remove_vehicle(vehicle)
     @vehicle = vehicle
-    @company = Company.find(company_id) 
+    @company = Company.find(vehicle.company_id) 
 
     mail(subject: "[SubOut] Vehicle is removed on: #{@company.name}", to: Setting.admin_email)
   end

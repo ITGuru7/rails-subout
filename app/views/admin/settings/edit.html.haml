@@ -9,6 +9,6 @@
         - else
           = f.text_field :value
 
-    .control-group.pull-right
+    .form-actions
       = f.submit "Save", class: "btn btn-danger"
       = link_to "Cancel", edit_admin_setting_path(@setting), class: "btn"

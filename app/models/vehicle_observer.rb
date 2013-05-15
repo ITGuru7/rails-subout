@@ -6,6 +6,6 @@ class VehicleObserver < Mongoid::Observer
   end
 
   def after_destroy(vehicle)
-    Notifier.delay.remove_vehicle(vehicle, vehicle.company_id)
+    Notifier.delay.remove_vehicle(vehicle)
   end
 end

@@ -18,6 +18,6 @@ class Setting
   end
 
   def self.admin_email
-    Setting.find(key: 'admin_email').value
+    Setting.find_by(key: 'admin_email').value
   end
 end

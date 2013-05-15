@@ -75,7 +75,7 @@ module Subout
     config.assets.version = SUBOUT_APP_VERSION
 
     # Observers
-    config.mongoid.observers = :company_observer, :opportunity_observer, :bid_observer, :event_observer
+    config.mongoid.observers = :company_observer, :opportunity_observer, :bid_observer, :event_observer, :vehicle_observer
 
     # Mongo logging options
     Mongoid.logger.level = Logger::WARN
