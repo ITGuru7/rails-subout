@@ -30,6 +30,7 @@ class Bid
   scope :active, -> { where(canceled: false) }
   scope :recent, -> { desc(:created_at) }
   scope :by_amount, -> { asc(:amount) }
+  scope :today, -> { where(:created_at.gte => Date.today.beginning_of_day, :created_at.lte => Date.today.end_of_day) }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
@@ -98,6 +99,10 @@ class Bid
       if opportunity.for_favorites_only?
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
       end
+    end
+
+    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 2
+      errors.add :base, "You cannot bid over 10 times per day."
     end
   end
 

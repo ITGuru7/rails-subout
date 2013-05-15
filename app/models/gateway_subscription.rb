@@ -32,11 +32,15 @@ class GatewaySubscription
 
   def self.revenues(options)
     result = Hash.new
+
+    start_date = Date.parse(options[:start_date])
+    end_date = Date.parse(options[:end_date])
+
     GatewaySubscription::REGION_NAMES.each do |region|
       tmp_value = Hash.new
-      tmp_value[:posted_oppor_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).count
-      tmp_value[:total_awarded_count] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).won.count
-      tmp_value[:total_awarded_amount] = Opportunity.by_region(region).by_period(options[:start_date], options[:end_date]).won.sum(&:value)
+      tmp_value[:posted_oppor_count] = Opportunity.by_region(region).by_period(start_date, end_date).count
+      tmp_value[:total_awarded_count] = Opportunity.by_region(region).by_period(start_date, end_date).won.count
+      tmp_value[:total_awarded_amount] = Opportunity.by_region(region).by_period(start_date, end_date).won.sum(&:value)
       result[region] = tmp_value
     end
 

@@ -3,7 +3,7 @@ class CompanySerializer < ActiveModel::Serializer
     :fleet_size, :since, :owner, :contact_name, :tpa, :abbreviated_name, :contact_phone,
     :bids_count, :opportunities_count, :subout_pro_subscriber?, :favoriting_buyer_ids, :self_service_url,
     :dot_number, :cell_phone, :sales_info_messages, :subscription_plan, :insurance, :upgraded_recently, :has_ada_vehicles, :payment_state, 
-    :vehicle_types, :notification_email, :score, :payment_methods
+    :vehicle_types, :notification_email, :score, :payment_methods, :today_bids_count
 
   has_many :ratings_taken, serializer: RatingSerializer
   has_many :vehicles
@@ -28,6 +28,10 @@ class CompanySerializer < ActiveModel::Serializer
 
   def bids_count
     object.bids.count
+  end
+
+  def today_bids_count
+    object.bids.today.count
   end
 
   def opportunities_count

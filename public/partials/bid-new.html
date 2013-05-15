@@ -7,6 +7,13 @@
   </div>
   <div class="modal-body modal-content">
     <form name="newBid" class="form-horizontal">
+      <div class="alert alert-info" ng-show="company.isFreeUser()">
+        Your subscription plan is 'free' plan. You can bid only 10 times a day. <br />
+        Today's bid count: {{ company.today_bids_count }} <br />
+        <a ng-click="displaySettings('vehicles')" style="text-decoration: underline">
+        Please upgrade your subscription plan to bid more.
+        </a>
+      </div>
       <div class="alert alert-error" ng-show="errors">
         <a class="close" ng-click="hideAlert()">&times;</a>
         <ul ng-repeat="error in errors">

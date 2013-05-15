@@ -189,9 +189,6 @@ suboutSvcs.factory "Authorize", ($rootScope, $location, AuthToken, Region, User,
       $rootScope.pusher = new Pusher(token.pusher_key)
       $rootScope.channel = $rootScope.pusher.subscribe 'global'
 
-      $rootScope.REGION_PRICES = Region.query
-        api_token: token.api_token
-
       promise = defer.promise.then( ()->
         $rootScope.company = Company.get
           companyId: token.company_id

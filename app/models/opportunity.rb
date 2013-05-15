@@ -50,7 +50,7 @@ class Opportunity
   scope :won, -> { where(:winning_bid_id.ne => nil) }
   scope :by_region, ->(region) { where(start_region: region) }
   scope :expired, -> { where(expired_notification_sent: true) }
-  scope :by_period, ->(start_date, end_date) { where(:created_at.gte => Date.parse(start_date).beginning_of_day, :created_at.lte => Date.parse(end_date).end_of_day) }
+  scope :by_period, ->(start_date, end_date) { where(:created_at.gte => start_date.beginning_of_day, :created_at.lte => end_date.end_of_day) }
   
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
