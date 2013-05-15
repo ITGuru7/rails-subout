@@ -101,7 +101,7 @@ class Bid
       end
     end
 
-    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 2
+    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 10
       errors.add :base, "You cannot bid over 10 times per day."
     end
   end
