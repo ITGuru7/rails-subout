@@ -958,13 +958,14 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl()
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl()
   $scope.subscription = null
+  $scope.additional_price = 0
 
   $rootScope.selectedTab = "user-login" unless $rootScope.selectedTab
   token = $rootScope.token
   
-  updateTotalPrice = (product)->
-    product.total = product.price_in_cents
-    product.total = product.price_in_cents + ($scope.companyProfile.vehicles.length - 2) * 50 * 100 if $scope.companyProfile.vehicles.length > 2
+  updateAdditionalPrice = ()->
+    $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100 if $scope.companyProfile.vehicles.length > 2
+    console.log $scope.additional_price
 
   updateSelectedRegions = ->
     $scope.companyProfile.regions ||= []
@@ -991,7 +992,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     api_token: $rootScope.token.api_token
     (data) ->
       $scope.subout_pro_product = data.product
-      updateTotalPrice($scope.subout_pro_product)
+      updateAdditionalPrice()
 
   GatewaySubscription.get
     subscriptionId: $rootScope.company.subscription_id
@@ -1099,7 +1100,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.saveCompanyProfile()
 
   $scope.$watch "companyProfile.vehicles.length", ->
-    updateTotalPrice($scope.subout_pro_product) if $scope.subout_pro_product
+    updateAdditionalPrice()
 
   $scope.addVehicle = (vehicle)->
     $scope.companyProfile.vehicles.push(vehicle)

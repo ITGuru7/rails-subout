@@ -288,7 +288,6 @@ class Company
 
     upgrading = products.index(product) > products.index(self.subscription_plan) 
     self.last_upgraded_at = Time.now if upgrading 
-    self.vehicles.destroy_all if product != 'subout-pro-service'
 
     self.created_from_subscription.update_product!(product) if self.created_from_subscription 
     set_subscription_info

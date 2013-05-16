@@ -290,45 +290,15 @@
 
       <div ng-class="{active:selectedTab == 'vehicles'}" class="tab-pane modal-content" id="vehicles">
 
-        <div class="alert alert-info downgrade-instructions" ng-show="!companyProfile.isFreeUser && companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
-
-        <div class="row-fluid">
-          <div class="span4">
-            <h5>Subout free plan</h5>
-            <div>Price: $0</div>
-            <div>Vehicles: none</div>
-            <div>Bid count: 10 a day</div>
-
-          </div>
-          <div class="span4">
-            <h5>Subout basic plan</h5>
-            <div>Price: {{subout_basic_product.price_in_cents/100 | soCurrency}}</div>
-            <div>Vehicles: none</div>
-            <div>Bid count: no limit</div>
-          </div>
-          <div class="span4">
-            <h5>Subout pro plan</h5>
-            <div>Price: {{subout_pro_product.price_in_cents/100 | soCurrency}}</div>
-            <div>Vehicles: 2 as free</div>
-            <div>Bid count: no limit</div>
-          </div>
-        </div>
-
-        <hr />
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
 
         <!--subout pro plan-->
 
         <div class="subout-pro-subscription" ng-show="company.subscription_plan == 'subout-pro-service'">
-          <div>Subscription price: {{subout_pro_product.total/100  | soCurrency}}</div>
+          <div>Subscription price: {{(subout_pro_product.price_in_cents + additional_price)/100  | soCurrency}}</div>
+          <div class="alert alert-info downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
           <div class="text-centered">
-            <br />
             <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('subout-basic-service')">Downgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
-            <br />
-            <br />
-            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('free')">Downgrade to subout free plan</button>
-            <br>
-            <br>
           </div>
         </div>
 
@@ -337,24 +307,25 @@
         <div class="subout-basic-subscription" ng-show="company.subscription_plan == 'subout-basic-service'">
           <div>Subscription price: {{subout_basic_product.price_in_cents/100 | soCurrency}}</div>
           <div class="text-centered">
-            <br />
-            <br />
             <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
           </div>
         </div>
 
         <!--free plan-->
 
-        <div ng-show="company.subscription_plan == 'free'" class="text-centered">
-          <a class="btn btn-primary" ng-click="updateProduct('subout-basic-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</a>
-          <br/><br/>
-          <a class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</a>
-          <br><br>
+        <div ng-show="company.subscription_plan == 'free'" >
+          <div class="alert alert-info" ng-show="subscription == null">Please contact admin to upgrade your plan.</div>
+          <div class="text-centered">
+            <button class="btn btn-primary" ng-click="updateProduct('subout-basic-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
+            <br />
+            <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
+          </div>
         </div>
 
-        <div ng-show="company.self_service_url" class="text-centered">
+        <div ng-show="company.self_service_url && subscription!=null" class="text-centered">
+          <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">Please update your credit card number to upgrade your plan.</div>
           <br />
-          <a class="btn btn-success" href="{{company.self_service_url}}">Update my credit card number</a>
+          <a class="btn btn-success" href="{{company.self_service_url}}" target="_blank">Update my credit card number</a>
         </div>
         <hr />
 

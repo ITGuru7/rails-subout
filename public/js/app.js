@@ -1216,7 +1216,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
-  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateTotalPrice, vehicleTypeOptions;
+  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
@@ -1224,15 +1224,16 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl();
   $scope.subscription = null;
+  $scope.additional_price = 0;
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
   token = $rootScope.token;
-  updateTotalPrice = function(product) {
-    product.total = product.price_in_cents;
+  updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return product.total = product.price_in_cents + ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
+      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
     }
+    return console.log($scope.additional_price);
   };
   updateSelectedRegions = function() {
     var region, _base, _i, _len, _ref, _results;
@@ -1264,7 +1265,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     api_token: $rootScope.token.api_token
   }, function(data) {
     $scope.subout_pro_product = data.product;
-    return updateTotalPrice($scope.subout_pro_product);
+    return updateAdditionalPrice();
   });
   GatewaySubscription.get({
     subscriptionId: $rootScope.company.subscription_id,
@@ -1381,9 +1382,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.saveCompanyProfile();
   };
   $scope.$watch("companyProfile.vehicles.length", function() {
-    if ($scope.subout_pro_product) {
-      return updateTotalPrice($scope.subout_pro_product);
-    }
+    return updateAdditionalPrice();
   });
   $scope.addVehicle = function(vehicle) {
     return $scope.companyProfile.vehicles.push(vehicle);

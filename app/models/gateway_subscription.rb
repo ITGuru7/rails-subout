@@ -119,6 +119,8 @@ class GatewaySubscription
     sub.product_handle = product_handle
     sub.save
 
+    created_company.vehicles.destroy_all if product_handle == 'free'
+
     self.product_handle = product_handle
     self.save
   end
