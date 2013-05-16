@@ -15,6 +15,13 @@
       <select ng-model="filterVehicleType" ng-options="t for t in VEHICLE_TYPES">
         <option value="">All</option>
       </select>
+      &nbsp;&nbsp;
+    </div>
+    <div class="pull-left">
+      <span>Trip Type: </span>
+      <select ng-model="filterTripType" ng-options="t for t in TRIP_TYPES">
+        <option value="">All</option>
+      </select>
     </div>
     <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   </div>
@@ -51,6 +58,8 @@
       <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
       <td>
         <span ng-show="opportunity.vehicle_type">Vehicle Type: {{opportunity.vehicle_type}}<br></span>
+        <span ng-show="opportunity.trip_type">Trip Type: {{opportunity.trip_type}}<br></span>
+        <br />
         {{opportunity.description}}
       </td>
       <td>
