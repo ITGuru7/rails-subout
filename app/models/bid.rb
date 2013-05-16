@@ -111,12 +111,12 @@ class Bid
     if opportunity.forward_auction?
       max_amount = previous_bids.map(&:amount).max
       if max_amount && amount <= BigDecimal.new(max_amount.to_s)
-        errors.add :amount, "cannot be lower than or equal to previous bid"
+        errors.add :amount, "cannot be lower or equal to previous bid"
       end
     else
       min_amount = previous_bids.map(&:amount).min
-      if min_amount && amount == BigDecimal.new(min_amount.to_s)
-        errors.add :amount, "cannot be higher than or equal to previous bid"
+      if min_amount && amount >= BigDecimal.new(min_amount.to_s)
+        errors.add :amount, "cannot be higher or equal to previous bid"
       end
     end
   end
