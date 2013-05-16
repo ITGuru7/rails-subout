@@ -287,11 +287,16 @@ class Company
     products = ["free", "subout-basic-service", "subout-pro-service"]
 
     upgrading = products.index(product) > products.index(self.subscription_plan) 
-    self.last_upgraded_at = Time.now if upgrading 
 
-    self.created_from_subscription.update_product!(product) if self.created_from_subscription 
-    set_subscription_info
-    self.save
+    if self.upgraded_recently && !upgrading
+      errors.add(:base, "You upgraded your plan recently. You couldn't downgrade within a month.")
+      return false
+    else
+      self.last_upgraded_at = Time.now if upgrading 
+      self.created_from_subscription.update_product!(product) if self.created_from_subscription 
+      set_subscription_info
+      self.save
+    end
   end
 
   def self.csv_column_names
