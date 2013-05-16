@@ -65,6 +65,11 @@
       </section>
     </div>
     <div class="span9">
+
+      <div class="alert alert-info" ng-show="company.canAddFreeBuses()">
+          We supports 2 roadside assitance buses as free. Would you add vehicles? 
+          <a href="#modal" data-toggle="modal" ng-click="displaySettings('vehicles')" style="text-decoration:underline;">Click here</a>
+      </div>
       <section id="activities" when-scrolled="loadMoreEvents()">
         <div id="toolbar">
           <div class="row-fluid">

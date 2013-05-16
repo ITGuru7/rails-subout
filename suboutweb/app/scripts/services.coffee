@@ -106,8 +106,12 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
     return true if event.eventable.buyer_id is this._id
     event.eventable.buyer_id in this.favoriting_buyer_ids
 
-  Company::nationalSubscriber = ->
-    this.subscription_plan in ["subout-national-service", "subout-partner"]
+  Company::canAddFreeBuses = ()->
+    this.subscription_plan is "subout-pro-service" && 2 - this.vehicles.length > 0
+    
+
+  Company::isBasicUser = ->
+    this.subscription_plan is "subout-basic-service"
 
   Company::isProUser = ->
     this.subscription_plan is "subout-pro-service"

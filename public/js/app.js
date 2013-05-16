@@ -1938,9 +1938,11 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     }
     return _ref = event.eventable.buyer_id, __indexOf.call(this.favoriting_buyer_ids, _ref) >= 0;
   };
-  Company.prototype.nationalSubscriber = function() {
-    var _ref;
-    return (_ref = this.subscription_plan) === "subout-national-service" || _ref === "subout-partner";
+  Company.prototype.canAddFreeBuses = function() {
+    return this.subscription_plan === "subout-pro-service" && 2 - this.vehicles.length > 0;
+  };
+  Company.prototype.isBasicUser = function() {
+    return this.subscription_plan === "subout-basic-service";
   };
   Company.prototype.isProUser = function() {
     return this.subscription_plan === "subout-pro-service";
