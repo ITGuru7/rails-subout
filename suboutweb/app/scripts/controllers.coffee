@@ -949,7 +949,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.query = $location.search().q
     $scope.refreshEvents()
 
-SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $config) ->
+SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) ->
   $scope.userProfile = angular.copy($rootScope.user)
   $scope.companyProfile = angular.copy($rootScope.company)
 
@@ -957,26 +957,14 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
   $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl()
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl()
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl()
+  $scope.subscription = null
 
   $rootScope.selectedTab = "user-login" unless $rootScope.selectedTab
   token = $rootScope.token
   
-  Product.get
-    productHandle: 'subout-basic-service'
-    api_token: $rootScope.token.api_token
-    (data) ->
-      $scope.subout_basic_product = data.product
-  Product.get
-    productHandle: 'subout-pro-service'
-    api_token: $rootScope.token.api_token
-    (data) ->
-      $scope.subout_pro_product = data.product
-
-  $scope.updateTotalPrice = (starting_price)->
-    totalPrice = starting_price
-    totalPrice = totalPrice + ($scope.companyProfile.vehicles.length - 2) * 50 if $scope.companyProfile.vehicles.length > 2
-    $scope.totalPrice = totalPrice
-    totalPrice
+  updateTotalPrice = (product)->
+    product.total = product.price_in_cents
+    product.total = product.price_in_cents + ($scope.companyProfile.vehicles.length - 2) * 50 * 100 if $scope.companyProfile.vehicles.length > 2
 
   updateSelectedRegions = ->
     $scope.companyProfile.regions ||= []
@@ -991,6 +979,27 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
     $rootScope.regions = company.regions
     $scope.companyProfile = angular.copy(company)
     updateSelectedRegions()
+
+  Product.get
+    productHandle: 'subout-basic-service'
+    api_token: $rootScope.token.api_token
+    (data) ->
+      $scope.subout_basic_product = data.product
+
+  Product.get
+    productHandle: 'subout-pro-service'
+    api_token: $rootScope.token.api_token
+    (data) ->
+      $scope.subout_pro_product = data.product
+      updateTotalPrice($scope.subout_pro_product)
+
+  GatewaySubscription.get
+    subscriptionId: $rootScope.company.subscription_id
+    api_token: $rootScope.token.api_token
+    (subscription) ->
+      $scope.subscription = subscription
+    (error) ->
+      $scope.subscription = null
 
   $rootScope.setupFileUploader()
 
@@ -1088,18 +1097,9 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, $co
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 
     $scope.saveCompanyProfile()
-  
-  vehicleCounts = ()->
-    $scope.vehicle_count = 0
-    $scope.vehicle_count = $scope.companyProfile.vehicles.length if $scope.companyProfile.vehicles
-
-  $scope.$watch "companyProfile.plan_type", ->
-    vehicleCounts()
 
   $scope.$watch "companyProfile.vehicles.length", ->
-    vehicleCounts()
-
-  vehicleCounts()
+    updateTotalPrice($scope.subout_pro_product) if $scope.subout_pro_product
 
   $scope.addVehicle = (vehicle)->
     $scope.companyProfile.vehicles.push(vehicle)

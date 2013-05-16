@@ -1,6 +1,6 @@
 %h2 Companies
 .pull-right
-  = link_to "Create Free Company", "https://#{CHARGIFY_URI}/h/#{CHARGIFY_FREE_SIGN_UP_KEY}/subscriptions/new", target: "_blank", class: "btn btn-primary"
+  = link_to "Create Free Company", "https://#{CHARGIFY_URI}/h/#{CHARGIFY_FREE_PRODUCT_ID}/subscriptions/new", target: "_blank", class: "btn btn-primary"
   &nbsp;
   = link_to "Download CSV", admin_companies_path(format: "csv", sort_by: @sort_by, sort_direction: @sort_direction), target: "_blank"
 %table#admin-companies.table.table-striped

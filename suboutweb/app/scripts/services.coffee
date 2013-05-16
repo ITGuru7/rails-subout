@@ -109,6 +109,9 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::nationalSubscriber = ->
     this.subscription_plan in ["subout-national-service", "subout-partner"]
 
+  Company::isProUser = ->
+    this.subscription_plan is "subout-pro-service"
+
   Company::isFreeUser = ->
     this.subscription_plan is "free"
 

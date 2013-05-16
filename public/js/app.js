@@ -1215,38 +1215,24 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   });
 };
 
-SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, $config) {
-  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleCounts, vehicleTypeOptions;
+SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
+  var paymentMethodOptions, successUpdate, token, updateCompanyAndCompanyProfile, updateSelectedRegions, updateTotalPrice, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
   $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl();
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl();
+  $scope.subscription = null;
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
   token = $rootScope.token;
-  Product.get({
-    productHandle: 'subout-basic-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.subout_basic_product = data.product;
-  });
-  Product.get({
-    productHandle: 'subout-pro-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.subout_pro_product = data.product;
-  });
-  $scope.updateTotalPrice = function(starting_price) {
-    var totalPrice;
-    totalPrice = starting_price;
+  updateTotalPrice = function(product) {
+    product.total = product.price_in_cents;
     if ($scope.companyProfile.vehicles.length > 2) {
-      totalPrice = totalPrice + ($scope.companyProfile.vehicles.length - 2) * 50;
+      return product.total = product.price_in_cents + ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
     }
-    $scope.totalPrice = totalPrice;
-    return totalPrice;
   };
   updateSelectedRegions = function() {
     var region, _base, _i, _len, _ref, _results;
@@ -1267,6 +1253,27 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.companyProfile = angular.copy(company);
     return updateSelectedRegions();
   };
+  Product.get({
+    productHandle: 'subout-basic-service',
+    api_token: $rootScope.token.api_token
+  }, function(data) {
+    return $scope.subout_basic_product = data.product;
+  });
+  Product.get({
+    productHandle: 'subout-pro-service',
+    api_token: $rootScope.token.api_token
+  }, function(data) {
+    $scope.subout_pro_product = data.product;
+    return updateTotalPrice($scope.subout_pro_product);
+  });
+  GatewaySubscription.get({
+    subscriptionId: $rootScope.company.subscription_id,
+    api_token: $rootScope.token.api_token
+  }, function(subscription) {
+    return $scope.subscription = subscription;
+  }, function(error) {
+    return $scope.subscription = null;
+  });
   $rootScope.setupFileUploader();
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -1373,19 +1380,11 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     });
     return $scope.saveCompanyProfile();
   };
-  vehicleCounts = function() {
-    $scope.vehicle_count = 0;
-    if ($scope.companyProfile.vehicles) {
-      return $scope.vehicle_count = $scope.companyProfile.vehicles.length;
-    }
-  };
-  $scope.$watch("companyProfile.plan_type", function() {
-    return vehicleCounts();
-  });
   $scope.$watch("companyProfile.vehicles.length", function() {
-    return vehicleCounts();
+    if ($scope.subout_pro_product) {
+      return updateTotalPrice($scope.subout_pro_product);
+    }
   });
-  vehicleCounts();
   $scope.addVehicle = function(vehicle) {
     return $scope.companyProfile.vehicles.push(vehicle);
   };
@@ -1943,6 +1942,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.nationalSubscriber = function() {
     var _ref;
     return (_ref = this.subscription_plan) === "subout-national-service" || _ref === "subout-partner";
+  };
+  Company.prototype.isProUser = function() {
+    return this.subscription_plan === "subout-pro-service";
   };
   Company.prototype.isFreeUser = function() {
     return this.subscription_plan === "free";

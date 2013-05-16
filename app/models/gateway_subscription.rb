@@ -150,5 +150,7 @@ class GatewaySubscription
     cc = cs.credit_card
     return false unless cc.present?
     Time.new(cc.expiration_year, cc.expiration_month) > Time.now.beginning_of_month
+  rescue
+    false
   end
 end

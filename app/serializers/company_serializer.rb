@@ -2,7 +2,7 @@ class CompanySerializer < ActiveModel::Serializer
   attributes :_id, :name, :email, :logo_url, :logo_id, :regions, :website, :notification_type,
     :fleet_size, :since, :owner, :contact_name, :tpa, :abbreviated_name, :contact_phone,
     :bids_count, :opportunities_count, :subout_pro_subscriber?, :favoriting_buyer_ids, :self_service_url,
-    :dot_number, :cell_phone, :sales_info_messages, :subscription_plan, :insurance, :upgraded_recently, :has_ada_vehicles, :payment_state, 
+    :dot_number, :cell_phone, :sales_info_messages, :subscription_plan, :subscription_id, :insurance, :upgraded_recently, :has_ada_vehicles, :payment_state, 
     :vehicle_types, :notification_email, :score, :payment_methods, :today_bids_count
 
   has_many :ratings_taken, serializer: RatingSerializer
@@ -59,5 +59,9 @@ class CompanySerializer < ActiveModel::Serializer
 
   def self_service_url
     MyChargify.self_service_url(object.created_from_subscription.try(:subscription_id))
+  end
+
+  def subscription_id
+    object.created_from_subscription.try(:_id)
   end
 end

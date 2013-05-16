@@ -59,9 +59,9 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
 
   def show
     if params[:chargify_id]
-      subscription = GatewaySubscription.pending.find_by(subscription_id: params[:chargify_id])
+      subscription = GatewaySubscription.find_by(subscription_id: params[:chargify_id])
     else
-      subscription = GatewaySubscription.pending.find(params[:id])
+      subscription = GatewaySubscription.find(params[:id])
     end
 
     render json: subscription
