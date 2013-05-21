@@ -124,13 +124,12 @@ class GatewaySubscription
 
       created_company.vehicles.destroy_all if product_handle == 'free'
 
-      if company = self.created_company
-        company.set_subscription_info
-        company.save
-      end
-
       self.product_handle = product_handle
       self.save
+
+      if company = self.created_company
+        company.set_subscription_info
+      end
     end
   end
 
