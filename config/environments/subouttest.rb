@@ -78,6 +78,6 @@ Subout::Application.configure do
   DEVELOPMENT_MODE = false
   CHARGIFY_URI = 'subouttest.chargify.com'
   CHARGIFY_TOKEN = 'FsikQqr_iR0tcokkv8db'
-  CHARGIFY_FREE_PRODUCT_ID = '3307848'
-  CHARGIFY_BASIC_PRODUCT_ID = '3307848'
+  CHARGIFY_FREE_PRODUCT_ID = '3309893'
+  CHARGIFY_BASIC_PRODUCT_ID = '3309894'
 end
