@@ -9565,7 +9565,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   function distance(date) {
-    return (new Date().getTime() - date.getTime());
+    // TODO: added 60 seconds to sync with server time
+    return (new Date().getTime() + 60 * 1000 - date.getTime());
   }
 
   // fix for IE6 suckage

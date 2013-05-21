@@ -17,10 +17,13 @@
         <div class="span3">
             <h4>{{detailed_company.name}}</h4>
             <div ng-show="detailed_company.score">
-              <span ng-repeat="s in stars" ng-class="{ hide: s > detailed_company.score }"> <img src="/img/icon-star.jpg"> </span>
+              <span ng-repeat="s in stars" ng-class="{ hide: s > detailed_company.score }"> 
+                <img src="/img/icon-star.png">
+                <img src="/img/icon-star-half.png" ui-if="detailed_company.score - s > 0 && detailed_company.score - s < 1">  
+              </span>
                 ( {{detailed_company.score}} )
             </div>
-            <div><img ng-show="detailed_company.logo" class="logo" ng-src="{{detailed_company.logo}}" /></div>
+            <div><img ng-show="detailed_company.logo_url" class="logo" ng-src="{{detailed_company.logo_url}}" /></div>
             <div class="add-to-favorites" ng-show="detailed_company.canBeAddedAsFavorite(company)">
               <a ng-click="addToFavorites(detailed_company)">Add to Favorites</a>
             </div>
@@ -35,6 +38,11 @@
           <div class="row-fluid">
               <div class="span3">Insurance</div>
               <div class="span9"><a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno={{detailed_company.dot_number}}">{{detailed_company.insurance}}</a></div>
+          </div>
+
+          <div class="row-fluid">
+              <div class="span3">Established Date:</div>
+              <div class="span9">{{detailed_company.since}}</div>
           </div>
 
           <div class="row-fluid">
@@ -107,7 +115,7 @@
             <div class="row-fluid question">
                 <div class="span3">Over all experience</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.over_all_experience }"> <img src="/img/icon-star.jpg">  </span>
+                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.over_all_experience }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
                   <select id="rating_over_all_experience" name="rating_over_all_experience" ng-model="rating.over_all_experience" ng-options="s for s in stars" required>
@@ -161,28 +169,33 @@
                   </div>
                   <div class="span9">
                     <div class="row-fluid">
-                      <div class="span3"> {{ (r.trip_expected) && ("Expected Trip") || ("Unexpected Trip") }} - {{r.score}}</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.score }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span3">{{r.score}}</div>
+                      <div class="span9">
+                        <span ng-repeat="s in stars" ng-class="{ hide: s > r.score }"> 
+                          <img src="/img/icon-star.png">  
+                          <img src="/img/icon-star-half.png" ui-if="r.score - s > 0 && r.score - s < 1">  
+                        </span>
+                      </div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">Communication</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.communication }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.communication }"> <img src="/img/icon-star.png">  </span></div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">Punctuality</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.punctuality }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.punctuality }"> <img src="/img/icon-star.png">  </span></div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">Ease of payment</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.ease_of_payment }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.ease_of_payment }"> <img src="/img/icon-star.png">  </span></div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">Over all experience</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.over_all_experience }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.over_all_experience }"> <img src="/img/icon-star.png">  </span></div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">How likely are you to use this company again?</div>
-                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.like_again }"> <img src="/img/icon-star.jpg">  </span></div>
+                      <div class="span9"><span ng-repeat="s in stars" ng-class="{ hide: s > r.like_again }"> <img src="/img/icon-star.png">  </span></div>
                     </div>
                     <div class="row-fluid">
                       <div class="span3">Did this trip travel as expected?</div>
