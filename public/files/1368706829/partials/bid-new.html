@@ -29,7 +29,7 @@
                  name="bid_amount"
                  required
                  ng-model="bid.amount"
-                 ui-validate="{ only_numbers: validateNumber, reserve_amount: validateReserveAmount, win_it_now_price: validateWinItNowPrice }"
+                 ui-validate="{ only_numbers: 'validateNumber($value)', reserve_amount: 'validateReserveAmount($value)', win_it_now_price: 'validateWinItNowPrice($value)' }"
                  size="10"
                  maxlength="10"
                  class="input-small">
@@ -50,7 +50,7 @@
                  id="bid_auto_bidding_limit"
                  name="bid_auto_bidding_limit"
                  ng-model="bid.auto_bidding_limit"
-                 ui-validate="{ only_numbers: validateOptionalNumber, win_it_now_price: validateWinItNowPrice, bid_amount: validateAutoBiddingLimit }"
+                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)', win_it_now_price: 'validateWinItNowPrice($value)', bid_amount: 'validateAutoBiddingLimit($value)' }"
                  size="10"
                  maxlength="10"
                  class="input-small">
@@ -65,7 +65,7 @@
       </div>
 
       <div class="control-group">
-        <label for="bid_comment" class="control-label">Comment</label>
+        <label for="bid_comment" class="control-label">Brag about your company here</label>
         <div class="controls">
           <input type="text" id="bid_comment" name="bid_comment" ng-model="bid.comment" class="input-xlarge">
         </div>

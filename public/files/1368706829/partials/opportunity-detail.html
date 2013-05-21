@@ -9,7 +9,10 @@
       <h5>OFFERED BY</h5>
       <div class="company-info">
         <ul>
-          <li><img ng-src="{{opportunity.buyer.logo_url}}" /></li>
+          <li>
+            <img ng-show="opportunity.buyer.logo_url" ng-src="{{opportunity.buyer.logo_url}}" />
+            <div ng-hide="opportunity.buyer.logo_url">No Logo Available</div>
+          </li>
           <li><a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(opportunity.buyer._id)">{{opportunity.buyer.abbreviated_name}}</a></li>
         </ul>
       </div>
@@ -65,7 +68,7 @@
             <span ng-show="opportunity.status == 'In progress'" class="label-field">Bidding ends: </span>
             <span relative-time="opportunity.bidding_ends_at" title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
           </div>
-          <div ng-hide="opportunity.status == 'In progress'">
+          <div ng-show="opportunity.status && opportunity.status != 'In progress'">
             <span class="label-field warning">Bidding ended</span><br>
             <span ng-hide="opportunity.winning_bid_id">The poster of this opportunity has not yet selected a winner.</span>
           </div>
