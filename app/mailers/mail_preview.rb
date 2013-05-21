@@ -45,11 +45,6 @@ class MailPreview < MailView
     Notifier.new_opportunity(opportunity.id, company.id)
   end
 
-  def updated_licensed_regions
-    company = Company.last
-    Notifier.updated_licensed_regions(company.id)
-  end
-
   def updated_product
     company = Company.last
     Notifier.updated_product(company.id)

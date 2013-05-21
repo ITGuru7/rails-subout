@@ -23,10 +23,7 @@ class Admin::GatewaySubscriptionsController < Admin::BaseController
     @subscription = GatewaySubscription.find(params[:id])
     @subscription.update_attributes(params[:gateway_subscription])
     @subscription.update_product!(params[:gateway_subscription][:product_handle])
-    if company = @subscription.created_company
-      company.set_subscription_info
-      company.save
-    end
+
     redirect_to edit_admin_gateway_subscription_path(@subscription), notice: "Subscription updated"
   end
 end

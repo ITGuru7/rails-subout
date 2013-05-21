@@ -293,9 +293,8 @@ class Company
       return false
     else
       self.last_upgraded_at = Time.now if upgrading 
-      self.created_from_subscription.update_product!(product) if self.created_from_subscription 
-      set_subscription_info
       self.save
+      self.created_from_subscription.update_product!(product) if self.created_from_subscription 
     end
   end
 
@@ -342,6 +341,10 @@ class Company
     self.update_attribute(:email, email)
     self.created_from_subscription.update_attribute(:email, email)
     self.users.first.update_attribute(:email, email)
+  end
+
+  def chargify_service_url
+    MyChargify.self_service_url(self.created_from_subscription.try(:subscription_id))
   end
 
   private

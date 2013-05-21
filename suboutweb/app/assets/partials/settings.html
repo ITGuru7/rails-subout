@@ -318,14 +318,17 @@
           <div class="text-centered">
             <button class="btn btn-primary" ng-click="updateProduct('subout-basic-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
             <br />
+            <br />
             <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
           </div>
         </div>
 
-        <div ng-show="company.self_service_url && subscription!=null" class="text-centered">
-          <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">Please update your credit card number to upgrade your plan.</div>
-          <br />
+        <div ng-show="subscription!=null">
+          <hr />
+          <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">You have not valid credit card number. Please update your credit card number to upgrade your plan.</div>
+          <div class="text-centered">
           <a class="btn btn-success" href="{{company.self_service_url}}" target="_blank">Update my credit card number</a>
+          </div>
         </div>
         <hr />
 

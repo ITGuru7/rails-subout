@@ -1,0 +1,8 @@
+%p Dear #{@company.name},
+%p Your credit card is expired.
+%p 
+  Please click
+  = link_to "here", @card_update_link
+  to update credit card information.
+%p Note that if you don't update credit card information in 10 days, your company will be locked.
+= render 'email_sig'

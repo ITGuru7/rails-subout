@@ -93,9 +93,15 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] new opportunity arrived", to: @company.notifiable_email)
   end
 
-  def updated_licensed_regions(company_id)
+  def expired_card(company_id)
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] updated licensed regions", to: @company.notifiable_email)
+    @card_update_link = @company.chargify_service_url
+    mail(subject: "[SubOut] Credit card is expired", to: @company.notifiable_email)
+  end
+
+  def locked_company(company_id)
+    @company = Company.find(company_id)
+    mail(subject: "[SubOut] Your company is locked", to: @company.notifiable_email)
   end
 
   def updated_product(company_id)

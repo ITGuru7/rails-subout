@@ -58,7 +58,7 @@ class CompanySerializer < ActiveModel::Serializer
   end
 
   def self_service_url
-    MyChargify.self_service_url(object.created_from_subscription.try(:subscription_id))
+    object.chargify_service_url
   end
 
   def subscription_id

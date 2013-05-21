@@ -4,8 +4,6 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
   end
 
   def update_account
-    gs = GatewaySubscription.find_by(subscription_id: params[:chargify_id])
-    gs.update_attribute(:payment_state, "success") if gs.has_valid_credit_card?
     redirect_to "/#/dashboard"
   end
 
@@ -43,15 +41,22 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
       else
         Notifier.delay.subscription_confirmation(gw_subscription.id)
       end
+
+      gw_subscription.update_credit_card_expired
     elsif event == "subscription_state_change"
       gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
       gw_subscription.update_attribute(:state, subscription["state"])
     elsif event == "payment_failure"
       gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
       gw_subscription.update_attribute(:payment_state, "failure")
+      gw_subscription.update_credit_card_expired
     elsif event == "payment_success"
       gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
       gw_subscription.update_attribute(:payment_state, "success")
+    elsif event == "expiring_card"
+      gw_subscription = GatewaySubscription.find_by(subscription_id: subscription["id"])
+      gw_subscription.update_attribute(:expiring_card, true)
+      gw_subscription.update_credit_card_expired
     end
 
     render json: {}

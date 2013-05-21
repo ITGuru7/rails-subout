@@ -18,6 +18,8 @@ class GatewaySubscription
   field :confirmed, type: Boolean, default: false
   field :state
   field :payment_state
+  field :card_expired_date, type: Date
+  field :card_expired_email_sent, type: Boolean, default: false
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
 
@@ -121,6 +123,11 @@ class GatewaySubscription
 
     created_company.vehicles.destroy_all if product_handle == 'free'
 
+    if company = self.created_company
+      company.set_subscription_info
+      company.save
+    end
+
     self.product_handle = product_handle
     self.save
   end
@@ -138,6 +145,8 @@ class GatewaySubscription
 
   def chargify_subscription
     Chargify::Subscription.find(self.subscription_id)
+  rescue
+    nil
   end
 
   def update_chargify_email
@@ -145,14 +154,48 @@ class GatewaySubscription
     customer.email = self.email
     customer.save
   end
+  
+  def self.send_expired_card_notification
+    GatewaySubscription.all.each do |gs|
+      next if gs.created_company.nil? or gs.state != 'active'
 
-  def has_valid_credit_card?
+      gs.update_credit_card_expired
+
+      if gs.card_expired_date
+        if (gs.card_expired_date > 10.days.ago.to_date) and !gs.card_expired_email_sent
+          Notifier.delay.expired_card(gs.created_company.id)
+          gs.set(:card_expired_email_sent, true)
+        elsif gs.card_expired_date == 10.days.ago.to_date
+          gs.created_company.lock_access!
+          Notifier.delay.locked_company(gs.created_company.id)
+        end
+      end
+    end
+  end
+
+  def credit_card_info
     cs = chargify_subscription
-    return false unless cs.present?
-    cc = cs.credit_card
-    return false unless cc.present?
-    Time.new(cc.expiration_year, cc.expiration_month) > Time.now.beginning_of_month
+    return unless cs.present?
+    cs.try(:credit_card)
   rescue
     false
   end
+
+  def has_valid_credit_card?
+    cc = credit_card_info
+    return false unless cc.present?
+
+    Time.new(cc.expiration_year, cc.expiration_month) > Time.now.beginning_of_month
+  end
+
+  def update_credit_card_expired
+    unless has_valid_credit_card?
+      self.card_expired_date = Time.now if self.card_expired_date.nil?
+    else
+      self.card_expired_date = nil
+      self.card_expired_email_sent = false
+    end
+    self.save
+  end
+
 end

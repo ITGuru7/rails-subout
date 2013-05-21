@@ -21,6 +21,7 @@ Subout::Application.routes.draw do
       resources :gateway_subscriptions do
         get :connect_company, on: :collection
         get :update_account, on: :collection
+        get :card_info, on: :member
       end
       resources :products
       resources :file_uploader_signatures, only: :new

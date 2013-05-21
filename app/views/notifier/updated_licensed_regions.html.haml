@@ -1,7 +1,0 @@
-%p Dear #{@company.name},
-%p Your licensed regions have been updated:
-- if @company.regions.present?
-  %p You are now subscribed to #{@company.regions.join(", ")}.
-%p Billing adjustments will be reflected on your next invoice.
-%p Note that if you have added new regions then you will be unable to downgrade for one month.
-= render 'email_sig'
