@@ -107,29 +107,31 @@ class GatewaySubscription
   def update_vehicle_count!(vehicle_count)
     return if self.product_handle != 'subout-pro-service' 
 
-    sub = Chargify::Subscription.find(self.subscription_id)
-    bus_component = sub.components.first
-    bus_component.allocated_quantity = vehicle_count > 2 ? vehicle_count - 2 : 0
-    bus_component.save
+    if cs = chargify_subscription
+      bus_component = cs.components.first
+      bus_component.allocated_quantity = vehicle_count > 2 ? vehicle_count - 2 : 0
+      bus_component.save
 
-    self.vehicle_count = vehicle_count
-    self.save
+      self.vehicle_count = vehicle_count
+      self.save
+    end
   end
 
   def update_product!(product_handle)
-    sub = Chargify::Subscription.find(self.subscription_id)
-    sub.product_handle = product_handle
-    sub.save
+    if cs = chargify_subscription
+      cs.product_handle = product_handle
+      cs.save
 
-    created_company.vehicles.destroy_all if product_handle == 'free'
+      created_company.vehicles.destroy_all if product_handle == 'free'
 
-    if company = self.created_company
-      company.set_subscription_info
-      company.save
+      if company = self.created_company
+        company.set_subscription_info
+        company.save
+      end
+
+      self.product_handle = product_handle
+      self.save
     end
-
-    self.product_handle = product_handle
-    self.save
   end
 
   def update_product_and_vehicle_count!(options)
