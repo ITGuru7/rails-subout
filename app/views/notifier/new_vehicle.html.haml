@@ -1,6 +1,29 @@
 %p Dear Admin,
-%p #{@company.name} created new vehicle.
-%p 
+%p #{@company.name} company created new vehicle.
+%p
+  %strong Company Profile
+  %br
+  Company name: #{@company.name}
+  %br
+  Owner Name: #{@company.contact_name}
+  %br
+  Email: #{@company.email}
+  %br
+  Street: #{@company.address_line1}
+  %br
+  Street2/Apt: #{@company.address_line2}
+  %br
+  City: #{@company.city}
+  %br
+  State: #{@company.state}
+  %br
+  Country: #{@company.country}
+  %br
+  Zip: #{@company.zip_code}
+  %br
+%p
+  %strong Vehicle Information
+  %br
   Year: #{@vehicle.year}
   %br
   Make: #{@vehicle.make}

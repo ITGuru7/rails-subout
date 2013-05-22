@@ -184,6 +184,53 @@
             <hr />
 
             <div class="control-group">
+              <label for="address_line1" class="control-label">Street</label>
+              <div class="controls">
+                <input id="address_line1" type="text" class="input-xlarge" ng:model="companyProfile.address_line1" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="address_line2" class="control-label">Street 2/Apt</label>
+              <div class="controls">
+                <input id="address_line2" type="text" class="input-xlarge" ng:model="companyProfile.address_line2" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="city" class="control-label">City</label>
+              <div class="controls">
+                <input id="city" type="text" class="input-xlarge" ng:model="companyProfile.city" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="state" class="control-label">State</label>
+              <div class="controls">
+                <input id="state" type="text" class="input-xlarge" ng:model="companyProfile.state" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="country" class="control-label">Country</label>
+              <div class="controls">
+                <select class="input-xlarge" name="country" id="country"  ng-model="companyProfile.country">
+                  <option value="USA">USA</option>
+                  <option value="Canada">Canada</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label for="zip_code" class="control-label">Zip code</label>
+              <div class="controls">
+                <input id="zip_code" type="text" class="input-xlarge" ng:model="companyProfile.zip_code" />
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="control-group">
               <label for="notification_type" class="control-label">Notification</label>
               <div class="controls">
                 <select class="input-xlarge" name="notification_type" id="notification_type"  ng-model="companyProfile.notification_type">
@@ -364,7 +411,7 @@
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
-                  <label for="vehicle_vin" class="control-label">Last 8 Of Truck VIN</label>
+                  <label for="vehicle_vin" class="control-label">Last 8 Of Bus VIN</label>
                   <div class="controls">
                     <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
                   </div>

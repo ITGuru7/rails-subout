@@ -1,5 +1,5 @@
 %p Dear Admin,
-%p #{@company.name} company removed vehicle.
+%p #{@company.name} company update the vehicle.
 %p
   %strong Company Profile
   %br
@@ -22,7 +22,17 @@
   Zip: #{@company.zip_code}
   %br
 %p
-  %strong Vehicle Information
+  %strong Old Vehicle Information
+  %br
+  Year: #{@old_vehicle.year}
+  %br
+  Make: #{@old_vehicle.make}
+  %br
+  Model: #{@old_vehicle.model}
+  %br
+  Last 8 of Vehicle Vin: #{@old_vehicle.vin}
+%p
+  %strong Updated Vehicle Information
   %br
   Year: #{@vehicle.year}
   %br

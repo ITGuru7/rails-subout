@@ -117,6 +117,15 @@ class Notifier < ActionMailer::Base
     end
   end
 
+  def update_vehicle(vehicle_id, old_vehicle)
+    if @vehicle = Vehicle.find(vehicle_id) 
+      @company = @vehicle.company
+      @old_vehicle = old_vehicle
+
+      mail(subject: "[SubOut] Vehicle is updated on: #{@company.name}", to: Setting.admin_email)
+    end
+  end
+
   def remove_vehicle(vehicle)
     @vehicle = vehicle
     @company = Company.find(vehicle.company_id) 

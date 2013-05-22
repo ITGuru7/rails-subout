@@ -21,6 +21,13 @@ class Company
   field :insurance, type: String
   field :cell_phone, type: String
 
+  field :address_line1, type: String
+  field :address_line2, type: String
+  field :city, type: String
+  field :state, type: String
+  field :country, type: String
+  field :zip_code, type: String
+
   field :favorite_supplier_ids, type: Array, default: []
   field :favoriting_buyer_ids, type: Array, default: []
   field :created_from_invitation_id
@@ -42,11 +49,6 @@ class Company
   field :vehicle_types, type: Array, default: []
   field :payment_methods, type: Array, default: []
 
-  #address stuff TODO ask Tom about this
-  field :street_address, type: String
-  field :zip_code, type: String
-  field :city, type: String
-  field :state, type: String
   field :active, type: Boolean
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
@@ -76,6 +78,12 @@ class Company
   validates :abbreviated_name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates_confirmation_of :password
+
+  #validates :address_line1, presence: true
+  #validates :city, presence: true
+  #validates :state, presence: true
+  #validates :country, presence: true
+  #validates :zip_code, presence: true
 
 
   # FIXME: Thomas Total Hack
@@ -263,7 +271,12 @@ class Company
     vehicle_list.each do |vehicle|
       v = Vehicle.where(id: vehicle[:_id]).first
       if v
-        v.update_attributes(vehicle)
+        old_vehicle = v.clone
+        v.assign_attributes(vehicle) 
+        if v.changed?
+          v.save
+          Notifier.delay.update_vehicle(v.id, old_vehicle)
+        end
       else
         self.vehicles << Vehicle.create(vehicle)
       end
