@@ -382,6 +382,13 @@
         <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-show="company.subscription_plan == 'subout-pro-service'" novalidate>
           <h4>Roadside assistance buses (free for 2 buses)</h4>
           <div>
+            <div class="row-fluid" ng-show="!vehicle.editable">
+              <div class="span2"><strong>Year</strong></div>
+              <div class="span2"><strong>Make</strong></div>
+              <div class="span3"><strong>Model</strong></div>
+              <div class="span3"><strong>VIN</strong></div>
+              <div class="span2"></div>
+            </div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
               <div class="row-fluid" ng-show="!vehicle.editable">
                 <div class="span2"> {{vehicle.year}} </div>
@@ -389,9 +396,9 @@
                 <div class="span3"> {{vehicle.model}} </div>
                 <div class="span3"> {{vehicle.vin}} </div>
                 <div class="span2"><a class="btn" ng-click="vehicle.editable = 1">Edit</a></div>
-                <hr />
               </div>
               <div ng-show="vehicle.editable">
+                <br />
                 <div class="control-group">
                   <label for="vehicle_year" class="control-label">Vehicle's year</label>
                   <div class="controls">
