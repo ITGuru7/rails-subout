@@ -381,8 +381,8 @@
 
         <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-show="company.subscription_plan == 'subout-pro-service'" novalidate>
           <h4>Roadside assistance buses (free for 2 buses)</h4>
-          <div>
-            <div class="row-fluid" ng-show="!vehicle.editable">
+          <div ng-show="companyProfile.vehicles.length > 0">
+            <div class="row-fluid">
               <div class="span2"><strong>Year</strong></div>
               <div class="span2"><strong>Make</strong></div>
               <div class="span3"><strong>Model</strong></div>
@@ -430,12 +430,12 @@
                 <hr />
               </div>
             </div>
-
-            <div>
-              <a ng-click="addVehicle({'editable': 1})">Add Vehicle (+$50)</a> <br/><br/>
-            </div>
           </div>
-          <div class="form-actions" ng-show="companyProfile.vehicles.length > 0">
+
+          <div>
+            <a ng-click="addVehicle({'editable': 1})">Add Vehicle (+$50)</a> <br/><br/>
+          </div>
+          <div class="form-actions">
             <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
           </div>
         </form>
