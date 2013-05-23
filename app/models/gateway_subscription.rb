@@ -129,6 +129,7 @@ class GatewaySubscription
 
       if company = self.created_company
         company.set_subscription_info
+        company.save
       end
     end
   end

@@ -172,7 +172,6 @@ class Company
     else
       self.subscription_plan = "free"
     end
-    self.save
   end
 
   def last_sign_in_at
