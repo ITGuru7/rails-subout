@@ -351,12 +351,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function() {
-    if ($rootScope.company.isFreeUser()) {
-      return $rootScope.setModal(suboutPartialPath('upgrading-license-required.html'));
-    } else {
-      $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
-      return $rootScope.setupFileUploader();
-    }
+    $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
+    return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewFavoriteForm = function() {
     $rootScope.$broadcast('clearNewFavoriteForm');

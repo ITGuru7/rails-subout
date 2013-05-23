@@ -199,11 +199,8 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     $rootScope.$broadcast('modalOpened')
 
   $rootScope.displayNewOpportunityForm = ->
-    if $rootScope.company.isFreeUser()
-      $rootScope.setModal(suboutPartialPath('upgrading-license-required.html'))
-    else
-      $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
-      $rootScope.setupFileUploader()
+    $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
+    $rootScope.setupFileUploader()
 
   $rootScope.displayNewFavoriteForm = () ->
     $rootScope.$broadcast('clearNewFavoriteForm')
