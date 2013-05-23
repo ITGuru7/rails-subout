@@ -723,7 +723,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     }
   ];
   availableToCurrentCompany = function(opportunity) {
-    return opportunity.buyer_id !== $rootScope.company._id && $rootScope.company.isLicensedToBidOnOpportunity(opportunity);
+    return opportunity.buyer_id !== $rootScope.company._id;
   };
   $rootScope.channel.bind('event_created', function(event) {
     var affectedOpp;

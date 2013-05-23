@@ -528,8 +528,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   ]
 
   availableToCurrentCompany = (opportunity) ->
-    opportunity.buyer_id != $rootScope.company._id and
-    $rootScope.company.isLicensedToBidOnOpportunity(opportunity)
+    opportunity.buyer_id != $rootScope.company._id
 
   $rootScope.channel.bind 'event_created', (event) ->
     affectedOpp = _.find $scope.paginated_results, (opportunity) ->
