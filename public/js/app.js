@@ -1949,19 +1949,26 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     return this.subscription_plan === "free";
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
-    if (opportunity.type === 'Emergency') {
-      return true;
+    if (opportunity.type !== 'Emergency') {
+      if (!opportunity.status) {
+        return false;
+      }
+      if (opportunity.bids.length > 0) {
+        return false;
+      }
+      if (this._id !== opportunity.buyer._id) {
+        return false;
+      }
+      return opportunity.status === 'In progress';
+    } else {
+      if (!opportunity.status) {
+        return false;
+      }
+      if (this._id !== opportunity.buyer._id) {
+        return false;
+      }
+      return opportunity.status === 'In progress';
     }
-    if (!opportunity.status) {
-      return false;
-    }
-    if (opportunity.bids.length > 0) {
-      return false;
-    }
-    if (this._id !== opportunity.buyer._id) {
-      return false;
-    }
-    return opportunity.status === 'In progress';
   };
   Company.prototype.removeFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId);

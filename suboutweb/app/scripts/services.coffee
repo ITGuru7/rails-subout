@@ -120,11 +120,15 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
     this.subscription_plan is "free"
 
   Company::canCancelOrEdit = (opportunity) ->
-    return true if opportunity.type is 'Emergency'
-    return false unless opportunity.status
-    return false if opportunity.bids.length > 0
-    return false if this._id isnt opportunity.buyer._id
-    opportunity.status is 'In progress'
+    unless opportunity.type is 'Emergency'
+      return false unless opportunity.status
+      return false if opportunity.bids.length > 0
+      return false if this._id isnt opportunity.buyer._id
+      return opportunity.status is 'In progress'
+    else
+      return false unless opportunity.status
+      return false if this._id isnt opportunity.buyer._id
+      return opportunity.status is 'In progress'
 
   Company::removeFavoriteBuyerId = (buyerId) ->
     this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId)
