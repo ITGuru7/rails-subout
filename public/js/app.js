@@ -593,6 +593,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       api_token: $rootScope.token.api_token,
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
+      $rootScope.company.today_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);

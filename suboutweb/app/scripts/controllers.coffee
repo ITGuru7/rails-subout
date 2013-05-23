@@ -403,6 +403,7 @@ BidNewCtrl = ($scope, $rootScope, Bid) ->
       api_token: $rootScope.token.api_token
       opportunityId: $rootScope.opportunity._id
     , (data) ->
+      $rootScope.company.today_bids_count += 1
       jQuery("#modal").modal "hide"
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
