@@ -1229,8 +1229,10 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
       $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
+      return console.log($scope.companyProfile.vehicles.length);
+    } else {
+      return $scope.additional_price = 0;
     }
-    return console.log($scope.additional_price);
   };
   updateSelectedRegions = function() {
     var region, _base, _i, _len, _ref, _results;
@@ -1378,16 +1380,15 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     });
     return $scope.saveCompanyProfile();
   };
-  $scope.$watch("companyProfile.vehicles.length", function() {
-    return updateAdditionalPrice();
-  });
   $scope.addVehicle = function(vehicle) {
-    return $scope.companyProfile.vehicles.push(vehicle);
+    $scope.companyProfile.vehicles.push(vehicle);
+    return updateAdditionalPrice();
   };
   $scope.removeVehicle = function(vehicle) {
-    return $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
+    $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, function(item) {
       return vehicle === item;
     });
+    return updateAdditionalPrice();
   };
   $scope.removeVehicleType = function(vehicle_type) {
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, function(item) {

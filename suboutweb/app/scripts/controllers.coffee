@@ -961,8 +961,11 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   token = $rootScope.token
   
   updateAdditionalPrice = ()->
-    $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100 if $scope.companyProfile.vehicles.length > 2
-    console.log $scope.additional_price
+    if $scope.companyProfile.vehicles.length > 2
+      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100
+      console.log $scope.companyProfile.vehicles.length
+    else
+      $scope.additional_price = 0
 
   updateSelectedRegions = ->
     $scope.companyProfile.regions ||= []
@@ -1096,14 +1099,14 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
 
     $scope.saveCompanyProfile()
 
-  $scope.$watch "companyProfile.vehicles.length", ->
-    updateAdditionalPrice()
 
   $scope.addVehicle = (vehicle)->
     $scope.companyProfile.vehicles.push(vehicle)
+    updateAdditionalPrice()
 
   $scope.removeVehicle = (vehicle) ->
     $scope.companyProfile.vehicles = _.reject($scope.companyProfile.vehicles, (item) -> vehicle is item)
+    updateAdditionalPrice()
 
   $scope.removeVehicleType = (vehicle_type) ->
     $scope.companyProfile.vehicle_types = _.reject($scope.companyProfile.vehicle_types, (item) -> vehicle_type is item)
