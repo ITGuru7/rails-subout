@@ -27,6 +27,13 @@
         </select>
         &nbsp;&nbsp;
       </div>
+      <!--<div class="pull-left">
+        <label>Region: </label>
+        <select data-placeholder="-- Select Region --" ng-model="filterRegions" class="multiselect" ng-multiple="true" multiple="multiple">
+          <option value=""></option>
+          <option ng-repeat="r in allRegions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+        </select>
+      </div>-->
       <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
     </form>
     <br/>

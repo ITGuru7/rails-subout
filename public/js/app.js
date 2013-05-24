@@ -704,6 +704,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
+  $scope.filterRegions = null;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -1602,6 +1603,32 @@ HelpCtrl = function() {
     return applyScopeHelpers($scope, $rootScope, $location, $routeParams, $timeout, Password, AuthToken);
   });
 })();
+
+subout.directive('multiple', function() {
+  return {
+    scope: true,
+    link: function(scope, element, attrs) {
+      element.multiselect({
+        enableFiltering: true,
+        onChange: function(optionElement, checked) {
+          optionElement.removeAttr('selected');
+          if (checked) {
+            optionElement.attr('selected', 'selected');
+          }
+          return element.change();
+        }
+      });
+      scope.$watch(function() {
+        return element[0].length;
+      }, function() {
+        return element.multiselect('rebuild');
+      });
+      return scope.$watch(attrs.ngModel, function() {
+        return element.multiselect('refresh');
+      });
+    }
+  };
+});
 
 subout.directive("relativeTime", function() {
   return {

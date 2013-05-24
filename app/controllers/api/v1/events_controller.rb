@@ -4,7 +4,7 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = events.where(:"action.type" => params[:event_type]) if params[:event_type]
 
     regions = current_company.regions
-    regions = params[:regions].split(',') unless params[:regions].nil?
+    regions = params[:regions].split(',') unless params[:regions].blank?
 
     events = events.where(:regions.in => regions) unless regions.blank?
     events = events.where(:cached_eventable_type => params[:opportunity_type]) if params[:opportunity_type]

@@ -201,17 +201,15 @@ class Company
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
     regions = nil if regions == "null" or regions.blank?
+    regions = regions.split(',') unless regions.nil?
 
     options = []
 
-    #if self.regions.present?
-    #  options << {:for_favorites_only => false, :start_region.in => self.regions}
-    #  options << {:for_favorites_only => false, :end_region.in => self.regions}
-    #end
+    if !regions.nil?
+      options << {:start_region.in => regions}
+      options << {:end_region.in => regions}
+    end
     
-    options << {:start_region.in => self.regions}
-    options << {:end_region.in => self.regions}
-
     conditions = {
       :buyer_id.in => self.favoriting_buyer_ids,
       canceled: false,
