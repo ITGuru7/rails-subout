@@ -23,7 +23,7 @@
           <ul>
             <li class="filter" ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">New Opportunities</a></li>
             <li class="filter" ng-class="{active: $location.search().event_type =='bid_created'}"><a ng-click="setEventType('bid_created')">Recent Bids</a></li>
-            <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Recently Won</a></li>
+            <!-- <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Recently Won</a></li> -->
             <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Cancellations</a></li>
           </ul>
         </section>
@@ -46,6 +46,7 @@
         </section>
       </section>
 
+      <!--
       <section id="companies">
         <section class="title"><h5>Company</h5></section>
         <section ng-show="!isMobile" class="content">
@@ -63,6 +64,7 @@
           <div class="clearfix"></div>
         </section>
       </section>
+      -->
     </div>
     <div class="span9">
 

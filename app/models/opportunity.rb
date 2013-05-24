@@ -140,6 +140,10 @@ class Opportunity
     where(:end_date.lte => Date.today, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
       Notifier.delay.completed_auction_notification_to_buyer(opportunity.id)
       Notifier.delay.completed_auction_notification_to_supplier(opportunity.id)
+
+      unlock_rating(opportunity.winning_bid.bidder.id, opportunity.buyer.id)
+      unlock_rating(opportunity.buyer.id, opportunity.winning_bid.bidder.id)
+
       opportunity.set(:completed_notification_sent, true)
     end
   end
@@ -293,6 +297,11 @@ class Opportunity
   end
 
   private
+
+  def unlock_rating(rater_id, ratee_id)
+    rating = Rating.find_or_create_by(rater_id: rater_id, ratee_id: ratee_id)
+    rating.unlock!
+  end
 
   def set_bidding_ends_at
     created_time = self.created_at || Time.now

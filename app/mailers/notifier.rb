@@ -60,10 +60,6 @@ class Notifier < ActionMailer::Base
     @poster = @auction.buyer
     @bidder = @bid.bidder
 
-    @rating = Rating.where(rater_id: @poster.id, ratee_id: @bidder.id).first
-    @rating = Rating.create(rater_id: @poster.id, ratee_id: @bidder.id) if @rating.blank?
-    @rating.unlock!
-
     mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @poster.notifiable_email) if @poster.notifiable?
   end
 
@@ -73,9 +69,6 @@ class Notifier < ActionMailer::Base
     @poster = @auction.buyer
     @bidder = @bid.bidder
 
-    @rating = Rating.where(rater_id: @bidder.id, ratee_id: @poster.id).first
-    @rating = Rating.create(rater_id: @bidder.id, ratee_id: @poster.id) if @rating.blank?
-    @rating.unlock!
     mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bidder.notifiable_email) if @bidder.notifiable?
   end
 
