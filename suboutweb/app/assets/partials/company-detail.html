@@ -76,61 +76,61 @@
               <div class="span9">{{detailed_company.tpa}}</div>
           </div>
 
-          <form name="newRating" id="ratingForm" class="form-horizontal" novalidate ng-show="rating.editable">
+          <form name="newRating" id="ratingForm" class="form-horizontal"  ng-show="rating.editable">
             <hr/>
             <h5>Please rate this company</h5>
             <div class="row-fluid question">
                 <div class="span3">Communication</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.communication }"> <img src="/img/icon-star.jpg">  </span>
+                  <span ng-repeat="s in stars" ng-show="rating.communication" ng-class="{ hide: s > rating.communication }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
-                  <select id="rating_communication" name="rating_communication" ng-model="rating.communication" ng-options="s for s in stars" required>
-                    <option value=""></option>
+                  <select id="rating_communication" name="rating_communication" ng-model="rating.communication" ui-validate="{ only_rate: 'validateRate($value)'}" ng-options="s for s in stars" required>
+                    <option value="">No feedback</option>
                   </select>
                 </div>
             </div>
             <div class="row-fluid question">
                 <div class="span3">Punctuality</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.punctuality }"> <img src="/img/icon-star.jpg">  </span>
+                  <span ng-repeat="s in stars" ng-show="rating.punctuality" ng-class="{ hide: s > rating.punctuality }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
-                  <select id="rating_punctuality" name="rating_punctuality" ng-model="rating.punctuality" ng-options="s for s in stars" required>
-                    <option value=""></option>
+                  <select id="rating_punctuality" name="rating_punctuality" ng-model="rating.punctuality" ui-validate="{ only_rate: 'validateRate($value)'}" ng-options="s for s in stars" required>
+                    <option value="">No feedback</option>
                   </select>
                 </div>
             </div>
             <div class="row-fluid question">
                 <div class="span3">Ease of Payment</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.ease_of_payment }"> <img src="/img/icon-star.jpg">  </span>
+                  <span ng-repeat="s in stars" ng-show="rating.ease_of_payment"  ng-class="{ hide: s > rating.ease_of_payment }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
-                  <select id="rating_ease_of_payment" name="rating_ease_of_payment" ng-model="rating.ease_of_payment" ng-options="s for s in stars" required>
-                    <option value=""></option>
+                  <select id="rating_ease_of_payment" name="rating_ease_of_payment" ng-model="rating.ease_of_payment" ui-validate="{ only_rate: 'validateRate($value)'}" ng-options="s for s in stars" required>
+                    <option value="">No feedback</option>
                   </select>
                 </div>
             </div>
             <div class="row-fluid question">
                 <div class="span3">Over all experience</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.over_all_experience }"> <img src="/img/icon-star.png">  </span>
+                  <span ng-repeat="s in stars" ng-show="rating.over_all_experience" ng-class="{ hide: s > rating.over_all_experience }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
-                  <select id="rating_over_all_experience" name="rating_over_all_experience" ng-model="rating.over_all_experience" ng-options="s for s in stars" required>
-                    <option value=""></option>
+                  <select id="rating_over_all_experience" name="rating_over_all_experience" ng-model="rating.over_all_experience" ui-validate="{ only_rate: 'validateRate($value)'}" ng-options="s for s in stars" required>
+                    <option value="">No feedback</option>
                   </select>
                 </div>
             </div>
             <div class="row-fluid question">
                 <div class="span3">How likely are you to use this company again?</div>
                 <div class="span3">
-                  <span ng-repeat="s in stars" ng-class="{ hide: s > rating.like_again }"> <img src="/img/icon-star.jpg">  </span>
+                  <span ng-repeat="s in stars" ng-show="rating.like_again" ng-class="{ hide: s > rating.like_again }"> <img src="/img/icon-star.png">  </span>
                 </div>
                 <div class="span6" ng-show="rating.editable">
-                  <select id="rating_like_again" name="rating_like_again" ng-model="rating.like_again" ng-options="s for s in stars">
-                    <option value=""></option>
+                  <select id="rating_like_again" name="rating_like_again" ng-model="rating.like_again" ui-validate="{ only_rate: 'validateRate($value)'}" ng-options="s for s in stars" required>
+                    <option value="">No feedback</option>
                   </select>
                 </div>
             </div>

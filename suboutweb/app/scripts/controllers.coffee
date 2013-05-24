@@ -1,5 +1,5 @@
-subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
-  Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) ->
+subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
+  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) ->
 
   $rootScope.stars = [1,2,3,4,5]
   $rootScope.regionFilters = []
@@ -222,7 +222,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
     alert("Not implemented yet, I think that it should display popup with rating details.")
 
   $rootScope.addToFavorites = (company) ->
-    $scope.notice = null
+    $rootScope.notice = null
     Favorite.save(
       {
         supplier_id: company._id,
@@ -233,9 +233,9 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter,
         company.favoriting_buyer_ids ||= []
         company.favoriting_buyer_ids.push $rootScope.company._id
 
-        $scope.notice = "Successfully added to favorites."
+        $rootScope.notice = "Successfully added to favorites."
         $timeout ->
-          $scope.notice = null
+          $rootScope.notice = null
           $("#modal").modal "hide"
         , 2000
       )
@@ -1221,7 +1221,18 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
       $("body").scrollTop(0)
 
 CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Favorite, Company, Rating) ->
-  $scope.rating = {}
+
+  $scope.validateRate = (value) ->
+    value != 0
+
+  $scope.rating =
+    communication: ""
+    ease_of_payment: ""
+    editable: false
+    like_again: ""
+    over_all_experience: ""
+    punctuality: ""
+
   company_id = $routeParams.company_id
   $location.path("/dashboard") unless company_id
 
@@ -1230,6 +1241,7 @@ CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fav
     companyId: company_id
   ,(company)->
     $scope.rating = company.ratingFromCompany($rootScope.company)
+    console.log $scope.rating
   ,(error)->
     $location.path("/dashboard")
 
@@ -1241,7 +1253,7 @@ CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fav
     , (data) ->
       $location.search(reload: new Date().getTime())
     , (content) ->
-      console.log "rating updated failed"
+      console.log "rating update failed"
 
 CompanyProfileCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Favorite, Company, Rating) ->
   return true

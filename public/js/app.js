@@ -149,7 +149,7 @@ angular.element(document).ready(function() {
 var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opportunity, Company, User, FileUploaderSignature, AuthToken, Region, Bid) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) {
   var REGION_NAMES, p;
   $rootScope.stars = [1, 2, 3, 4, 5];
   $rootScope.regionFilters = [];
@@ -378,16 +378,16 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, Opport
     return alert("Not implemented yet, I think that it should display popup with rating details.");
   };
   $rootScope.addToFavorites = function(company) {
-    $scope.notice = null;
+    $rootScope.notice = null;
     return Favorite.save({
       supplier_id: company._id,
       api_token: $rootScope.token.api_token
     }, {}, function() {
       company.favoriting_buyer_ids || (company.favoriting_buyer_ids = []);
       company.favoriting_buyer_ids.push($rootScope.company._id);
-      $scope.notice = "Successfully added to favorites.";
+      $rootScope.notice = "Successfully added to favorites.";
       return $timeout(function() {
-        $scope.notice = null;
+        $rootScope.notice = null;
         return $("#modal").modal("hide");
       }, 2000);
     });
@@ -1525,7 +1525,17 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
-  $scope.rating = {};
+  $scope.validateRate = function(value) {
+    return value !== 0;
+  };
+  $scope.rating = {
+    communication: "",
+    ease_of_payment: "",
+    editable: false,
+    like_again: "",
+    over_all_experience: "",
+    punctuality: ""
+  };
   company_id = $routeParams.company_id;
   if (!company_id) {
     $location.path("/dashboard");
@@ -1534,7 +1544,8 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
     api_token: $rootScope.token.api_token,
     companyId: company_id
   }, function(company) {
-    return $scope.rating = company.ratingFromCompany($rootScope.company);
+    $scope.rating = company.ratingFromCompany($rootScope.company);
+    return console.log($scope.rating);
   }, function(error) {
     return $location.path("/dashboard");
   });
@@ -1548,7 +1559,7 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
         reload: new Date().getTime()
       });
     }, function(content) {
-      return console.log("rating updated failed");
+      return console.log("rating update failed");
     });
   };
 };
