@@ -7,23 +7,37 @@
     </div>
   </div>
   <div>
-    <div class="pull-left">
-      <span>Pick up Date:</span> <input type="text" ng-model="filterDepatureDate" ui-date="dateOptions">&nbsp;&nbsp;
-    </div>
-    <div class="pull-left">
-      <span>Vehicle Type: </span>
-      <select ng-model="filterVehicleType" ng-options="t for t in VEHICLE_TYPES">
-        <option value="">All</option>
-      </select>
-      &nbsp;&nbsp;
-    </div>
-    <div class="pull-left">
-      <span>Trip Type: </span>
-      <select ng-model="filterTripType" ng-options="t for t in TRIP_TYPES">
-        <option value="">All</option>
-      </select>
-    </div>
-    <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
+    <form class="form-inline">
+      <div class="pull-left">
+        <label>Pick up Date:</label> 
+        <input type="text" class="input-medium" ng-model="filterDepatureDate" ui-date="dateOptions">      
+        &nbsp;&nbsp;
+      </div>
+      <div class="pull-left">
+        <label>Vehicle Type: </label>
+        <select ng-model="filterVehicleType" data-placeholder="All" class="input-medium" ng-options="t for t in VEHICLE_TYPES" ui-select2>
+          <option value=""></option>
+        </select>
+        &nbsp;&nbsp;
+      </div>
+      <div class="pull-left">
+        <label>Trip Type: </label>
+        <select ng-model="filterTripType" data-placeholder="All" class="input-medium" ng-options="t for t in TRIP_TYPES" ui-select2>
+            <option value=""></option>
+        </select>
+        &nbsp;&nbsp;
+      </div>
+      <!--<div class="pull-left">
+        <label>Region: </label>
+        <select data-placeholder="-- Select Region --" ng-model="filterRegions" class="multiselect" ng-multiple="true" multiple="multiple">
+          <option value=""></option>
+          <option ng-repeat="r in allRegions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+        </select>
+      </div>-->
+      <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
+    </form>
+    <br/>
+    <br/>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>
