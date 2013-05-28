@@ -29,8 +29,7 @@
       </div>
       <div class="pull-left">
         <label>Region: </label>
-        <select data-placeholder="-- Select Region --" ng-change="alert($index)" ng-model="filterRegions" class="multiselect" ng-options="r for r in company.regions" multiple>
-          <option value=""></option>
+        <select ng-model="filterRegions" class="multiselect" ng-options="r for r in allRegions" multiple="multiple">
         </select>
       </div>
       <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
