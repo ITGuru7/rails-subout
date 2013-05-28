@@ -752,7 +752,8 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       sort_direction: $scope.sortDirection,
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
-      trip_type: $scope.filterTripType
+      trip_type: $scope.filterTripType,
+      regions: $scope.filterRegions
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -799,7 +800,12 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       return $scope.loadMoreOpportunities(1);
     }
   });
-  return $scope.$watch("filterTripType", function(oldValue, newValue) {
+  $scope.$watch("filterTripType", function(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      return $scope.loadMoreOpportunities(1);
+    }
+  });
+  return $scope.$watch("filterRegions", function(oldValue, newValue) {
     if (oldValue !== newValue) {
       return $scope.loadMoreOpportunities(1);
     }
@@ -1606,7 +1612,7 @@ HelpCtrl = function() {
 
 subout.directive('multiple', function() {
   return {
-    scope: true,
+    scope: false,
     link: function(scope, element, attrs) {
       element.multiselect({
         enableFiltering: true,
@@ -1623,9 +1629,12 @@ subout.directive('multiple', function() {
       }, function() {
         return element.multiselect('rebuild');
       });
-      return scope.$watch(attrs.ngModel, function() {
+      scope.$watch(attrs.ngModel, function() {
         return element.multiselect('refresh');
       });
+      if (scope.$last) {
+        return element.multiselect('rebuild');
+      }
     }
   };
 });

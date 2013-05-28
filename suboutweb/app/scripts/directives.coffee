@@ -1,5 +1,5 @@
 subout.directive 'multiple', ->
-  scope: true,
+  scope: false,
   link: (scope, element, attrs) ->
     element.multiselect
       enableFiltering: true
@@ -18,6 +18,8 @@ subout.directive 'multiple', ->
     ,() ->
       element.multiselect('refresh')
 
+    if (scope.$last)
+      element.multiselect('rebuild')
         
 subout.directive "relativeTime", ->
   link: (scope, element, iAttrs) ->

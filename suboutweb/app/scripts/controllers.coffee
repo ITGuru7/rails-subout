@@ -555,6 +555,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
+        regions: $scope.filterRegions
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -589,6 +590,9 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
     if(oldValue != newValue)
       $scope.loadMoreOpportunities(1)
   $scope.$watch "filterTripType", (oldValue, newValue) ->
+    if(oldValue != newValue)
+      $scope.loadMoreOpportunities(1)
+  $scope.$watch "filterRegions", (oldValue, newValue) ->
     if(oldValue != newValue)
       $scope.loadMoreOpportunities(1)
 
