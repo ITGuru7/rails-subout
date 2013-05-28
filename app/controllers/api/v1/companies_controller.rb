@@ -20,7 +20,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def update
     current_company.update_attributes(params[:company].except(:favoriting_buyer_ids))
-    respond_with_namespace(current_company)
+    respond_with_serializer()
   end
 
   def create
@@ -42,7 +42,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   def update_product
     if current_company.update_product!(params[:product])
       Notifier.delay.updated_product(current_company.id)
-      render json: current_company.reload
+      respond_with_serializer()
     else
       render json: { errors: current_company.errors.full_messages }, status: 423
     end
@@ -50,7 +50,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def update_regions
     if current_company.update_regions!(params[:company][:regions])
-      render json: current_company.reload
+      respond_with_serializer()
     else
       render json: { errors: current_company.errors.full_messages }, status: 422
     end
@@ -58,9 +58,17 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def update_vehicles
     if current_company.update_vehicles!(params[:company][:vehicles])
-      render json: current_company.reload
+      respond_with_serializer()
     else
       render json: { errors: current_company.errors.full_messages }, status: 422
     end
+  end
+
+  private
+
+  def respond_with_serializer()
+    @company = Company.find(current_company.id)
+    @serializer = CompanySerializer.new(@company, :scope => current_company)
+    render json: @serializer
   end
 end

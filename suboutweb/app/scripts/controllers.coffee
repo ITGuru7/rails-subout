@@ -953,10 +953,9 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
 SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) ->
   $scope.userProfile = angular.copy($rootScope.user)
+  console.log $rootScope.company
   $scope.companyProfile = angular.copy($rootScope.company)
 
-  $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl()
-  $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl()
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl()
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl()
   $scope.subscription = null
@@ -1062,7 +1061,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       company: $scope.companyProfile
       api_token: $rootScope.token.api_token
       (company) ->
-        $rootScope.company = $scope.companyProfile
+        updateCompanyAndCompanyProfile(company)
         successUpdate()
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
@@ -1077,6 +1076,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       action: "update_product"
       (company) ->
         updateCompanyAndCompanyProfile(company)
+        successUpdate()
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 
@@ -1099,10 +1099,9 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       action: "update_vehicles"
       (company) ->
         updateCompanyAndCompanyProfile(company)
+        successUpdate()
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
-
-    $scope.saveCompanyProfile()
 
 
   $scope.addVehicle = (vehicle)->

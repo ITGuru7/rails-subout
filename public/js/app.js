@@ -1222,9 +1222,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
   var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
+  console.log($rootScope.company);
   $scope.companyProfile = angular.copy($rootScope.company);
-  $scope.nationalSubscriptionUrl = $config.nationalSubscriptionUrl();
-  $scope.stateByStateSubscriptionUrl = $config.stateByStateSubscriptionUrl();
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
   $scope.suboutProSubscriptionUrl = $config.suboutProSubscriptionUrl();
   $scope.subscription = null;
@@ -1342,7 +1341,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       company: $scope.companyProfile,
       api_token: $rootScope.token.api_token
     }, function(company) {
-      $rootScope.company = $scope.companyProfile;
+      updateCompanyAndCompanyProfile(company);
       return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
@@ -1358,7 +1357,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token,
       action: "update_product"
     }, function(company) {
-      return updateCompanyAndCompanyProfile(company);
+      updateCompanyAndCompanyProfile(company);
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1375,17 +1375,17 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
-    Company.update_vehicles({
+    return Company.update_vehicles({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
       api_token: $rootScope.token.api_token,
       action: "update_vehicles"
     }, function(company) {
-      return updateCompanyAndCompanyProfile(company);
+      updateCompanyAndCompanyProfile(company);
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
-    return $scope.saveCompanyProfile();
   };
   $scope.addVehicle = function(vehicle) {
     $scope.companyProfile.vehicles.push(vehicle);
