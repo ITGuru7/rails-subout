@@ -10,8 +10,8 @@
       <div class="company-info">
         <ul>
           <li>
-            <img ng-show="{{opportunity.buyer.logo_url}}" ng-src="{{opportunity.buyer.logo_url}}" />
-            <div ng-hide="{{opportunity.buyer.logo_url}}">No Logo Available</div>
+            <img ng-show="opportunity.buyer.logo_url" ng-src="{{opportunity.buyer.logo_url}}" />
+            <div ng-hide="opportunity.buyer.logo_url">No Logo Available</div>
           </li>
           <li><a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(opportunity.buyer._id)">{{opportunity.buyer.abbreviated_name}}</a></li>
         </ul>
@@ -82,18 +82,13 @@
           <div class="actions" ng-show="opportunity.buyer_id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
           </div>
-          <div ng-show="company.isLicensedToBidOnOpportunity(opportunity)">
-            <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
-              <div>
-                <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-              </div>
-              <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
-              </div>
+          <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+            <div>
+              <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
             </div>
-          </div>
-          <div ng-hide="company.isLicensedToBidOnOpportunity(opportunity) || opportunity.status != 'In progress'">
-            <a href="#modal" data-toggle="modal" ng-click="displaySettings('licensed-regions')">You are not licensed to bid on this opportunity. Upgrade now!</a>
+            <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+              <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+            </div>
           </div>
         </div>
         <div class="span4">
