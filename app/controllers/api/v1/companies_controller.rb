@@ -67,8 +67,8 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   private
 
   def respond_with_serializer()
-    @company = Company.find(current_company.id)
-    @serializer = CompanySerializer.new(@company, :scope => current_company)
+    current_company.reload
+    @serializer = CompanySerializer.new(current_company, :scope => current_company)
     render json: @serializer
   end
 end
