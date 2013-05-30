@@ -19,7 +19,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   end
 
   def update
-    current_company.update_attributes(params[:company].except(:favoriting_buyer_ids))
+    current_company.update_attributes(params[:company].except(:favoriting_buyer_ids, :regions))
     respond_with_serializer()
   end
 

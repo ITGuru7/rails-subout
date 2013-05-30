@@ -98,7 +98,7 @@
             <div class="pill" ng-show="$location.search().event_type">
               {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
             </div>
-            <div class="pill region" ng-repeat="region in company.regions">
+            <div class="pill region" ng-repeat="region in filterRegions">
               {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
             <div class="pill" ng-show="$location.search().company_id">
