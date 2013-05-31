@@ -23,7 +23,7 @@
           <ul>
             <li class="filter" ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">New Opportunities</a></li>
             <li class="filter" ng-class="{active: $location.search().event_type =='bid_created'}"><a ng-click="setEventType('bid_created')">Recent Bids</a></li>
-            <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Recently Won</a></li>
+            <!-- <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Recently Won</a></li> -->
             <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Cancellations</a></li>
           </ul>
         </section>
@@ -41,24 +41,6 @@
           <select class="span10 mobileSelect"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
             <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
-          </select>
-          <div class="clearfix"></div>
-        </section>
-      </section>
-
-      <section id="companies">
-        <section class="title"><h5>Company</h5></section>
-        <section ng-show="!isMobile" class="content">
-          <select ui-select2 ng-model="companyFilter" data-placeholder="-- Select Company --" class="span10">
-            <option value=""></option>
-            <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
-          </select>
-          <div class="clearfix"></div>
-        </section>
-        <section ng-show="isMobile" class="content">
-          <select ng-model="companyFilter" class="span10 mobileSelect" ui-select2>
-            <option value=""> -- Select Company -- </option>
-            <option ng-repeat="company in companies | orderBy:'name'"  data-abbreviated_name="{{company.abbreviated_name}}" value="{{company._id}}">{{company.name}} ({{company.abbreviated_name}})</option>
           </select>
           <div class="clearfix"></div>
         </section>
@@ -96,7 +78,7 @@
             <div class="pill" ng-show="$location.search().event_type">
               {{eventTypeLabel($location.search().event_type)}}<button type="button" ng-click="setEventType($location.search().event_type)" class="close">×</button>
             </div>
-            <div class="pill region" ng-repeat="region in company.regions">
+            <div class="pill region" ng-repeat="region in filterRegions">
               {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
             <div class="pill" ng-show="$location.search().company_id">
