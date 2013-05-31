@@ -594,7 +594,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
       $scope.loadMoreOpportunities(1)
   $scope.$watch "filterRegions", (oldValue, newValue) ->
     if(oldValue != newValue)
-      $rootScope.filterRegions = newValue
+      $rootScope.filterRegions = $scope.filterRegions
       $scope.loadMoreOpportunities(1)
 
 OpportunityCtrl = ($scope, $rootScope, $location, Auction, soPagination) ->
@@ -847,13 +847,9 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   regionFilterOptions = ->
     _.difference($rootScope.company.regions, $rootScope.filterRegions)
 
-  $rootScope.$watch "filterRegions", ()->
+  $scope.$watch "filterRegions", ()->
     $scope.regionFilterOptions = regionFilterOptions()
     $scope.refreshEvents()
-
-  $rootScope.$watch "company.regions", ()->
-    #$rootScope.filterRegions = angular.copy($rootScope.company.regions)
-    console.log "ccc"
 
   $scope.regionFilter = $location.search().region
   $scope.$watch "regionFilter", setRegionFilter

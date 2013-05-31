@@ -3,11 +3,6 @@ subout.directive 'multiple', ->
   link: (scope, element, attrs) ->
     element.multiselect
       enableFiltering: true
-      onChange: (optionElement, checked) ->
-        optionElement.removeAttr('selected')
-        if (checked)
-          optionElement.attr('selected', 'selected')
-        element.change()
 
     scope.$watch ->
       return element[0].length
@@ -19,7 +14,7 @@ subout.directive 'multiple', ->
       element.multiselect('refresh')
 
     if (scope.$last)
-      element.multiselect('rebuild')
+      element.multiselect('refresh')
         
 subout.directive "relativeTime", ->
   link: (scope, element, iAttrs) ->

@@ -811,7 +811,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   });
   return $scope.$watch("filterRegions", function(oldValue, newValue) {
     if (oldValue !== newValue) {
-      $rootScope.filterRegions = newValue;
+      $rootScope.filterRegions = $scope.filterRegions;
       return $scope.loadMoreOpportunities(1);
     }
   });
@@ -1098,12 +1098,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   regionFilterOptions = function() {
     return _.difference($rootScope.company.regions, $rootScope.filterRegions);
   };
-  $rootScope.$watch("filterRegions", function() {
+  $scope.$watch("filterRegions", function() {
     $scope.regionFilterOptions = regionFilterOptions();
     return $scope.refreshEvents();
-  });
-  $rootScope.$watch("company.regions", function() {
-    return console.log("ccc");
   });
   $scope.regionFilter = $location.search().region;
   $scope.$watch("regionFilter", setRegionFilter);
@@ -1607,14 +1604,7 @@ subout.directive('multiple', function() {
     scope: false,
     link: function(scope, element, attrs) {
       element.multiselect({
-        enableFiltering: true,
-        onChange: function(optionElement, checked) {
-          optionElement.removeAttr('selected');
-          if (checked) {
-            optionElement.attr('selected', 'selected');
-          }
-          return element.change();
-        }
+        enableFiltering: true
       });
       scope.$watch(function() {
         return element[0].length;
@@ -1625,7 +1615,7 @@ subout.directive('multiple', function() {
         return element.multiselect('refresh');
       });
       if (scope.$last) {
-        return element.multiselect('rebuild');
+        return element.multiselect('refresh');
       }
     }
   };
