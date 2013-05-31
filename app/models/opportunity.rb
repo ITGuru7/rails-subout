@@ -67,6 +67,7 @@ class Opportunity
   validates_presence_of :start_date
   validates_presence_of :end_date
   validates_presence_of :start_location
+  validates_presence_of :vehicle_type
   validate :validate_locations
   validate :validate_start_and_end_date
   validate :validate_win_it_now_price

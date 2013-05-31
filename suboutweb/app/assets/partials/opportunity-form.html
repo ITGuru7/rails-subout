@@ -37,10 +37,10 @@
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="opportunity_vehicle_type" class="control-label">Vehicle Type</label>
+      <div class="control-group" ng-class="{error:newOpportunity.opportunity_vehicle_type.$invalid}">
+        <label for="opportunity_vehicle_type" class="control-label">Vehicle Type *</label>
         <div class="controls">
-          <select id="opportunity_vehicle_type" name="opportunity_vehicle_type" ng-model="opportunity.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
+          <select id="opportunity_vehicle_type" name="opportunity_vehicle_type" ng-model="opportunity.vehicle_type" ng-options="t for t in VEHICLE_TYPES" required>
             <option value=""></option>
           </select>
         </div>
