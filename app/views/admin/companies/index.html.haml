@@ -20,6 +20,7 @@
       %th
         Last signed in
       %th Subscription
+      %th Vehicle Count
       %th
         - if @sort_by != "auctions_count"
           = link_to "# Ops", admin_companies_path(sort_by: "auctions_count", sort_direction: "desc")
@@ -54,8 +55,8 @@
           = "(#{company.contact_phone})" if company.contact_phone
         %td= time_ago_in_words(company.created_at) + " ago" if company.created_at
         %td= time_ago_in_words(company.last_sign_in_at) + " ago" if company.last_sign_in_at
-        %td
-          = company.subscription_plan
+        %td= company.subscription_plan
+        %td= company.vehicles.count
         %td= company.auctions_count
         %td= company.auctions_expired_count
         %td= company.bids_count

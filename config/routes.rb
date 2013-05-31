@@ -91,6 +91,7 @@ Subout::Application.routes.draw do
         put "add_as_a_favorite"
         put "change_emails"
       end
+      resources :vehicles, only: [:edit, :update]
     end
     resources :favorite_invitations, only: [:index] do
       put 'resend_invitation', on: :member

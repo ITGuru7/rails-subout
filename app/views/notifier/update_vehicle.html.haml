@@ -31,6 +31,8 @@
   Model: #{@old_vehicle.model}
   %br
   Last 8 of Vehicle Vin: #{@old_vehicle.vin}
+  %br
+  Load Master Membership Number: #{@old_vehicle.rm_number}
 %p
   %strong Updated Vehicle Information
   %br
@@ -41,4 +43,6 @@
   Model: #{@vehicle.model}
   %br
   Last 8 of Vehicle Vin: #{@vehicle.vin}
+  %br
+  Load Master Membership Number: #{@vehicle.rm_number}
 = render 'email_sig'

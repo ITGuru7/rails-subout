@@ -269,7 +269,7 @@ class Company
       v = Vehicle.where(id: vehicle[:_id]).first
       if v
         old_vehicle = v.clone
-        v.assign_attributes(vehicle.except(:created_at, :updated_at)) 
+        v.assign_attributes(vehicle.except(:created_at, :updated_at, :rm_number)) 
         if v.changed?
           v.save
           Notifier.delay.update_vehicle(v.id, old_vehicle)

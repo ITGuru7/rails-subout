@@ -1,5 +1,4 @@
 %h2 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
-
 - if @subscription && @subscription.exists_on_chargify?
   %ul
     %li Subscription: #{@company.subscription_plan}
@@ -10,23 +9,53 @@
     = link_to "Cancel and lock this account", lock_account_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to lock this account?"
   - else
     = link_to "Unlock this account", unlock_account_admin_company_path(@company), class: "btn btn-success", method: "put", confirm: "Are you sure to unlock this account"
-
 - else
   %p.alert.alert-error
     Subscription not found on Chargify
 
+.row
+%h3 Vehicles
+- if @company.subscription_plan == 'subout-pro-service'
+  .span8
+    %table.table.table-striped
+      %tr
+        %td Year
+        %td Make
+        %td Model
+        %td Vin
+        %td RM number
+        %td 
+      - if @company.vehicles.any?
+        - @company.vehicles.each do |bus|
+          %tr
+            %td= bus.year
+            %td= bus.make
+            %td= bus.model
+            %td= bus.vin
+            %td= bus.rm_number
+            %td= link_to "Edit", edit_admin_company_vehicle_path(@company, bus), class: 'btn'
+      - else
+        %tr
+          %td{colspan: 6} This company has any vehicles yet.
+- else
+  %p This company can't have vehicles.
+
+.row
 %h3 Companies favorited #{@company.name}
 %ul
   - @company.favoriting_buyers.each do |company|
     %li= company.name
 = form_tag add_as_a_favorite_admin_company_path(@company), method: "put", class: "form-horizontal" do
   = select_tag "company_id", options_from_collection_for_select(Company.not_in(_id: @company.favoriting_buyer_ids), "id", "name")
-  = submit_tag "Add", class: "btn"
+  = submit_tag "Add", class: "btn btn-primary"
 
+.row
 %h3 Email
 = form_tag change_emails_admin_company_path(@company), method: "put", class: "form-horizontal" do
   = text_field_tag "email", @company.email
-  = submit_tag "Submit", class: "btn"
+  = submit_tag "Submit", class: "btn btn-primary"
 %p
   %strong Notice:
   This email will be applied to company, subscription and user.
+
+= link_to "Back", :back, class: 'btn'

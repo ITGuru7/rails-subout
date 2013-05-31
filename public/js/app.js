@@ -150,8 +150,14 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) {
-  var REGION_NAMES, p;
+  var REGION_NAMES, d, p, _i, _ref, _results;
   $rootScope.stars = [1, 2, 3, 4, 5];
+  d = new Date();
+  $rootScope.years = (function() {
+    _results = [];
+    for (var _i = _ref = d.getFullYear(); _ref <= 1970 ? _i <= 1970 : _i >= 1970; _ref <= 1970 ? _i++ : _i--){ _results.push(_i); }
+    return _results;
+  }).apply(this);
   $rootScope.filterRegions = [];
   $('#modal').on('hidden', function() {
     var $scope, modalElement, modalScope;
@@ -184,11 +190,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return /^\d*$/.test(value);
   };
   $rootScope.userSignedIn = function() {
-    var _ref;
+    var _ref1;
     if ($location.path() === '/sign_in') {
       return false;
     }
-    if (((_ref = $rootScope.token) != null ? _ref.authorized : void 0) || $.cookie(AuthToken)) {
+    if (((_ref1 = $rootScope.token) != null ? _ref1.authorized : void 0) || $.cookie(AuthToken)) {
       return true;
     }
   };
@@ -265,12 +271,12 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     "Wyoming": "WY"
   };
   REGION_NAMES = (function() {
-    var _results;
-    _results = [];
+    var _results1;
+    _results1 = [];
     for (p in $rootScope.ALL_REGIONS) {
-      _results.push(p);
+      _results1.push(p);
     }
-    return _results;
+    return _results1;
   })();
   $rootScope.allRegions = REGION_NAMES.slice(0);
   $rootScope.setupFileUploader = function() {
@@ -364,11 +370,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     });
   };
   $rootScope.cloneOpportunity = function(opportunity) {
-    var property, _i, _len, _ref;
+    var property, _j, _len, _ref1;
     $rootScope.opportunity = angular.copy(opportunity);
-    _ref = ["_id", "start_date", "start_time", "end_date", "end_time", "tracking_id"];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      property = _ref[_i];
+    _ref1 = ["_id", "start_date", "start_time", "end_date", "end_time", "tracking_id"];
+    for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+      property = _ref1[_j];
       delete $rootScope.opportunity[property];
     }
     return $rootScope.opportunity.clone = true;
@@ -420,24 +426,24 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return result;
   };
   $rootScope.alertError = function(errors) {
-    var $alertError, close, errorMessage, errorMessages, _i, _len;
+    var $alertError, close, errorMessage, errorMessages, _j, _len;
     errorMessages = $rootScope.errorMessages(errors);
     $alertError = $("<div class='alert alert-error'></div>");
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
     $alertError.append(close);
-    for (_i = 0, _len = errorMessages.length; _i < _len; _i++) {
-      errorMessage = errorMessages[_i];
+    for (_j = 0, _len = errorMessages.length; _j < _len; _j++) {
+      errorMessage = errorMessages[_j];
       $alertError.append("<p>" + errorMessage + "</p>");
     }
     return $alertError;
   };
   $rootScope.alertInfo = function(messages) {
-    var $alertInfo, close, info, _i, _len;
+    var $alertInfo, close, info, _j, _len;
     $alertInfo = $("<div class='alert alert-info'></div>");
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
     $alertInfo.append(close);
-    for (_i = 0, _len = messages.length; _i < _len; _i++) {
-      info = messages[_i];
+    for (_j = 0, _len = messages.length; _j < _len; _j++) {
+      info = messages[_j];
       $alertInfo.append("<p>" + info + "</p>");
     }
     return $alertInfo;

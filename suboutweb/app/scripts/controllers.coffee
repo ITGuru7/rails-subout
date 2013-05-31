@@ -2,6 +2,8 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) ->
 
   $rootScope.stars = [1,2,3,4,5]
+  d = new Date()
+  $rootScope.years = [d.getFullYear()..1970]
   $rootScope.filterRegions = []
 
   $('#modal').on('hidden', () ->

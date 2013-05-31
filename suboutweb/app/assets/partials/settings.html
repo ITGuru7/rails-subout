@@ -388,42 +388,48 @@
           <h4>Roadside assistance buses (free for 2 buses)</h4>
           <div ng-show="companyProfile.vehicles.length > 0">
             <div class="row-fluid">
+              <div class="span2"><strong>RM #</strong></div>
               <div class="span2"><strong>Year</strong></div>
               <div class="span2"><strong>Make</strong></div>
-              <div class="span3"><strong>Model</strong></div>
-              <div class="span3"><strong>VIN</strong></div>
+              <div class="span2"><strong>Model</strong></div>
+              <div class="span2"><strong>VIN</strong></div>
               <div class="span2"></div>
             </div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
               <div class="row-fluid" ng-show="!vehicle.editable">
+                <div class="span2"> {{vehicle.rm_number}} </div>
                 <div class="span2"> {{vehicle.year}} </div>
                 <div class="span2"> {{vehicle.make}} </div>
-                <div class="span3"> {{vehicle.model}} </div>
-                <div class="span3"> {{vehicle.vin}} </div>
+                <div class="span2"> {{vehicle.model}} </div>
+                <div class="span2"> {{vehicle.vin}} </div>
                 <div class="span2"><a class="btn" ng-click="vehicle.editable = 1">Edit</a></div>
               </div>
               <div ng-show="vehicle.editable">
                 <br />
+                <div class="control-group" ng-show="vehicle.rm_number">
+                  <strong>RM Number:</strong> {{vehicle.rm_number}}
+                </div>
                 <div class="control-group">
-                  <label for="vehicle_year" class="control-label">Vehicle's year</label>
+                  <label for="vehicle_year" class="control-label">Year</label>
                   <div class="controls">
-                    <input id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" type="text" class="input-xlarge" required />
+                    <select id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" ng-options="y for y in years" required>
+                    </select>
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
-                  <label for="vehicle_make" class="control-label">Vehicle's Make</label>
+                  <label for="vehicle_make" class="control-label">Make</label>
                   <div class="controls">
                     <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="input-xlarge" required />
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
-                  <label for="vehicle_model" class="control-label">Vehicle's Model</label>
+                  <label for="vehicle_model" class="control-label">Model</label>
                   <div class="controls">
                     <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="input-xlarge" required />
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
-                  <label for="vehicle_vin" class="control-label">Last 8 Of Bus VIN</label>
+                  <label for="vehicle_vin" class="control-label">Last 8 Of VIN</label>
                   <div class="controls">
                     <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
                   </div>

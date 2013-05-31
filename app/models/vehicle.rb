@@ -8,6 +8,7 @@ class Vehicle
   field :make, type: String
   field :model, type: String
   field :vin, type: String
+  field :rm_number, type: String
 
   belongs_to :company
 
