@@ -745,12 +745,14 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.filter = null
   $scope.opportunity = null
   $scope.events = []
-  $scope.regionFilterOptions = $rootScope.company.regions
+  $scope.regionFilterOptions = []
 
   Company.query
     api_token: $rootScope.token.api_token
   , (data) ->
     $scope.companies = data
+    # TODO somehow $rootScope.company object is undefined some times, so we added this line here
+    $scope.regionFilterOptions = $rootScope.company.regions
 
   $scope.loadMoreEvents = ->
     return if $scope.noMoreEvents or $scope.loading
@@ -844,11 +846,11 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       regions.push($scope.regionFilter)
       $rootScope.filterRegions = regions
 
-  regionFilterOptions = ->
+  getRegionFilterOptions = ->
     _.difference($rootScope.company.regions, $rootScope.filterRegions)
 
   $scope.$watch "filterRegions", ()->
-    $scope.regionFilterOptions = regionFilterOptions()
+    $scope.regionFilterOptions = getRegionFilterOptions()
     $scope.refreshEvents()
 
   $scope.regionFilter = $location.search().region
