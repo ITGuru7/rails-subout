@@ -745,14 +745,12 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.filter = null
   $scope.opportunity = null
   $scope.events = []
-  $scope.regionFilterOptions = []
+  $scope.regionFilterOptions = $rootScope.allRegions
 
   Company.query
     api_token: $rootScope.token.api_token
   , (data) ->
     $scope.companies = data
-    # TODO somehow $rootScope.company object is undefined some times, so we added this line here
-    $scope.regionFilterOptions = $rootScope.company.regions
 
   $scope.loadMoreEvents = ->
     return if $scope.noMoreEvents or $scope.loading
@@ -847,7 +845,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       $rootScope.filterRegions = regions
 
   getRegionFilterOptions = ->
-    _.difference($rootScope.company.regions, $rootScope.filterRegions)
+    _.difference($rootScope.allRegions, $rootScope.filterRegions)
 
   $scope.$watch "filterRegions", ()->
     $scope.regionFilterOptions = getRegionFilterOptions()
@@ -1036,6 +1034,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       (company) ->
         updateCompanyAndCompanyProfile(company)
         successUpdate()
+        $location.search(reload: new Date().getTime())
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 

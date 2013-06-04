@@ -200,18 +200,20 @@ class Company
     start_date = nil if start_date == "null" or start_date.blank?
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
+
     regions = nil if regions == "null" or regions.blank?
     regions = regions.split(',') unless regions.nil?
+    regions = [] if regions.nil?
+
+    regions = self.regions & regions
+    regions = self.regions if regions.blank?
 
     options = []
-
-    if !regions.nil?
-      options << {:start_region.in => regions}
-      options << {:end_region.in => regions}
-    end
+    options << {:start_region.in => regions}
+    options << {:end_region.in => regions}
     
     conditions = {
-      :buyer_id.in => self.favoriting_buyer_ids,
+      #:buyer_id.in => self.favoriting_buyer_ids,
       canceled: false,
       :bidding_ends_at.gt => Time.now,
       winning_bid_id: nil,

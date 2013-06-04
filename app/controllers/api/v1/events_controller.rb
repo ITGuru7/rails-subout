@@ -3,7 +3,6 @@ class Api::V1::EventsController < Api::V1::BaseController
     events = Event.includes([:actor, :eventable]).recent.page(params[:page]).for(current_company)
     events = events.where(:"action.type" => params[:event_type]) if params[:event_type]
 
-    regions = current_company.regions
     regions = params[:regions].split(',') unless params[:regions].blank?
 
     events = events.where(:regions.in => regions) unless regions.blank?

@@ -976,12 +976,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filter = null;
   $scope.opportunity = null;
   $scope.events = [];
-  $scope.regionFilterOptions = [];
+  $scope.regionFilterOptions = $rootScope.allRegions;
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
-    $scope.companies = data;
-    return $scope.regionFilterOptions = $rootScope.company.regions;
+    return $scope.companies = data;
   });
   $scope.loadMoreEvents = function() {
     var queryOptions;
@@ -1097,7 +1096,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     }
   };
   getRegionFilterOptions = function() {
-    return _.difference($rootScope.company.regions, $rootScope.filterRegions);
+    return _.difference($rootScope.allRegions, $rootScope.filterRegions);
   };
   $scope.$watch("filterRegions", function() {
     $scope.regionFilterOptions = getRegionFilterOptions();
@@ -1319,7 +1318,10 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       action: "update_regions"
     }, function(company) {
       updateCompanyAndCompanyProfile(company);
-      return successUpdate();
+      successUpdate();
+      return $location.search({
+        reload: new Date().getTime()
+      });
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
