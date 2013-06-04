@@ -967,7 +967,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
-  var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
+  var regionFilterOptions, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -976,12 +976,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filter = null;
   $scope.opportunity = null;
   $scope.events = [];
-  $scope.regionFilterOptions = [];
+  $scope.regionFilterOptions = $rootScope.company.regions;
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
-    $scope.companies = data;
-    return $scope.regionFilterOptions = $rootScope.company.regions;
+    return $scope.companies = data;
   });
   $scope.loadMoreEvents = function() {
     var queryOptions;
@@ -1096,11 +1095,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return $rootScope.filterRegions = regions;
     }
   };
-  getRegionFilterOptions = function() {
+  regionFilterOptions = function() {
     return _.difference($rootScope.company.regions, $rootScope.filterRegions);
   };
   $scope.$watch("filterRegions", function() {
-    $scope.regionFilterOptions = getRegionFilterOptions();
+    $scope.regionFilterOptions = regionFilterOptions();
     return $scope.refreshEvents();
   });
   $scope.regionFilter = $location.search().region;
