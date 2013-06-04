@@ -339,40 +339,45 @@
 
         <h4>Current Subscription Plan: {{company.subscription_plan}}</h4>
 
-        <!--subout pro plan-->
+        <div ng-show="subscription != null">
+          <!--subout pro plan-->
 
-        <div class="subout-pro-subscription" ng-show="company.subscription_plan == 'subout-pro-service'">
-          <div>Subscription price: {{(subout_pro_product.price_in_cents + additional_price)/100  | soCurrency}}</div>
-          <div class="alert alert-info downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
-          <div class="text-centered">
-            <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently" ng-click="updateProduct('subout-basic-service')">Downgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
+          <div class="subout-pro-subscription" ng-show="company.subscription_plan == 'subout-pro-service'">
+            <div>Subscription price: ${{(subout_pro_product.price_in_cents + additional_price)/100.00}}</div>
+            <hr />
+            <div class="alert alert-info downgrade-instructions" ng-show="companyProfile.upgraded_recently">You upgraded within the past month.  Before being able to downgrade you will need to wait until at least one month has past since your last upgrade.</div>
+            <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">You have not valid credit card number. Please update your credit card number to upgrade your plan.</div>
+            <div class="text-centered">
+              <button class="btn btn-primary" ng-disabled="companyProfile.upgraded_recently || !subscription.has_valid_credit_card" ng-click="updateProduct('subout-basic-service')">Downgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
+            </div>
           </div>
-        </div>
 
-        <!--subout basic plan-->
+          <!--subout basic plan-->
 
-        <div class="subout-basic-subscription" ng-show="company.subscription_plan == 'subout-basic-service'">
-          <div>Subscription price: {{subout_basic_product.price_in_cents/100 | soCurrency}}</div>
-          <div class="text-centered">
-            <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
+          <div class="subout-basic-subscription" ng-show="company.subscription_plan == 'subout-basic-service'">
+            <div>Subscription price: {{subout_basic_product.price_in_cents/100 | soCurrency}}</div>
+            <hr />
+            <div class="text-centered">
+              <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">You have not valid credit card number. Please update your credit card number to upgrade your plan.</div>
+              <button class="btn btn-primary" ng-disabled="!subscription.has_valid_credit_card" ng-click="updateProduct('subout-pro-service')">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
+            </div>
           </div>
-        </div>
 
-        <!--free plan-->
+          <!--free plan-->
 
-        <div ng-show="company.subscription_plan == 'free'" >
-          <div class="alert alert-info" ng-show="subscription == null">Please contact admin to upgrade your plan.</div>
-          <div class="text-centered">
-            <button class="btn btn-primary" ng-click="updateProduct('subout-basic-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
-            <br />
-            <br />
-            <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" ng-disabled="subscription == null || !subscription.has_valid_credit_card">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
+          <div ng-show="company.subscription_plan == 'free'" >
+            <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">You have not valid credit card number. Please update your credit card number to upgrade your plan.</div>
+            <div class="text-centered">
+              <button class="btn btn-primary" ng-click="updateProduct('subout-basic-service')" ng-disabled="!subscription.has_valid_credit_card">Upgrade to subout basic plan for {{subout_basic_product.price_in_cents/100 | soCurrency}}</button>
+              <br />
+              <br />
+              <button class="btn btn-primary" ng-click="updateProduct('subout-pro-service')" ng-disabled="!subscription.has_valid_credit_card">Upgrade to subout pro plan for {{subout_pro_product.price_in_cents/100 | soCurrency}}</button>
+            </div>
           </div>
         </div>
 
         <div ng-show="subscription!=null">
           <hr />
-          <div class="alert alert-info" ng-show="!subscription.has_valid_credit_card">You have not valid credit card number. Please update your credit card number to upgrade your plan.</div>
           <div class="text-centered">
           <a class="btn btn-success" href="{{company.self_service_url}}" target="_blank">Update my credit card number</a>
           </div>
@@ -380,45 +385,53 @@
         <hr />
 
         <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-show="company.subscription_plan == 'subout-pro-service'" novalidate>
-          <h4>Roadside assistance buses (free for 2 buses)</h4>
+          <h4>Register Vehicles Here (2 buses included with subscription)</h4>
+          <p class="help-block">Additional vehicles can be added for $49.99</p>
+          <br />
           <div ng-show="companyProfile.vehicles.length > 0">
             <div class="row-fluid">
+              <div class="span2"><strong>RM #</strong></div>
               <div class="span2"><strong>Year</strong></div>
               <div class="span2"><strong>Make</strong></div>
-              <div class="span3"><strong>Model</strong></div>
-              <div class="span3"><strong>VIN</strong></div>
+              <div class="span2"><strong>Model</strong></div>
+              <div class="span2"><strong>VIN</strong></div>
               <div class="span2"></div>
             </div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
               <div class="row-fluid" ng-show="!vehicle.editable">
+                <div class="span2"> {{vehicle.rm_number}} </div>
                 <div class="span2"> {{vehicle.year}} </div>
                 <div class="span2"> {{vehicle.make}} </div>
-                <div class="span3"> {{vehicle.model}} </div>
-                <div class="span3"> {{vehicle.vin}} </div>
+                <div class="span2"> {{vehicle.model}} </div>
+                <div class="span2"> {{vehicle.vin}} </div>
                 <div class="span2"><a class="btn" ng-click="vehicle.editable = 1">Edit</a></div>
               </div>
               <div ng-show="vehicle.editable">
                 <br />
+                <div class="control-group" ng-show="vehicle.rm_number">
+                  <strong>RM Number:</strong> {{vehicle.rm_number}}
+                </div>
                 <div class="control-group">
-                  <label for="vehicle_year" class="control-label">Vehicle's year</label>
+                  <label for="vehicle_year" class="control-label">Year</label>
                   <div class="controls">
-                    <input id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" type="text" class="input-xlarge" required />
+                    <select id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" ng-options="y for y in years" required>
+                    </select>
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
-                  <label for="vehicle_make" class="control-label">Vehicle's Make</label>
+                  <label for="vehicle_make" class="control-label">Make</label>
                   <div class="controls">
                     <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="input-xlarge" required />
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
-                  <label for="vehicle_model" class="control-label">Vehicle's Model</label>
+                  <label for="vehicle_model" class="control-label">Model</label>
                   <div class="controls">
                     <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="input-xlarge" required />
                   </div>
                 </div>
                 <div class="control-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
-                  <label for="vehicle_vin" class="control-label">Last 8 Of Bus VIN</label>
+                  <label for="vehicle_vin" class="control-label">Last 8 Of VIN</label>
                   <div class="controls">
                     <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
                   </div>
@@ -433,7 +446,7 @@
           </div>
 
           <div>
-            <a ng-click="addVehicle({'editable': 1})">Add Vehicle (+$50)</a> <br/><br/>
+            <a ng-click="addVehicle({'editable': 1})">Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></a> <br/><br/>
           </div>
           <div class="form-actions">
             <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
