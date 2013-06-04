@@ -446,7 +446,7 @@
           </div>
 
           <div>
-            <a ng-click="addVehicle({'editable': 1})">Add Vehicle (+$49.99)</a> <br/><br/>
+            <a ng-click="addVehicle({'editable': 1})">Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></a> <br/><br/>
           </div>
           <div class="form-actions">
             <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
