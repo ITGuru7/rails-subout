@@ -1034,7 +1034,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       (company) ->
         updateCompanyAndCompanyProfile(company)
         successUpdate()
-        $location.search(reload: new Date().getTime())
+        $rootScope.filterRegions = company.regions
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 

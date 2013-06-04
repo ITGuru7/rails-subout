@@ -1319,9 +1319,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     }, function(company) {
       updateCompanyAndCompanyProfile(company);
       successUpdate();
-      return $location.search({
-        reload: new Date().getTime()
-      });
+      return $rootScope.filterRegions = company.regions;
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
