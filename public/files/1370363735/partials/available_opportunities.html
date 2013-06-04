@@ -6,6 +6,9 @@
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
   </div>
+  <div class="alert alert-info" ng-show="company.regions.length == 0">
+      <a href="#modal" data-toggle="modal" ng-click="displaySettings('favorited-regions')" style="text-decoration:underline;">Click here to add your favorite regions</a>
+  </div>
   <div>
     <form class="form-inline">
       <div class="pull-left">
