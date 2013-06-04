@@ -967,7 +967,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
-  var regionFilterOptions, setRegionFilter, updatePreviousEvents;
+  var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -976,11 +976,12 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filter = null;
   $scope.opportunity = null;
   $scope.events = [];
-  $scope.regionFilterOptions = $rootScope.company.regions;
+  $scope.regionFilterOptions = [];
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
-    return $scope.companies = data;
+    $scope.companies = data;
+    return $scope.regionFilterOptions = $rootScope.company.regions;
   });
   $scope.loadMoreEvents = function() {
     var queryOptions;
@@ -1095,11 +1096,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return $rootScope.filterRegions = regions;
     }
   };
-  regionFilterOptions = function() {
+  getRegionFilterOptions = function() {
     return _.difference($rootScope.company.regions, $rootScope.filterRegions);
   };
   $scope.$watch("filterRegions", function() {
-    $scope.regionFilterOptions = regionFilterOptions();
+    $scope.regionFilterOptions = getRegionFilterOptions();
     return $scope.refreshEvents();
   });
   $scope.regionFilter = $location.search().region;
@@ -1225,7 +1226,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   token = $rootScope.token;
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
+      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
     } else {
       return $scope.additional_price = 0;
     }

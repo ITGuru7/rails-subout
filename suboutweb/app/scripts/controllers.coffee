@@ -955,7 +955,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   
   updateAdditionalPrice = ()->
     if $scope.companyProfile.vehicles.length > 2
-      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100
+      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100
     else
       $scope.additional_price = 0
 
