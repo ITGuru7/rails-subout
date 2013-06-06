@@ -1605,7 +1605,22 @@ subout.directive('multiple', function() {
     scope: false,
     link: function(scope, element, attrs) {
       element.multiselect({
-        enableFiltering: true
+        enableFiltering: true,
+        selectAllText: "All",
+        buttonText: function(options, select) {
+          var selected;
+          if (options.length === 0) {
+            return 'All favorite regions <b class="caret"></b>';
+          } else if (options.length > 3) {
+            return options.length + ' selected <b class="caret"></b>';
+          } else {
+            selected = "";
+            options.each(function() {
+              return selected += $(this).text() + ", ";
+            });
+            return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
+          }
+        }
       });
       scope.$watch(function() {
         return element[0].length;

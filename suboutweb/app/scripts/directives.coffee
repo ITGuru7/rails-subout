@@ -3,6 +3,18 @@ subout.directive 'multiple', ->
   link: (scope, element, attrs) ->
     element.multiselect
       enableFiltering: true
+      selectAllText: "All"
+      buttonText: (options, select)->
+        if (options.length == 0)
+          return 'All favorite regions <b class="caret"></b>'
+        else if (options.length > 3)
+          return options.length + ' selected <b class="caret"></b>'
+        else
+          selected = ""
+          options.each ()->
+            selected += $(this).text() + ", "
+
+          return selected.substr(0, selected.length-2) + ' <b class="caret"></b>'
 
     scope.$watch ->
       return element[0].length
