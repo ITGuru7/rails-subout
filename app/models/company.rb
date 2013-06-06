@@ -203,14 +203,12 @@ class Company
 
     regions = nil if regions == "null" or regions.blank?
     regions = regions.split(',') unless regions.nil?
-    regions = [] if regions.nil?
-
-    regions = self.regions & regions
-    regions = self.regions if regions.blank?
 
     options = []
-    options << {:start_region.in => regions}
-    options << {:end_region.in => regions}
+    if !regions.blank?
+      options << {:start_region.in => regions}
+      options << {:end_region.in => regions}
+    end
     
     conditions = {
       #:buyer_id.in => self.favoriting_buyer_ids,

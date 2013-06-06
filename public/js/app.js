@@ -709,6 +709,9 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
+  if ($rootScope.filterRegions.length === 0) {
+    $scope.filterRegions = $rootScope.company.regions;
+  }
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -1610,7 +1613,7 @@ subout.directive('multiple', function() {
         buttonText: function(options, select) {
           var selected;
           if (options.length === 0) {
-            return 'All favorite regions <b class="caret"></b>';
+            return 'All regions <b class="caret"></b>';
           } else if (options.length > 3) {
             return options.length + ' selected <b class="caret"></b>';
           } else {

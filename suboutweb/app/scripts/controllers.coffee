@@ -507,6 +507,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.maxPage = 1
   $scope.filterVehicleType = null
   $scope.filterTripType = null
+  $scope.filterRegions = $rootScope.company.regions if $rootScope.filterRegions.length == 0
   $scope.sortItems = [
     {
       value: "created_at,asc"
