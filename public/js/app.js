@@ -2001,9 +2001,6 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       if (!opportunity.status) {
         return false;
       }
-      if (opportunity.bids.length > 0) {
-        return false;
-      }
       if (this._id !== opportunity.buyer._id) {
         return false;
       }

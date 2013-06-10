@@ -122,7 +122,6 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::canCancelOrEdit = (opportunity) ->
     unless opportunity.type is 'Emergency'
       return false unless opportunity.status
-      return false if opportunity.bids.length > 0
       return false if this._id isnt opportunity.buyer._id
       return opportunity.status is 'In progress'
     else

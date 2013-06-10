@@ -37,7 +37,9 @@ class Bid
 
   def status
     if canceled?
-      "Canceled"
+      "Canceled by you"
+    elsif opportunity.status == "Canceled"
+      "Canceled by poster"
     elsif opportunity.status == "Bidding won"
       opportunity.winning_bid_id == id ? "Won" : "Not won"
     elsif opportunity.status == "Bidding ended"
