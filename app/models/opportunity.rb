@@ -166,8 +166,8 @@ class Opportunity
     self.bidding_won_at = Time.now
     self.save(validate: false) # when poster select winner, the start date validation may be failed
 
-    self.buyer.inc(:total_sales, bid.amount)
-    bid.bidder.inc(:total_winnings, bid.amount)
+    self.buyer.inc(:total_sales, bid.amount.to_i)
+    bid.bidder.inc(:total_winnings, bid.amount.to_i)
     bid.bidder.inc(:total_won_bids_count, 1)
 
     Notifier.delay.won_auction_to_buyer(self.id)
