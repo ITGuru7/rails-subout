@@ -7,12 +7,4 @@ class Comment
   belongs_to :commenter, :class_name => "Company"
   embedded_in :opportunity
   validates :body, presence: true
-
-  before_validation :set_commenter_name
-
-  private
-
-  def set_commenter_name
-    self.commenter_name = self.commenter.name
-  end
 end
