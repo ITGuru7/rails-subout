@@ -6,7 +6,7 @@
   = link_to "Edit this subscription", edit_admin_gateway_subscription_path(@subscription), class: "btn" if @company.created_from_subscription_id
 
   - if @subscription.state == 'canceled'
-    = link_to "Reactivate this subscription", reactivate_subscription_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to cancel this subscription?"
+    = link_to "Reactivate this subscription", reactivate_subscription_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to reactivate this subscription?"
   - else
     = link_to "Cancel this subscription", cancel_subscription_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to cancel this subscription?"
 
