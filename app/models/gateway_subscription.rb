@@ -134,13 +134,6 @@ class GatewaySubscription
     end
   end
 
-  def update_product_and_vehicle_count!(options)
-    update_product!(options[:product_handle])
-    if product_handle == "subout-pro-service" and options[:vehicle_count] 
-      update_vehicle_count!(options[:vehicle_count])
-    end
-  end
-
   def exists_on_chargify?
     Chargify::Subscription.exists?(self.subscription_id)
   end
@@ -149,6 +142,19 @@ class GatewaySubscription
     Chargify::Subscription.find(self.subscription_id)
   rescue
     nil
+  end
+
+  def cancel!
+    if subscription = chargify_subscription
+      subscription.cancel
+      sleep(1)
+    end
+  end
+
+  def reactivate!
+    if subscription = chargify_subscription
+      subscription.reactivate
+    end
   end
 
   def update_chargify_email

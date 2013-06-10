@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :cancel_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
+  before_filter :load_company, only: [:edit, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -23,26 +23,32 @@ class Admin::CompaniesController < Admin::BaseController
 
   def lock_account
     if subscription = @company.created_from_subscription
-      subscription.update_product_and_vehicle_count!(product_handle: "free", vehicle_count: 0)
+      subscription.cancel!
     end
-
     @company.lock_access!
-    redirect_to edit_admin_company_path(@company)
+    redirect_to edit_admin_company_path(@company), notice: "This account is locked."
   end
 
   def unlock_account
     if subscription = @company.created_from_subscription
-      subscription.update_product_and_vehicle_count!(product_handle: "subout-basic-service", vehicle_count: 0)
+      subscription.reactivate!
     end
     @company.unlock_access!
-    redirect_to edit_admin_company_path(@company)
+    redirect_to edit_admin_company_path(@company), notice: "This account is unlocked."
   end
 
   def cancel_subscription
     if subscription = @company.created_from_subscription
-      subscription.update_product_and_vehicle_count!(product_handle: "free", vehicle_count: 0)
+      subscription.cancel!
     end
-    redirect_to edit_admin_company_path(@company)
+    redirect_to edit_admin_company_path(@company), notice: "This subscription is canceled."
+  end
+
+  def reactivate_subscription
+    if subscription = @company.created_from_subscription
+      subscription.reactivate!
+    end
+    redirect_to edit_admin_company_path(@company), notice: "This subscription is reactivated."
   end
 
   def add_as_a_favorite
