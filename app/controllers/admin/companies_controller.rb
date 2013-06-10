@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
+  before_filter :load_company, only: [:edit, :connect_subscription, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -49,6 +49,10 @@ class Admin::CompaniesController < Admin::BaseController
       subscription.reactivate!
     end
     redirect_to edit_admin_company_path(@company), notice: "This subscription is reactivated."
+  end
+
+  def connect_subscription
+
   end
 
   def add_as_a_favorite

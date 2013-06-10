@@ -87,6 +87,7 @@ Subout::Application.routes.draw do
       member do
         put "cancel_subscription"
         put "reactivate_subscription"
+        put "connect_subscription"
         put "lock_account"
         put "unlock_account"
         put "add_as_a_favorite"
