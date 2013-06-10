@@ -74,7 +74,7 @@ class Opportunity
   validate :validate_reseve_amount_and_win_it_now_price
 
   #TODO this validation doesn't work correctly, if we enable this, it doesn't save any vehicle_type or trip_type
-  #validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"] }
+  #validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"] }
   #validates :trip_type, inclusion: { in: [nil, "One way", "Round trip", "Over the road"] }
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'

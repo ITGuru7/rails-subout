@@ -216,7 +216,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
-  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
+  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",

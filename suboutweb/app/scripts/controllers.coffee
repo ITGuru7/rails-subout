@@ -80,7 +80,8 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     "Motorcoach",
     "Double Decker Motorcoach",
     "Executive Coach",
-    "Sleeper Bus"
+    "Sleeper Bus",
+    "School Bus"
   ]
   $rootScope.ALL_REGIONS = {
     "Alabama":"AL",
