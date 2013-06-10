@@ -216,7 +216,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   };
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
-  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus"];
+  $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -709,6 +709,9 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
+  if ($rootScope.filterRegions.length === 0) {
+    $scope.filterRegions = $rootScope.company.regions;
+  }
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -811,7 +814,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   });
   return $scope.$watch("filterRegions", function(oldValue, newValue) {
     if (oldValue !== newValue) {
-      $rootScope.filterRegions = newValue;
+      $rootScope.filterRegions = $scope.filterRegions;
       return $scope.loadMoreOpportunities(1);
     }
   });
@@ -967,7 +970,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 };
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
-  var regionFilterOptions, setRegionFilter, updatePreviousEvents;
+  var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -976,7 +979,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filter = null;
   $scope.opportunity = null;
   $scope.events = [];
-  $scope.regionFilterOptions = $rootScope.company.regions;
+  $scope.regionFilterOptions = $rootScope.allRegions;
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
@@ -1095,15 +1098,12 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return $rootScope.filterRegions = regions;
     }
   };
-  regionFilterOptions = function() {
-    return _.difference($rootScope.company.regions, $rootScope.filterRegions);
+  getRegionFilterOptions = function() {
+    return _.difference($rootScope.allRegions, $rootScope.filterRegions);
   };
-  $rootScope.$watch("filterRegions", function() {
-    $scope.regionFilterOptions = regionFilterOptions();
+  $scope.$watch("filterRegions", function() {
+    $scope.regionFilterOptions = getRegionFilterOptions();
     return $scope.refreshEvents();
-  });
-  $rootScope.$watch("company.regions", function() {
-    return console.log("ccc");
   });
   $scope.regionFilter = $location.search().region;
   $scope.$watch("regionFilter", setRegionFilter);
@@ -1228,7 +1228,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   token = $rootScope.token;
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 50 * 100;
+      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
     } else {
       return $scope.additional_price = 0;
     }
@@ -1321,7 +1321,8 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       action: "update_regions"
     }, function(company) {
       updateCompanyAndCompanyProfile(company);
-      return successUpdate();
+      successUpdate();
+      return $rootScope.filterRegions = company.regions;
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
@@ -1608,12 +1609,20 @@ subout.directive('multiple', function() {
     link: function(scope, element, attrs) {
       element.multiselect({
         enableFiltering: true,
-        onChange: function(optionElement, checked) {
-          optionElement.removeAttr('selected');
-          if (checked) {
-            optionElement.attr('selected', 'selected');
+        selectAllText: "All",
+        buttonText: function(options, select) {
+          var selected;
+          if (options.length === 0) {
+            return 'All regions <b class="caret"></b>';
+          } else if (options.length > 3) {
+            return options.length + ' selected <b class="caret"></b>';
+          } else {
+            selected = "";
+            options.each(function() {
+              return selected += $(this).text() + ", ";
+            });
+            return selected.substr(0, selected.length - 2) + ' <b class="caret"></b>';
           }
-          return element.change();
         }
       });
       scope.$watch(function() {
@@ -1625,7 +1634,7 @@ subout.directive('multiple', function() {
         return element.multiselect('refresh');
       });
       if (scope.$last) {
-        return element.multiselect('rebuild');
+        return element.multiselect('refresh');
       }
     }
   };
@@ -1990,9 +1999,6 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (opportunity.type !== 'Emergency') {
       if (!opportunity.status) {
-        return false;
-      }
-      if (opportunity.bids.length > 0) {
         return false;
       }
       if (this._id !== opportunity.buyer._id) {
