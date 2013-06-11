@@ -15,8 +15,10 @@
   - else
     = link_to "Unlock this account", unlock_account_admin_company_path(@company), class: "btn btn-success", method: "put", confirm: "Are you sure to unlock this account"
 - else
-  %p.alert.alert-error
-    Subscription not found on Chargify
+  = form_tag connect_subscription_admin_company_path(@company), method: "put", class: "form-horizontal" do
+    Subscription ID on chargify: 
+    = text_field_tag :subscription_id, params[:subscription_id]
+    = submit_tag "Connect", class: "btn btn-primary"
 
 .row
 %h3 Vehicles

@@ -154,6 +154,7 @@ class GatewaySubscription
   def reactivate!
     if subscription = chargify_subscription
       subscription.reactivate
+      sleep(1)
     end
   end
 
