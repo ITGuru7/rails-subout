@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :connect_subscription, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
+  before_filter :load_company, only: [:edit, :update, :connect_subscription, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -17,6 +17,12 @@ class Admin::CompaniesController < Admin::BaseController
     if !@subscription or !@subscription.exists_on_chargify?
       flash.now[:error] = "Subscription is not found on chargify."
     end
+  end
+
+  def update
+    @company.update_attributes(params[:company])
+
+    redirect_to edit_admin_company_path(@company), notice: 'Company is updated.'
   end
 
   def change_emails

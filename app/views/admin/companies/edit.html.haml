@@ -57,7 +57,14 @@
   = submit_tag "Add", class: "btn btn-primary"
 
 .row
-%h3 Email
+%h4 TPA number
+= form_for @company, url: admin_company_path(@company), html: { class: "form-horizontal edit_gateway_subscription" } do |f|
+  .control-group
+    = f.text_field :tpa
+    = f.submit "Submit", class: "btn btn-primary"
+
+.row
+%h4 Email
 = form_tag change_emails_admin_company_path(@company), method: "put", class: "form-horizontal" do
   = text_field_tag "email", @company.email
   = submit_tag "Submit", class: "btn btn-primary"
