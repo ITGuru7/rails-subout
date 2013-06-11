@@ -76,7 +76,7 @@
             <span class="label-field">Starting price: </span>{{opportunity.reserve_amount | soCurrency}}
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
-            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
+            <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-show="opportunity.bids.length == 0" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
           </div>
           <div class="actions" ng-show="opportunity.buyer_id == company._id">
