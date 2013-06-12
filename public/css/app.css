@@ -8249,6 +8249,12 @@ div#opportunity-show .description .content {
 .bid-history td {
   max-width: 300px;
 }
+.bid-history td.tpa {
+  text-align: center;
+}
+.bid-history td.tpa img {
+  max-width: 80px;
+}
 .comments .comment-body {
   color: #666550;
   margin-bottom: 5px;

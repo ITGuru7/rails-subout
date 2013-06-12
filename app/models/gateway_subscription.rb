@@ -145,14 +145,14 @@ class GatewaySubscription
   end
 
   def cancel!
-    if subscription = chargify_subscription
+    if subscription = chargify_subscription and subscription.state != 'canceled'
       subscription.cancel
       sleep(1)
     end
   end
 
   def reactivate!
-    if subscription = chargify_subscription
+    if subscription = chargify_subscription and subscription.state == 'canceled'
       subscription.reactivate
       sleep(1)
     end

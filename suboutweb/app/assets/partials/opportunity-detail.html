@@ -109,6 +109,7 @@
           <td><strong>{{bid.amount | soCurrency}}</strong></td>
           <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
+          <td class="tpa"><img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa"></td>
           <td>{{bid.comment}}</td>
           <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
             <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
