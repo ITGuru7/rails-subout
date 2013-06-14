@@ -200,12 +200,14 @@ class Company
     start_date = nil if start_date == "null" or start_date.blank?
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
-
     regions = nil if regions == "null" or regions.blank?
-    regions = regions.split(',') unless regions.nil?
 
     options = []
-    if !regions.blank?
+    
+    regions = regions.split(',') unless regions.nil?
+    regions = self.regions if regions.blank?
+
+    unless regions.blank?
       options << {:start_region.in => regions}
       options << {:end_region.in => regions}
     end

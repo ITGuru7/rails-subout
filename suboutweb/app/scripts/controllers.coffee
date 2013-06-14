@@ -4,7 +4,19 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
   $rootScope.years = [d.getFullYear()..1970]
-  $rootScope.filterRegions = []
+
+  salt =(key)->
+    return $rootScope.api_token + "_" + key
+     
+  $rootScope.filterRegionsOnHome = null
+  $rootScope.filterRegionsOnBuybid = null
+
+  $rootScope.filterRegionsOnHome = $.cookie(salt("filterRegionsOnHome"))
+  $rootScope.filterRegionsOnHome = [] if $rootScope.filterRegionsOnHome == null
+
+  $rootScope.$watch "filterRegionsOnHome", (v1, v2)->
+    if v1 != null
+      $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome)
 
   $('#modal').on('hidden', () ->
     $scope = angular.element(document).scope()
@@ -508,7 +520,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
   $scope.maxPage = 1
   $scope.filterVehicleType = null
   $scope.filterTripType = null
-  $scope.filterRegions = $rootScope.company.regions if $rootScope.filterRegions.length == 0
+  $scope.filterRegions = $rootScope.filterRegionsOnBuybid
   $scope.sortItems = [
     {
       value: "created_at,asc"
@@ -527,6 +539,9 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
       label: "Ends (descending)"
     }
   ]
+
+  $rootScope.$watch "company.regions.length", ()->
+    $scope.filterRegions = angular.copy($rootScope.company.regions)
 
   availableToCurrentCompany = (opportunity) ->
     opportunity.buyer_id != $rootScope.company._id
@@ -557,7 +572,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
-        regions: $rootScope.filterRegions
+        regions: $scope.filterRegions
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -596,7 +611,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
       $scope.loadMoreOpportunities(1)
   $scope.$watch "filterRegions", (oldValue, newValue) ->
     if(oldValue != newValue)
-      $rootScope.filterRegions = $scope.filterRegions
+      $rootScope.filterRegionsOnBuybid = $scope.filterRegions
       $scope.loadMoreOpportunities(1)
 
 OpportunityCtrl = ($scope, $rootScope, $location, Auction, soPagination) ->
@@ -748,6 +763,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.opportunity = null
   $scope.events = []
   $scope.regionFilterOptions = $rootScope.allRegions
+  $scope.filterRegions = $rootScope.filterRegionsOnHome
 
   Company.query
     api_token: $rootScope.token.api_token
@@ -761,7 +777,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
-    queryOptions.regions = $rootScope.filterRegions
+    queryOptions.regions = $scope.filterRegions
 
     queryOptions.page = $scope.currentPage
 
@@ -841,15 +857,17 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     event.actor._id is actor_id
 
   setRegionFilter = ->
-    regions = angular.copy($rootScope.filterRegions)
-    if $scope.regionFilter
-      regions.push($scope.regionFilter)
-      $rootScope.filterRegions = regions
+    regions = angular.copy($scope.filterRegions)
+    if ($scope.regionFilter)
+      regions.push $scope.regionFilter
+      $scope.filterRegions = regions
+      
 
   getRegionFilterOptions = ->
-    _.difference($rootScope.allRegions, $rootScope.filterRegions)
+    _.difference($rootScope.allRegions, $scope.filterRegions)
 
   $scope.$watch "filterRegions", ()->
+    $rootScope.filterRegionsOnHome = angular.copy($scope.filterRegions)
     $scope.regionFilterOptions = getRegionFilterOptions()
     $scope.refreshEvents()
 
@@ -917,7 +935,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.fullTextSearch()
 
   $scope.hasAnyFilter = ->
-    return true if $rootScope.filterRegions.length > 0
+    return true if $scope.filterRegions.length > 0
     not _.isEmpty($location.search())
 
   $scope.filterValue = if $rootScope.isMobile then '' else null
@@ -925,7 +943,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.clearFilters = ->
     $scope.query = ""
     $scope.regionFilter = $scope.filterValue
-    $rootScope.filterRegions = []
+    $scope.filterRegions = []
     $location.search({})
     $scope.refreshEvents()
   
@@ -933,7 +951,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $rootScope.company.regions = []
 
   $scope.removeRegionFilter = (region)->
-    $rootScope.filterRegions = _.reject($rootScope.filterRegions, (item) -> region is item)
+    $scope.filterRegions = _.reject($scope.filterRegions, (item) -> region is item)
 
   $rootScope.$watch ()->
     return $location.absUrl()
@@ -969,7 +987,6 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
 
   updateCompanyAndCompanyProfile = (company) ->
     $rootScope.company = company
-    $rootScope.filterRegions = []
     $scope.companyProfile = angular.copy(company)
     updateSelectedRegions()
 
@@ -1036,7 +1053,6 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       (company) ->
         updateCompanyAndCompanyProfile(company)
         successUpdate()
-        $rootScope.filterRegions = company.regions
       (error) ->
         $scope.companyProfileError = "Sorry, invalid inputs. Please try again."
 
