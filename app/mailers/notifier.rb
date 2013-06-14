@@ -125,4 +125,18 @@ class Notifier < ActionMailer::Base
 
     mail(subject: "[SubOut] Vehicle is removed on: #{@company.name}", to: Setting.admin_email)
   end
+
+  def remind_to_user(user_id)
+    @user = User.find(user_id)
+    @company = @user.company
+
+    mail(subject: "[SubOut] You didn't login in last 3 days", to: @user.email)
+  end
+
+  def remind_to_admin(user_id)
+    @user = User.find(user_id)
+    @company = @user.company
+
+    mail(subject: "[SubOut] #{@company.name} didn't login in last 3 days", to: 'sales@subout.com')
+  end
 end

@@ -34,4 +34,8 @@ namespace :subout do
   task :send_expired_card_notification => :environment do
     GatewaySubscription.send_expired_card_notification
   end
+
+  task :send_remind_notiiation => :environment do 
+    User.send_remind_notification
+  end
 end
