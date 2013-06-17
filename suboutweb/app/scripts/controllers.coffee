@@ -95,6 +95,18 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     "Sleeper Bus",
     "School Bus"
   ]
+
+  $rootScope.NOTIFICATION_TYPES = [
+    {name: "Opportunity Post", type: "email", code: "opportunity-new" },
+    {name: "Opportunity Expired", type: "email", code: "opportunity-expire" },
+    {name: "Opportunity Win", type: "email", code: "opportunity-win" },
+    {name: "New Bid", type: "email", code: "bid-new" },
+    {name: "Update Product", type: "email", code: "account-update-product" },
+    {name: "Account Locked", type: "email", code: "account-locked" },
+    {name: "Expired Card", type: "email", code: "account-expired-card" },
+    {name: "Opportunity Post", type: "mobile", code: "mobile-opportunity-new" }
+  ]
+
   $rootScope.ALL_REGIONS = {
     "Alabama":"AL",
     "Alaska":"AK",
@@ -984,7 +996,14 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       $scope.companyProfile.allRegions[region] = region in $scope.companyProfile.regions
   updateSelectedRegions()
 
+  updateSelectedNotifications = ->
+    for t in $rootScope.NOTIFICATION_TYPES
+      t.enabled = true if $rootScope.company.hasNotificationItem(t.code)
+  updateSelectedNotifications()
 
+  $scope.setNotification = (t)->
+    t.enabled = !t.enabled
+    
   updateCompanyAndCompanyProfile = (company) ->
     $rootScope.company = company
     $scope.companyProfile = angular.copy(company)
@@ -1038,8 +1057,8 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       $scope.userProfileError =
         "The new password and password confirmation are not identical."
 
+  
   $scope.saveFavoritedRegions = ->
-    return unless confirm("Are you sure?")
     finalRegions = []
 
     for region, isEnabled of $scope.companyProfile.allRegions
@@ -1060,6 +1079,11 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.companyProfileError = ""
 
     $scope.companyProfile.logo_id = $("#company_logo_id").val()
+
+    finalNotifications = []
+    for t in $rootScope.NOTIFICATION_TYPES
+      finalNotifications.push(t.code) if t.enabled
+    $scope.companyProfile.notification_items = finalNotifications
 
     Company.update
       companyId: $rootScope.company._id

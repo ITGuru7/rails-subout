@@ -230,6 +230,41 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"];
+  $rootScope.NOTIFICATION_TYPES = [
+    {
+      name: "Opportunity Post",
+      type: "email",
+      code: "opportunity-new"
+    }, {
+      name: "Opportunity Expired",
+      type: "email",
+      code: "opportunity-expire"
+    }, {
+      name: "Opportunity Win",
+      type: "email",
+      code: "opportunity-win"
+    }, {
+      name: "New Bid",
+      type: "email",
+      code: "bid-new"
+    }, {
+      name: "Update Product",
+      type: "email",
+      code: "account-update-product"
+    }, {
+      name: "Account Locked",
+      type: "email",
+      code: "account-locked"
+    }, {
+      name: "Expired Card",
+      type: "email",
+      code: "account-expired-card"
+    }, {
+      name: "Opportunity Post",
+      type: "mobile",
+      code: "mobile-opportunity-new"
+    }
+  ];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -1231,7 +1266,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
-  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleTypeOptions;
+  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
@@ -1262,6 +1297,24 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return _results;
   };
   updateSelectedRegions();
+  updateSelectedNotifications = function() {
+    var t, _i, _len, _ref, _results;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if ($rootScope.company.hasNotificationItem(t.code)) {
+        _results.push(t.enabled = true);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+  updateSelectedNotifications();
+  $scope.setNotification = function(t) {
+    return t.enabled = !t.enabled;
+  };
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
     $scope.companyProfile = angular.copy(company);
@@ -1317,9 +1370,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
   $scope.saveFavoritedRegions = function() {
     var finalRegions, isEnabled, region, _ref;
-    if (!confirm("Are you sure?")) {
-      return;
-    }
     finalRegions = [];
     _ref = $scope.companyProfile.allRegions;
     for (region in _ref) {
@@ -1342,8 +1392,18 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     });
   };
   $scope.saveCompanyProfile = function() {
+    var finalNotifications, t, _i, _len, _ref;
     $scope.companyProfileError = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
+    finalNotifications = [];
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if (t.enabled) {
+        finalNotifications.push(t.code);
+      }
+    }
+    $scope.companyProfile.notification_items = finalNotifications;
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -1952,6 +2012,10 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       method: "PUT",
       action: "update_regions"
     },
+    update_notifications: {
+      method: "PUT",
+      action: "update_notifications"
+    },
     update_vehicles: {
       method: "PUT",
       action: "update_vehicles"
@@ -2031,6 +2095,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.removeFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId);
+  };
+  Company.prototype.hasNotificationItem = function(code) {
+    return _.indexOf(this.notification_items, code) !== -1;
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);

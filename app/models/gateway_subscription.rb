@@ -172,11 +172,11 @@ class GatewaySubscription
 
       if gs.card_expired_date
         if (gs.card_expired_date > 10.days.ago.to_date) and !gs.card_expired_email_sent
-          Notifier.delay.expired_card(gs.created_company.id)
+          Notifier.delay.expired_card(gs.created_company.id) if gs.created_company.notification_items.include?("account-expired-card")
           gs.set(:card_expired_email_sent, true)
         elsif gs.card_expired_date == 10.days.ago.to_date
           gs.created_company.lock_access!
-          Notifier.delay.locked_company(gs.created_company.id)
+          Notifier.delay.locked_company(gs.created_company.id) if gs.created_company.notification_items.include?("account-locked")
         end
       end
     end

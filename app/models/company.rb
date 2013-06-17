@@ -72,6 +72,8 @@ class Company
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :bids, foreign_key: 'bidder_id'
 
+  field :notification_items, type: Array, default: ["opportunity-new", "opportunity-win", "bid-new", "mobile-opportunity-new"]
+
   accepts_nested_attributes_for :users
 
   validates :name, presence: true

@@ -10,7 +10,7 @@ class BidObserver < Mongoid::Observer
 
     bid.opportunity.update_value!
 
-    Notifier.delay_for(5.minutes).new_bid(bid.id)
+    Notifier.delay_for(5.minutes).new_bid(bid.id) if bid.opportunity.buyer.notification_items.include?("bid-new")
   end
 
   def after_update(bid)

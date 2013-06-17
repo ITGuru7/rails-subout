@@ -90,7 +90,7 @@ class Opportunity
     else
       options << {:regions.in => regions}
     end
-    companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id, notification_type: 'None') - notified_companies
+    companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id) - notified_companies
     companies.select { |c| notify_to_vehicle_owner?(c.vehicle_types) }
   end
 
@@ -106,12 +106,14 @@ class Opportunity
     ios_keys = []
 
     companies_to_notify.each do |company|
-      Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id)
+      Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id) if company.notification_items.include?("opportunity-new")
       Sms.new_opportunity(self, company) if company.cell_phone.present? && self.emergency?
 
       user = company.users.first
-      android_keys += user.mobile_keys.android.pluck(:key)
-      ios_keys += user.mobile_keys.ios.pluck(:key)
+      if company.notification_items.include?("mobile-opportunity-new")
+        android_keys += user.mobile_keys.android.pluck(:key)
+        ios_keys += user.mobile_keys.ios.pluck(:key)
+      end
     end
 
     MobileKey.push_message_to_android(android_keys.uniq, {alert: self.name, extra:{id: self.id}}) if android_keys.any?
@@ -132,15 +134,15 @@ class Opportunity
   def self.send_expired_notification
     where(:bidding_ends_at.lte => Time.now, expired_notification_sent: false, winning_bid_id: nil).each do |opportunity|
       opportunity.buyer.inc(:auctions_expired_count, 1)
-      Notifier.delay.expired_auction_notification(opportunity.id)
+      Notifier.delay.expired_auction_notification(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-expire")
       opportunity.set(:expired_notification_sent, true)
     end
   end
 
   def self.send_completed_notification
     where(:end_date.lte => Date.today, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
-      Notifier.delay.completed_auction_notification_to_buyer(opportunity.id)
-      Notifier.delay.completed_auction_notification_to_supplier(opportunity.id)
+      Notifier.delay.completed_auction_notification_to_buyer(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-win")
+      Notifier.delay.completed_auction_notification_to_supplier(opportunity.id) if opportunity.winning_bid.bidder.notification_items.include?("opportunity-win")
 
       opportunity.unlock_rating(opportunity.winning_bid.bidder.id, opportunity.buyer.id)
       opportunity.unlock_rating(opportunity.buyer.id, opportunity.winning_bid.bidder.id)
@@ -170,9 +172,9 @@ class Opportunity
     bid.bidder.inc(:total_winnings, bid.amount.to_i)
     bid.bidder.inc(:total_won_bids_count, 1)
 
-    Notifier.delay.won_auction_to_buyer(self.id)
-
-    Notifier.delay.won_auction_to_supplier(self.id)
+    Notifier.delay.won_auction_to_buyer(self.id) if self.buyer.notification_items.include?("opportunity-win")
+    Notifier.delay.won_auction_to_supplier(self.id) if bid.bidder.notification_items.include?("opportunity-win")
+    
     bid_loser_ids.each do |bidder_id|
       Notifier.delay.finished_auction_to_bidder(self.id, bidder_id)
     end

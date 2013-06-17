@@ -6,8 +6,9 @@
   </div>
   <div class="modal-body">
     <ul class="nav nav-tabs">
-      <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User Login</a></li>
-      <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company Profile</a></li>
+      <li ng-class="{active:selectedTab == 'user-login'}"><a href="#user-login" data-toggle="tab">User</a></li>
+      <li ng-class="{active:selectedTab == 'company-profile'}"><a href="#company-profile" data-toggle="tab">Company</a></li>
+      <li ng-class="{active:selectedTab == 'notifications'}"><a href="#notifications" data-toggle="tab">Notifications</a></li>
       <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
       <li ng-class="{active:selectedTab == 'favorited-regions'}"><a href="#favorited-regions" data-toggle="tab">Regions</a></li>
       <li ng-class="{active:selectedTab == 'vehicles'}"><a href="#vehicles" data-toggle="tab">Vehicles</a></li>
@@ -67,6 +68,51 @@
             </div>
 
           </fieldset>
+        </form>
+      </div>
+
+      <div ng-class="{active:selectedTab == 'notifications'}" class="tab-pane modal-content" id="notifications">
+        <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
+          <div class="control-group">
+            <label for="notification_type" class="control-label">Notification</label>
+            <div class="controls">
+              <select class="input-xlarge" name="notification_type" id="notification_type"  ng-model="companyProfile.notification_type">
+                <option value="None">None</option>
+                <option value="Individual">Individual</option>
+              </select>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="notification_email" class="control-label">Notification Email</label>
+            <div class="controls">
+              <input id="notification_email" name="notification_email" type="text" class="input-xlarge" ng:model="companyProfile.notification_email" />
+            </div>
+          </div>
+          <hr />
+          <div class="notification-items row-fluid">
+            <div class="span6">
+              <h5>Email</h5>
+              <div ng-repeat="notification_type in NOTIFICATION_TYPES">
+                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='email'">
+                   <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
+                   {{notification_type.name}}
+                </label>
+              </div>
+            </div>
+            <div class="span6">
+              <h5>Mobile</h5>
+              <div ng-repeat="notification_type in NOTIFICATION_TYPES">
+                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='mobile'">
+                   <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
+                   {{notification_type.name}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="form-actions">
+            <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
+          </div>
         </form>
       </div>
 
@@ -223,21 +269,6 @@
 
             <hr />
 
-            <div class="control-group">
-              <label for="notification_type" class="control-label">Notification</label>
-              <div class="controls">
-                <select class="input-xlarge" name="notification_type" id="notification_type"  ng-model="companyProfile.notification_type">
-                  <option value="None">None</option>
-                  <option value="Individual">Individual</option>
-                </select>
-              </div>
-            </div>
-            <div class="control-group">
-              <label for="notification_email" class="control-label">Notification Email</label>
-              <div class="controls">
-                <input id="notification_email" name="notification_email" type="text" class="input-xlarge" ng:model="companyProfile.notification_email" />
-              </div>
-            </div>
 
             <div class="control-group" ng-class="{error:settingsCompanyProfile.payment_method.$invalid}">
               <label for="payment_method" class="control-label">Payment methods</label>

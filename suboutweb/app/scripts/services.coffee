@@ -83,6 +83,7 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
     update: {method: "PUT"}
     search: {method: "GET", action: "search", isArray: true}
     update_regions: {method: "PUT", action: "update_regions"}
+    update_notifications: {method: "PUT", action: "update_notifications"}
     update_vehicles: {method: "PUT", action: "update_vehicles"}
     update_product: {method: "PUT", action: "update_product"}
 
@@ -131,6 +132,9 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
 
   Company::removeFavoriteBuyerId = (buyerId) ->
     this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId)
+
+  Company::hasNotificationItem = (code) ->
+    return _.indexOf(this.notification_items, code) != -1
 
   Company::addFavoriteBuyerId = (buyerId) ->
     this.favoriting_buyer_ids.push(buyerId)

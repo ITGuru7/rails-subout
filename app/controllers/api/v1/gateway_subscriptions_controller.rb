@@ -36,7 +36,7 @@ class Api::V1::GatewaySubscriptionsController < ActionController::Base
           company.created_from_subscription = gw_subscription
           company.set_subscription_info
           company.save
-          Notifier.delay.updated_product(company.id)
+          Notifier.delay.updated_product(company.id) if company.notification_items.include?("account-update-product")
         end
       else
         Notifier.delay.subscription_confirmation(gw_subscription.id)

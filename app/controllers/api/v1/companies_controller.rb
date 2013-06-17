@@ -41,7 +41,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
 
   def update_product
     if current_company.update_product!(params[:product])
-      Notifier.delay.updated_product(current_company.id)
+      Notifier.delay.updated_product(current_company.id) if current_company.notification_items.include?("account-update-product")
       respond_with_serializer()
     else
       render json: { errors: current_company.errors.full_messages }, status: 423
