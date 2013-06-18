@@ -99,6 +99,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.NOTIFICATION_TYPES = [
     {name: "Opportunity Post", type: "email", code: "opportunity-new" },
     {name: "Opportunity Expired", type: "email", code: "opportunity-expire" },
+    {name: "Opportunity Completed", type: "email", code: "opportunity-complete" },
     {name: "Opportunity Win", type: "email", code: "opportunity-win" },
     {name: "New Bid", type: "email", code: "bid-new" },
     {name: "Update Product", type: "email", code: "account-update-product" },

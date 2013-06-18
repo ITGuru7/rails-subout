@@ -141,8 +141,8 @@ class Opportunity
 
   def self.send_completed_notification
     where(:end_date.lte => Date.today, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
-      Notifier.delay.completed_auction_notification_to_buyer(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-win")
-      Notifier.delay.completed_auction_notification_to_supplier(opportunity.id) if opportunity.winning_bid.bidder.notification_items.include?("opportunity-win")
+      Notifier.delay.completed_auction_notification_to_buyer(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-complete")
+      Notifier.delay.completed_auction_notification_to_supplier(opportunity.id) if opportunity.winning_bid.bidder.notification_items.include?("opportunity-complete")
 
       opportunity.set(:completed_notification_sent, true)
 

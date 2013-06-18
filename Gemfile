@@ -34,6 +34,7 @@ gem 'newrelic_moped'
 gem 'mail_view'
 gem 'unicorn'
 gem 'urbanairship'
+gem 'email_validator'
 
 group :production do
   gem "airbrake"

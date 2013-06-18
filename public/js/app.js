@@ -240,6 +240,10 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       type: "email",
       code: "opportunity-expire"
     }, {
+      name: "Opportunity Completed",
+      type: "email",
+      code: "opportunity-complete"
+    }, {
       name: "Opportunity Win",
       type: "email",
       code: "opportunity-win"
