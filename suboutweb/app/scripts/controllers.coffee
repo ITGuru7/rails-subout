@@ -709,6 +709,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
     $scope.errors = null
 
   $scope.cancelOpportunity = ->
+    return unless confirm("Are you sure to cancel your opportunity?")
     Auction.cancel(
       {
         opportunityId: $scope.opportunity._id,

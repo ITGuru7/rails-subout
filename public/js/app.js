@@ -963,6 +963,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     return $scope.errors = null;
   };
   $scope.cancelOpportunity = function() {
+    if (!confirm("Are you sure to cancel your opportunity?")) {
+      return;
+    }
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
