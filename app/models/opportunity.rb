@@ -144,10 +144,10 @@ class Opportunity
       Notifier.delay.completed_auction_notification_to_buyer(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-win")
       Notifier.delay.completed_auction_notification_to_supplier(opportunity.id) if opportunity.winning_bid.bidder.notification_items.include?("opportunity-win")
 
+      opportunity.set(:completed_notification_sent, true)
+
       opportunity.unlock_rating(opportunity.winning_bid.bidder.id, opportunity.buyer.id)
       opportunity.unlock_rating(opportunity.buyer.id, opportunity.winning_bid.bidder.id)
-
-      opportunity.set(:completed_notification_sent, true)
     end
   end
 
