@@ -8249,6 +8249,12 @@ div#opportunity-show .description .content {
 .bid-history td {
   max-width: 300px;
 }
+.bid-history td.tpa {
+  text-align: center;
+}
+.bid-history td.tpa img {
+  max-width: 80px;
+}
 .comments .comment-body {
   color: #666550;
   margin-bottom: 5px;
@@ -8607,6 +8613,9 @@ div#opportunity-show .description .content {
   margin-top: 10px;
   font-size: 14px;
   line-height: 20px;
+}
+.notification-items label.control-label {
+  text-align: left;
 }
 .control-group .ng-invalid {
   border: solid 1px red;
