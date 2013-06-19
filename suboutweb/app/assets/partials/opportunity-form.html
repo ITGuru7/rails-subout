@@ -46,6 +46,14 @@
         </div>
       </div>
 
+      <div class="control-group">
+        <label for="opportunity_vehicle_count" class="control-label">Vehicle Count</label>
+        <div class="controls">
+          <input type="text" id="opportunity_vehicle_count" ng-model="opportunity.vehicle_count" size="30" class="input-small">
+          <p class="help-block">Total number of buses needed</p>
+        </div>
+      </div>
+
       <div class="control-group" ng-class="{error:newOpportunity.opportunity_description.$invalid}">
         <label for="opportunity_description" class="control-label">Description *</label>
         <div class="controls">

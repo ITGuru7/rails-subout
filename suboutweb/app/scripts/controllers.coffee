@@ -324,6 +324,9 @@ WelcomePrelaunchCtrl = (AuthToken) ->
   $.removeCookie(AuthToken)
 
 OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
+  unless $scope.opportunity
+    $scope.opportunity = {}
+    $scope.opportunity.vehicle_count = 1
   $scope.types = [
     "Vehicle Needed",
     "Vehicle for Hire",
@@ -385,6 +388,8 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       $scope.opportunity.forward_auction = true
 
 BidNewCtrl = ($scope, $rootScope, Bid) ->
+  $scope.bid = {} unless $scope.bid
+  $scope.bid.vehicle_count = $scope.opportunity.vehicle_count
   $scope.hideAlert = ->
     $scope.errors = null
 
@@ -403,18 +408,18 @@ BidNewCtrl = ($scope, $rootScope, Bid) ->
       true
 
   $scope.validateAutoBiddingLimit = (value) ->
-    return true if isNaN(value)
+    return true if isNaN(value) or value == ""
     value = parseFloat(value)
     if $scope.bid.amount
       if $scope.opportunity.forward_auction
-        $scope.bid.amount <= value
+        return $scope.bid.amount <= value
       else
-        $scope.bid.amount >= value
+        return $scope.bid.amount >= value
     else
-      true
+      return true
 
   $scope.validateWinItNowPrice = (value) ->
-    return true if isNaN(value)
+    return true if isNaN(value) or value == ""
     value = parseFloat(value)
     if $scope.opportunity.win_it_now_price
       if $scope.opportunity.forward_auction
@@ -423,6 +428,16 @@ BidNewCtrl = ($scope, $rootScope, Bid) ->
         $scope.opportunity.win_it_now_price < value
     else
       true
+
+  $scope.validateVehicleCount = (value) ->
+    return true if isNaN(value) or value == ""
+    value = parseFloat(value)
+    value <= $scope.opportunity.vehicle_count
+
+  $scope.validateVehicleCountLimit = (value) ->
+    return true if isNaN(value) or value == ""
+    value = parseFloat(value)
+    value <= $scope.bid.vehicle_count
 
   $scope.save = ->
     Bid.save
@@ -725,6 +740,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
     )
 
   $scope.selectWinner = (bid) ->
+    return unless confirm("Are you sure to accept this bid?")
     Auction.select_winner(
       {
         opportunityId: $scope.opportunity._id,

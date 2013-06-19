@@ -48,6 +48,9 @@
           <div ng-show="opportunity.vehicle_type">
             <span class="label-field">Vehicle Type: </span>{{opportunity.vehicle_type}}
           </div>
+          <div ng-show="opportunity.vehicle_count > 1">
+            <span class="label-field">Total Number Of Vehicles Needed: </span>{{opportunity.vehicle_count}}
+          </div>
           <div class="description">
             <div><strong>Description</strong></div>
             <div class="content">{{opportunity.description}}</div>
@@ -107,6 +110,7 @@
       <table ng-show="!isPhone" class="bid-history">
         <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
           <td><strong>{{bid.amount | soCurrency}}</strong></td>
+          <td ng-show="opportunity.vehicle_count > 1"><strong>{{bid.vehicle_count}}</strong> vehicle(s)</td>
           <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
           <td ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id" >by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
           <td class="tpa"><img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa"></td>

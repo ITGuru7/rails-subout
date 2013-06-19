@@ -6,6 +6,8 @@ class Bid
   field :comment, type: String
   field :auto_bidding_limit, type: Money
   field :canceled, type: Boolean, default: false
+  field :vehicle_count, type: Integer, default: 1
+  field :vehicle_count_limit, type: Integer
   
   paginates_per 30
 
@@ -17,6 +19,8 @@ class Bid
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
   validates_presence_of :amount, on: :create, message: "can't be blank"
   validates :amount, numericality: { greater_than: 0 }
+  validates :vehicle_count, numericality: { greater_than: 0}, unless: 'vehicle_count.blank?'
+  validates :vehicle_count_limit, numericality: { greater_than: 0}, unless: 'vehicle_count_limit.blank?'
   validate :validate_opportunity_bidable, on: :create
   validate :validate_bidable_by_bidder, on: :create
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
@@ -25,6 +29,8 @@ class Bid
   validate :validate_auto_bidding_limit, on: :create
   validate :validate_auto_bidding_limit_on_win_it_now_price, on: :create
   validate :validate_ada_required, on: :create
+  validate :vehicle_count_bidable, on: :create
+  validate :vehicle_count_limit_bidable, on: :create
   validates :comment, length: { maximum: 255 }
 
   scope :active, -> { where(canceled: false) }
@@ -55,6 +61,10 @@ class Bid
 
   def bidding_limit_amount
     auto_bidding_limit ? auto_bidding_limit : amount
+  end
+
+  def min_vehicle_count
+    vehicle_count_limit ? vehicle_count_limit : vehicle_count
   end
 
   def cancel
@@ -183,6 +193,25 @@ class Bid
 
     if opportunity.ada_required? and !bidder.has_ada_vehicles?
       errors.add :base, "Please indicate that your fleet includes ADA vehicles before continuing."
+    end
+  end
+
+  def vehicle_count_bidable
+    return unless opportunity
+    return if opportunity.vehicle_count == 1
+
+    if vehicle_count > opportunity.vehicle_count
+      errors.add :vehicle_count, "cannot be greater than vehicle count of opportunity."
+    end
+  end
+
+  def vehicle_count_limit_bidable
+    return unless opportunity
+    return if opportunity.vehicle_count == 1
+    return if vehicle_count_limit.blank?
+
+    if vehicle_count_limit > vehicle_count
+      errors.add :vehicle_count_limit, "cannot be greater than vehicle count you are bidding."
     end
   end
 

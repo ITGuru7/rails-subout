@@ -25,6 +25,7 @@ class Opportunity
   field :seats, type: Integer
   field :type, type: String
   field :vehicle_type, type: String, default: ""
+  field :vehicle_count, type: Integer, default: 1
   field :trip_type, type: String, default: ""
   field :canceled, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
@@ -61,6 +62,7 @@ class Opportunity
 
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
   validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true
+  validates :vehicle_count, numericality: { greater_than: 0}, unless: 'vehicle_count.blank?'
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
@@ -78,6 +80,7 @@ class Opportunity
   #validates :trip_type, inclusion: { in: [nil, "One way", "Round trip", "Over the road"] }
 
   before_save :set_bidding_ends_at, unless: 'self.canceled'
+  before_save :set_vehicle_count, if: 'self.vehicle_count.blank?'
 
   search_in :reference_number, :name, :description
 
@@ -175,8 +178,34 @@ class Opportunity
     Notifier.delay.won_auction_to_buyer(self.id) if self.buyer.notification_items.include?("opportunity-win")
     Notifier.delay.won_auction_to_supplier(self.id) if bid.bidder.notification_items.include?("opportunity-win")
     
-    bid_loser_ids.each do |bidder_id|
-      Notifier.delay.finished_auction_to_bidder(self.id, bidder_id)
+    if self.vehicle_count != bid.vehicle_count and self.bidding_ends_at > Time.now
+      new_opportunity_attrs = self.attributes.except("_id", "reference_number", "created_at", "upated_at", "bidding_won_at", "value", "winning_bid_id", "bidding_done", "favorites_notified", "bidding_ends_at")
+      new_opportunity_attrs["vehicle_count"] = self.vehicle_count - bid.vehicle_count
+      new_opportunity_attrs["reserve_amount"] = self.reserve_amount / self.vehicle_count * new_opportunity_attrs["vehicle_count"]
+      new_opportunity = Opportunity.create(new_opportunity_attrs)
+      new_opportunity.update_value!
+
+      self.bids.active.each do |old_bid|
+        next if old_bid.id == self.winning_bid_id
+        
+        if old_bid.vehicle_count > new_opportunity.vehicle_count
+          if old_bid.min_vehicle_count > new_opportunity.vehicle_count
+            Notifier.delay.finished_auction_to_bidder(self.id, old_bid.bidder_id)
+            next
+          else
+            old_bid.amount = old_bid.amount.to_i / old_bid.vehicle_count * new_opportunity.vehicle_count
+            old_bid.vehicle_count = new_opportunity.vehicle_count 
+          end
+        end
+
+        old_bid.opportunity = new_opportunity
+        old_bid.save
+      end
+
+    else
+      bid_loser_ids.each do |bidder_id|
+        Notifier.delay.finished_auction_to_bidder(self.id, bidder_id)
+      end
     end
   end
 
@@ -309,6 +338,10 @@ class Opportunity
   def set_bidding_ends_at
     created_time = self.created_at || Time.now
     self.bidding_ends_at = created_time + self.bidding_duration_hrs.to_i.hours
+  end
+
+  def set_vehicle_count
+    self.vehicle_count = 1
   end
 
   def valid_time?(time)

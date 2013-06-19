@@ -531,6 +531,10 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
+  if (!$scope.opportunity) {
+    $scope.opportunity = {};
+    $scope.opportunity.vehicle_count = 1;
+  }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -593,6 +597,10 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid) {
+  if (!$scope.bid) {
+    $scope.bid = {};
+  }
+  $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -615,7 +623,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     }
   };
   $scope.validateAutoBiddingLimit = function(value) {
-    if (isNaN(value)) {
+    if (isNaN(value) || value === "") {
       return true;
     }
     value = parseFloat(value);
@@ -630,7 +638,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     }
   };
   $scope.validateWinItNowPrice = function(value) {
-    if (isNaN(value)) {
+    if (isNaN(value) || value === "") {
       return true;
     }
     value = parseFloat(value);
@@ -643,6 +651,20 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     } else {
       return true;
     }
+  };
+  $scope.validateVehicleCount = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.opportunity.vehicle_count;
+  };
+  $scope.validateVehicleCountLimit = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.bid.vehicle_count;
   };
   return $scope.save = function() {
     return Bid.save({
@@ -981,6 +1003,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     });
   };
   $scope.selectWinner = function(bid) {
+    if (!confirm("Are you sure to accept this bid?")) {
+      return;
+    }
     return Auction.select_winner({
       opportunityId: $scope.opportunity._id,
       action: 'select_winner',

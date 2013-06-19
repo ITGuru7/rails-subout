@@ -19,7 +19,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       white_listed_fields = %W{
         name type tracking_id description image_id contact_phone start_location end_location
         start_date start_time end_date end_time bidding_duration_hrs ada_required for_favorites_only
-        forward_auction quick_winnable win_it_now_price reserve_amount vehicle_type trip_type
+        forward_auction quick_winnable win_it_now_price reserve_amount vehicle_type trip_type vehicle_count
       }
       @auction = Opportunity.new(params[:opportunity].slice(*white_listed_fields))
     else
