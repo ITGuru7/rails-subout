@@ -126,17 +126,15 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] Vehicle is removed on: #{@company.name}", to: Setting.admin_email)
   end
 
-  def remind_to_user(user_id)
-    @user = User.find(user_id)
-    @company = @user.company
+  def remind_registration_to_user(subscription_id)
+    @subscription = GatewaySubscription.find(subscription_id)
 
-    mail(subject: "[SubOut] You didn't login in last 3 days", to: @user.email)
+    mail(subject: "[SubOut] You didn't complete the registration to Subout", to: @subscription.email)
   end
 
-  def remind_to_admin(user_id)
-    @user = User.find(user_id)
-    @company = @user.company
+  def remind_registration_to_admin(subscription_id)
+    @subscription = GatewaySubscription.find(subscription_id)
 
-    mail(subject: "[SubOut] #{@company.name} didn't login in last 3 days", to: 'sales@subout.com')
+    mail(subject: "[SubOut] #{@subscription.organization} didn't complete the registration in last 3 days", to: Setting.admin_email)
   end
 end

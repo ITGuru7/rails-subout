@@ -25,7 +25,6 @@ class User
   field :last_sign_in_at,    :type => Time
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
-  field :remind_email_sent, type: Boolean, default: false
 
   ## Confirmable
   # field :confirmation_token,   :type => String
@@ -57,22 +56,6 @@ class User
 
   def self.find_by_email(email)
     where(:email => email).first
-  end
-
-  def self.send_remind_notification
-    User.all.each do |user|
-      next if user.company_id.nil?
-
-      if user.last_sign_in_at < 3.days.ago and user.remind_email_sent == false
-        user.remind_email_sent = true
-
-        Notifier.delay.remind_to_user(user.id)
-        Notifier.delay.remind_to_admin(user.id)
-      else
-        user.remind_email_sent = false
-      end
-      user.save
-    end
   end
 
   def auth_token_hash

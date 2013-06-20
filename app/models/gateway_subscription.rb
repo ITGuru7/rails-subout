@@ -20,9 +20,9 @@ class GatewaySubscription
   field :payment_state
   field :card_expired_date, type: Date
   field :card_expired_email_sent, type: Boolean, default: false
+  field :remind_email_sent, type: Boolean, default: false
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
-
   attr_accessible :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
 
   after_save :update_chargify_email, if: "self.email_changed?"
@@ -31,6 +31,14 @@ class GatewaySubscription
   scope :recent, -> { desc(:created_at) }
 
   validates :subscription_id, uniqueness: true
+
+  def self.send_remind_notification
+    GatewaySubscription.where(confirmed: false, remind_email_sent: false, :created_at.lte => 3.days.ago).each do |gw|
+      Notifier.delay.remind_registration_to_user(gw.id)
+      Notifier.delay.remind_registration_to_admin(gw.id)
+      gw.update_attribute(:remind_email_sent, true)
+    end
+  end
 
   def self.revenues(options)
     result = Hash.new

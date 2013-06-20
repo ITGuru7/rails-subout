@@ -1,0 +1,4 @@
+%p Dear #{@subscription.first_name},
+%p You didn't complete the registration to Subout in last 3 days. 
+%p Please click #{link_to "here", "http://#{DEFAULT_HOST_WITH_PORT}/#/sign_up?subscription_id=#{@subscription.id}"} to complete your registration and to begin using SubOut.
+= render 'email_sig'

@@ -68,27 +68,32 @@ class Admin::CompaniesController < Admin::BaseController
     end
 
     params[:subscription_id] = params[:subscription_id].strip
-    if GatewaySubscription.where(subscription_id: params[:subscription_id]).first
+    exist_gs = GatewaySubscription.where(subscription_id: params[:subscription_id]).first
+    if exist_gs and exist_gs.created_company
       flash.now[:error] = "This subscription is already used in another company."
       render :edit
       return
     end
 
     if Chargify::Subscription.exists?(params[:subscription_id])
-      subscription = Chargify::Subscription.find(params[:subscription_id])
+      if exist_gs
+        gw_subscription = exist_gs
+      else
+        subscription = Chargify::Subscription.find(params[:subscription_id])
 
-      customer = subscription.customer
+        customer = subscription.customer
 
-      gw_subscription = GatewaySubscription.create(
-        subscription_id: params[:subscription_id],
-        customer_id:     customer.id,
-        email:           customer.email,
-        first_name:      customer.first_name,
-        last_name:       customer.last_name,
-        organization:    customer.organization,
-        product_handle:  subscription.product.handle,
-        state:           subscription.state,
-      )
+        gw_subscription = GatewaySubscription.create(
+          subscription_id: params[:subscription_id],
+          customer_id:     customer.id,
+          email:           customer.email,
+          first_name:      customer.first_name,
+          last_name:       customer.last_name,
+          organization:    customer.organization,
+          product_handle:  subscription.product.handle,
+          state:           subscription.state,
+        )
+      end
 
       if @company.created_from_subscription_id
         @company.created_from_subscription.destroy
