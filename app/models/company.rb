@@ -96,6 +96,7 @@ class Company
   validate :check_nils
 
   before_create :set_subscription_info
+  before_save :set_notification_items
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
@@ -365,6 +366,10 @@ class Company
 
   private
 
+  def set_notification_items
+    self.notification_items = [] if self.notification_items.nil?
+  end
+
   def validate_invitation
     return if self.created_from_invitation && self.created_from_invitation.pending?
 
@@ -376,7 +381,6 @@ class Company
 
     errors.add(:created_from_subscription_id, "Invalid subscription")
   end
-
 
   def accept_invitation!
     self.created_from_invitation.accept!
