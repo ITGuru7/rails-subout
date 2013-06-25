@@ -150,7 +150,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) {
-  var REGION_NAMES, d, p, _i, _ref, _results;
+  var REGION_NAMES, d, p, salt, _i, _ref, _results;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
   $rootScope.years = (function() {
@@ -158,7 +158,21 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     for (var _i = _ref = d.getFullYear(); _ref <= 1970 ? _i <= 1970 : _i >= 1970; _ref <= 1970 ? _i++ : _i--){ _results.push(_i); }
     return _results;
   }).apply(this);
-  $rootScope.filterRegions = [];
+  $rootScope.reload = null;
+  salt = function(key) {
+    return $rootScope.api_token + "_" + key;
+  };
+  $rootScope.filterRegionsOnHome = null;
+  $rootScope.filterRegionsOnBuybid = null;
+  $rootScope.filterRegionsOnHome = $.cookie(salt("filterRegionsOnHome"));
+  if ($rootScope.filterRegionsOnHome === null) {
+    $rootScope.filterRegionsOnHome = [];
+  }
+  $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
+    if (v1 !== null) {
+      return $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome);
+    }
+  });
   $('#modal').on('hidden', function() {
     var $scope, modalElement, modalScope;
     $scope = angular.element(document).scope();
@@ -217,6 +231,45 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.TRIP_TYPES = ["One way", "Round trip", "Over the road"];
   $rootScope.PAYMENT_METHODS = ["Visa", "MasterCard", "Discover", "American Express", "Check/Money Order", "Company Check", "Bank/Wire Transfer", "Invoice", "Paypal"];
   $rootScope.VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"];
+  $rootScope.NOTIFICATION_TYPES = [
+    {
+      name: "Opportunity Post",
+      type: "email",
+      code: "opportunity-new"
+    }, {
+      name: "Opportunity Expired",
+      type: "email",
+      code: "opportunity-expire"
+    }, {
+      name: "Opportunity Completed",
+      type: "email",
+      code: "opportunity-complete"
+    }, {
+      name: "Opportunity Win",
+      type: "email",
+      code: "opportunity-win"
+    }, {
+      name: "New Bid",
+      type: "email",
+      code: "bid-new"
+    }, {
+      name: "Update Product",
+      type: "email",
+      code: "account-update-product"
+    }, {
+      name: "Account Locked",
+      type: "email",
+      code: "account-locked"
+    }, {
+      name: "Expired Card",
+      type: "email",
+      code: "account-expired-card"
+    }, {
+      name: "Opportunity Post",
+      type: "mobile",
+      code: "mobile-opportunity-new"
+    }
+  ];
   $rootScope.ALL_REGIONS = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -459,7 +512,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     bid = {
-      amount: opportunity.win_it_now_price
+      amount: opportunity.win_it_now_price,
+      vehicle_count: opportunity.vehicle_count
     };
     return Bid.save({
       bid: bid,
@@ -479,6 +533,10 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
+  if (!$scope.opportunity) {
+    $scope.opportunity = {};
+    $scope.opportunity.vehicle_count = 1;
+  }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -496,6 +554,9 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.image_id = $('#opportunity_image_id').val();
     opportunity.start_time = $("#opportunity_start_time").val();
     opportunity.end_time = $("#opportunity_end_time").val();
+    if (opportunity.quick_winnable === false) {
+      opportunity.win_it_now_price = null;
+    }
     showErrors = function(errors) {
       var $alertError;
       if ($rootScope.isMobile) {
@@ -540,7 +601,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-BidNewCtrl = function($scope, $rootScope, Bid) {
+BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
+  if (!$scope.bid) {
+    $scope.bid = {};
+  }
+  $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -563,7 +628,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     }
   };
   $scope.validateAutoBiddingLimit = function(value) {
-    if (isNaN(value)) {
+    if (isNaN(value) || value === "") {
       return true;
     }
     value = parseFloat(value);
@@ -578,11 +643,11 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     }
   };
   $scope.validateWinItNowPrice = function(value) {
-    if (isNaN(value)) {
+    if (isNaN(value) || value === "") {
       return true;
     }
     value = parseFloat(value);
-    if ($scope.opportunity.win_it_now_price) {
+    if ($scope.opportunity.quick_winnable && $scope.opportunity.win_it_now_price) {
       if ($scope.opportunity.forward_auction) {
         return $scope.opportunity.win_it_now_price > value;
       } else {
@@ -591,6 +656,20 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
     } else {
       return true;
     }
+  };
+  $scope.validateVehicleCount = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.opportunity.vehicle_count;
+  };
+  $scope.validateVehicleCountLimit = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.bid.vehicle_count;
   };
   return $scope.save = function() {
     return Bid.save({
@@ -709,9 +788,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   $scope.maxPage = 1;
   $scope.filterVehicleType = null;
   $scope.filterTripType = null;
-  if ($rootScope.filterRegions.length === 0) {
-    $scope.filterRegions = $rootScope.company.regions;
-  }
+  $scope.filterRegions = $rootScope.filterRegionsOnBuybid;
   $scope.sortItems = [
     {
       value: "created_at,asc",
@@ -727,6 +804,9 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       label: "Ends (descending)"
     }
   ];
+  $rootScope.$watch("company.regions.length", function() {
+    return $scope.filterRegions = angular.copy($rootScope.company.regions);
+  });
   availableToCurrentCompany = function(opportunity) {
     return opportunity.buyer_id !== $rootScope.company._id;
   };
@@ -760,7 +840,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
       trip_type: $scope.filterTripType,
-      regions: $rootScope.filterRegions
+      regions: $scope.filterRegions
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -814,7 +894,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
   });
   return $scope.$watch("filterRegions", function(oldValue, newValue) {
     if (oldValue !== newValue) {
-      $rootScope.filterRegions = $scope.filterRegions;
+      $rootScope.filterRegionsOnBuybid = $scope.filterRegions;
       return $scope.loadMoreOpportunities(1);
     }
   });
@@ -914,6 +994,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     return $scope.errors = null;
   };
   $scope.cancelOpportunity = function() {
+    if (!confirm("Are you sure to cancel your opportunity?")) {
+      return;
+    }
     return Auction.cancel({
       opportunityId: $scope.opportunity._id,
       action: 'cancel',
@@ -925,6 +1008,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     });
   };
   $scope.selectWinner = function(bid) {
+    if (!confirm("Are you sure to accept this bid?")) {
+      return;
+    }
     return Auction.select_winner({
       opportunityId: $scope.opportunity._id,
       action: 'select_winner',
@@ -980,6 +1066,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.opportunity = null;
   $scope.events = [];
   $scope.regionFilterOptions = $rootScope.allRegions;
+  $scope.filterRegions = $rootScope.filterRegionsOnHome;
   Company.query({
     api_token: $rootScope.token.api_token
   }, function(data) {
@@ -993,7 +1080,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     $scope.loading = true;
     queryOptions = angular.copy($location.search());
     queryOptions.api_token = $rootScope.token.api_token;
-    queryOptions.regions = $rootScope.filterRegions;
+    queryOptions.regions = $scope.filterRegions;
     queryOptions.page = $scope.currentPage;
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
@@ -1025,7 +1112,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       prevOpportunity = prevEvent.eventable;
       if (prevOpportunity._id === opportunity._id) {
         prevOpportunity.canceled = opportunity.canceled;
-        return prevOpportunity.bidable = opportunity.bidable;
+        prevOpportunity.bidable = opportunity.bidable;
+        return prevOpportunity.status = opportunity.status;
       }
     });
   };
@@ -1092,16 +1180,17 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   setRegionFilter = function() {
     var regions;
-    regions = angular.copy($rootScope.filterRegions);
+    regions = angular.copy($scope.filterRegions);
     if ($scope.regionFilter) {
       regions.push($scope.regionFilter);
-      return $rootScope.filterRegions = regions;
+      return $scope.filterRegions = regions;
     }
   };
   getRegionFilterOptions = function() {
-    return _.difference($rootScope.allRegions, $rootScope.filterRegions);
+    return _.difference($rootScope.allRegions, $scope.filterRegions);
   };
   $scope.$watch("filterRegions", function() {
+    $rootScope.filterRegionsOnHome = angular.copy($scope.filterRegions);
     $scope.regionFilterOptions = getRegionFilterOptions();
     return $scope.refreshEvents();
   });
@@ -1185,7 +1274,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $scope.fullTextSearch();
   };
   $scope.hasAnyFilter = function() {
-    if ($rootScope.filterRegions.length > 0) {
+    if ($scope.filterRegions.length > 0) {
       return true;
     }
     return !_.isEmpty($location.search());
@@ -1194,7 +1283,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.clearFilters = function() {
     $scope.query = "";
     $scope.regionFilter = $scope.filterValue;
-    $rootScope.filterRegions = [];
+    $scope.filterRegions = [];
     $location.search({});
     return $scope.refreshEvents();
   };
@@ -1202,7 +1291,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return $rootScope.company.regions = [];
   };
   $scope.removeRegionFilter = function(region) {
-    return $rootScope.filterRegions = _.reject($rootScope.filterRegions, function(item) {
+    return $scope.filterRegions = _.reject($scope.filterRegions, function(item) {
       return region === item;
     });
   };
@@ -1215,7 +1304,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
-  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedRegions, vehicleTypeOptions;
+  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
@@ -1246,9 +1335,26 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return _results;
   };
   updateSelectedRegions();
+  updateSelectedNotifications = function() {
+    var t, _i, _len, _ref, _results;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if ($rootScope.company.hasNotificationItem(t.code)) {
+        _results.push(t.enabled = true);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
+  };
+  updateSelectedNotifications();
+  $scope.setNotification = function(t) {
+    return t.enabled = !t.enabled;
+  };
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
-    $rootScope.filterRegions = [];
     $scope.companyProfile = angular.copy(company);
     return updateSelectedRegions();
   };
@@ -1302,9 +1408,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
   $scope.saveFavoritedRegions = function() {
     var finalRegions, isEnabled, region, _ref;
-    if (!confirm("Are you sure?")) {
-      return;
-    }
     finalRegions = [];
     _ref = $scope.companyProfile.allRegions;
     for (region in _ref) {
@@ -1321,15 +1424,24 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       action: "update_regions"
     }, function(company) {
       updateCompanyAndCompanyProfile(company);
-      successUpdate();
-      return $rootScope.filterRegions = company.regions;
+      return successUpdate();
     }, function(error) {
       return $scope.companyProfileError = "Sorry, invalid inputs. Please try again.";
     });
   };
   $scope.saveCompanyProfile = function() {
+    var finalNotifications, t, _i, _len, _ref;
     $scope.companyProfileError = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
+    finalNotifications = [];
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if (t.enabled) {
+        finalNotifications.push(t.code);
+      }
+    }
+    $scope.companyProfile.notification_items = finalNotifications;
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -1938,6 +2050,10 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       method: "PUT",
       action: "update_regions"
     },
+    update_notifications: {
+      method: "PUT",
+      action: "update_notifications"
+    },
     update_vehicles: {
       method: "PUT",
       action: "update_vehicles"
@@ -2017,6 +2133,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.removeFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids = _.without(this.favoriting_buyer_ids, buyerId);
+  };
+  Company.prototype.hasNotificationItem = function(code) {
+    return _.indexOf(this.notification_items, code) !== -1;
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);
