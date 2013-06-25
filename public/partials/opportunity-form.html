@@ -163,7 +163,7 @@
         </label>
       </div>
 
-      <div class="control-group" ng-show="opportunity.quick_winnable" ng-class="{error:newOpportunity.win_it_now_price.$invalid}">
+      <div class="control-group" ui-if="opportunity.quick_winnable"  ng-class="{error:newOpportunity.win_it_now_price.$invalid}">
         <label for="opportunity_win_it_now_price" class="control-label">Win it now price</label>
         <div class="controls">
           <input id="opportunity_win_it_now_price" type="text" name="win_it_now_price" ng-model="opportunity.win_it_now_price" ui-validate="{ win_it_now_price: 'validateOptionalNumber($value)' }" size="31" class="input-small">

@@ -158,6 +158,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     for (var _i = _ref = d.getFullYear(); _ref <= 1970 ? _i <= 1970 : _i >= 1970; _ref <= 1970 ? _i++ : _i--){ _results.push(_i); }
     return _results;
   }).apply(this);
+  $rootScope.reload = null;
   salt = function(key) {
     return $rootScope.api_token + "_" + key;
   };
@@ -511,7 +512,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     bid = {
-      amount: opportunity.win_it_now_price
+      amount: opportunity.win_it_now_price,
+      vehicle_count: opportunity.vehicle_count
     };
     return Bid.save({
       bid: bid,
@@ -552,6 +554,9 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.image_id = $('#opportunity_image_id').val();
     opportunity.start_time = $("#opportunity_start_time").val();
     opportunity.end_time = $("#opportunity_end_time").val();
+    if (opportunity.quick_winnable === false) {
+      opportunity.win_it_now_price = null;
+    }
     showErrors = function(errors) {
       var $alertError;
       if ($rootScope.isMobile) {
@@ -596,7 +601,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-BidNewCtrl = function($scope, $rootScope, Bid) {
+BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
   if (!$scope.bid) {
     $scope.bid = {};
   }
@@ -642,7 +647,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       return true;
     }
     value = parseFloat(value);
-    if ($scope.opportunity.win_it_now_price) {
+    if ($scope.opportunity.quick_winnable && $scope.opportunity.win_it_now_price) {
       if ($scope.opportunity.forward_auction) {
         return $scope.opportunity.win_it_now_price > value;
       } else {
@@ -1107,7 +1112,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       prevOpportunity = prevEvent.eventable;
       if (prevOpportunity._id === opportunity._id) {
         prevOpportunity.canceled = opportunity.canceled;
-        return prevOpportunity.bidable = opportunity.bidable;
+        prevOpportunity.bidable = opportunity.bidable;
+        return prevOpportunity.status = opportunity.status;
       }
     });
   };

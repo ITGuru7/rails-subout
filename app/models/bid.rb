@@ -177,7 +177,7 @@ class Bid
   def validate_auto_bidding_limit_on_win_it_now_price
     return unless opportunity
     return unless auto_bidding_limit.present?
-    return unless opportunity.win_it_now_price.present?
+    return unless opportunity.quick_winnable
 
     if opportunity.forward_auction? and opportunity.win_it_now_price <= auto_bidding_limit
       errors.add :auto_bidding_limit, "cannot be lower than win it now price."

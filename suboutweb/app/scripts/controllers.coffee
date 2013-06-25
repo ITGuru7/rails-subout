@@ -4,6 +4,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
   $rootScope.years = [d.getFullYear()..1970]
+  $rootScope.reload = null
 
   salt =(key)->
     return $rootScope.api_token + "_" + key
@@ -309,13 +310,14 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
       $("#modal").modal("show")
       return
     return unless confirm("Win it now price is $#{$numberFormatter.format(opportunity.win_it_now_price, 2)}. Do you want to proceed?")
-    bid = {amount: opportunity.win_it_now_price}
+    bid = {amount: opportunity.win_it_now_price, vehicle_count: opportunity.vehicle_count}
     Bid.save
       bid: bid
       api_token: $rootScope.token.api_token
       opportunityId: opportunity._id
     , ->
       jQuery("#modal").modal "hide"
+
     , (content) ->
       alert("An error occured on your bid!\n" + $rootScope.errorMessages(content.data.errors).join("\n"))
 )
@@ -350,6 +352,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     # ui-mask removes colon(:)
     opportunity.start_time = $("#opportunity_start_time").val()
     opportunity.end_time = $("#opportunity_end_time").val()
+    opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
     showErrors = (errors) ->
      
@@ -387,7 +390,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     else if type is "Vehicle for Hire"
       $scope.opportunity.forward_auction = true
 
-BidNewCtrl = ($scope, $rootScope, Bid) ->
+BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count
   $scope.hideAlert = ->
@@ -421,7 +424,7 @@ BidNewCtrl = ($scope, $rootScope, Bid) ->
   $scope.validateWinItNowPrice = (value) ->
     return true if isNaN(value) or value == ""
     value = parseFloat(value)
-    if $scope.opportunity.win_it_now_price
+    if $scope.opportunity.quick_winnable and $scope.opportunity.win_it_now_price
       if $scope.opportunity.forward_auction
         $scope.opportunity.win_it_now_price > value
       else
@@ -447,6 +450,7 @@ BidNewCtrl = ($scope, $rootScope, Bid) ->
     , (data) ->
       $rootScope.company.today_bids_count += 1
       jQuery("#modal").modal "hide"
+
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
 
@@ -795,6 +799,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.regionFilterOptions = $rootScope.allRegions
   $scope.filterRegions = $rootScope.filterRegionsOnHome
 
+
   Company.query
     api_token: $rootScope.token.api_token
   , (data) ->
@@ -837,6 +842,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       if prevOpportunity._id is opportunity._id
         prevOpportunity.canceled = opportunity.canceled
         prevOpportunity.bidable = opportunity.bidable
+        prevOpportunity.status = opportunity.status
 
   $scope.refreshEvents ->
     if($rootScope.channel)
