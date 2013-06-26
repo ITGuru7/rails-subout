@@ -18,7 +18,7 @@ class OpportunitySerializer < ActiveModel::Serializer
     return unless object.winning_bid_id
 
     winning_bid = object.winning_bid
-    {name: winning_bid.bidder.name, amount: winning_bid.amount}
+    {name: winning_bid.bidder.name, amount: winning_bid.amount, vehicle_count: winning_bid.vehicle_count}
   end
 
   def image_url
