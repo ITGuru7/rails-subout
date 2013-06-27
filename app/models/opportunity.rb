@@ -179,7 +179,7 @@ class Opportunity
     Notifier.delay.won_auction_to_supplier(self.id) if bid.bidder.notification_items.include?("opportunity-win")
     
     if self.vehicle_count != bid.vehicle_count #and self.bidding_ends_at > Time.now
-      new_opportunity_attrs = self.attributes.except("_id", "reference_number", "created_at", "updated_at", "bidding_won_at", "value", "winning_bid_id", "bidding_done", "favorites_notified", "bidding_ends_at")
+      new_opportunity_attrs = self.attributes.except("_id", "reference_number", "created_at", "updated_at", "bidding_won_at", "value", "winning_bid_id", "bidding_done", "favorites_notified", "bidding_ends_at", "notified_regions")
       new_opportunity_attrs["vehicle_count"] = self.vehicle_count - bid.vehicle_count
       new_opportunity_attrs["reserve_amount"] = self.reserve_amount / self.vehicle_count * new_opportunity_attrs["vehicle_count"] unless self.reserve_amount.blank?
       new_opportunity_attrs["win_it_now_price"] = self.win_it_now_price / self.vehicle_count * new_opportunity_attrs["vehicle_count"] unless self.win_it_now_price.blank?
