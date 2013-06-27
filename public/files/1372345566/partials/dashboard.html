@@ -111,7 +111,7 @@
                       {{opportunity.name}}
                     </a>
                   </span>
-                  <span class="event-region" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
                   <span class="event-action" ng-cloak>
                     {{actionDescription(action)}}
                   </span>
@@ -132,7 +132,12 @@
                     <div class="content">{{event.eventable.description}}</div>
                   </div>
                   <div class="winner" ng-show="event.eventable.winning_bid_id">
-                    <span class="label-field">Winning Amount: </span> <span>{{ event.eventable.winner.amount | soCurrency }}</span>
+                    <span class="label-field">Winning Amount: </span> 
+                    <span>{{ event.eventable.winner.amount | soCurrency }}</span>
+                    <span ui-if="event.eventable.winner.vehicle_count > 1">({{ event.eventable.winner.vehicle_count }} vehicles)</span>
+                  </div>
+                  <div ng-show="event.eventable.vehicle_count > 1">
+                    <span>Vehicles needed:</span> {{event.eventable.vehicle_count}}<br />
                   </div>
                   <div>
                     <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
@@ -160,7 +165,7 @@
                   </div>
                   <div style="display:none" ng-show="event.eventable._id">
                     <div>
-                      <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+                      <div ng-show="opportunity.buyer_id != company._id && event.eventable.status == 'In progress'">
                         <div>
                           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                         </div>
@@ -205,7 +210,7 @@
               </tr>
               <tr>
                 <td colspan='2'>
-                  <span class="event-region table-header" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}->{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region table-header" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
                   <span class="event-action" ng-cloak>
                     {{actionDescription(action)}}
                   </span>

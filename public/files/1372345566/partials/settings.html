@@ -22,7 +22,7 @@
             <div class="control-group" ng-class="{error:settingsUserLogin.user_email.$invalid}">
               <label for="user_email" class="control-label">Email *</label>
               <div class="controls">
-                <input id="user_email" name="user_email" type="text" class="input-xlarge" ng:model="userProfile.email" required />
+                <input id="user_email" name="user_email" type="email" class="input-xlarge" ng:model="userProfile.email" required />
               </div>
             </div>
             
@@ -72,20 +72,12 @@
       </div>
 
       <div ng-class="{active:selectedTab == 'notifications'}" class="tab-pane modal-content" id="notifications">
-        <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
-          <div class="control-group">
-            <label for="notification_type" class="control-label">Notification</label>
-            <div class="controls">
-              <select class="input-xlarge" name="notification_type" id="notification_type"  ng-model="companyProfile.notification_type">
-                <option value="None">None</option>
-                <option value="Individual">Individual</option>
-              </select>
-            </div>
-          </div>
+        <form name="settingsNotifications" class="form-horizontal" novalidate>
           <div class="control-group">
             <label for="notification_email" class="control-label">Notification Email</label>
             <div class="controls">
-              <input id="notification_email" name="notification_email" type="text" class="input-xlarge" ng:model="companyProfile.notification_email" />
+              <input id="notification_email" name="notification_email" type="email" class="input-xlarge" ng:model="companyProfile.notification_email"/>
+              <p class="help-block">If notification email is empty, we will send email to company email address. ({{companyProfile.email}})</p>
             </div>
           </div>
           <hr />
@@ -93,7 +85,7 @@
             <div class="span6">
               <h5>Email</h5>
               <div ng-repeat="notification_type in NOTIFICATION_TYPES">
-                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='email'">
+                <label for="notification_{{notification_type.code}}" class="checkbox" ui-if="notification_type.type=='email'">
                    <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
                    {{notification_type.name}}
                 </label>
@@ -102,7 +94,7 @@
             <div class="span6">
               <h5>Mobile</h5>
               <div ng-repeat="notification_type in NOTIFICATION_TYPES">
-                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='mobile'">
+                <label for="notification_{{notification_type.code}}" class="checkbox" ui-if="notification_type.type=='mobile'">
                    <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
                    {{notification_type.name}}
                 </label>
@@ -111,7 +103,7 @@
           </div>
           <hr />
           <div class="form-actions">
-            <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
+            <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsNotifications.$invalid">Save</button>
           </div>
         </form>
       </div>
@@ -201,7 +193,7 @@
             <div class="control-group" ng-class="{error:settingsCompanyProfile.contact_email.$invalid}">
               <label for="contact_email" class="control-label">Contact Email *</label>
               <div class="controls">
-                <input id="contact_email" name="contact_email" type="text" class="input-xlarge" ng:model="companyProfile.email" required />
+                <input id="contact_email" name="contact_email" type="email" class="input-xlarge" ng:model="companyProfile.email" required />
               </div>
             </div>
 
