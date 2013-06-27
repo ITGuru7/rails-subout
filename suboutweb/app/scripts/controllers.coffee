@@ -996,6 +996,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     $scope.refreshEvents()
 
 SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) ->
+  token = $rootScope.token
   $scope.userProfile = angular.copy($rootScope.user)
   $scope.companyProfile = angular.copy($rootScope.company)
 
@@ -1005,7 +1006,6 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   $scope.additional_price = 0
 
   $rootScope.selectedTab = "user-login" unless $rootScope.selectedTab
-  token = $rootScope.token
   
   updateAdditionalPrice = ()->
     if $scope.companyProfile.vehicles.length > 2
@@ -1018,6 +1018,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.companyProfile.allRegions = {}
     for region in $rootScope.allRegions
       $scope.companyProfile.allRegions[region] = region in $scope.companyProfile.regions
+
   updateSelectedRegions()
 
   updateSelectedNotifications = ->
@@ -1033,26 +1034,29 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.companyProfile = angular.copy(company)
     updateSelectedRegions()
 
-  Product.get
-    productHandle: 'subout-basic-service'
-    api_token: $rootScope.token.api_token
-    (data) ->
-      $scope.subout_basic_product = data.product
+  loadProductInfo = ()->
+    Product.get
+      productHandle: 'subout-basic-service'
+      api_token: $rootScope.token.api_token
+      (data) ->
+        $scope.subout_basic_product = data.product
 
-  Product.get
-    productHandle: 'subout-pro-service'
-    api_token: $rootScope.token.api_token
-    (data) ->
-      $scope.subout_pro_product = data.product
-      updateAdditionalPrice()
+    Product.get
+      productHandle: 'subout-pro-service'
+      api_token: $rootScope.token.api_token
+      (data) ->
+        $scope.subout_pro_product = data.product
+        updateAdditionalPrice()
 
-  GatewaySubscription.get
-    subscriptionId: $rootScope.company.subscription_id
-    api_token: $rootScope.token.api_token
-    (subscription) ->
-      $scope.subscription = subscription
-    (error) ->
-      $scope.subscription = null
+    GatewaySubscription.get
+      subscriptionId: $rootScope.company.subscription_id
+      api_token: $rootScope.token.api_token
+      (subscription) ->
+        $scope.subscription = subscription
+      (error) ->
+        $scope.subscription = null
+
+  loadProductInfo()
 
   $rootScope.setupFileUploader()
 
@@ -1101,9 +1105,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
 
   $scope.saveCompanyProfile = ->
     $scope.companyProfileError = ""
-
     $scope.companyProfile.logo_id = $("#company_logo_id").val()
-
     finalNotifications = []
     for t in $rootScope.NOTIFICATION_TYPES
       finalNotifications.push(t.code) if t.enabled

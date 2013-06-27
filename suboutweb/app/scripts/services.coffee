@@ -203,35 +203,31 @@ suboutSvcs.factory "Authorize", ($rootScope, $location, AuthToken, Region, User,
       $rootScope.pusher = new Pusher(token.pusher_key)
       $rootScope.channel = $rootScope.pusher.subscribe 'global'
 
-      promise = defer.promise.then( ()->
-        $rootScope.company = Company.get
-          companyId: token.company_id
-          api_token: token.api_token
-        , (company) ->
-          $rootScope.channel.bind 'added_to_favorites', (favorite) ->
-            if $rootScope.company._id is favorite.supplier_id
-              $rootScope.company.addFavoriteBuyerId(favorite.company_id)
-          $rootScope.channel.bind 'removed_from_favorites', (favorite) ->
-            if $rootScope.company._id is favorite.supplier_id
-              $rootScope.company.removeFavoriteBuyerId(favorite.company_id)
-          if company.state_by_state_subscriber
-            $rootScope.regions = company.regions
-          $rootScope.salesInfoMessages = company.sales_info_messages
-
-          defer.resolve()
-        , () ->
-      )
-
-      $rootScope.user = User.get
-        userId: token.user_id
+      $rootScope.company = Company.get
+        companyId: token.company_id
         api_token: token.api_token
       , (company) ->
-        defer.resolve()
-        setTimeout( () ->
-          $rootScope.$apply()
-        , 3000)
+        $rootScope.channel.bind 'added_to_favorites', (favorite) ->
+          if $rootScope.company._id is favorite.supplier_id
+            $rootScope.company.addFavoriteBuyerId(favorite.company_id)
+        $rootScope.channel.bind 'removed_from_favorites', (favorite) ->
+          if $rootScope.company._id is favorite.supplier_id
+            $rootScope.company.removeFavoriteBuyerId(favorite.company_id)
+        if company.state_by_state_subscriber
+          $rootScope.regions = company.regions
+        $rootScope.salesInfoMessages = company.sales_info_messages
+        $rootScope.user = User.get
+          userId: token.user_id
+          api_token: token.api_token
+        , (company) ->
+          defer.resolve()
+          setTimeout( () ->
+            $rootScope.$apply()
+          , 3000)
+      , () ->
 
-      return promise
+
+      return defer.promise
     check: ->
       if $rootScope.token?.authorized
         return true

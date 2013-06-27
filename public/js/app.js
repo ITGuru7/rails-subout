@@ -1304,7 +1304,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
-  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
+  var loadProductInfo, paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
+  token = $rootScope.token;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
@@ -1314,7 +1315,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
-  token = $rootScope.token;
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
       return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
@@ -1358,27 +1358,30 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.companyProfile = angular.copy(company);
     return updateSelectedRegions();
   };
-  Product.get({
-    productHandle: 'subout-basic-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.subout_basic_product = data.product;
-  });
-  Product.get({
-    productHandle: 'subout-pro-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    $scope.subout_pro_product = data.product;
-    return updateAdditionalPrice();
-  });
-  GatewaySubscription.get({
-    subscriptionId: $rootScope.company.subscription_id,
-    api_token: $rootScope.token.api_token
-  }, function(subscription) {
-    return $scope.subscription = subscription;
-  }, function(error) {
-    return $scope.subscription = null;
-  });
+  loadProductInfo = function() {
+    Product.get({
+      productHandle: 'subout-basic-service',
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      return $scope.subout_basic_product = data.product;
+    });
+    Product.get({
+      productHandle: 'subout-pro-service',
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      $scope.subout_pro_product = data.product;
+      return updateAdditionalPrice();
+    });
+    return GatewaySubscription.get({
+      subscriptionId: $rootScope.company.subscription_id,
+      api_token: $rootScope.token.api_token
+    }, function(subscription) {
+      return $scope.subscription = subscription;
+    }, function(error) {
+      return $scope.subscription = null;
+    });
+  };
+  loadProductInfo();
   $rootScope.setupFileUploader();
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -2216,45 +2219,42 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
       return this.tokenValue;
     },
     authenticate: function(token) {
-      var defer, promise;
+      var defer;
       defer = $q.defer();
       $.cookie(AuthToken, token);
       this.tokenValue = token;
       $rootScope.token = token;
       $rootScope.pusher = new Pusher(token.pusher_key);
       $rootScope.channel = $rootScope.pusher.subscribe('global');
-      promise = defer.promise.then(function() {
-        return $rootScope.company = Company.get({
-          companyId: token.company_id,
-          api_token: token.api_token
-        }, function(company) {
-          $rootScope.channel.bind('added_to_favorites', function(favorite) {
-            if ($rootScope.company._id === favorite.supplier_id) {
-              return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
-            }
-          });
-          $rootScope.channel.bind('removed_from_favorites', function(favorite) {
-            if ($rootScope.company._id === favorite.supplier_id) {
-              return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
-            }
-          });
-          if (company.state_by_state_subscriber) {
-            $rootScope.regions = company.regions;
-          }
-          $rootScope.salesInfoMessages = company.sales_info_messages;
-          return defer.resolve();
-        }, function() {});
-      });
-      $rootScope.user = User.get({
-        userId: token.user_id,
+      $rootScope.company = Company.get({
+        companyId: token.company_id,
         api_token: token.api_token
       }, function(company) {
-        defer.resolve();
-        return setTimeout(function() {
-          return $rootScope.$apply();
-        }, 3000);
-      });
-      return promise;
+        $rootScope.channel.bind('added_to_favorites', function(favorite) {
+          if ($rootScope.company._id === favorite.supplier_id) {
+            return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
+          }
+        });
+        $rootScope.channel.bind('removed_from_favorites', function(favorite) {
+          if ($rootScope.company._id === favorite.supplier_id) {
+            return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
+          }
+        });
+        if (company.state_by_state_subscriber) {
+          $rootScope.regions = company.regions;
+        }
+        $rootScope.salesInfoMessages = company.sales_info_messages;
+        return $rootScope.user = User.get({
+          userId: token.user_id,
+          api_token: token.api_token
+        }, function(company) {
+          defer.resolve();
+          return setTimeout(function() {
+            return $rootScope.$apply();
+          }, 3000);
+        });
+      }, function() {});
+      return defer.promise;
     },
     check: function() {
       var token, _ref;
