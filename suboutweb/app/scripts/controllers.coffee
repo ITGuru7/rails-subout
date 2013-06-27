@@ -701,6 +701,8 @@ OpportunityCtrl = ($scope, $rootScope, $location, Auction, soPagination) ->
 
 OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) ->
   fiveMinutes = 5 * 60 * 1000
+  opportunity_id = $routeParams.opportunity_reference_number
+
   updateFiveMinutesAgo = ->
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes
     $timeout updateFiveMinutesAgo, 5000
@@ -709,7 +711,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
   reloadOpportunity = ->
     $scope.opportunity = Opportunity.get
       api_token: $rootScope.token.api_token
-      opportunityId: $routeParams.opportunity_reference_number
+      opportunityId: opportunity_id
     , (content) ->
       # success
       true
@@ -717,6 +719,13 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
       alert("Record not found")
       $location.path("/dashboard")
 
+  refreshOpportunity = ()->
+    setTimeout ()->
+      reloadOpportunity()
+      refreshOpportunity()
+    , fiveMinutes
+  
+  refreshOpportunity()
   reloadOpportunity()
 
   $rootScope.channel.bind 'event_created', (event) ->

@@ -963,8 +963,9 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
-  var fiveMinutes, reloadOpportunity, updateFiveMinutesAgo;
+  var fiveMinutes, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
+  opportunity_id = $routeParams.opportunity_reference_number;
   updateFiveMinutesAgo = function() {
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
     return $timeout(updateFiveMinutesAgo, 5000);
@@ -973,7 +974,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   reloadOpportunity = function() {
     return $scope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
-      opportunityId: $routeParams.opportunity_reference_number
+      opportunityId: opportunity_id
     }, function(content) {
       return true;
     }, function(content) {
@@ -981,6 +982,13 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $location.path("/dashboard");
     });
   };
+  refreshOpportunity = function() {
+    return setTimeout(function() {
+      reloadOpportunity();
+      return refreshOpportunity();
+    }, fiveMinutes);
+  };
+  refreshOpportunity();
   reloadOpportunity();
   $rootScope.channel.bind('event_created', function(event) {
     if (event.eventable._id === $scope.opportunity._id) {
