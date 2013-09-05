@@ -43,7 +43,10 @@
 
           <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
           <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
-          <p ng-show="validateReserveAmount(newBid.bid_amount)" class="help-block">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</p>
+          <p ng-show="!validateReserveAmount(bid.amount)" class="help-block">
+            <span ng-hide="opportunity.forward_auction">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
+            <span ng-show="opportunity.forward_auction">$ value you posted is less than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
+          </p>
           <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block error">You can win now!</p>
         </div>
       </div>
