@@ -85,7 +85,7 @@
             <div class="span6">
               <h5>Email</h5>
               <div ng-repeat="notification_type in NOTIFICATION_TYPES">
-                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='email'">
+                <label for="notification_{{notification_type.code}}" class="checkbox" ui-if="notification_type.type=='email'">
                    <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
                    {{notification_type.name}}
                 </label>
@@ -94,7 +94,7 @@
             <div class="span6">
               <h5>Mobile</h5>
               <div ng-repeat="notification_type in NOTIFICATION_TYPES">
-                <label for="notification_{{notification_type.code}}" class="control-label" ui-if="notification_type.type=='mobile'">
+                <label for="notification_{{notification_type.code}}" class="checkbox" ui-if="notification_type.type=='mobile'">
                    <input id="notification_{{notification_type.code}}" name="notification_item" type="checkbox" ng-checked="notification_type.enabled" ng-click="setNotification(notification_type)"/>
                    {{notification_type.name}}
                 </label>
