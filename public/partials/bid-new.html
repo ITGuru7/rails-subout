@@ -36,14 +36,14 @@
                  name="bid_amount"
                  required
                  ng-model="bid.amount"
-                 ui-validate="{ only_numbers: 'validateNumber($value)', reserve_amount: 'validateReserveAmount($value)', win_it_now_price: 'validateWinItNowPrice($value)' }"
+                 ui-validate="{ only_numbers: 'validateNumber($value)', win_it_now_price: 'validateWinItNowPrice($value)' }"
                  size="10"
                  maxlength="10"
                  class="input-small">
 
           <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
           <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_amount.$error.reserve_amount" class="help-block error">Starting price not met.</p>
+          <p ng-show="validateReserveAmount(newBid.bid_amount)" class="help-block">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</p>
           <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block error">You can win now!</p>
         </div>
       </div>

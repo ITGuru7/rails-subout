@@ -24,7 +24,7 @@ class Bid
   validate :validate_opportunity_bidable, on: :create
   validate :validate_bidable_by_bidder, on: :create
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
-  validate :validate_reserve_met, on: :create
+  #validate :validate_reserve_met, on: :create
   validate :validate_dot_number_of_bidder, on: :create
   validate :validate_auto_bidding_limit, on: :create
   validate :validate_auto_bidding_limit_on_win_it_now_price, on: :create
@@ -136,6 +136,7 @@ class Bid
     end
   end
 
+  # we don't use this validation according to story #56069204
   def validate_reserve_met
     return unless opportunity
     return unless opportunity.reserve_amount.present?
