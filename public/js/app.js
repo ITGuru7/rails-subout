@@ -393,8 +393,10 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
-    if ($rootScope.company.payment_state === 'failure') {
-      $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+    if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
+      if (!$rootScope.subscription.has_valid_credit_card) {
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+      }
       return;
     }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
@@ -1384,9 +1386,10 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       subscriptionId: $rootScope.company.subscription_id,
       api_token: $rootScope.token.api_token
     }, function(subscription) {
+      $rootScope.subscription = subscription;
       return $scope.subscription = subscription;
     }, function(error) {
-      return $scope.subscription = null;
+      return $rootScope.subscription = null;
     });
   };
   loadProductInfo();

@@ -213,8 +213,8 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     unless $rootScope.company.dot_number
       $rootScope.setModal(suboutPartialPath('dot-required.html'))
       return
-    if $rootScope.company.payment_state is 'failure'
-      $rootScope.setModal(suboutPartialPath('update-credit-card.html'))
+    if $rootScope.company.subscription_plan != 'free' && $rootScope.subscription
+      $rootScope.setModal(suboutPartialPath('update-credit-card.html')) if !$rootScope.subscription.has_valid_credit_card
       return
     if opportunity.ada_required and !$rootScope.company.has_ada_vehicles
       $rootScope.setModal(suboutPartialPath('ada-required.html'))
@@ -1061,9 +1061,10 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       subscriptionId: $rootScope.company.subscription_id
       api_token: $rootScope.token.api_token
       (subscription) ->
+        $rootScope.subscription = subscription
         $scope.subscription = subscription
       (error) ->
-        $scope.subscription = null
+        $rootScope.subscription = null
 
   loadProductInfo()
 
