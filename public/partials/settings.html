@@ -418,8 +418,7 @@
                 <div class="span2"> {{vehicle.model}} </div>
                 <div class="span2"> {{vehicle.vin}} </div>
                 <div class="span2">
-                  <button class="btn btn-small btn-danger" ng-click="removeVehicle(vehicle)"><span class="icon icon-trash"></span></button>
-                  <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span></button>
+                  <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
                 </div>
               </div>
               <div ng-show="vehicle.editable">
@@ -454,8 +453,8 @@
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn" ng-click="vehicle.editable = 0" ng-disabled="vform.$invalid">Save</button>
-                  <button class="btn" ng-click="vehicle.editable = 0">Close</button>
+                  <button class="btn btn-small btn-primary" ng-click="vehicle.editable = 0" ng-disabled="vform.$invalid">Save</button>
+                  <!--<button class="btn btn-small btn-danger" ng-click="removeVehicle(vehicle)"><span class="icon icon-trash"></span>Remove</button>-->
                 </div>
                 </form>
                 <hr />
@@ -463,7 +462,7 @@
             </div>
           </div>
           <div class="text-centered">
-            <button class="btn btn-success" ng-click="addVehicle({'editable': 1})"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
+            <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
             <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
           </div>
         </form>
