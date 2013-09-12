@@ -1492,6 +1492,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
+    if (!confirm("Are you sure?")) {
+      return false;
+    }
     return Company.update_vehicles({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,

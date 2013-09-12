@@ -1156,6 +1156,8 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.vehicleTypeOptions = vehicleTypeOptions()
 
   $scope.saveVehicles = ->
+    if !confirm("Are you sure?")
+      return false
     Company.update_vehicles
       companyId: $rootScope.company._id
       company: $scope.companyProfile

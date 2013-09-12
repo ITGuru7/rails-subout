@@ -417,7 +417,10 @@
                 <div class="span2"> {{vehicle.make}} </div>
                 <div class="span2"> {{vehicle.model}} </div>
                 <div class="span2"> {{vehicle.vin}} </div>
-                <div class="span2"><a class="btn" ng-click="vehicle.editable = 1">Edit</a></div>
+                <div class="span2">
+                  <button class="btn btn-small btn-danger" ng-click="removeVehicle(vehicle)"><span class="icon icon-trash"></span></button>
+                  <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span></button>
+                </div>
               </div>
               <div ng-show="vehicle.editable">
                 <br />
@@ -449,20 +452,16 @@
                     <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="input-xlarge" required />
                   </div>
                 </div>
-                <div class="row-fluid text-centered">
-                  <button class="btn btn-danger" ng-click="removeVehicle(vehicle)">Remove</button>
-                  <button class="btn" ng-click="vehicle.editable = 0" ng-disabled="vehicleForm.$invalid">Close</button>
+                <div class="form-actions">
+                  <button class="btn btn-primary" ng-click="vehicle.editable = 0" ng-disabled="vehicleForm.$invalid">Save</button>
                 </div>
                 <hr />
               </div>
             </div>
           </div>
-
-          <div>
-            <a ng-click="addVehicle({'editable': 1})">Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></a> <br/><br/>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Save</button>
+          <div class="text-centered">
+            <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
+            <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
           </div>
         </form>
       </div>
