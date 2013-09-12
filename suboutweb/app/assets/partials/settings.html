@@ -424,6 +424,7 @@
               </div>
               <div ng-show="vehicle.editable">
                 <br />
+                <ng-form name="vform">
                 <div class="control-group" ng-show="vehicle.rm_number">
                   <strong>RM Number:</strong> {{vehicle.rm_number}}
                 </div>
@@ -453,14 +454,16 @@
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="btn btn-primary" ng-click="vehicle.editable = 0" ng-disabled="vehicleForm.$invalid">Save</button>
+                  <button class="btn" ng-click="vehicle.editable = 0" ng-disabled="vform.$invalid">Save</button>
+                  <button class="btn" ng-click="vehicle.editable = 0">Close</button>
                 </div>
+                </form>
                 <hr />
               </div>
             </div>
           </div>
           <div class="text-centered">
-            <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
+            <button class="btn btn-success" ng-click="addVehicle({'editable': 1})"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
             <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
           </div>
         </form>
