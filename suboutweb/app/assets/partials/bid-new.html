@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <div class="control-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid}">
+      <div class="control-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid || !validateReserveAmount(bid.amount)}">
         <label for="bid_amount" class="control-label">Bid Amount ($) *</label>
         <div class="controls">
           <input type="text"
@@ -43,7 +43,7 @@
 
           <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
           <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block error">Enter only numeric characters.</p>
-          <p ng-show="!validateReserveAmount(bid.amount)" class="help-block">
+          <p ng-show="!validateReserveAmount(bid.amount)" class="help-block error">
             <span ng-hide="opportunity.forward_auction">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
             <span ng-show="opportunity.forward_auction">$ value you posted is less than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
           </p>
