@@ -146,8 +146,17 @@
       </div>
     </div>
 
+    <div class="control-group">
+      <div class="controls">
+        <label for="agreement" class="checkbox">
+          <input id="agreement" type="checkbox" name="agreement" ng-model="agreement" required />
+           I accept <a target="_blank" href="http://subout.com/terms-conditions">terms and conditions</a>.
+        </label>
+      </div>
+    </div>
+
     <div class="form-actions">
-      <button class="btn btn-primary" type="submit" ng:disabled="signUpForm.$invalid">Sign Up</button>
+      <button class="btn btn-primary" type="submit" ng:disabled="signUpForm.$invalid && !agreement">Sign Up</button>
     </div>
   </fieldset>
 </form>
