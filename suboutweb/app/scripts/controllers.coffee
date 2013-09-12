@@ -214,8 +214,9 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
       $rootScope.setModal(suboutPartialPath('dot-required.html'))
       return
     if $rootScope.company.subscription_plan != 'free' && $rootScope.subscription
-      $rootScope.setModal(suboutPartialPath('update-credit-card.html')) if !$rootScope.subscription.has_valid_credit_card
-      return
+      if !$rootScope.subscription.has_valid_credit_card
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'))
+        return
     if opportunity.ada_required and !$rootScope.company.has_ada_vehicles
       $rootScope.setModal(suboutPartialPath('ada-required.html'))
       return

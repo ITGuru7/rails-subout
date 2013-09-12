@@ -396,8 +396,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
       if (!$rootScope.subscription.has_valid_credit_card) {
         $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+        return;
       }
-      return;
     }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
