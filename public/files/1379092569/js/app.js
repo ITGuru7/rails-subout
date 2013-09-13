@@ -158,6 +158,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     for (var _i = _ref = d.getFullYear(); _ref <= 1970 ? _i <= 1970 : _i >= 1970; _ref <= 1970 ? _i++ : _i--){ _results.push(_i); }
     return _results;
   }).apply(this);
+  $rootScope.reload = null;
   salt = function(key) {
     return $rootScope.api_token + "_" + key;
   };
@@ -392,9 +393,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
-    if ($rootScope.company.payment_state === 'failure') {
-      $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
-      return;
+    if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
+      if (!$rootScope.subscription.has_valid_credit_card) {
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+        return;
+      }
     }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
@@ -511,7 +514,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     bid = {
-      amount: opportunity.win_it_now_price
+      amount: opportunity.win_it_now_price,
+      vehicle_count: opportunity.vehicle_count
     };
     return Bid.save({
       bid: bid,
@@ -552,6 +556,9 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     opportunity.image_id = $('#opportunity_image_id').val();
     opportunity.start_time = $("#opportunity_start_time").val();
     opportunity.end_time = $("#opportunity_end_time").val();
+    if (opportunity.quick_winnable === false) {
+      opportunity.win_it_now_price = null;
+    }
     showErrors = function(errors) {
       var $alertError;
       if ($rootScope.isMobile) {
@@ -596,7 +603,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-BidNewCtrl = function($scope, $rootScope, Bid) {
+BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
   if (!$scope.bid) {
     $scope.bid = {};
   }
@@ -642,7 +649,7 @@ BidNewCtrl = function($scope, $rootScope, Bid) {
       return true;
     }
     value = parseFloat(value);
-    if ($scope.opportunity.win_it_now_price) {
+    if ($scope.opportunity.quick_winnable && $scope.opportunity.win_it_now_price) {
       if ($scope.opportunity.forward_auction) {
         return $scope.opportunity.win_it_now_price > value;
       } else {
@@ -958,8 +965,9 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
-  var fiveMinutes, reloadOpportunity, updateFiveMinutesAgo;
+  var fiveMinutes, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
+  opportunity_id = $routeParams.opportunity_reference_number;
   updateFiveMinutesAgo = function() {
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
     return $timeout(updateFiveMinutesAgo, 5000);
@@ -968,7 +976,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   reloadOpportunity = function() {
     return $scope.opportunity = Opportunity.get({
       api_token: $rootScope.token.api_token,
-      opportunityId: $routeParams.opportunity_reference_number
+      opportunityId: opportunity_id
     }, function(content) {
       return true;
     }, function(content) {
@@ -976,6 +984,13 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $location.path("/dashboard");
     });
   };
+  refreshOpportunity = function() {
+    return setTimeout(function() {
+      reloadOpportunity();
+      return refreshOpportunity();
+    }, fiveMinutes);
+  };
+  refreshOpportunity();
   reloadOpportunity();
   $rootScope.channel.bind('event_created', function(event) {
     if (event.eventable._id === $scope.opportunity._id) {
@@ -1107,7 +1122,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       prevOpportunity = prevEvent.eventable;
       if (prevOpportunity._id === opportunity._id) {
         prevOpportunity.canceled = opportunity.canceled;
-        return prevOpportunity.bidable = opportunity.bidable;
+        prevOpportunity.bidable = opportunity.bidable;
+        return prevOpportunity.status = opportunity.status;
       }
     });
   };
@@ -1298,7 +1314,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
 };
 
 SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) {
-  var paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
+  var loadProductInfo, paymentMethodOptions, successUpdate, token, updateAdditionalPrice, updateCompanyAndCompanyProfile, updateSelectedNotifications, updateSelectedRegions, vehicleTypeOptions;
+  token = $rootScope.token;
   $scope.userProfile = angular.copy($rootScope.user);
   $scope.companyProfile = angular.copy($rootScope.company);
   $scope.suboutBasicSubscriptionUrl = $config.suboutBasicSubscriptionUrl();
@@ -1308,10 +1325,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   if (!$rootScope.selectedTab) {
     $rootScope.selectedTab = "user-login";
   }
-  token = $rootScope.token;
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
+      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * $scope.subout_bus_price * 100;
     } else {
       return $scope.additional_price = 0;
     }
@@ -1352,27 +1368,32 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.companyProfile = angular.copy(company);
     return updateSelectedRegions();
   };
-  Product.get({
-    productHandle: 'subout-basic-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.subout_basic_product = data.product;
-  });
-  Product.get({
-    productHandle: 'subout-pro-service',
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    $scope.subout_pro_product = data.product;
-    return updateAdditionalPrice();
-  });
-  GatewaySubscription.get({
-    subscriptionId: $rootScope.company.subscription_id,
-    api_token: $rootScope.token.api_token
-  }, function(subscription) {
-    return $scope.subscription = subscription;
-  }, function(error) {
-    return $scope.subscription = null;
-  });
+  loadProductInfo = function() {
+    Product.get({
+      productHandle: 'subout-basic-service',
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      return $scope.subout_basic_product = data.product;
+    });
+    Product.get({
+      productHandle: 'subout-pro-service',
+      api_token: $rootScope.token.api_token
+    }, function(data) {
+      $scope.subout_pro_product = data.product;
+      $scope.subout_bus_price = data.product.components[0].component.unit_price;
+      return updateAdditionalPrice();
+    });
+    return GatewaySubscription.get({
+      subscriptionId: $rootScope.company.subscription_id,
+      api_token: $rootScope.token.api_token
+    }, function(subscription) {
+      $rootScope.subscription = subscription;
+      return $scope.subscription = subscription;
+    }, function(error) {
+      return $rootScope.subscription = null;
+    });
+  };
+  loadProductInfo();
   $rootScope.setupFileUploader();
   successUpdate = function() {
     if ($rootScope.isMobile) {
@@ -1475,6 +1496,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
+    if (!confirm("Are you sure?")) {
+      return false;
+    }
     return Company.update_vehicles({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -2210,45 +2234,42 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
       return this.tokenValue;
     },
     authenticate: function(token) {
-      var defer, promise;
+      var defer;
       defer = $q.defer();
       $.cookie(AuthToken, token);
       this.tokenValue = token;
       $rootScope.token = token;
       $rootScope.pusher = new Pusher(token.pusher_key);
       $rootScope.channel = $rootScope.pusher.subscribe('global');
-      promise = defer.promise.then(function() {
-        return $rootScope.company = Company.get({
-          companyId: token.company_id,
-          api_token: token.api_token
-        }, function(company) {
-          $rootScope.channel.bind('added_to_favorites', function(favorite) {
-            if ($rootScope.company._id === favorite.supplier_id) {
-              return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
-            }
-          });
-          $rootScope.channel.bind('removed_from_favorites', function(favorite) {
-            if ($rootScope.company._id === favorite.supplier_id) {
-              return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
-            }
-          });
-          if (company.state_by_state_subscriber) {
-            $rootScope.regions = company.regions;
-          }
-          $rootScope.salesInfoMessages = company.sales_info_messages;
-          return defer.resolve();
-        }, function() {});
-      });
-      $rootScope.user = User.get({
-        userId: token.user_id,
+      $rootScope.company = Company.get({
+        companyId: token.company_id,
         api_token: token.api_token
       }, function(company) {
-        defer.resolve();
-        return setTimeout(function() {
-          return $rootScope.$apply();
-        }, 3000);
-      });
-      return promise;
+        $rootScope.channel.bind('added_to_favorites', function(favorite) {
+          if ($rootScope.company._id === favorite.supplier_id) {
+            return $rootScope.company.addFavoriteBuyerId(favorite.company_id);
+          }
+        });
+        $rootScope.channel.bind('removed_from_favorites', function(favorite) {
+          if ($rootScope.company._id === favorite.supplier_id) {
+            return $rootScope.company.removeFavoriteBuyerId(favorite.company_id);
+          }
+        });
+        if (company.state_by_state_subscriber) {
+          $rootScope.regions = company.regions;
+        }
+        $rootScope.salesInfoMessages = company.sales_info_messages;
+        return $rootScope.user = User.get({
+          userId: token.user_id,
+          api_token: token.api_token
+        }, function(company) {
+          defer.resolve();
+          return setTimeout(function() {
+            return $rootScope.$apply();
+          }, 3000);
+        });
+      }, function() {});
+      return defer.promise;
     },
     check: function() {
       var token, _ref;
