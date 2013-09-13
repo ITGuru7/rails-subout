@@ -399,7 +399,7 @@
 
         <form name="vehicleForm" id="vehicleForm" class="form-horizontal" ng-show="company.subscription_plan == 'subout-pro-service'" novalidate>
           <h4>Register Vehicles Here (2 vehicles included with subscription)</h4>
-          <p class="help-block">Additional vehicles can be added for $49.99</p>
+          <p class="help-block">Additional vehicles can be added for ${{subout_bus_price}}</p>
           <br />
           <div ng-show="companyProfile.vehicles.length > 0">
             <div class="row-fluid">
@@ -461,7 +461,7 @@
               </div>
             </div>
             <div class="text-centered">
-              <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+$49.99)</span></button>
+              <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+${{subout_bus_price}})</span></button>
               <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
             </div>
           </div>

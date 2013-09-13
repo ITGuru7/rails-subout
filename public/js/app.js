@@ -1327,7 +1327,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
+      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * $scope.subout_bus_price * 100;
     } else {
       return $scope.additional_price = 0;
     }
@@ -1380,6 +1380,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token
     }, function(data) {
       $scope.subout_pro_product = data.product;
+      $scope.subout_bus_price = data.product.components[0].component.unit_price;
       return updateAdditionalPrice();
     });
     return GatewaySubscription.get({

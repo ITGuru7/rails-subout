@@ -1019,7 +1019,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   
   updateAdditionalPrice = ()->
     if $scope.companyProfile.vehicles.length > 2
-      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100
+      $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * $scope.subout_bus_price * 100
     else
       $scope.additional_price = 0
 
@@ -1056,6 +1056,7 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
       api_token: $rootScope.token.api_token
       (data) ->
         $scope.subout_pro_product = data.product
+        $scope.subout_bus_price = data.product.components[0].component.unit_price
         updateAdditionalPrice()
 
     GatewaySubscription.get
