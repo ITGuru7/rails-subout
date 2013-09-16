@@ -50,9 +50,11 @@
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
         <div class="navbar-inner row">
-          <div class="span3">
-            <a class="brand-logo" href="#">SubOut</a>
-            <div id="subout-loading" class="loading-animation"></div>
+          <div class="col-md-3 col-sm-4">
+            <div id="subout-brand">
+              <a href="#" id="logo"><img src="/img/logo.png" class="img-responsive"></a>
+              <div id="subout-loading" class="loading-animation"></div>
+            </div>
           </div>
           
           
@@ -83,9 +85,9 @@
           <!-- Be sure to leave the brand out there if you want it shown -->
           <!--<a class="brand" href="#"></a>-->
 
-          <div class="span8">
+          <div class="col-md-9">
             <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
-              <ul id="menu" class="nav mobile-nav">
+              <ul id="menu" class="nav navbar navbar-nav mobile-nav">
                 <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
                 <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
                 <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>

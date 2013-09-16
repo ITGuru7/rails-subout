@@ -5,6 +5,7 @@ exports.config =
     wrapper: false
   paths:
     public: '../public'
+    ignored: /(\/bootstrap\/)|(\/custom\/)|(bootstrap-3.0.0)/
   files:
     javascripts:
       joinTo:

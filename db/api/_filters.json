@@ -4,7 +4,7 @@
     "name":"Vehicle Needed",
     "color":"#69b645",
     "active_red":false,
-    "icon": "icon-hand-up",
+    "icon": "glyphicon-hand-up",
     
     "evaluation":{
        "type": "compare",
@@ -22,7 +22,7 @@
     "name":"Vehicle for Hire",
     "color":"#69b645",
     "active_red":false,
-    "icon": "icon-road",
+    "icon": "glyphicon-road",
     
     "evaluation":{
        "type": "compare",
@@ -39,7 +39,7 @@
     "name":"Special",
     "color":"#f25a29",
     "active_red":true,
-    "icon": "icon-bullhorn",
+    "icon": "glyphicon-bullhorn",
     
     "evaluation":{
        "type": "compare",
@@ -57,7 +57,7 @@
     "name":"Emergency",
     "color":"#f25a29",
     "active_red":true,
-    "icon": "icon-plus-sign",
+    "icon": "glyphicon-plus-sign",
     
     "evaluation":{
        "type": "compare",
@@ -74,7 +74,7 @@
     "name":"Buy or Sell Parts and Vehicles",
     "color":"#f25a29",
     "active_red":true,
-    "icon": "icon-cog",
+    "icon": "glyphicon-cog",
     
     "evaluation":{
        "type": "compare",

@@ -1,6 +1,6 @@
 <div id="dashboard">
-  <div class="row-fluid">
-    <div id="sidebar" class="span3 filters">
+  <div class="row">
+    <div id="sidebar" class="col-md-3 filters">
       <div class="welcome display-message">
         <span class="display-message-extra">Welcome</span>
         <span class="company display-message-subject">{{company.name}}!</span>
@@ -10,9 +10,9 @@
         <section class="title"><h5>Opportunity Type</h5></section>
         <section class="content">
           <ul>
-            <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name, red: filter.active_red}"
+            <li ng-repeat="filter in filters" class="filter" ng-class="{active: $location.search().opportunity_type == filter.name, red: filter.active_red}"
             title="{{filter.name}}">
-            <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
+            <i class="glyphicon {{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
             </li>
           </ul>
         </section>
@@ -30,15 +30,15 @@
       </section>
       <section id="regions">
         <section class="title"><h5>Region</h5></section>
-        <section  ng-show="!isMobile" class="content">
-          <select class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
+        <section  ng-show="!isMobile" class="content row">
+          <select class="col-md-10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
         <section  ng-show="isMobile" class="content">
-          <select class="span10 mobileSelect"  ng-model="regionFilter">
+          <select class="col-xs-10 mobileSelect"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
             <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
@@ -46,7 +46,7 @@
         </section>
       </section>
     </div>
-    <div class="span9">
+    <div class="col-md-9">
 
       <div class="alert alert-info" ng-show="company.canAddFreeBuses()">
           Your subscription includes Roadside Assistance for 2 of your vehicles. 
@@ -54,24 +54,28 @@
       </div>
       <section id="activities" when-scrolled="loadMoreEvents()">
         <div id="toolbar">
-          <div class="row-fluid">
-            <div class="pull-left span4">
+          <div class="row">
+            <div class="pull-left col-md-4">
               <div class="display-message sales-info" sales-info-messages="salesInfoMessages"></div>
               <div class="info-label-heading">
                 <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
                 <span ng-hide="hasAnyFilter()">All Events:</span>
               </div>
             </div>
-            <div class='pull-right span8 toolbar-buttons'>
-              <div id="search" class="pull-right span6">
-                <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
+            <div class='pull-right col-md-8 toolbar-buttons'>
+              <div class="row">
+              <div id="search" class="pull-right col-md-6 col-xs-6">
+                <input id="search-listing" class="col-md-12" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
                 <div class="icon-search"></div>
               </div>
-              <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
-              <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+              <div class="col-md-6 col-xs-6">
+                <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+              </div>
+              </div>
             </div>
           </div>
-          <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
+          <div id="pills" class="row" ng-show="hasAnyFilter()">
             <div class="pill" ng-show="$location.search().opportunity_type">
               {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
             </div>
@@ -93,19 +97,19 @@
           </div>
         </div>
         <section id="activity-stream">
-          <div class="event row-fluid"
+          <div class="event row"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
             ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
             ng-hide="isMobile">
             <div class="event-summary">
-              <div class="row-fluid">
-                <span class="span3">
-                  <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+              <div class="row">
+                <span class="col-md-3">
+                  <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
                   <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
                   <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                 </span>
-                <span class="span9">
+                <span class="col-md-9">
                   <span class="opportunity-name">
                     <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
                       {{opportunity.name}}
@@ -125,7 +129,7 @@
               </div>
             </div>
             <div class="eventable-details" ng-show="event.selected" class="action-buttons">
-              <div class="row-fluid">
+              <div class="row">
                 <div class="offset3 span5">
                   <div class="description">
                     <div><strong>Description</strong></div>
@@ -179,7 +183,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="span4">
+                <div class="col-md-4">
                   <a ng-show="event.eventable.image_url && !isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
                     <img ng-src="{{event.eventable.image_url}}" />
                   </a>

@@ -1,31 +1,3 @@
-/****************************************************************************************************************************
- *
- * current_file: app/styles/themes/custom/_overrides.less
- *
- */
-
-/*
-Place custom styles here. Thes styles are ment to be loaded after
-bootstrap, so the may override it's behavior.
- */
-
-//copied over
-
-/** This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the top of the
- * compiled file, but it's generally better to create a new file per style scope.
- *
- *= require bootstrap
- *= jquery-ui-1.8.9.custom
- *= require jquery.timeentry
- *= require_tree .
- */
-
 ul {
   margin:0px;
   padding:0px;
@@ -112,8 +84,6 @@ body {
   padding:0px 40px;
 }
 #sign-in-form {
-  max-width:560px;
-  margin:0px auto;
   margin-bottom:40px;
 }
 #dashboard {
@@ -269,7 +239,6 @@ input[type="search"],
 input[type="tel"],
 input[type="color"],
 .uneditable-input {
-  height: 20px;
   line-height: 20px;
 }
 select {
@@ -313,7 +282,7 @@ a {
 }
 
 .btn-primary {
-  .buttonBackground(@skyBlue, spin(@skyBlue, 10%));
+  /*.buttonBackground(@skyBlue, spin(@skyBlue, 10%));*/
 }
 
 [class^="icon-"], [class*=" icon-"],[class^="icon-"]:hover, [class*=" icon-"]:hover {
