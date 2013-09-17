@@ -54,7 +54,13 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
   $rootScope.currentPath = ->
     $location.path()
-
+  $rootScope.currentMenuName = ->
+    return "Home" if $location.path() == '/dashboard'
+    return "Buy/Bid Now" if $location.path() == '/available_opportunities'
+    return "My Bids" if $location.path() == '/bids'
+    return "My Opportunities" if $location.path() == '/opportunities'
+    return "Favorites" if $location.path() == '/favorites'
+    
   $rootScope.setModal = (url) ->
     $rootScope.modal = url
 

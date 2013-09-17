@@ -217,6 +217,23 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.currentPath = function() {
     return $location.path();
   };
+  $rootScope.currentMenuName = function() {
+    if ($location.path() === '/dashboard') {
+      return "Home";
+    }
+    if ($location.path() === '/available_opportunities') {
+      return "Buy/Bid Now";
+    }
+    if ($location.path() === '/bids') {
+      return "My Bids";
+    }
+    if ($location.path() === '/opportunities') {
+      return "My Opportunities";
+    }
+    if ($location.path() === '/favorites') {
+      return "Favorites";
+    }
+  };
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };

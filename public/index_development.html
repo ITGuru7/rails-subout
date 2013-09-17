@@ -49,6 +49,11 @@
   <body data-subout-deploy="--DEPLOY--">
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
+        <ul id="top-links" class="pull-right">
+          <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+          <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+          <li><a ng-click="signOut()">Sign Out</a></li>
+        </ul>
         <div class="navbar-inner row">
           <div class="col-md-3 col-sm-4">
             <div id="subout-brand">
@@ -56,51 +61,29 @@
               <div id="subout-loading" class="loading-animation"></div>
             </div>
           </div>
-          
-          
-            <ul ng-show="isMobile">
-              <li ng-show="currentPath()=='/dashboard'" ng-class="{brand: currentPath()=='/dashboard'} " class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Home</span>
-                <span class="menu-button" ></span>
-              </li>
-              <li ng-show="currentPath()=='/available_opportunities'" ng-class="{brand: currentPath()=='/available_opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Buy/Bid Now</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/bids'" ng-class="{brand: currentPath()=='/bids'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">My Bids</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/opportunities'" ng-class="{brand: currentPath()=='/opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">My Opportunities</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/favorites'" ng-class="{brand: currentPath()=='/favorites'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Favorites</span>
-                <span class="menu-button"></span>
-              </li>
-            </ul>
-
-          
-          <!-- Be sure to leave the brand out there if you want it shown -->
-          <!--<a class="brand" href="#"></a>-->
 
           <div class="col-md-9">
-            <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
-              <ul id="menu" class="nav navbar navbar-nav mobile-nav">
-                <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
-                <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
-                <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-                <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-                <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
-              </ul>
-            </div>
-            <ul id="top-links">
-              <!--<li><a href="#/help">Help</a></li>-->
-              <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-              <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-              <li><a ng-click="signOut()">Sign Out</a></li>
-            </ul>
+            <nav class="navbar navbar-subout" role="navigation">
+              <div class="navbar-header visible-xs">
+                <div class="pull-left">{{currentMenuName()}}</div>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                </button>
+              </div>
+              <div class="collapse navbar-collapse navbar-collapse-1">
+                <ul id="menu" class="nav navbar navbar-nav">
+                  <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard" class="col-xs-12" >Home</a></li>
+                  <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities" class="col-xs-12" >Buy/Bid Now</a></li>
+                  <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+                  <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities" class="col-xs-12" >My Opportunities</a></li>
+                  <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites" class="col-xs-12" >Favorites</a></li>
+                </ul>
+              </div>
+            </nav>
+
           </div>
         </div>
       </div>

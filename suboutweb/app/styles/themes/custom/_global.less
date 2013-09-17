@@ -154,7 +154,7 @@ body {
 }
 
 #content {
-  padding: 10px 40px 20px 40px;
+  padding: 0px;
 }
 
 #sign-in-form, #sign-up-form {
@@ -493,7 +493,6 @@ div#opportunity-show {
 }
 
 #sidebar {
-  float: left;
   > section {
     padding-bottom: 15px;
   }
@@ -503,11 +502,22 @@ div#opportunity-show {
   }
 }
 
-#subout-navbar.navbar {
+#subout-navbar{
 
+  .navbar-subout { margin-bottom: 0px;}
+  .navbar-subout .icon-bar{ background: #ccc!important;}
+  .navbar-collapse{ padding: 0px;}
+  .navbar-subout{
+    .navbar-header{
+      font-size: 16px;
+      line-height: 40px;
+      padding: 0px 10px;
+       background-color: #69B645;
+       color: #FFFFFF;
+    }
+    .navbar-toggle{ background: #e2e2e2;  margin: 5px  0px; }
+  }
   #top-links{
-    position: absolute;
-    right: 20px; 
     li + li{
       border-left: 1px solid @appleGreen;
     }
@@ -516,7 +526,7 @@ div#opportunity-show {
   }
 
   border-bottom: 8px solid @lightGray;
-  padding: 0 40px;
+  padding: 0px;
   .navbar-inner {
     padding: 0;
     border: 0;
@@ -540,7 +550,7 @@ div#opportunity-show {
     padding: 0;
     margin: 15px 0 0 0;
   }
-  #menu { margin-top: 20px; }
+  #menu {  }
   #menu li {
     line-height: 40px;
     font-size: 18px;
@@ -892,60 +902,6 @@ div#opportunity-show {
 .span10.mobileSelect {
   width:100%;
 }
-#subout-navbar.mobile {
-  &.navbar {
-    padding: 0 20px;
-
-    .mobile-nav {
-      & > li {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
-    }
-  }
-
-  .mobile-nav {
-    background-color: #eaeaea; 
-
-  }
-
-  &.navbar {
-    li {
-      line-height: 0;
-      border-bottom: 1px solid #f8f8f8;
-      padding: 10px;
-      margin-left: 0;
-
-      a {
-        font-weight: normal;
-      }
-
-      &.active {
-        a {
-          background-color: #eaeaea;
-          color: #000;
-          box-shadow: none;
-          text-decoration: underline;
-        }
-      }
-    }
-  } 
-  a.brand {
-    padding: 0;
-  }
-
-  .navbar {
-    a.brand {
-      display: none;
-    }
-
-    li.brand {
-      padding-left: 5px;
-      padding-right: 0px;
-      margin-left: 0px;
-    }
-  } 
-}
 
 @media only screen and (max-device-width : 767px) {
 
@@ -982,39 +938,10 @@ div#opportunity-show {
 
 #subout-loading{
   position:absolute;
-  top: 0px;
+  bottom: 0px;
   right: 0px;
   &.loading-animation {
     width: 40px;    
-  }
-
-}
-
-.mobile-menu {
-  width: 92%;
-  height: 30px;
-  background-color: #f2f2f2;
-  position: relative;
-
-  & > a {
-    display: inline-block;
-  }
-
-  .menu-button {
-    width: 38px;
-    height: 28px;
-    background: url(/img/menu-icon.png) no-repeat center 100%; 
-    display: inline-block;
-    position: absolute;
-    right: 10px;
-    top: 12px;
-  }
-
-  .menu-title{
-    line-height: 31px;
-    padding-left: 10px;
-    font-weight: normal;
-    color: #000;
   }
 
 }

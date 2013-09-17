@@ -5,7 +5,7 @@ exports.config =
     wrapper: false
   paths:
     public: '../public'
-    ignored: /(\/bootstrap\/)|(\/custom\/)|(bootstrap-3.0.0)/
+    ignored: /(\/styles\/bootstrap\/)|(\/custom\/)|(bootstrap-3.0.0)/
   files:
     javascripts:
       joinTo:
@@ -26,12 +26,7 @@ exports.config =
           'vendor/scripts/jquery/jquery.cookie.js'
           'vendor/scripts/jquery/lightbox.js'
           'vendor/scripts/jquery/jquery.maskedinput.js'
-          'vendor/scripts/bootstrap/bootstrap-transition.js'
-          'vendor/scripts/bootstrap/bootstrap-modal.js'
-          'vendor/scripts/bootstrap/bootstrap-tab.js'
-          'vendor/scripts/bootstrap/bootstrap-alert.js'
-          'vendor/scripts/bootstrap/bootstrap-tooltip.js'
-          'vendor/scripts/bootstrap/bootstrap-collapse.js'
+          'vendor/scripts/bootstrap/bootstrap.min.js'
           'vendor/scripts/angular/angular.min.js'
           'vendor/scripts/select2/select2.js'
           'vendor/scripts/angular-ui/angular-ui.js'
@@ -40,7 +35,6 @@ exports.config =
           'vendor/scripts/underscore/underscore-min.js'
           'vendor/scripts/underscore/underscore.string.js'
         ]
-
     stylesheets:
       joinTo:
         'css/app.css': /^(app|vendor)/

@@ -1,6 +1,6 @@
 <div id="dashboard">
   <div class="row">
-    <div id="sidebar" class="col-md-3 filters">
+    <div id="sidebar" class="col-md-3 col-sm-3 filters">
       <div class="welcome display-message">
         <span class="display-message-extra">Welcome</span>
         <span class="company display-message-subject">{{company.name}}!</span>
@@ -30,23 +30,23 @@
       </section>
       <section id="regions">
         <section class="title"><h5>Region</h5></section>
-        <section  ng-show="!isMobile" class="content row">
+        <section  class="hidden-xs content row">
           <select class="col-md-10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
-        <section  ng-show="isMobile" class="content">
+        <section  class="visible-xs content">
           <select class="col-xs-10 mobileSelect"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
-            <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+            <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
       </section>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 col-sm-9">
 
       <div class="alert alert-info" ng-show="company.canAddFreeBuses()">
           Your subscription includes Roadside Assistance for 2 of your vehicles. 
@@ -55,27 +55,31 @@
       <section id="activities" when-scrolled="loadMoreEvents()">
         <div id="toolbar">
           <div class="row">
-            <div class="pull-left col-md-4">
+            <div class="col-md-4 col-sm-4">
               <div class="display-message sales-info" sales-info-messages="salesInfoMessages"></div>
               <div class="info-label-heading">
                 <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
                 <span ng-hide="hasAnyFilter()">All Events:</span>
               </div>
             </div>
-            <div class='pull-right col-md-8 toolbar-buttons'>
+            <div class='col-md-8 col-sm-8'>
               <div class="row">
-              <div id="search" class="pull-right col-md-6 col-xs-6">
-                <input id="search-listing" class="col-md-12" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
-                <div class="icon-search"></div>
-              </div>
-              <div class="col-md-6 col-xs-6">
-                <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
-                <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
-              </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group clearfix">
+                  <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                  <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div id="search" class="form-group">
+                    <input id="search-listing" class="col-md-12" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
+                    <span class="icon-search"></span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div id="pills" class="row" ng-show="hasAnyFilter()">
+          <div id="pills" class="form-group clearfix" ng-show="hasAnyFilter()">
             <div class="pill" ng-show="$location.search().opportunity_type">
               {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
             </div>
@@ -97,13 +101,13 @@
           </div>
         </div>
         <section id="activity-stream">
-          <div class="event row"
+          <div class="event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
             ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
             ng-hide="isMobile">
             <div class="event-summary">
-              <div class="row">
+              <div class="clearfix">
                 <span class="col-md-3">
                   <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
                   <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
@@ -129,7 +133,7 @@
               </div>
             </div>
             <div class="eventable-details" ng-show="event.selected" class="action-buttons">
-              <div class="row">
+              <div class="clearfix">
                 <div class="offset3 span5">
                   <div class="description">
                     <div><strong>Description</strong></div>
