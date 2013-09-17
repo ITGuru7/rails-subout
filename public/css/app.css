@@ -7191,15 +7191,6 @@ body {
   margin-bottom: 0.3em;
   cursor: pointer;
 }
-/*.modal-body{ */
-/*max-height:auto;*/
-/*}*/
-/*.modal{ height:80%; }*/
-.modal {
-  overflow-y: hidden;
-  max-height: 80%;
-  margin-top: -45%;
-}
 #company.well {
   padding: 10px;
 }
@@ -7349,7 +7340,7 @@ form {
   position: relative;
 }
 #logo img {
-  margin-top: 20px;
+  margin-top: 0px;
   padding-right: 45px;
   max-height: 60px;
 }
@@ -7652,58 +7643,6 @@ div#opportunity-show .description .content {
   white-space: pre;
   white-space: pre-wrap;
   padding-left: 5px;
-}
-.modal {
-  margin-top: -45%;
-  overflow: visible!important;
-  height: auto!important;
-  max-height: none!important;
-}
-.modal-body {
-  max-height: none;
-}
-#modal .modal-body {
-  overflow: visible!important;
-  height: auto!important;
-  max-height: none!important;
-}
-#modal .modal-content {
-  overflow: auto!important;
-  max-height: 400px!important;
-}
-#modal .region-checkboxes {
-  height: 280px;
-  overflow-y: scroll;
-}
-@media all and (max-height: 650px) {
-  #modal .modal-content {
-    max-height: 325px!important;
-  }
-  #modal .region-checkboxes {
-    height: 150px;
-  }
-}
-@media all and (max-height: 550px) {
-  #modal .modal-content {
-    max-height: 250px!important;
-  }
-  #modal .region-checkboxes {
-    height: 100px;
-  }
-}
-@media all and (max-height: 450px) {
-  #media .modal-content {
-    max-height: 100px!important;
-  }
-  #media .region-checkboxes {
-    height: 50px;
-  }
-}
-#modal.modal {
-  margin-top: 0px;
-}
-#modal.modal.fade.in {
-  top: 10%;
 }
 #modal dt {
   color: #666550;
@@ -8050,7 +7989,7 @@ div#opportunity-show .description .content {
   margin: 0 0 10px 0;
 }
 #page-settings ul.nav-tabs li {
-  font-size: 18px;
+  font-size: 16px;
 }
 #page-settings .tab-content {
   padding: 10px 5px;

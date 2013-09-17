@@ -49,11 +49,12 @@
   <body data-subout-deploy="--DEPLOY--">
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
-        <ul id="top-links" class="pull-right">
-          <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-          <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-          <li><a ng-click="signOut()">Sign Out</a></li>
-        </ul>
+        <div class="row">
+          <ul id="top-links" class="pull-right">
+            <li><a  href="#modal" data-taget="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+            <li><a ng-click="signOut()">Sign Out</a></li>
+          </ul>
+        </div>
         <div class="navbar-inner row">
           <div class="col-md-3 col-sm-4">
             <div id="subout-brand">
@@ -88,8 +89,10 @@
         </div>
       </div>
       <div id="content" ng-view="content" class="ng-cloak"></div>
-      <div id="modal" class="modal hide fade">
-         <div id="modal-stage" ng-include="modal"></div>
+      <div id="modal" class="modal fade" role="modal">
+        <div class="modal-dialog">
+          <div id="modal-stage" class="modal-content" ng-include="modal"></div>
+        </div>
       </div>
     </div>
 
