@@ -10,35 +10,36 @@
       <a href="#modal" data-toggle="modal" ng-click="displaySettings('favorited-regions')" style="text-decoration:underline;">Click here to add your favorite regions</a>
   </div>
   <div>
-    <form class="form-inline">
-      <div class="pull-left">
+    <form class="form-inline" role="form">
+      <div class="form-group">
         <label>Pick up Date:</label> 
-        <input type="text" class="input-medium" ng-model="filterDepatureDate" ui-date="dateOptions">      
-        &nbsp;&nbsp;
+        <input type="text" class="form-control" ng-model="filterDepatureDate" ui-date="dateOptions">      
       </div>
-      <div class="pull-left">
+      <div class="form-group">
         <label>Vehicle Type: </label>
-        <select ng-model="filterVehicleType" data-placeholder="All" class="input-medium" ng-options="t for t in VEHICLE_TYPES" ui-select2>
+        <select ng-model="filterVehicleType" data-placeholder="All" class="form-control" ng-options="t for t in VEHICLE_TYPES">
           <option value=""></option>
         </select>
-        &nbsp;&nbsp;
       </div>
-      <div class="pull-left">
+      <div class="form-group">
         <label>Trip Type: </label>
-        <select ng-model="filterTripType" data-placeholder="All" class="input-medium" ng-options="t for t in TRIP_TYPES" ui-select2>
+        <select ng-model="filterTripType" data-placeholder="All" class="form-control" ng-options="t for t in TRIP_TYPES">
             <option value=""></option>
         </select>
-        &nbsp;&nbsp;
       </div>
-      <div class="pull-left">
+      <div class="form-group">
         <label>Region: </label>
-        <select ng-model="filterRegions" class="multiselect" ng-options="r for r in allRegions" multiple="multiple">
+        <select ng-model="filterRegions" class="multiselect form-control" ng-options="r for r in allRegions" multiple="multiple">
+        </select>
+      </div>
+      <div class="form-group visible-xs">
+        <label>Sort by: </label>
+        <select ng-model="sortOption" ng-change="sortMobileOpportunity()">
+          <option ng-repeat="item in sortItems" value="{{item.value}}">{{item.label}}</option>
         </select>
       </div>
       <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
     </form>
-    <br/>
-    <br/>
   </div>
   <table ng-show="!isPhone" class="table">
     <tr>
@@ -98,14 +99,6 @@
     </tr>
   </table>
 
-  <div ng-show="isPhone" class="row-fluid">
-    <div class="span12">
-      Sort by
-      <select ng-model="sortOption" ng-change="sortMobileOpportunity()">
-        <option ng-repeat="item in sortItems" value="{{item.value}}">{{item.label}}</option>
-      </select>
-    </div>
-  </div>
 
   <table ng-show="isPhone" ng-repeat="opportunity in opportunities" class="table table-border">
     <tr>

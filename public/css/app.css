@@ -4901,6 +4901,9 @@ textarea.input-group-sm > .input-group-btn > .btn {
     margin-left: 0;
   }
 }
+.navbar-form .form-group .btn-group {
+  width: 100%;
+}
 @media (max-width: 767px) {
   .navbar-form .form-group {
     margin-bottom: 5px;
@@ -7294,15 +7297,8 @@ a {
 a:hover {
   color: #378bac;
 }
-.btn-primary {
-  /*.buttonBackground(@skyBlue, spin(@skyBlue, 10%));*/
-
-}
-[class^="icon-"],
-[class*=" icon-"],
-[class^="icon-"]:hover,
-[class*=" icon-"]:hover {
-  background: none !important;
+.form-inline .form-group .btn-group {
+  width: 100%;
 }
 /****************************************************************************************************************************
  *
@@ -7336,6 +7332,9 @@ h5 {
 body {
   background: #bfbfbf;
 }
+form {
+  margin-bottom: 10px;
+}
 .text-centered {
   text-align: center;
 }
@@ -7350,7 +7349,7 @@ body {
   position: relative;
 }
 #logo img {
-  margin-top: 10px;
+  margin-top: 20px;
   padding-right: 45px;
   max-height: 60px;
 }
