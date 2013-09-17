@@ -65,7 +65,7 @@
             <div class="form-group">
               <div class="col-md-offset-3 col-md-9">
               <button class="btn btn-primary" ng:click="saveUserProfile()" ng-disabled="settingsUserLogin.$invalid">Save</button>
-              <button data-dismiss="modal" type="button" class="btn btn-danger">Close</button>
+              <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
             </div>
 
@@ -105,7 +105,8 @@
           <hr />
           <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
-            <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsNotifications.$invalid">Save</button>
+              <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsNotifications.$invalid">Save</button>
+              <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
             </div>
           </div>
         </form>
@@ -283,6 +284,7 @@
             <div class="form-group">
               <div class="col-md-offset-3 col-md-9">
                 <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
             </div>
           </fieldset>
@@ -326,7 +328,8 @@
 
             <div class="form-group">
               <div class="col-md-offset-3 col-md-9">
-              <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsFleet.$invalid">Save</button>
+                <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsFleet.$invalid">Save</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
             </div>
           </fieldset>
