@@ -30,14 +30,14 @@
       </section>
       <section id="regions">
         <section class="title"><h5>Region</h5></section>
-        <section  class="hidden-xs content row">
+        <section  class="hidden-xs hidden-sm content row">
           <select class="col-md-10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
-        <section  class="visible-xs content">
+        <section  class="visible-xs visible-sm content">
           <select class="col-xs-10 mobileSelect"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
@@ -66,8 +66,7 @@
               <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div class="form-group clearfix">
-                  <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
-                  <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
+                    <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
                   </div>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
@@ -101,7 +100,7 @@
           </div>
         </div>
         <section id="activity-stream">
-          <div class="hidden-xs event clearfix"
+          <div class="hidden-xs hidden-sm event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
             ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
@@ -199,7 +198,7 @@
             </div>
           </div>
           <!-- mobile view event stream -->
-          <div class="visible-xs">
+          <div class="visible-xs visible-sm">
             <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
               ng-repeat="event in events"
               ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
