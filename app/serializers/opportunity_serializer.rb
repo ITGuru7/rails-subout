@@ -15,7 +15,7 @@ class OpportunitySerializer < ActiveModel::Serializer
   end
 
   def winner
-    return unless object.winning_bid_id
+    return unless object.winning_bid
 
     winning_bid = object.winning_bid
     {name: winning_bid.bidder.name, amount: winning_bid.amount, vehicle_count: winning_bid.vehicle_count}

@@ -32,11 +32,13 @@
         <select ng-model="filterRegions" class="multiselect form-control" ng-options="r for r in allRegions" multiple="multiple">
         </select>
       </div>
-      <div class="form-group visible-xs visible-sm">
-        <label>Sort by: </label>
-        <select ng-model="sortOption" ng-change="sortMobileOpportunity()" class="form-control">
-          <option ng-repeat="item in sortItems" value="{{item.value}}">{{item.label}}</option>
-        </select>
+      <div class="form-group">
+        <div class="visible-xs visible-sm">
+          <label>Sort by: </label>
+          <select ng-model="sortOption" ng-change="sortMobileOpportunity()" class="form-control">
+            <option ng-repeat="item in sortItems" value="{{item.value}}">{{item.label}}</option>
+          </select>
+        </div>
       </div>
       <div class="clearfix"> <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div> </div>
     </form>
@@ -50,26 +52,25 @@
         <th>Description</th>
         <th>
           <a ng-click="sortOpportunities('created_at')">Created</a>
-          <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-down"></i>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
         <th>
           <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
-          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-down"></i>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
         <th>
           <a ng-click="sortOpportunities('start_date')">Pick up</a>
-          <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-down"></i>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
-        <th class="current-bid-amount">Bid Range</th>
-        <th>Actions</th>
+        <th class="current-bid-amount">Bid Range</thupth>Actions</th>
       </tr>
       <tr ng-repeat="opportunity in paginated_results" >
         <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
         <td>
-          <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+          <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
           <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
         </td>
         <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>

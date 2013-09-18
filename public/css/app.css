@@ -7337,6 +7337,7 @@ form {
 }
 #logo img {
   margin-top: 0px;
+  padding-bottom: 10px;
   padding-right: 45px;
   max-height: 60px;
 }
@@ -7702,6 +7703,12 @@ div#opportunity-show .description .content {
 #subout-navbar .navbar-subout .navbar-toggle {
   background: #e2e2e2;
   margin: 5px  0px;
+}
+#subout-navbar #menu.nav-mobile li {
+  font-size: 16px;
+}
+#subout-navbar #menu.nav-mobile li a {
+  padding: 10px;
 }
 #subout-navbar #top-links li + li {
   border-left: 1px solid #69b645;
@@ -8078,21 +8085,6 @@ div#opportunity-show .description .content {
 }
 .span10.mobileSelect {
   width: 100%;
-}
-@media only screen and (max-device-width: 767px) {
-  #content {
-    padding: 10px 5% 0px 5%;
-  }
-  .gsfn-widget-tab.gsfn-left {
-    display: none;
-  }
-  .mobile-controls .cloudinary-fileupload {
-    width: 100%;
-  }
-  #activity-stream .event.expanded {
-    background: #e0f1db;
-    margin-bottom: 20px;
-  }
 }
 #subout-loading {
   position: absolute;

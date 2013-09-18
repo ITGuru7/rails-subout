@@ -8,7 +8,7 @@
     <div class="col-md-3 col-sm-4">
       <div class="search">
         <input ng-model="query" ui-keypress="{13:'fullTextSearch()'}" placeholder="Search opportunities for..."/>
-        <div class="icon-search"></div>
+        <div class="glyphicon glyphicon-search"></div>
       </div>
     </div>
   </div>
@@ -26,18 +26,18 @@
         <th>Description</th>
         <th>
           <a ng-click="sortOpportunities('created_at')">Created</a>
-          <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-down"></i>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
         <th>
           <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
-          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-up"></i>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
         <th>
           <a ng-click="sortOpportunities('start_date')">Pick up</a>
-          <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-          <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-up"></i>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
         <th class="current-bid-amount">Bid Range</th>
         <th>Winning Bidder (Amount)</th>
@@ -45,7 +45,7 @@
       <tr ng-repeat="opportunity in paginated_results" >
         <td>{{opportunity.reference_number}}</td>
         <td>
-          <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+          <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
           <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
         </td>
         <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>

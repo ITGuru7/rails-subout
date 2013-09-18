@@ -30,15 +30,15 @@
       </section>
       <section id="regions">
         <section class="title"><h5>Region</h5></section>
-        <section  class="hidden-xs hidden-sm content row">
-          <select class="col-md-10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
+        <section  class="hidden-xs hidden-sm content">
+          <select data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
         <section  class="visible-xs visible-sm content">
-          <select class="col-xs-10 mobileSelect"  ng-model="regionFilter">
+          <select class="mobileSelect"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
@@ -71,8 +71,8 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <div id="search" class="form-group">
-                    <input id="search-listing" class="col-md-12" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
-                    <span class="icon-search"></span>
+                    <input id="search-listing" class="col-md-11 col-sm-10 col-xs-9" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
+                    <div class="glyphicon glyphicon-search"></div>
                   </div>
                 </div>
               </div>
@@ -103,11 +103,10 @@
           <div class="hidden-xs hidden-sm event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
-            ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
-            ng-hide="isMobile">
+            ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
             <div class="event-summary">
-              <div class="clearfix">
-                <span class="col-md-3 col-sm-3">
+              <div class="row">
+                <span class="col-md-3">
                   <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
                   <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
                   <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
@@ -133,7 +132,7 @@
             </div>
             <div class="eventable-details" ng-show="event.selected" class="action-buttons">
               <div class="clearfix">
-                <div class="col-md-offset-3 col-md-5 col-sm-6">
+                <div class="col-md-offset-3 col-md-5">
                   <div class="description">
                     <div><strong>Description</strong></div>
                     <div class="content">{{event.eventable.description}}</div>
@@ -186,7 +185,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-4">
                   <a ng-show="event.eventable.image_url && !isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
                     <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
                   </a>

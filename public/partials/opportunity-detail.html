@@ -4,8 +4,8 @@
     <span class="company display-message-subject">{{company.name}}!</span>
     <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
   </div>
-  <div class="row-fluid">
-    <div class="span3">
+  <div class="row">
+    <div class="col-sm-3">
       <h5>OFFERED BY</h5>
       <div class="company-info">
         <ul>
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="span9">
+    <div class="col-sm-9">
       <div class="alert alert-error" ng-show="errors">
         <a class="close" ng-click="hideAlert()">&times;</a>
         <ul ng-repeat="error in errors">
@@ -26,8 +26,8 @@
         </ul>
       </div>
       <h3>{{opportunity.name}} <span class="status">({{opportunity.status}})</span></h3>
-      <div class="row-fluid">
-        <div class="span8 details">
+      <div class="row">
+        <div class="col-sm-8 details">
           <div ng-show="opportunity.winning_bid_id">
             <ul>
               <li ng-show="company._id == opportunity.buyer_id"><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
@@ -86,15 +86,13 @@
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
           </div>
           <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
-            <div>
-              <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-            </div>
-            <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-              <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
-            </div>
+            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
+            <span ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+              &nbsp;<a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+            </span>
           </div>
         </div>
-        <div class="span4">
+        <div class="col-sm-4">
           <a ng-show="opportunity.image_url && !isOldBrowser" rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
             <img ng-src="{{opportunity.image_url}}" />
           </a>
@@ -107,43 +105,47 @@
       <hr />
 
       <h4>Bid History</h4>
-      <table ng-show="!isPhone" class="bid-history">
-        <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
-          <td><strong>{{bid.amount | soCurrency}}</strong></td>
-          <td ng-show="opportunity.vehicle_count > 1"><strong>{{bid.vehicle_count}}</strong> vehicle(s)</td>
-          <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
-          <td>
-            <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></span>
-          </td>
-          <td class="tpa">
-             <img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa">
-          </td>
-          <td>{{bid.comment}}</td>
-          <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
-            <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
-          </td>
-          <td ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id">
-            <a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a>
-          </td>
-        </tr>
-      </table>
+      <div class="hidden-xs hidden-sm">
+        <table class="bid-history">
+          <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids">
+            <td><strong>{{bid.amount | soCurrency}}</strong></td>
+            <td ng-show="opportunity.vehicle_count > 1"><strong>{{bid.vehicle_count}}</strong> vehicle(s)</td>
+            <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
+            <td>
+              <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></span>
+            </td>
+            <td class="tpa">
+               <img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa">
+            </td>
+            <td>{{bid.comment}}</td>
+            <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
+              <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
+            </td>
+            <td ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id">
+              <a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-      <table ng-show="isPhone" ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
-        <tr>
-          <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | soShortDate}}</strong></td>
-        </tr>
-        <tr ng-show="opportunity.buyer._id == company._id">
-          <td>
-            by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
-          </td>
-        </tr>
-        <tr ng-show="bid.comment">
-          <td>{{bid.comment}}</td>
-        </tr>
-        <tr ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" >
-          <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
-        </tr>
-      </table>  
+      <div class="visible-xs visible-sm">
+        <table ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
+          <tr>
+            <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | soShortDate}}</strong></td>
+          </tr>
+          <tr ng-show="opportunity.buyer._id == company._id">
+            <td>
+              by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+            </td>
+          </tr>
+          <tr ng-show="bid.comment">
+            <td>{{bid.comment}}</td>
+          </tr>
+          <tr ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" >
+            <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+          </tr>
+        </table>  
+      </div>
       <hr />
       <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
       <h4>{{opportunity.buyer.name}}'s Comments</h4>
@@ -157,16 +159,20 @@
       </ul>
       <div>
         <form name="newComment" class="form-horizontal">
-          <div class="alert alert-error" ng-show="errors">
+          <div class="alert alert-danger" ng-show="errors">
             <a class="close" ng-click="hideAlert()">&times;</a>
             <ul ng-repeat="error in errors">
               <li>{{error}}</li>
             </ul>
           </div>
-          <div class="control-group" ng-show="opportunity.buyer_id == company._id">
-            <label for="comment_body" class="control-label">New Comment: </label>
-            <div class="controls">
-              <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="input-xlarge">
+          <div class="form-group" ng-show="opportunity.buyer_id == company._id">
+            <label for="comment_body" class="col-sm-3 control-label">New Comment: </label>
+            <div class="col-sm-9">
+              <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="form-control">
+            </div>
+          </div>
+          <div class="form-group" ng-show="opportunity.buyer_id == company._id">
+            <div class="col-sm-offset-3 col-sm-9">
               <button ng-click="addComment()" class="btn btn-success" ng-disabled="newComment.$invalid">Add</button>
             </div>
           </div>
