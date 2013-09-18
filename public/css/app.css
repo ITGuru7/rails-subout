@@ -7274,10 +7274,6 @@ textarea {
   background-color: #FFFFFF;
   border: 2px solid #c7c6b3;
 }
-table [class*="span"],
-.row-fluid table [class*="span"] {
-  float: left;
-}
 .table th,
 .table td {
   border-top: 1px solid #c7c6b3;
@@ -8087,10 +8083,6 @@ div#opportunity-show .description .content {
   #content {
     padding: 10px 5% 0px 5%;
   }
-  .table th,
-  .table td {
-    padding: 8px 2px;
-  }
   .gsfn-widget-tab.gsfn-left {
     display: none;
   }
@@ -8113,12 +8105,8 @@ div#opportunity-show .description .content {
 .table-border {
   border: 1px solid #ccc;
 }
-.reference-number {
-  width: 35%;
-}
 .table-header {
   font-weight: bold;
-  width: 35%;
 }
 .mobile-bid-history.table td {
   border-top: 0px none #ccc;

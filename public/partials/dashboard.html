@@ -101,7 +101,7 @@
           </div>
         </div>
         <section id="activity-stream">
-          <div class="event clearfix"
+          <div class="hidden-xs event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
             ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
@@ -127,7 +127,7 @@
 
                   <div class="pull-right expand-collapse">
                     <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
+                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
                   </div>
                 </span>
               </div>
@@ -199,20 +199,19 @@
             </div>
           </div>
           <!-- mobile view event stream -->
-          <div>
+          <div class="visible-xs">
             <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
-              ng-show="isMobile"
               ng-repeat="event in events"
               ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
               <tr>
                 <td>
-                  <i class="{{opportunity.icon}}"></i>
+                  <i class="glyphicon {{opportunity.icon}}"></i>
                   <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                 </td>
                 <td>
                   <div class="pull-right expand-collapse">
                     <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
+                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
                   </div>
                 </td>
               </tr>

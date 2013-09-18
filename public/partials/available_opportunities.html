@@ -34,116 +34,119 @@
       </div>
       <div class="form-group visible-xs">
         <label>Sort by: </label>
-        <select ng-model="sortOption" ng-change="sortMobileOpportunity()">
+        <select ng-model="sortOption" ng-change="sortMobileOpportunity()" class="form-control">
           <option ng-repeat="item in sortItems" value="{{item.value}}">{{item.label}}</option>
         </select>
       </div>
-      <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
+      <div class="clearfix"> <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div> </div>
     </form>
   </div>
-  <table ng-show="!isPhone" class="table">
-    <tr>
-      <th>Reference #</th>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th>
-        <a ng-click="sortOpportunities('created_at')">Created</a>
-        <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-        <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
-      </th>
-      <th>
-        <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
-        <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-        <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
-      </th>
-      <th>
-        <a ng-click="sortOpportunities('start_date')">Pick up</a>
-        <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
-        <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
-      </th>
-      <th class="current-bid-amount">Bid Range</th>
-      <th>Actions</th>
-    </tr>
-    <tr ng-repeat="opportunity in paginated_results" >
-      <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
-      <td>
-        <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
-        <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
-      </td>
-      <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
-      <td>
-        <span ng-show="opportunity.vehicle_type">Vehicle Type: {{opportunity.vehicle_type}}<br></span>
-        <span ng-show="opportunity.trip_type">Trip Type: {{opportunity.trip_type}}<br></span>
-        <br />
-        {{opportunity.description}}
-      </td>
-      <td>
-        <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>
-      </td>
-      <td>
-        <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
-      </td>
-      <td>
-        <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
-      </td>
-      <td class="current-bid-amount">
-        <span ng-show="opportunity.lowest_bid_amount">
-          {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
-        </span>
-      </td>
-      <td>
-        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
-      </td>
-    </tr>
-  </table>
+  <div class="hidden-xs">
+    <table class="table">
+      <tr>
+        <th>Reference #</th>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>
+          <a ng-click="sortOpportunities('created_at')">Created</a>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+          <i ng-show="sortBy == 'created_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+        </th>
+        <th>
+          <a ng-click="sortOpportunities('bidding_ends_at')">Bidding Ends</a>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+          <i ng-show="sortBy == 'bidding_ends_at' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+        </th>
+        <th>
+          <a ng-click="sortOpportunities('start_date')">Pick up</a>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="icon-large icon-caret-down"></i>
+          <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="icon-large icon-caret-up"></i>
+        </th>
+        <th class="current-bid-amount">Bid Range</th>
+        <th>Actions</th>
+      </tr>
+      <tr ng-repeat="opportunity in paginated_results" >
+        <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
+        <td>
+          <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+          <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
+        </td>
+        <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
+        <td>
+          <span ng-show="opportunity.vehicle_type">Vehicle Type: {{opportunity.vehicle_type}}<br></span>
+          <span ng-show="opportunity.trip_type">Trip Type: {{opportunity.trip_type}}<br></span>
+          <br />
+          {{opportunity.description}}
+        </td>
+        <td>
+          <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>
+        </td>
+        <td>
+          <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+        </td>
+        <td>
+          <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
+        </td>
+        <td class="current-bid-amount">
+          <span ng-show="opportunity.lowest_bid_amount">
+            {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
+          </span>
+        </td>
+        <td>
+          <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
+          <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-
-  <table ng-show="isPhone" ng-repeat="opportunity in opportunities" class="table table-border">
-    <tr>
-      <td class="table-header">Reference #</td>
-      <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
-    </tr>
-    <tr>
-      <td class="table-header">Type</td>
-      <td>{{opportunity.type}}</td>
-    </tr>
-    <tr>
-      <td class="table-header">Name</td>
-      <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
-    </tr>
-    <tr>
-      <td class="table-header">Description</td>
-      <td>{{opportunity.description}}</td>
-    </tr>
-    <tr>
-      <td class="table-header">Created</td>
-      <td>
-        <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>
-      </td>
-    </tr>
-    <tr>
-      <td class="table-header">Ends</td>
-      <td>
-        <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
-      </td>
-    </tr>
-    <tr>
-      <td class="table-header">Bid Range</td>
-      <td class="current-bid-amount">
-        <span ng-show="opportunity.lowest_bid_amount">
-          {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
-        </span>
-      </td>
-    </tr>
-    <tr>
-      <td class="table-header">Actions</td>
-      <td>
-        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-        <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
-      </td>
-    </tr>
-  </table>
-  <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
+  <div class="visible-xs">
+    <table ng-repeat="opportunity in paginated_results" class="table table-border">
+      <tr>
+        <td class="table-header">Reference #</td>
+        <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
+      </tr>
+      <tr>
+        <td class="table-header">Type</td>
+        <td>{{opportunity.type}}</td>
+      </tr>
+      <tr>
+        <td class="table-header">Name</td>
+        <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
+      </tr>
+      <tr>
+        <td class="table-header">Description</td>
+        <td>{{opportunity.description}}</td>
+      </tr>
+      <tr>
+        <td class="table-header">Created</td>
+        <td>
+          <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-header">Ends</td>
+        <td>
+          <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-header">Bid Range</td>
+        <td class="current-bid-amount">
+          <span ng-show="opportunity.lowest_bid_amount">
+            {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="table-header">Actions</td>
+        <td>
+          <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
+          <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="clearfix"> <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div> </div>
 </div>
