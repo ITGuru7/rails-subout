@@ -419,13 +419,15 @@
           <p class="help-block">Additional vehicles can be added for ${{subout_bus_price}}</p>
           <br />
           <div ng-show="companyProfile.vehicles.length > 0">
-            <div class="row">
-              <div class="col-md-2 col-sm-2"><strong>RM #</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Year</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Make</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Model</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>VIN</strong></div>
-              <div class="col-md-2 col-sm-2"></div>
+            <div class="hidden-sm hidden-xs">
+              <div class="row">
+                <div class="col-md-2 col-sm-2"><strong>RM #</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Year</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Make</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Model</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>VIN</strong></div>
+                <div class="col-md-2 col-sm-2"></div>
+              </div>
             </div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
               <div class="hidden-sm hidden-xs">
@@ -436,7 +438,7 @@
                   <div class="col-md-2 col-sm-2"> {{vehicle.model}} </div>
                   <div class="col-md-2 col-sm-2"> {{vehicle.vin}} </div>
                   <div class="col-md-2 col-sm-2">
-                    <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
+                    <button class="btn btn-small btn-info" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
                   </div>
                 </div>
               </div>
