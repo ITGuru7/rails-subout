@@ -1,6 +1,6 @@
 <div id="dashboard">
-  <div class="row-fluid">
-    <div id="sidebar" class="span3 filters">
+  <div class="row">
+    <div id="sidebar" class="col-md-3 col-sm-3 filters">
       <div class="welcome display-message">
         <span class="display-message-extra">Welcome</span>
         <span class="company display-message-subject">{{company.name}}!</span>
@@ -10,9 +10,9 @@
         <section class="title"><h5>Opportunity Type</h5></section>
         <section class="content">
           <ul>
-            <li ng-repeat="filter in filters" class="filter row-fluid" ng-class="{active: $location.search().opportunity_type == filter.name, red: filter.active_red}"
+            <li ng-repeat="filter in filters" class="filter" ng-class="{active: $location.search().opportunity_type == filter.name, red: filter.active_red}"
             title="{{filter.name}}">
-            <i class="{{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
+            <i class="glyphicon {{filter.icon}}"></i> <a ng-click="setOpportunityTypeFilter(filter.name)">{{filter.name}}</a>
             </li>
           </ul>
         </section>
@@ -30,23 +30,23 @@
       </section>
       <section id="regions">
         <section class="title"><h5>Region</h5></section>
-        <section  ng-show="!isMobile" class="content">
-          <select class="span10" data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
+        <section  class="hidden-xs hidden-sm content">
+          <select data-placeholder="-- Select Region --" ng-model="regionFilter" ui-select2>
             <option value=""></option>
             <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
-        <section  ng-show="isMobile" class="content">
-          <select class="span10 mobileSelect"  ng-model="regionFilter">
+        <section  class="visible-xs visible-sm content">
+          <select class="form-control"  ng-model="regionFilter">
             <option value="" selected="selected">-- Select Region --</option>
-            <option ng-repeat="r in regions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
+            <option ng-repeat="r in regionFilterOptions" value={{r}} data-abbreviated_name="{{r}}">{{r}}</option>
           </select>
           <div class="clearfix"></div>
         </section>
       </section>
     </div>
-    <div class="span9">
+    <div class="col-md-9 col-sm-9">
 
       <div class="alert alert-info" ng-show="company.canAddFreeBuses()">
           Your subscription includes Roadside Assistance for 2 of your vehicles. 
@@ -54,24 +54,31 @@
       </div>
       <section id="activities" when-scrolled="loadMoreEvents()">
         <div id="toolbar">
-          <div class="row-fluid">
-            <div class="pull-left span4">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
               <div class="display-message sales-info" sales-info-messages="salesInfoMessages"></div>
               <div class="info-label-heading">
                 <span ng-show="hasAnyFilter()">Events View Filtered By:</span>
                 <span ng-hide="hasAnyFilter()">All Events:</span>
               </div>
             </div>
-            <div class='pull-right span8 toolbar-buttons'>
-              <div id="search" class="pull-right span6">
-                <input id="search-listing" class="span10" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
-                <div class="icon-search"></div>
+            <div class='col-md-8 col-sm-8'>
+              <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group clearfix">
+                    <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setOpportunity({}); displayNewOpportunityForm()">New Opportunity</a>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div id="search" class="form-group">
+                    <input id="search-listing" class="col-md-11 col-sm-10 col-xs-9" ui-keypress="{13:'fullTextSearch($event)'}" ng-model="query" placeholder="Search listings for..."/>
+                    <div class="glyphicon glyphicon-search"></div>
+                  </div>
+                </div>
               </div>
-              <a ng-show="!isMobile" href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
-              <a ng-show="isMobile" href="#/new-opportunity" class="btn btn-primary pull-right" data-toggle="modal" ng-click="displayNewOpportunityForm()">New Opportunity</a>
             </div>
           </div>
-          <div id="pills" class="row-fluid" ng-show="hasAnyFilter()">
+          <div id="pills" class="form-group clearfix" ng-show="hasAnyFilter()">
             <div class="pill" ng-show="$location.search().opportunity_type">
               {{$location.search().opportunity_type}}<button type="button" ng-click="setOpportunityTypeFilter($location.search().opportunity_type)" class="close">×</button>
             </div>
@@ -93,19 +100,18 @@
           </div>
         </div>
         <section id="activity-stream">
-          <div class="event row-fluid"
+          <div class="hidden-xs hidden-sm event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
-            ng-init="opportunity=event.eventable; actor=event.actor; action=event.action"
-            ng-hide="isMobile">
+            ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
             <div class="event-summary">
-              <div class="row-fluid">
-                <span class="span3">
-                  <i class="{{opportunity.icon}}" title="{{opportunity.type}}"></i>
+              <div class="row">
+                <span class="col-md-3">
+                  <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
                   <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
                   <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                 </span>
-                <span class="span9">
+                <span class="col-md-9 col-sm-9">
                   <span class="opportunity-name">
                     <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
                       {{opportunity.name}}
@@ -119,14 +125,14 @@
 
                   <div class="pull-right expand-collapse">
                     <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
+                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
                   </div>
                 </span>
               </div>
             </div>
             <div class="eventable-details" ng-show="event.selected" class="action-buttons">
-              <div class="row-fluid">
-                <div class="offset3 span5">
+              <div class="clearfix">
+                <div class="col-md-offset-3 col-md-5">
                   <div class="description">
                     <div><strong>Description</strong></div>
                     <div class="content">{{event.eventable.description}}</div>
@@ -179,32 +185,31 @@
                     </div>
                   </div>
                 </div>
-                <div class="span4">
+                <div class="col-md-4">
                   <a ng-show="event.eventable.image_url && !isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
-                    <img ng-src="{{event.eventable.image_url}}" />
+                    <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
                   </a>
                   <a ng-show="event.eventable.image_url && isOldBrowser"  href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}" target="_blank">
-                    <img ng-src="{{event.eventable.image_url}}" />
+                    <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
                   </a>
                 </div>
               </div>
             </div>
           </div>
           <!-- mobile view event stream -->
-          <div>
+          <div class="visible-xs visible-sm">
             <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
-              ng-show="isMobile"
               ng-repeat="event in events"
               ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
               <tr>
                 <td>
-                  <i class="{{opportunity.icon}}"></i>
+                  <i class="glyphicon {{opportunity.icon}}"></i>
                   <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                 </td>
                 <td>
                   <div class="pull-right expand-collapse">
                     <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" ng-class="{true: 'icon-large icon-caret-down'}[event.selected] || 'icon-large icon-caret-right'"></i>
+                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
                   </div>
                 </td>
               </tr>

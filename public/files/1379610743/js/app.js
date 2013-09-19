@@ -217,6 +217,23 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.currentPath = function() {
     return $location.path();
   };
+  $rootScope.currentMenuName = function() {
+    if ($location.path() === '/dashboard') {
+      return "Home";
+    }
+    if ($location.path() === '/available_opportunities') {
+      return "Buy/Bid Now";
+    }
+    if ($location.path() === '/bids') {
+      return "My Bids";
+    }
+    if ($location.path() === '/opportunities') {
+      return "My Opportunities";
+    }
+    if ($location.path() === '/favorites') {
+      return "Favorites";
+    }
+  };
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };
@@ -393,9 +410,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
       return;
     }
-    if ($rootScope.company.payment_state === 'failure') {
-      $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
-      return;
+    if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
+      if (!$rootScope.subscription.has_valid_credit_card) {
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+        return;
+      }
     }
     if (opportunity.ada_required && !$rootScope.company.has_ada_vehicles) {
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
@@ -539,14 +558,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return jQuery("#modal").modal("hide");
-    }
+    return jQuery("#modal").modal("hide");
   };
   $scope.save = function() {
     var opportunity, showErrors;
+    $rootScope.inPosting = true;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
@@ -1325,7 +1341,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   }
   updateAdditionalPrice = function() {
     if ($scope.companyProfile.vehicles.length > 2) {
-      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * 49.99 * 100;
+      return $scope.additional_price = ($scope.companyProfile.vehicles.length - 2) * $scope.subout_bus_price * 100;
     } else {
       return $scope.additional_price = 0;
     }
@@ -1378,25 +1394,23 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       api_token: $rootScope.token.api_token
     }, function(data) {
       $scope.subout_pro_product = data.product;
+      $scope.subout_bus_price = data.product.components[0].component.unit_price;
       return updateAdditionalPrice();
     });
     return GatewaySubscription.get({
       subscriptionId: $rootScope.company.subscription_id,
       api_token: $rootScope.token.api_token
     }, function(subscription) {
+      $rootScope.subscription = subscription;
       return $scope.subscription = subscription;
     }, function(error) {
-      return $scope.subscription = null;
+      return $rootScope.subscription = null;
     });
   };
   loadProductInfo();
   $rootScope.setupFileUploader();
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return $rootScope.closeModal();
-    }
+    return $rootScope.closeModal();
   };
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
@@ -1492,6 +1506,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     return $scope.vehicleTypeOptions = vehicleTypeOptions();
   };
   $scope.saveVehicles = function() {
+    if (!confirm("Are you sure?")) {
+      return false;
+    }
     return Company.update_vehicles({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -2353,6 +2370,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
   return function(promise) {
     return promise.then((function(response) {
       var $http, deploy, mime, payloadData, version;
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       mime = "application/json; charset=utf-8";
       if (response.headers()["content-type"] === mime) {
         payloadData = response.data ? response.data.payload : null;
@@ -2378,6 +2398,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
       }
       return response;
     }), function(response) {
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       $('.loading-animation').removeClass('loading');
       if (response.data.payload) {
         response.data = response.data.payload;
