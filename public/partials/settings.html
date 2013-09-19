@@ -156,13 +156,17 @@
             <div class="form-group">
               <label for="logo_id" class="col-md-4 control-label">Company Logo</label>
 
-              <div class="col-md-8 mobile-col-md-8">
-                <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
-                <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+              <div class="col-md-8">
+                <div>
+                  <input ng-init="setupFileUploader()" class="cloudinary-fileupload form-control" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+                  <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+                </div>
                 <div id="progress">
                   <div class="bar" style="width: 0%;"></div>
                 </div>
-                <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview"/>
+                <div>
+                  <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview img-responsive"/>
+                </div>
                 <div ng-hide="company.logo_url">No Logo Available</div>
               </div>
             </div>
