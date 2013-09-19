@@ -28,7 +28,7 @@ namespace :subout do
       destination = dir + "/files/#{deploy}"
       `mkdir -p #{destination}`
 
-      targets = ['/css','/images','/img','/js','/partials','/font']
+      targets = ['/css','/images','/img','/js','/partials','/fonts']
       targets.each do |target|
         start_path = dir + target
         final_path = destination + target
