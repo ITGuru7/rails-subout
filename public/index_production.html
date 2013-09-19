@@ -7,7 +7,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
-    <link rel="stylesheet" href="/files/1379306362/css/app.css" />
+    <link rel="stylesheet" href="/files/1379566613/css/app.css" />
 <!--[if lte IE 7]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 <![endif]-->
@@ -21,11 +21,10 @@
       };
       eval_ = eval;
     </script>
-    <script src="/files/1379306362/js/vendor.js"></script>
-    <script src="/files/1379306362/js/app.js"></script>
+    <script src="/files/1379566613/js/vendor.js"></script>
+    <script src="/files/1379566613/js/app.js"></script>
 <script type="text/ng-template" id="pagination">
-  <div class="pagination">
-    <ul>
+    <ul class="pagination">
       <li ng-class="{disabled: page == 1}">
         <a href ng-click="setPage(1)">« First</a>
       </li>
@@ -42,69 +41,76 @@
         <a href ng-click="setPage(maxPage)">Last »</a>
       </li>
     </ul>
-  </div>
 </script>
   </head>
 
-  <body data-subout-deploy="1379306362">
+  <body data-subout-deploy="1379566613">
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
       <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
+        <div class="row">
+          <ul id="top-links" class="pull-right">
+            <li><a  href="#modal" data-taget="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
+            <li><a ng-click="signOut()">Sign Out</a></li>
+          </ul>
+        </div>
         <div class="navbar-inner row">
-          <div class="span3">
-            <a class="brand-logo" href="#">SubOut</a>
-            <div id="subout-loading" class="loading-animation"></div>
-          </div>
-          
-          
-            <ul ng-show="isMobile">
-              <li ng-show="currentPath()=='/dashboard'" ng-class="{brand: currentPath()=='/dashboard'} " class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Home</span>
-                <span class="menu-button" ></span>
-              </li>
-              <li ng-show="currentPath()=='/available_opportunities'" ng-class="{brand: currentPath()=='/available_opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Buy/Bid Now</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/bids'" ng-class="{brand: currentPath()=='/bids'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">My Bids</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/opportunities'" ng-class="{brand: currentPath()=='/opportunities'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">My Opportunities</span>
-                <span class="menu-button"></span>
-              </li>
-              <li ng-show="currentPath()=='/favorites'" ng-class="{brand: currentPath()=='/favorites'}" class="mobile-menu" data-toggle="collapse" data-target=".nav-collapse" ng-click="">
-                <span class="menu-title">Favorites</span>
-                <span class="menu-button"></span>
-              </li>
-            </ul>
-
-          
-          <!-- Be sure to leave the brand out there if you want it shown -->
-          <!--<a class="brand" href="#"></a>-->
-
-          <div class="span8">
-            <div id="mobile-collapse" ng-class="{'nav-collapse': isMobile, 'navbar-responsive-collapse': isMobile, collapse: isMobile}" style="height: 0px;">
-              <ul id="menu" class="nav mobile-nav">
-                <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
-                <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
-                <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-                <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-                <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
-              </ul>
+          <div class="col-md-3 col-sm-4">
+            <div id="subout-brand">
+              <a href="#" id="logo"><img src="/img/logo.png" class="img-responsive"></a>
+              <div id="subout-loading" class="loading-animation"></div>
             </div>
-            <ul id="top-links">
-              <!--<li><a href="#/help">Help</a></li>-->
-              <li ng-show="!isMobile"><a  href="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-              <li ng-show="isMobile"><a href="#/settings"  data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-              <li><a ng-click="signOut()">Sign Out</a></li>
-            </ul>
+          </div>
+
+          <div class="col-md-9 col-sm-8">
+            <nav class="navbar navbar-subout" role="navigation">
+              <div class="navbar-header visible-xs">
+                <div class="pull-left">{{currentMenuName()}}</div>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                </button>
+              </div>
+              <div class="collapse navbar-collapse navbar-collapse-1">
+                <div class="hidden-sm hidden-xs">
+                  <ul id="menu" class="nav navbar navbar-nav">
+                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
+                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
+                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
+                    <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
+                  </ul>
+                </div>
+                <div class="visible-sm">
+                  <ul id="menu" class="nav navbar navbar-nav nav-mobile">
+                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
+                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
+                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
+                    <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
+                  </ul>
+                </div>
+                <div class="visible-xs">
+                  <ul id="menu" class="nav navbar nav-mobile">
+                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Home</a></li>
+                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
+                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
+                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
+                    <li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+
           </div>
         </div>
       </div>
       <div id="content" ng-view="content" class="ng-cloak"></div>
-      <div id="modal" class="modal hide fade">
-         <div id="modal-stage" ng-include="modal"></div>
+      <div id="modal" class="modal fade" role="modal">
+        <div class="modal-dialog">
+          <div id="modal-stage" class="modal-content" ng-include="modal"></div>
+        </div>
       </div>
     </div>
 
