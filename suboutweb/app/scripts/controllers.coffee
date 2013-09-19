@@ -234,7 +234,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.$broadcast('modalOpened')
 
   $rootScope.displayNewOpportunityForm = ->
-    $rootScope.setOpportunity({})
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
     $rootScope.setupFileUploader()
 

@@ -90,8 +90,14 @@
 
       <div class="form-group two-lines">
         <div class="col-md-4">
-          <label for="opportunity_end_location" class="control-label">Drop off</label>
-          <p class="help-block">(if applicable)</p>
+          <div class="visible-xs visible-sm">
+            <label for="opportunity_end_location" class="control-label">Drop off</label>
+            <p class="help-block">(if applicable)</p>
+          </div>
+          <div class="hidden-xs hidden-sm">
+            <label for="opportunity_end_location" class="control-label col-md-12">Drop off</label>
+            <p class="help-block col-md-12 text-right">(if applicable)</p>
+          </div>
         </div>
         <div class="col-md-8">
           <input id="opportunity_end_location" type="text" ng-model="opportunity.end_location" size="30" class="form-control">
@@ -197,7 +203,7 @@
       </div>
 
       <div class="form-group">
-        <div class="col-md-offset-4 col-sm-offset-3">
+        <div class="col-md-offset-4 col-md-8">
           <button ng-click="save()" class="btn btn-primary" ng-disabled="newOpportunity.$invalid || inPosting">
             Save Opportunity
           </button>

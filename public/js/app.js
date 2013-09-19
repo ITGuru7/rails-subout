@@ -428,7 +428,6 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewOpportunityForm = function() {
-    $rootScope.setOpportunity({});
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
     return $rootScope.setupFileUploader();
   };
