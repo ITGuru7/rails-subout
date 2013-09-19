@@ -304,6 +304,7 @@ suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $inject
   (promise) ->
     promise.then ((response) ->
       # do something on success
+      $rootScope.inPosting = false if response.config.method == "POST"
       mime = "application/json; charset=utf-8"
       if response.headers()["content-type"] is mime
         payloadData = if response.data then response.data.payload else null
@@ -323,9 +324,11 @@ suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $inject
           $http = $injector.get('$http')
           if($http.pendingRequests.length == 0)
             $('.loading-animation').removeClass('loading')
+
           response.data = payloadData
       response
     ), (response) ->
+      $rootScope.inPosting = false if response.config.method == "POST"
       # do something on error
       $('.loading-animation').removeClass('loading')
       response.data = response.data.payload if response.data.payload

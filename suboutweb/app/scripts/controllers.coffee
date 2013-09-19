@@ -234,6 +234,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.$broadcast('modalOpened')
 
   $rootScope.displayNewOpportunityForm = ->
+    $rootScope.setOpportunity({})
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
     $rootScope.setupFileUploader()
 
@@ -345,12 +346,14 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   ]
 
   successUpdate = ->
-    if $rootScope.isMobile
-      $location.path('/dashboard')
-    else
-      jQuery("#modal").modal "hide"
+    #if $rootScope.isMobile
+    #  $location.path('/dashboard')
+    #else
+    #  jQuery("#modal").modal "hide"
+    jQuery("#modal").modal "hide"
 
   $scope.save = ->
+    $rootScope.inPosting = true
     opportunity = $scope.opportunity
     opportunity.bidding_ends = $('#opportunity_ends').val()
     opportunity.start_date = $('#opportunity_start_date').val()
@@ -1078,11 +1081,12 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
 
   $rootScope.setupFileUploader()
 
-  successUpdate = ->
-    if $rootScope.isMobile
-      $location.path('/dashboard')
-    else
-      $rootScope.closeModal()
+  successUpdate = ()->
+    $rootScope.closeModal()
+    #if $rootScope.isMobile
+    #  $location.path('/dashboard')
+    #else
+    #  $rootScope.closeModal()
 
   $scope.saveUserProfile = ->
     $scope.userProfileError = ""
