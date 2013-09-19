@@ -69,7 +69,7 @@
           <div id="progress">
             <div class="bar" style="width: 0%;"></div>
           </div>
-          <img ng-show="opportunity.image_url" class="image-preview" ng-src="{{opportunity.image_url}}"/>
+          <img ng-show="opportunity.image_url" class="image-preview img-responsive" ng-src="{{opportunity.image_url}}"/>
         </div>
       </div>
 
@@ -89,7 +89,10 @@
       </div>
 
       <div class="form-group two-lines">
-        <label for="opportunity_end_location" class="col-md-3 control-label">Drop off<p class="help-block">(if applicable)</p></label>
+        <div class="col-md-3">
+          <label for="opportunity_end_location" class="control-label">Drop off</label>
+          <p class="help-block">(if applicable)</p>
+        </div>
         <div class="col-md-9">
           <input id="opportunity_end_location" type="text" ng-model="opportunity.end_location" size="30" class="form-control">
           <p class="help-block">ex: San Francisco, CA</p>
@@ -110,7 +113,7 @@
         <div class="col-md-9">
           <div class="row">
             <div class="col-md-6 col-sm-6">
-              <input id="opportunity_start_date" name="opportunity_start_date" type="text" ng-model="opportunity.start_date" class="form-control glyphicon glyphicon-calendar" size="10" ui-date="dateOptions" ui-date-format required>
+              <input id="opportunity_start_date" name="opportunity_start_date" type="text" ng-model="opportunity.start_date" class="form-control" size="10" ui-date="dateOptions" ui-date-format required>
               <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
             <div class="col-md-6 col-sm-6">

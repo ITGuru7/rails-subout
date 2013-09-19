@@ -5,15 +5,10 @@
         </button>
         <h3>PROFILE</h3>
     </div>
-    <div class="clearfix">
-      <div class="add-to-favorites pull-right" ng-show="other_company.canBeAddedAsFavorite(company)">
-        <a ng-click="addToFavorites(other_company)">Add to Favorites</a>
-      </div>
-    </div>
-    <div class="alert alert-info" ng-show="notice">
-      {{notice}}
-    </div>
     <div class="modal-body">
+      <div class="alert alert-info" ng-show="notice">
+        {{notice}}
+      </div>
         <section class="section-content">
             <div class="row">
                 <div class="col-sm-6">
@@ -74,7 +69,15 @@
                 ( {{other_company.score}} )
               </div>
             </div>
-            <div><a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a></div>
+            <hr />
+            <div class="row">
+              <div class="add-to-favorites" ng-show="other_company.canBeAddedAsFavorite(company)">
+                <a ng-click="addToFavorites(other_company)" class="btn btn-small btn-success"><i class=" glyphicon glyphicon-plus"></i>Add to Favorites</a>
+                <button data-dismiss="modal" class="btn btn-small btn-danger" type="button">Cancel</button>
+
+                <a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a>
+              </div>
+            </div>
         </section>
     </div>
 </div>

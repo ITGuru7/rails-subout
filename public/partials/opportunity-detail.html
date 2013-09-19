@@ -25,9 +25,9 @@
           <li>{{error}}</li>
         </ul>
       </div>
-      <h3>{{opportunity.name}} <span class="status">({{opportunity.status}})</span></h3>
       <div class="row">
         <div class="col-sm-8 details">
+          <h3>{{opportunity.name}} <span class="status">({{opportunity.status}})</span></h3>
           <div ng-show="opportunity.winning_bid_id">
             <ul>
               <li ng-show="company._id == opportunity.buyer_id"><span class="label-field">Winner: </span>{{opportunity.winner.name}}</li>
@@ -94,10 +94,10 @@
         </div>
         <div class="col-sm-4">
           <a ng-show="opportunity.image_url && !isOldBrowser" rel="lightbox" href="{{opportunity.large_image_url}}" title="{{opportunity.name}}">
-            <img ng-src="{{opportunity.image_url}}" />
+            <img class="img-responsive" ng-src="{{opportunity.image_url}}" />
           </a>
           <a ng-show="opportunity.image_url && isOldBrowser"  href="{{opportunity.large_image_url}}" title="{{opportunity.name}}" target="_blank">
-            <img ng-src="{{opportunity.image_url}}" />
+            <img class="img-responsive" ng-src="{{opportunity.image_url}}" />
           </a>
         </div>
       </div>

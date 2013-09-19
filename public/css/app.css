@@ -7359,7 +7359,7 @@ form {
   word-break: break-all;
 }
 #pageWrapper.signin #buy-sell-connect .inner {
-  padding: 75px 0px;
+  padding: 60px 0px;
 }
 #pageWrapper.signin #marketing-message {
   color: #f9b474;
@@ -7427,7 +7427,7 @@ form {
   border: none;
 }
 #header {
-  margin: 3em 0px;
+  margin: 2em 0px 1em 0px;
 }
 #navigator {
   text-align: right;
