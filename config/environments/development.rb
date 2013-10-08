@@ -34,14 +34,16 @@ Subout::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  if ENV["MAILCATCHER"]
+
+  #if ENV["MAILCATCHER"]
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = { address: "localhost", port: 1025, domain: "suboutapp.com" }
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.perform_deliveries = true
-  else
-    config.action_mailer.delivery_method = :test
-  end
+  #else
+  #  config.action_mailer.delivery_method = :test
+  #end
+
   DEFAULT_HOST_WITH_PORT = "www.lvh.me:3000"
   DEVELOPMENT_MODE = ENV["DEV_SITE"].nil? ? false : true
   CHARGIFY_URI = ENV["SUBOUT_CHARGIFY_URI"] || 'suboutvps.chargify.com'
