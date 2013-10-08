@@ -217,6 +217,23 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.currentPath = function() {
     return $location.path();
   };
+  $rootScope.currentMenuName = function() {
+    if ($location.path() === '/dashboard') {
+      return "Home";
+    }
+    if ($location.path() === '/available_opportunities') {
+      return "Buy/Bid Now";
+    }
+    if ($location.path() === '/bids') {
+      return "My Bids";
+    }
+    if ($location.path() === '/opportunities') {
+      return "My Opportunities";
+    }
+    if ($location.path() === '/favorites') {
+      return "Favorites";
+    }
+  };
   $rootScope.setModal = function(url) {
     return $rootScope.modal = url;
   };
@@ -541,14 +558,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return jQuery("#modal").modal("hide");
-    }
+    return jQuery("#modal").modal("hide");
   };
   $scope.save = function() {
     var opportunity, showErrors;
+    $rootScope.inPosting = true;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
@@ -1396,11 +1410,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   loadProductInfo();
   $rootScope.setupFileUploader();
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return $rootScope.closeModal();
-    }
+    return $rootScope.closeModal();
   };
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
@@ -1701,6 +1711,37 @@ CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $time
 HelpCtrl = function() {
   return true;
 };
+
+(function() {
+  var applyScopeHelpers;
+  applyScopeHelpers = function($scope, $rootScope, $location, $routeParams, $timeout, Password, AuthToken) {
+    $scope.hideAlert = function() {
+      $scope.notice = null;
+      return $scope.errors = null;
+    };
+    return $scope.resetPassword = function() {
+      $scope.hideAlert();
+      $scope.user.reset_password_token = $routeParams.reset_password_token;
+      return Password.update({
+        user: $scope.user
+      }, function() {
+        $scope.notice = "Your password is reset successfully";
+        $scope.password = null;
+        $scope.password_confirmation = null;
+        return $timeout(function() {
+          $scope.notice = null;
+          return $location.path("sign_in").search({});
+        }, 2000);
+      }, function(content) {
+        return $scope.errors = $rootScope.errorMessages(content.data.errors);
+      });
+    };
+  };
+  return subout.controller('EditPasswordCtrl', function($scope, $rootScope, $routeParams, $location, $timeout, Password, AuthToken) {
+    $.removeCookie(AuthToken);
+    return applyScopeHelpers($scope, $rootScope, $location, $routeParams, $timeout, Password, AuthToken);
+  });
+})();
 
 subout.directive('multiple', function() {
   return {
@@ -2329,6 +2370,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
   return function(promise) {
     return promise.then((function(response) {
       var $http, deploy, mime, payloadData, version;
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       mime = "application/json; charset=utf-8";
       if (response.headers()["content-type"] === mime) {
         payloadData = response.data ? response.data.payload : null;
@@ -2354,6 +2398,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
       }
       return response;
     }), function(response) {
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       $('.loading-animation').removeClass('loading');
       if (response.data.payload) {
         response.data = response.data.payload;
