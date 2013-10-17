@@ -45,6 +45,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def show
     @auction = current_company.auctions.find(params[:id])
+    @auction.viewer = current_company
     respond_with_namespace(@auction)
   end
 
