@@ -333,6 +333,7 @@ WelcomePrelaunchCtrl = (AuthToken) ->
   $.removeCookie(AuthToken)
 
 OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
+  $rootScope.inPosting = false
   unless $scope.opportunity
     $scope.opportunity = {}
     $scope.opportunity.vehicle_count = 1

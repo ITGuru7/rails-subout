@@ -552,6 +552,7 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
+  $rootScope.inPosting = false;
   if (!$scope.opportunity) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
