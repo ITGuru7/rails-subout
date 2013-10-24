@@ -18,16 +18,16 @@
         <form name="settingsUserLogin" class="form-horizontal" role="form" novalidate>
             <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
 
-            <div class="form-group" ng-class="{error:settingsUserLogin.user_email.$invalid}">
-              <label for="user_email" class="col-md-3 control-label">Email *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsUserLogin.user_email.$invalid}">
+              <label for="user_email" class="col-md-4 control-label">Email *</label>
+              <div class="col-md-8">
                 <input id="user_email" name="user_email" type="email" class="form-control" ng:model="userProfile.email" required />
               </div>
             </div>
             
-            <div class="form-group" ng-class="{error:settingsUserLogin.current_password.$invalid}">
-              <label for="current_password" class="col-md-3 control-label">Current Password *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsUserLogin.current_password.$invalid}">
+              <label for="current_password" class="col-md-4 control-label">Current Password *</label>
+              <div class="col-md-8">
                 <input id="current_password"
                 name="current_password"
                 type="password"
@@ -39,8 +39,8 @@
             </div>
 
             <div class="form-group">
-              <label for="password" class="col-md-3 control-label">New Password</label>
-              <div class="col-md-9">
+              <label for="password" class="col-md-4 control-label">New Password</label>
+              <div class="col-md-8">
 
                 <input id="password"
                 type="password"
@@ -51,8 +51,8 @@
             </div>
 
             <div class="form-group">
-              <label for="password_confirmation" class="col-md-3 control-label">Password Confirmation</label>
-              <div class="col-md-9">
+              <label for="password_confirmation" class="col-md-4 control-label">Password Confirmation</label>
+              <div class="col-md-8">
 
                 <input id="password_confirmation"
                 type="password"
@@ -61,9 +61,10 @@
                 />
               </div>
             </div>
+            <hr/>
 
             <div class="form-group">
-              <div class="col-md-offset-3 col-md-9">
+              <div class="col-md-offset-4 col-md-8">
               <button class="btn btn-primary" ng:click="saveUserProfile()" ng-disabled="settingsUserLogin.$invalid">Save</button>
               <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
@@ -75,8 +76,8 @@
       <div ng-class="{active:selectedTab == 'notifications'}" class="tab-pane" id="notifications">
         <form name="settingsNotifications" class="form-horizontal" novalidate>
           <div class="form-group">
-            <label for="notification_email" class="col-md-3 control-label">Notification Email</label>
-            <div class="col-md-9">
+            <label for="notification_email" class="col-md-4 control-label">Notification Email</label>
+            <div class="col-md-8">
               <input id="notification_email" name="notification_email" type="email" class="form-control" ng:model="companyProfile.notification_email"/>
               <p class="help-block">If notification email is empty, we will send email to company email address. ({{companyProfile.email}})</p>
             </div>
@@ -104,7 +105,7 @@
           </div>
           <hr />
           <div class="form-group">
-            <div class="col-md-offset-3 col-md-9">
+            <div class="col-md-offset-4 col-md-8">
               <button class="btn btn-primary" ng:click="saveCompanyProfile()" ng-disabled="settingsNotifications.$invalid">Save</button>
               <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
             </div>
@@ -117,9 +118,9 @@
           <fieldset>
             <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
 
-            <div class="form-group two-lines" ng-class="{error:settingsCompanyProfile.abbreviated_name.$invalid}">
-              <label for="abbreviated_name" class="col-md-3 control-label">Company Abbreviated Name *</label>
-              <div class="col-md-9">
+            <div class="form-group two-lines" ng-class="{'has-error':settingsCompanyProfile.abbreviated_name.$invalid}">
+              <label for="abbreviated_name" class="col-md-4 control-label">Company Abbreviated Name *</label>
+              <div class="col-md-8">
 
                 <input id="abbreviated_name"
                 name="abbreviated_name"
@@ -131,16 +132,16 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="dot_number" class="col-md-3 control-label">DOT Number</label>
-              <div class="col-md-9">
+              <label for="dot_number" class="col-md-4 control-label">DOT Number</label>
+              <div class="col-md-8">
                 <input id="dot_number" type="text" class="form-control" ng:model="companyProfile.dot_number" />
                 <p class="help-block warning">Required for bidding.</p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="insurance" class="col-md-3 control-label">Insurance</label>
-              <div class="col-md-9">
+              <label for="insurance" class="col-md-4 control-label">Insurance</label>
+              <div class="col-md-8">
                 <select class="form-control" ng-model="companyProfile.insurance">
                   <option value=""></option>
                   <option value="lt_1M">&lt; 1M</option>
@@ -153,64 +154,68 @@
             </div>
 
             <div class="form-group">
-              <label for="logo_id" class="col-md-3 control-label">Company Logo</label>
+              <label for="logo_id" class="col-md-4 control-label">Company Logo</label>
 
-              <div class="col-md-9 mobile-col-md-9">
-                <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
-                <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+              <div class="col-md-8">
+                <div>
+                  <input ng-init="setupFileUploader()" class="cloudinary-fileupload form-control" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+                  <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+                </div>
                 <div id="progress">
                   <div class="bar" style="width: 0%;"></div>
                 </div>
-                <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview"/>
+                <div>
+                  <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview img-responsive"/>
+                </div>
                 <div ng-hide="company.logo_url">No Logo Available</div>
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.since.$invalid}">
-              <label for="since" class="col-md-3 control-label">Established Date *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.since.$invalid}">
+              <label for="since" class="col-md-4 control-label">Established Date *</label>
+              <div class="col-md-8">
                 <input id="since" name="since" type="text" class="form-control" ng:model="companyProfile.since" required />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.owner.$invalid}">
-              <label for="owner" class="col-md-3 control-label">Owner *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.owner.$invalid}">
+              <label for="owner" class="col-md-4 control-label">Owner *</label>
+              <div class="col-md-8">
                 <input id="owner" name="owner" type="text" class="form-control" ng:model="companyProfile.owner" required />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.contact_name.$invalid}">
-              <label for="owner" class="col-md-3 control-label">Contact Name *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.contact_name.$invalid}">
+              <label for="owner" class="col-md-4 control-label">Contact Name *</label>
+              <div class="col-md-8">
                 <input id="contact" name="contact_name" type="text" class="form-control" ng:model="companyProfile.contact_name" required />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.contact_phone.$invalid}">
-              <label for="contact_phone" class="col-md-3 control-label">Contact Phone *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.contact_phone.$invalid}">
+              <label for="contact_phone" class="col-md-4 control-label">Contact Phone *</label>
+              <div class="col-md-8">
                 <input id="contact_phone" name="contact_phone" type="text" class="form-control" ng:model="companyProfile.contact_phone" required />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.contact_email.$invalid}">
-              <label for="contact_email" class="col-md-3 control-label">Contact Email *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.contact_email.$invalid}">
+              <label for="contact_email" class="col-md-4 control-label">Contact Email *</label>
+              <div class="col-md-8">
                 <input id="contact_email" name="contact_email" type="email" class="form-control" ng:model="companyProfile.email" required />
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.website.$invalid}">
-              <label for="website" class="col-md-3 control-label">Website *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.website.$invalid}">
+              <label for="website" class="col-md-4 control-label">Website *</label>
+              <div class="col-md-8">
                 <input id="website" name="website" type="text" class="form-control" ng:model="companyProfile.website" required />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="cell_phone" class="col-md-3 control-label">Text message (SMS) number</label>
-              <div class="col-md-9">
+              <label for="cell_phone" class="col-md-4 control-label">Text message (SMS) number</label>
+              <div class="col-md-8">
                 <input id="cell_phone" type="text" class="form-control" ng-model="companyProfile.cell_phone" />
                 <p class="help-block">We will send text messages about emergecy opportunities</p>
               </div>
@@ -219,36 +224,36 @@
             <hr />
 
             <div class="form-group">
-              <label for="address_line1" class="col-md-3 control-label">Street</label>
-              <div class="col-md-9">
+              <label for="address_line1" class="col-md-4 control-label">Street</label>
+              <div class="col-md-8">
                 <input id="address_line1" type="text" class="form-control" ng:model="companyProfile.address_line1" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="address_line2" class="col-md-3 control-label">Street 2/Apt</label>
-              <div class="col-md-9">
+              <label for="address_line2" class="col-md-4 control-label">Street 2/Apt</label>
+              <div class="col-md-8">
                 <input id="address_line2" type="text" class="form-control" ng:model="companyProfile.address_line2" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="city" class="col-md-3 control-label">City</label>
-              <div class="col-md-9">
+              <label for="city" class="col-md-4 control-label">City</label>
+              <div class="col-md-8">
                 <input id="city" type="text" class="form-control" ng:model="companyProfile.city" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="state" class="col-md-3 control-label">State</label>
-              <div class="col-md-9">
+              <label for="state" class="col-md-4 control-label">State</label>
+              <div class="col-md-8">
                 <input id="state" type="text" class="form-control" ng:model="companyProfile.state" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="country" class="col-md-3 control-label">Country</label>
-              <div class="col-md-9">
+              <label for="country" class="col-md-4 control-label">Country</label>
+              <div class="col-md-8">
                 <select class="form-control" name="country" id="country"  ng-model="companyProfile.country">
                   <option value="USA">USA</option>
                   <option value="Canada">Canada</option>
@@ -257,8 +262,8 @@
             </div>
 
             <div class="form-group">
-              <label for="zip_code" class="col-md-3 control-label">Zip code</label>
-              <div class="col-md-9">
+              <label for="zip_code" class="col-md-4 control-label">Zip code</label>
+              <div class="col-md-8">
                 <input id="zip_code" type="text" class="form-control" ng:model="companyProfile.zip_code" />
               </div>
             </div>
@@ -266,9 +271,9 @@
             <hr />
 
 
-            <div class="form-group" ng-class="{error:settingsCompanyProfile.payment_method.$invalid}">
-              <label for="payment_method" class="col-md-3 control-label">Payment methods</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsCompanyProfile.payment_method.$invalid}">
+              <label for="payment_method" class="col-md-4 control-label">Payment methods</label>
+              <div class="col-md-8">
                 <ul>
                   <li ng-repeat="payment_method in companyProfile.payment_methods">
                     {{payment_method}} <a ng-click="removePaymentMethod(payment_method)" class="icon icon-trash"></a>
@@ -280,9 +285,10 @@
                 <button class="btn" ng-click="addPaymentMethod()" ng-disabled="!newPaymentMethod">Add</button>
               </div>
             </div>
+            <hr/>
 
             <div class="form-group">
-              <div class="col-md-offset-3 col-md-9">
+              <div class="col-md-offset-4 col-md-8">
                 <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsCompanyProfile.$invalid">Save</button>
                 <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
@@ -297,23 +303,23 @@
             <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
 
             <div class="form-group">
-              <label for="has_ada_vehicles" class="col-md-3 control-label">Fleet includes ADA vehicles?</label>
-              <div class="col-md-9">
+              <label for="has_ada_vehicles" class="col-md-4 control-label">Fleet includes ADA vehicles?</label>
+              <div class="col-md-8">
                 <input id="has_ada_vehicles" type="checkbox" ng-model="companyProfile.has_ada_vehicles" value="1">
                 <p class="help-block warning">Required for bidding on ADA opportunities.</p>
               </div>
             </div>
 
-            <div class="form-group" ng-class="{error:settingsFleet.fleet_size.$invalid}">
-              <label for="fleet-size" class="col-md-3 control-label">Fleet Size *</label>
-              <div class="col-md-9">
+            <div class="form-group" ng-class="{'has-error':settingsFleet.fleet_size.$invalid}">
+              <label for="fleet-size" class="col-md-4 control-label">Fleet Size *</label>
+              <div class="col-md-8">
                 <input id="fleet-size" name="fleet_size" type="text" class="form-control" ng:model="companyProfile.fleet_size" required />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="vehicle-type" class="col-md-3 control-label">Vehicle Type</label>
-              <div class="col-md-9">
+              <label for="vehicle-type" class="col-md-4 control-label">Vehicle Type</label>
+              <div class="col-md-8">
                 <ul>
                   <li ng-repeat="vehicle_type in companyProfile.vehicle_types">
                     {{vehicle_type}} <a ng-click="removeVehicleType(vehicle_type)" class="icon icon-trash"></a>
@@ -325,9 +331,9 @@
                 <button class="btn" ng-click="addVehicleType()" ng-disabled="!newVehicleType">Add</button>
               </div>
             </div>
-
+            <hr />
             <div class="form-group">
-              <div class="col-md-offset-3 col-md-9">
+              <div class="col-md-offset-4 col-md-8">
                 <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsFleet.$invalid">Save</button>
                 <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
               </div>
@@ -340,7 +346,7 @@
         <h4>Favorited Regions:</h4>
         <form name="settingsFavoritedRegions" class="form-horizontal" novalidate>
           <div class="region-checkboxes">
-            <fieldset class="regions-table">
+            <fieldset class="col-md-12">
               <div class="form-group">
                 <label ng-repeat="(region_name, region_abbr) in ALL_REGIONS" for="input-region-{{region_abbr}}" class="checkbox">
                   <div>
@@ -355,8 +361,9 @@
                 </label>
               </div>
             </fieldset>
+            <hr/>
             <div class="form-group">
-              <div class="col-md-offset-3 col-md-9">
+              <div class="col-md-offset-4 col-md-8">
               <button class="btn btn-primary" ng-click="saveFavoritedRegions()">Save</button>
               <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
               </div>
@@ -416,25 +423,61 @@
           <p class="help-block">Additional vehicles can be added for ${{subout_bus_price}}</p>
           <br />
           <div ng-show="companyProfile.vehicles.length > 0">
-            <div class="row">
-              <div class="col-md-2 col-sm-2"><strong>RM #</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Year</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Make</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>Model</strong></div>
-              <div class="col-md-2 col-sm-2"><strong>VIN</strong></div>
-              <div class="col-md-2 col-sm-2"></div>
+            <div class="hidden-sm hidden-xs">
+              <div class="row">
+                <div class="col-md-2 col-sm-2"><strong>RM #</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Year</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Make</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>Model</strong></div>
+                <div class="col-md-2 col-sm-2"><strong>VIN</strong></div>
+                <div class="col-md-2 col-sm-2"></div>
+              </div>
             </div>
             <div ng-repeat="vehicle in companyProfile.vehicles">
-              <div class="row" ng-show="!vehicle.editable">
-                <div class="col-md-2 col-sm-2"> {{vehicle.rm_number}} </div>
-                <div class="col-md-2 col-sm-2"> {{vehicle.year}} </div>
-                <div class="col-md-2 col-sm-2"> {{vehicle.make}} </div>
-                <div class="col-md-2 col-sm-2"> {{vehicle.model}} </div>
-                <div class="col-md-2 col-sm-2"> {{vehicle.vin}} </div>
-                <div class="col-md-2 col-sm-2">
-                  <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
+              <div class="hidden-sm hidden-xs">
+                <div class="row" ng-show="!vehicle.editable">
+                  <div class="col-md-2 col-sm-2"> {{vehicle.rm_number}} </div>
+                  <div class="col-md-2 col-sm-2"> {{vehicle.year}} </div>
+                  <div class="col-md-2 col-sm-2"> {{vehicle.make}} </div>
+                  <div class="col-md-2 col-sm-2"> {{vehicle.model}} </div>
+                  <div class="col-md-2 col-sm-2"> {{vehicle.vin}} </div>
+                  <div class="col-md-2 col-sm-2">
+                    <button class="btn btn-small btn-info" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
+                  </div>
                 </div>
               </div>
+
+              <div class="visible-xs visible-sm">
+                <table class="table table-border ng-scope">
+                  <tr>
+                    <td class="table-header">RM #</td>
+                    <td>{{vehicle.rm_number}}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-header">Year</td>
+                    <td>{{vehicle.year}}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-header">Make</td>
+                    <td>{{vehicle.make}}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-header">Model</td>
+                    <td>{{vehicle.model}}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-header">VIN</td>
+                    <td>{{vehicle.vin}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <button class="btn btn-small" ng-click="vehicle.editable = 1"><span class="icon icon-pencil"></span>Edit</button>
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+
               <div ng-show="vehicle.editable">
                 <br />
                 <ng-form name="vform">
@@ -442,32 +485,32 @@
                   <strong>RM Number:</strong> {{vehicle.rm_number}}
                 </div>
                 <div class="form-group">
-                  <label for="vehicle_year" class="col-md-3 control-label">Year</label>
-                  <div class="col-md-9">
-                    <select id="vehicle_year" name="vehicle_year" ng-model="vehicle.year" ng-options="y for y in years" required>
+                  <label for="vehicle_year" class="col-md-4 control-label">Year</label>
+                  <div class="col-md-8">
+                    <select id="vehicle_year" name="vehicle_year" class="form-control"  ng-model="vehicle.year" ng-options="y for y in years" required>
                     </select>
                   </div>
                 </div>
-                <div class="form-group" ng-class="{error:newVehicle.vehicle_make.$invalid}">
-                  <label for="vehicle_make" class="col-md-3 control-label">Make</label>
-                  <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error':newVehicle.vehicle_make.$invalid}">
+                  <label for="vehicle_make" class="col-md-4 control-label">Make</label>
+                  <div class="col-md-8">
                     <input id="vehicle_make" name="vehicle_make" ng-model="vehicle.make" type="text" class="form-control" required />
                   </div>
                 </div>
-                <div class="form-group" ng-class="{error:newVehicle.vehicle_model.$invalid}">
-                  <label for="vehicle_model" class="col-md-3 control-label">Model</label>
-                  <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error':newVehicle.vehicle_model.$invalid}">
+                  <label for="vehicle_model" class="col-md-4 control-label">Model</label>
+                  <div class="col-md-8">
                     <input id="vehicle_model" name="vehicle_model" ng-model="vehicle.model" type="text" class="form-control" required />
                   </div>
                 </div>
-                <div class="form-group" ng-class="{error:newVehicle.vehicle_vin.$invalid}">
-                  <label for="vehicle_vin" class="col-md-3 control-label">Last 8 Of VIN</label>
-                  <div class="col-md-9">
+                <div class="form-group" ng-class="{'has-error':newVehicle.vehicle_vin.$invalid}">
+                  <label for="vehicle_vin" class="col-md-4 control-label">Last 8 Of VIN</label>
+                  <div class="col-md-8">
                     <input id="vehicle_vin" name="vehicle_vin" ng-model="vehicle.vin" type="text" class="form-control" required />
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-md-offset-3 col-md-9">
+                  <div class="col-md-offset-4 col-md-8">
                   <button class="btn btn-small btn-primary" ng-click="vehicle.editable = 0" ng-disabled="vform.$invalid">Save</button>
                   <button class="btn btn-small btn-danger" ng-click="removeVehicle(vehicle)">Remove</button>
                   </div>
@@ -476,9 +519,11 @@
                 <hr />
               </div>
             </div>
-            <div class="text-centered">
+          </div>
+          <div class="clearfix" ng-show="company.subscription_plan == 'subout-pro-service'">
+            <div class="col-md-offset-4 col-md-8">
               <button class="btn btn-success" ng-click="addVehicle({'editable': 1})" ng-disabled="vehicleForm.$invalid"><span class="icon icon-plus"></span>Add Vehicle <span ng-show="companyProfile.vehicles.length >= 2">(+${{subout_bus_price}})</span></button>
-              <button class="btn btn-primary" ng-click="saveVehicles()" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
+              <button class="btn btn-primary" ng-click="saveVehicles()" ng-show="companyProfile.vehicles.length > 0" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
             </div>
           </div>
         </form>

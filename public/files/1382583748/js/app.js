@@ -552,20 +552,18 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
+  $rootScope.inPosting = false;
   if (!$scope.opportunity) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return jQuery("#modal").modal("hide");
-    }
+    return jQuery("#modal").modal("hide");
   };
   $scope.save = function() {
     var opportunity, showErrors;
+    $rootScope.inPosting = true;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
     opportunity.start_date = $('#opportunity_start_date').val();
@@ -1413,11 +1411,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   loadProductInfo();
   $rootScope.setupFileUploader();
   successUpdate = function() {
-    if ($rootScope.isMobile) {
-      return $location.path('/dashboard');
-    } else {
-      return $rootScope.closeModal();
-    }
+    return $rootScope.closeModal();
   };
   $scope.saveUserProfile = function() {
     $scope.userProfileError = "";
@@ -2377,6 +2371,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
   return function(promise) {
     return promise.then((function(response) {
       var $http, deploy, mime, payloadData, version;
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       mime = "application/json; charset=utf-8";
       if (response.headers()["content-type"] === mime) {
         payloadData = response.data ? response.data.payload : null;
@@ -2402,6 +2399,9 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
       }
       return response;
     }), function(response) {
+      if (response.config.method === "POST") {
+        $rootScope.inPosting = false;
+      }
       $('.loading-animation').removeClass('loading');
       if (response.data.payload) {
         response.data = response.data.payload;
