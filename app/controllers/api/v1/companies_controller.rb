@@ -25,14 +25,31 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   end
 
   def create
-    company = Company.new(params[:company])
-
     chargify_id = params[:company][:chargify_id]
+    subscription = nil
+
     if chargify_id.present?
-      company.created_from_subscription = GatewaySubscription.where(subscription_id: chargify_id).first
+      subscription = GatewaySubscription.where(subscription_id: chargify_id).first
     end
 
+    company = Company.new(params[:company])
+
+    if subscription.blank?
+      company.errors.add(:base, "Invalid chargify subscription.")
+    else
+      if subscription.created_company.present?
+        company.errors.add(:base, "Subscription is already used.")
+      end
+    end
+
+    if company.errors.any?
+      render json: { errors: company.sign_up_errors }, status: 422
+      return
+    end
+
+    company.created_from_subscription = subscription
     company.prelaunch = false
+
     if company.save
       respond_with_namespace(company)
     else

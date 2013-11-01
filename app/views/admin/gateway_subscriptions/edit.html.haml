@@ -18,6 +18,12 @@
     .control-group
       = f.button :submit, class: "btn btn-danger"
       = link_to "Cancel", admin_gateway_subscriptions_path, class: "btn"
+  - if @subscription.created_company.present?
+    %p.alert.alert-danger
+      This subscription is not connected to any company.
+      %br
+      Signup Link:
+      = link_to "http://#{DEFAULT_HOST_WITH_PORT}/#signup?subscription_id=#{@subscription.id}", "http://#{DEFAULT_HOST_WITH_PORT}/#signup?subscription_id=#{@subscription.id}", target: '_blank'
 - else
   %p.alert.alert-error
     Subscription not found on Chargify
