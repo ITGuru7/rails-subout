@@ -105,14 +105,14 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
   $rootScope.NOTIFICATION_TYPES = [
     {name: "Opportunity Post", type: "email", code: "opportunity-new" },
-    {name: "Opportunity Expired", type: "email", code: "opportunity-expire" },
-    {name: "Opportunity Completed", type: "email", code: "opportunity-complete" },
-    {name: "Opportunity Win", type: "email", code: "opportunity-win" },
-    {name: "New Bid", type: "email", code: "bid-new" },
-    {name: "Update Product", type: "email", code: "account-update-product" },
-    {name: "Account Locked", type: "email", code: "account-locked" },
-    {name: "Expired Card", type: "email", code: "account-expired-card" },
-    {name: "Opportunity Post", type: "mobile", code: "mobile-opportunity-new" }
+    {name: "Opportunity Expired", type: "email", code: "opportunity-expire"},
+    {name: "Opportunity Completed", type: "email", code: "opportunity-complete"},
+    {name: "Opportunity Win", type: "email", code: "opportunity-win"},
+    {name: "New Bid", type: "email", code: "bid-new"},
+    {name: "Update Product", type: "email", code: "account-update-product"},
+    {name: "Account Locked", type: "email", code: "account-locked"},
+    {name: "Expired Card", type: "email", code: "account-expired-card"},
+    {name: "Opportunity Post", type: "mobile", code: "mobile-opportunity-new"}
   ]
 
   $rootScope.ALL_REGIONS = {
@@ -1041,13 +1041,27 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
   updateSelectedRegions()
 
   updateSelectedNotifications = ->
+    $scope.daily_reminder = $rootScope.company.hasNotificationItem("daily-reminder")
     for t in $rootScope.NOTIFICATION_TYPES
-      t.enabled = true if $rootScope.company.hasNotificationItem(t.code)
+      if $rootScope.company.hasNotificationItem(t.code)
+        t.enabled = true
+      else
+        t.enabled = null
+
   updateSelectedNotifications()
 
-  $scope.setNotification = (t)->
-    t.enabled = !t.enabled
-    
+  $scope.setReminderNotification = ()->
+    $scope.daily_reminder = !$scope.daily_reminder
+   
+    for t in $rootScope.NOTIFICATION_TYPES
+      t.enabled = null
+
+  $scope.setNotification = (n)->
+    n.enabled = !n.enabled
+    $scope.daily_reminder = null
+    for t in $rootScope.NOTIFICATION_TYPES
+      t.enabled = n.enabled if t.code == n.code
+
   updateCompanyAndCompanyProfile = (company) ->
     $rootScope.company = company
     $scope.companyProfile = angular.copy(company)
@@ -1129,9 +1143,11 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.companyProfileError = ""
     $scope.companyProfile.logo_id = $("#company_logo_id").val()
     finalNotifications = []
+    finalNotifications.push("daily-reminder") if $scope.daily_reminder
     for t in $rootScope.NOTIFICATION_TYPES
       finalNotifications.push(t.code) if t.enabled
     $scope.companyProfile.notification_items = finalNotifications
+    console.log finalNotifications
 
     Company.update
       companyId: $rootScope.company._id

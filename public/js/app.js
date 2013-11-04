@@ -1362,6 +1362,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   updateSelectedRegions();
   updateSelectedNotifications = function() {
     var t, _i, _len, _ref, _results;
+    $scope.daily_reminder = $rootScope.company.hasNotificationItem("daily-reminder");
     _ref = $rootScope.NOTIFICATION_TYPES;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1369,14 +1370,38 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       if ($rootScope.company.hasNotificationItem(t.code)) {
         _results.push(t.enabled = true);
       } else {
-        _results.push(void 0);
+        _results.push(t.enabled = null);
       }
     }
     return _results;
   };
   updateSelectedNotifications();
-  $scope.setNotification = function(t) {
-    return t.enabled = !t.enabled;
+  $scope.setReminderNotification = function() {
+    var t, _i, _len, _ref, _results;
+    $scope.daily_reminder = !$scope.daily_reminder;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      _results.push(t.enabled = null);
+    }
+    return _results;
+  };
+  $scope.setNotification = function(n) {
+    var t, _i, _len, _ref, _results;
+    n.enabled = !n.enabled;
+    $scope.daily_reminder = null;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if (t.code === n.code) {
+        _results.push(t.enabled = n.enabled);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
@@ -1460,6 +1485,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.companyProfileError = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
     finalNotifications = [];
+    if ($scope.daily_reminder) {
+      finalNotifications.push("daily-reminder");
+    }
     _ref = $rootScope.NOTIFICATION_TYPES;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       t = _ref[_i];
@@ -1468,6 +1496,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       }
     }
     $scope.companyProfile.notification_items = finalNotifications;
+    console.log(finalNotifications);
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -2165,6 +2194,15 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.hasNotificationItem = function(code) {
     return _.indexOf(this.notification_items, code) !== -1;
+  };
+  Company.prototype.addNotificationItem = function(code) {
+    this.notification_items.push(code);
+    this.notifcation_items = _.uniq(this.notifiication_items);
+    return this.notification_items;
+  };
+  Company.prototype.removeNotificationItem = function(code) {
+    this.notifcation_items = _.without(this.notifiication_items, code);
+    return this.notification_items;
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);

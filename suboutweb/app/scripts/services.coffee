@@ -136,6 +136,15 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::hasNotificationItem = (code) ->
     return _.indexOf(this.notification_items, code) != -1
 
+  Company::addNotificationItem = (code) ->
+    this.notification_items.push code
+    this.notifcation_items = _.uniq(this.notifiication_items)
+    return this.notification_items
+
+  Company::removeNotificationItem = (code) ->
+    this.notifcation_items = _.without(this.notifiication_items, code)
+    return this.notification_items
+
   Company::addFavoriteBuyerId = (buyerId) ->
     this.favoriting_buyer_ids.push(buyerId)
     
