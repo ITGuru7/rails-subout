@@ -137,4 +137,10 @@ class Notifier < ActionMailer::Base
 
     mail(subject: "[SubOut] #{@subscription.organization} didn't complete the registration in last 3 days", to: Setting.admin_email)
   end
+
+  def daily_reminder(company_id)
+    @company = Company.find(company_id)
+
+    mail(subject: "[SubOut] Daily remind email", to: @company.notifiable_email)
+  end
 end

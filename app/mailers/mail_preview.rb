@@ -49,4 +49,9 @@ class MailPreview < MailView
     company = Company.last
     Notifier.updated_product(company.id)
   end
+
+  def daily_reminder
+    company = Company.last
+    Notifier.daily_reminder(company.id)
+  end
 end

@@ -73,6 +73,7 @@ class Company
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :bids, foreign_key: 'bidder_id'
 
+
   accepts_nested_attributes_for :users
 
   validates :name, presence: true
@@ -100,6 +101,12 @@ class Company
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
   search_in :name, :email
+
+  def self.send_daily_remind_notification
+    Company.where(:notification_items => ['daily-reminder']).each do |company|
+      Notifier.delay.daily_reminder(company.id)
+    end
+  end
 
   def check_nils
     errors.add(:favorite_supplier_ids, "is not defined") if favorite_supplier_ids.nil?
