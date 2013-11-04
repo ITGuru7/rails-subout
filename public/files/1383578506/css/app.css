@@ -7963,31 +7963,6 @@ div#opportunity-show .description .content {
 #bid-new .modal-body {
   color: #666550;
 }
-#bid-new .control-group {
-  margin-bottom: 14px;
-}
-#bid-new .control-group .opportunity-name h4 {
-  margin: 5px 0;
-}
-#bid-new .controls {
-  margin-left: 210px;
-}
-#bid-new .form-actions {
-  border: 0;
-  background-color: white;
-  margin: 0;
-  padding-top: 5px;
-  padding-left: 210px;
-}
-#bid-new .form-horizontal .control-label {
-  float: left;
-  padding-top: 5px;
-  text-align: left;
-  width: 210px;
-}
-#bid-new .ng-pristine .control-group .help-block {
-  display: none;
-}
 #bids .pagination {
   margin: 0 0 10px 0;
 }
@@ -8123,6 +8098,9 @@ div#opportunity-show .description .content {
 }
 #licensed-regions .checkbox {
   padding-left: 20px;
+}
+#available_opportunities {
+  min-height: 400px;
 }
 #available_opportunities .current-bid-amount {
   padding-right: 20px;
