@@ -8099,6 +8099,9 @@ div#opportunity-show .description .content {
 #licensed-regions .checkbox {
   padding-left: 20px;
 }
+#available_opportunities {
+  min-height: 400px;
+}
 #available_opportunities .current-bid-amount {
   padding-right: 20px;
   text-align: right;

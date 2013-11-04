@@ -1240,7 +1240,7 @@ SignInCtrl = ($scope, $rootScope, $location,
           if $rootScope.redirectToPath
             $location.path($rootScope.redirectToPath)
           else
-            $location.path "dashboard"
+            $location.path ""
       else
         $scope.message = token.message
 

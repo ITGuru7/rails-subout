@@ -124,7 +124,7 @@ subout.config([
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
     }).otherwise({
-      redirectTo: "/dashboard"
+      redirectTo: "/available_opportunities"
     });
   }
 ]);
@@ -1603,7 +1603,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
           if ($rootScope.redirectToPath) {
             return $location.path($rootScope.redirectToPath);
           } else {
-            return $location.path("dashboard");
+            return $location.path("");
           }
         });
       } else {

@@ -107,7 +107,7 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
    ).when("/add-favorite",
     templateUrl: suboutPartialPath("add-new-favorite.html")
     resolve: resolveAuth
-  ).otherwise redirectTo: "/dashboard"
+  ).otherwise redirectTo: "/available_opportunities"
 
 ])
 
