@@ -297,7 +297,7 @@ class Opportunity
 
   def status
     if self.canceled?
-      "Canceled"
+      "Awarded"
     elsif self.winning_bid_id
       "Bidding won"
     elsif self.bidding_ended?
