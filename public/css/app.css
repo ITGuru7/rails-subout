@@ -7335,6 +7335,11 @@ form {
 #subout-brand {
   position: relative;
 }
+#application-message {
+  text-align: center;
+  font-weight: bold;
+  color: gray;
+}
 #logo img {
   margin-top: 0px;
   padding-bottom: 10px;

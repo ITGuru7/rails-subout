@@ -1,5 +1,5 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
-  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) ->
+  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
 
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
@@ -14,6 +14,9 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
   $rootScope.filterRegionsOnHome = $.cookie(salt("filterRegionsOnHome"))
   $rootScope.filterRegionsOnHome = [] if $rootScope.filterRegionsOnHome == null
+
+  $rootScope.application_message = Setting.get
+    key: "application_message"
 
   $rootScope.$watch "filterRegionsOnHome", (v1, v2)->
     if v1 != null

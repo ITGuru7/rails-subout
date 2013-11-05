@@ -16,8 +16,7 @@
               %li= link_to "Subscriptions", admin_gateway_subscriptions_path
               %li= link_to "Favorite Invitations", admin_favorite_invitations_path
               %li= link_to "Revenues", admin_revenues_path
-              %li= link_to "Marketing Message", edit_admin_setting_path("marketing_message")
-              %li= link_to "Admin Email", edit_admin_setting_path("admin_email")
+              %li= link_to "Settings", admin_settings_path
     .container-fluid
       - if flash[:error]
         %p.alert.alert-error
