@@ -22,15 +22,15 @@
       </div>
 
       <div class="form-group oportunity_name">
-        <label class="col-md-3 control-label">Opportunity</label>
-        <div class="col-md-9 opportunity-name">
+        <label class="col-md-4 control-label">Opportunity</label>
+        <div class="col-md-8 opportunity-name">
           <h4>{{opportunity.name}}</h4>
         </div>
       </div>
 
-      <div class="form-group bid_amount" ng-class="{error:newBid.bid_amount.$invalid || !validateReserveAmount(bid.amount)}">
-        <label for="bid_amount" class="col-md-3 control-label">Bid Amount ($) *</label>
-        <div class="col-md-9">
+      <div class="form-group bid_amount" ng-class="{'has-error':newBid.bid_amount.$invalid || !validateReserveAmount(bid.amount)}">
+        <label for="bid_amount" class="col-md-4 control-label">Bid Amount ($) *</label>
+        <div class="col-md-8">
           <input type="text"
                  id="bid_amount"
                  name="bid_amount"
@@ -42,20 +42,20 @@
                  class="form-control">
 
           <span ng-show="opportunity.reserve_amount">(Starting price: {{opportunity.reserve_amount | soCurrency}})</span>
-          <p ng-show="newBid.bid_amount.$error.only_numbers" class="alert-danger">Enter only numeric characters.</p>
-          <p ng-show="!validateReserveAmount(bid.amount)" class="alert-danger">
+          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="!validateReserveAmount(bid.amount)" class="help-block">
             <span ng-hide="opportunity.forward_auction">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
             <span ng-show="opportunity.forward_auction">$ value you posted is less than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
           </p>
-          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="alert-danger">You can win now!</p>
+          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{error:newBid.bid_auto_bidding_limit.$invalid}">
-        <label for="bid_auto_bidding_limit" class="col-md-3 control-label">
+      <div class="form-group" ng-class="{'has-error':newBid.bid_auto_bidding_limit.$invalid}">
+        <label for="bid_auto_bidding_limit" class="col-md-4 control-label">
           <span ng-show="opportunity.forward_auction">Maximum</span><span ng-hide="opportunity.forward_auction">Minimum</span> Bid Amount ($)
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
           <input type="text"
                  id="bid_auto_bidding_limit"
                  name="bid_auto_bidding_limit"
@@ -65,20 +65,20 @@
                  maxlength="10"
                  class="form-control">
 
-          <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="alert-danger">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="alert-danger">
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="help-block">
             <span ng-show="opportunity.forward_auction">Maximum amount cannot be lower than bid amount.</span>
             <span ng-hide="opportunity.forward_auction">Minimum amount cannot be higher than bid amount.</span>
           </p>
-          <p ng-show="newBid.bid_auto_bidding_limit.$error.win_it_now_price" class="alert-danger">You can win now!</p>
+          <p ng-show="newBid.bid_auto_bidding_limit.$error.win_it_now_price" class="help-block">You can win now!</p>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{error:newBid.bid_vehicle_count.$invalid}" ui-if="opportunity.vehicle_count > 1">
-        <label for="bid_vehicle_count" class="col-md-3 control-label">
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count.$invalid}" ui-if="opportunity.vehicle_count > 1">
+        <label for="bid_vehicle_count" class="col-md-4 control-label">
           Vehicle count *
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
           <input type="text"
                  id="bid_vehicle_count"
                  name="bid_vehicle_count"
@@ -90,16 +90,16 @@
                  required
                  class="form-control">
           <span ng-show="opportunity.reserve_amount">(Vehicles needed: {{opportunity.vehicle_count}})</span>
-          <p ng-show="newBid.bid_vehicle_count.$error.only_numbers" class="alert-danger">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_vehicle_count.$error.vehicle_count" class="alert-danger">Vehicle count cannot be greater than poster needs.</p>
+          <p ng-show="newBid.bid_vehicle_count.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_vehicle_count.$error.vehicle_count" class="help-block">Vehicle count cannot be greater than poster needs.</p>
         </div>
       </div>
 
-      <div class="form-group" ng-class="{error:newBid.bid_vehicle_count_limit.$invalid}" ui-if="opportunity.vehicle_count > 1">
-        <label for="bid_vehicle_count_limit" class="col-md-3 control-label">
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count_limit.$invalid}" ui-if="opportunity.vehicle_count > 1">
+        <label for="bid_vehicle_count_limit" class="col-md-4 control-label">
           Minimum vehicle count
         </label>
-        <div class="col-md-9">
+        <div class="col-md-8">
           <input type="text"
                  id="bid_vehicle_count_limit"
                  name="bid_vehicle_count_limit"
@@ -109,19 +109,19 @@
                  maxlength="10"
                  class="form-control">
 
-          <p ng-show="newBid.bid_vehicle_count_limit.$error.only_numbers" class="alert-danger">Enter only numeric characters.</p>
-          <p ng-show="newBid.bid_vehicle_count_limit.$error.vehicle_count_limit" class="alert-danger">Minimum bus count cannot be greater than vehicle count you are bidding.</p>
+          <p ng-show="newBid.bid_vehicle_count_limit.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="newBid.bid_vehicle_count_limit.$error.vehicle_count_limit" class="help-block">Minimum bus count cannot be greater than vehicle count you are bidding.</p>
         </div>
       </div>
       <div class="form-group">
-        <label for="bid_comment" class="col-md-3 control-label">Brag about your company here</label>
-        <div class="col-md-9">
+        <label for="bid_comment" class="col-md-4 control-label">Brag about your company here</label>
+        <div class="col-md-8">
           <input type="text" id="bid_comment" name="bid_comment" ng-model="bid.comment" class="form-control">
         </div>
       </div>
 
       <div class="form-group">
-        <div class="col-md-offset-3 col-md-3">
+        <div class="col-md-offset-4 col-md-8">
           <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
             Bid Now
           </button>
