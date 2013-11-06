@@ -53,6 +53,8 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = current_company.auctions.find(params[:id])
     if @auction.canceled?
       render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
+    elsif @auction.awarded?
+      render json: { errors: { base: ["This opportunity is awarded."] } }, status: :unprocessable_entity
     else
       @auction.win!(params[:bid_id])
       render json: {}
@@ -61,11 +63,21 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def cancel
     @auction = Opportunity.find(params[:id])
-    unless @auction.canceled?
+    unless (@auction.canceled? or @auction.awarded?)
       @auction.cancel!
       render json: {}
     else
       render json: { errors: { base: ["This opportunity cannot be canceled"] } }, status: :unprocessable_entity
+    end
+  end
+
+  def award
+    @auction = Opportunity.find(params[:id])
+    unless (@auction.canceled? or @auction.awarded?)
+      @auction.award!
+      render json: {}
+    else
+      render json: { errors: { base: ["This opportunity cannot be awarded"] } }, status: :unprocessable_entity
     end
   end
 end

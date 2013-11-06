@@ -765,6 +765,21 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
 
+  $scope.endOpportunity = ->
+    return unless confirm("Are you sure to end your opportunity?")
+    Auction.cancel(
+      {
+        opportunityId: $scope.opportunity._id,
+        action: 'award',
+        api_token: $rootScope.token.api_token
+      }
+      , {}
+      , (content) ->
+        $location.path "dashboard"
+      , (content) ->
+        $scope.errors = $rootScope.errorMessages(content.data.errors)
+    )
+
   $scope.selectWinner = (bid) ->
     return unless confirm("Are you sure to accept this bid?")
     Auction.select_winner(

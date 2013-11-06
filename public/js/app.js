@@ -1035,6 +1035,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
+  $scope.endOpportunity = function() {
+    if (!confirm("Are you sure to end your opportunity?")) {
+      return;
+    }
+    return Auction.cancel({
+      opportunityId: $scope.opportunity._id,
+      action: 'award',
+      api_token: $rootScope.token.api_token
+    }, {}, function(content) {
+      return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
   $scope.selectWinner = function(bid) {
     if (!confirm("Are you sure to accept this bid?")) {
       return;

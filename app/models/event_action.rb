@@ -5,6 +5,7 @@ class EventAction
     :opportunity_created, 
     :opportunity_updated,
     :opportunity_canceled,
+    :opportunity_awarded,
     :bid_created, 
     :opportunity_bidding_won, 
   ]

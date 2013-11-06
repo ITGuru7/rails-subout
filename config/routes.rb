@@ -40,6 +40,7 @@ Subout::Application.routes.draw do
         member do
           put :select_winner
           put :cancel
+          put :award
         end
       end
 

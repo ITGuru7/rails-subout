@@ -28,6 +28,7 @@ class Opportunity
   field :vehicle_count, type: Integer, default: 1
   field :trip_type, type: String, default: ""
   field :canceled, type: Boolean, default: false
+  field :awarded, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
   field :expired_notification_sent, type: Boolean, default: false
   field :completed_notification_sent, type: Boolean, default: false
@@ -46,7 +47,7 @@ class Opportunity
   field :favorites_notified, type: Boolean, default: false
   attr_accessor :viewer
 
-  scope :active, -> { where(canceled: false) }
+  scope :active, -> { where(canceled: false, awarded: false) }
   scope :recent, -> { desc(:created_at) }
   scope :won, -> { where(:winning_bid_id.ne => nil) }
   scope :by_region, ->(region) { where(start_region: region) }
@@ -162,10 +163,15 @@ class Opportunity
     self.update_attributes(canceled: true, bidding_ends_at: Time.now)
   end
 
+  def award!
+    self.update_attributes(awarded: true, bidding_ends_at: Time.now)
+  end
+
   def win!(bid_id)
     bid = self.bids.active.find(bid_id)
 
     self.bidding_done = true
+    self.awarded = true
     self.winning_bid_id = bid.id
     self.value = bid.amount
     self.bidding_won_at = Time.now
@@ -243,7 +249,7 @@ class Opportunity
   end
 
   def bidable?
-    not(self.canceled? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
+    not(self.canceled? || self.awarded? || bidding_done? || self.winning_bid_id? || self.bidding_ended?)
   end
 
   def validate_locations
@@ -283,7 +289,7 @@ class Opportunity
   end
 
   def editable?
-    return false if self.canceled?
+    return false if self.canceled? or self.awarded?
     not(self.bids.active.exists?)
   end
 
@@ -297,11 +303,13 @@ class Opportunity
 
   def status
     if self.canceled?
-      "Awarded"
+      "Canceled"
     elsif self.winning_bid_id
       "Bidding won"
     elsif self.bidding_ended?
       "Bidding ended"
+    elsif self.awarded?
+      "Awarded"
     else
       "In progress"
     end
