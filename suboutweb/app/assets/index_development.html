@@ -109,7 +109,9 @@
           </div>
         </div>
       </div>
-      <p id="application-message" ui-if="userSignedIn()">{{application_message.value}}</p>
+      <div id="application-message" ui-if="userSignedIn()">
+        <p class="inner" ng-bind-html-unsafe="application_message.value"></p>
+      </div>
       <div id="content" ng-view="content" class="ng-cloak"></div>
       <div id="modal" class="modal fade" role="modal">
         <div class="modal-dialog">
