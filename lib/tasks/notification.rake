@@ -36,7 +36,7 @@ namespace :subout do
   end
 
   task :send_remind_notification => :environment do 
-    #GatewaySubscription.send_remind_notification
+    GatewaySubscription.send_remind_notification
     Company.send_daily_remind_notification
   end
 end
