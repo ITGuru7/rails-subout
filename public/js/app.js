@@ -1513,7 +1513,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       }
     }
     $scope.companyProfile.notification_items = finalNotifications;
-    console.log(finalNotifications);
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,

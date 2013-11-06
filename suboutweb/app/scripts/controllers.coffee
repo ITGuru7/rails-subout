@@ -1165,7 +1165,6 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     for t in $rootScope.NOTIFICATION_TYPES
       finalNotifications.push(t.code) if t.enabled
     $scope.companyProfile.notification_items = finalNotifications
-    console.log finalNotifications
 
     Company.update
       companyId: $rootScope.company._id
