@@ -48,6 +48,7 @@ class Company
   field :locked_at, type: Time
   field :vehicle_types, type: Array, default: []
   field :payment_methods, type: Array, default: []
+  field :poster_message
 
   field :active, type: Boolean
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }

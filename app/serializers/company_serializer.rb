@@ -4,7 +4,7 @@ class CompanySerializer < ActiveModel::Serializer
     :bids_count, :opportunities_count, :subout_pro_subscriber?, :favoriting_buyer_ids, :self_service_url,
     :dot_number, :cell_phone, :sales_info_messages, :subscription_plan, :subscription_id, :insurance, :upgraded_recently, :has_ada_vehicles, :payment_state, 
     :vehicle_types, :notification_email, :score, :payment_methods, :today_bids_count, 
-    :address_line1, :address_line2, :city, :state, :country, :zip_code, :notification_items
+    :address_line1, :address_line2, :city, :state, :country, :zip_code, :notification_items, :poster_message
 
   has_many :ratings_taken, serializer: RatingSerializer
   has_many :vehicles

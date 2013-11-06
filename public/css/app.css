@@ -7974,6 +7974,9 @@ div#opportunity-show .description .content {
 #page-settings ul.nav-tabs li {
   font-size: 16px;
 }
+#page-settings ul.nav-tabs li a {
+  padding: 10px;
+}
 #page-settings .tab-content {
   padding: 10px 5px;
 }
