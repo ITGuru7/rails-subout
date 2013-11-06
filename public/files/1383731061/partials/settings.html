@@ -12,6 +12,7 @@
       <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
       <li ng-class="{active:selectedTab == 'favorited-regions'}"><a href="#favorited-regions" data-toggle="tab">Regions</a></li>
       <li ng-class="{active:selectedTab == 'vehicles'}"><a href="#vehicles" data-toggle="tab">Vehicles</a></li>
+      <li ng-class="{active:selectedTab == 'others'}"><a href="#others" data-toggle="tab">Others</a></li>
     </ul>
     <div class="tab-content">
       <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane" id="user-login">
@@ -103,6 +104,13 @@
               </div>
             </div>
           </div>
+          <div>
+              <label for="notification_daily-reminder" class="checkbox">
+                 <input id="notification_daily-reminder" name="notification_item" type="checkbox" ng-mode="daily-reminder" ng-checked="daily_reminder" 
+                 ng-click="setReminderNotification()"/>
+              Only send daily reminder email
+              </label>
+          </div>
           <hr />
           <div class="form-group">
             <div class="col-md-offset-4 col-md-8">
@@ -156,13 +164,17 @@
             <div class="form-group">
               <label for="logo_id" class="col-md-4 control-label">Company Logo</label>
 
-              <div class="col-md-8 mobile-col-md-8">
-                <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
-                <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+              <div class="col-md-8">
+                <div>
+                  <input ng-init="setupFileUploader()" class="cloudinary-fileupload form-control" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
+                  <input type="hidden" id="company_logo_id" class="file-upload-public-id" value="{{company.logo_id}}" ng-model="company.logo_id">
+                </div>
                 <div id="progress">
                   <div class="bar" style="width: 0%;"></div>
                 </div>
-                <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview"/>
+                <div>
+                  <img ng-show="company.logo_url" ng-src="{{company.logo_url}}" class="image-preview img-responsive"/>
+                </div>
                 <div ng-hide="company.logo_url">No Logo Available</div>
               </div>
             </div>
@@ -522,6 +534,29 @@
               <button class="btn btn-primary" ng-click="saveVehicles()" ng-show="companyProfile.vehicles.length > 0" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
             </div>
           </div>
+        </form>
+      </div>
+
+      <div ng-class="{active:selectedTab == 'others'}" class="tab-pane" id="others">
+        <form name="settingsOther" class="form-horizontal" novalidate>
+          <fieldset>
+            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+
+            <div class="form-group">
+              <label for="poster-message" class="col-md-4 control-label">Message to bidder</label>
+              <div class="col-md-8">
+                <textarea id="poster-message" name="poster_message" type="text" class="form-control" ng:model="companyProfile.poster_message"></textarea>
+              </div>
+            </div>
+
+            <hr />
+            <div class="form-group">
+              <div class="col-md-offset-4 col-md-8">
+                <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsFleet.$invalid">Save</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+              </div>
+            </div>
+          </fieldset>
         </form>
       </div>
     </div>

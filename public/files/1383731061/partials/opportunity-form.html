@@ -25,7 +25,7 @@
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_type.$invalid}">
         <label for="opportunity_type" class="col-md-4 control-label">Opportunity Type *</label>
         <div class="col-md-8">
-          <select id="opportunity_type" ng-change="setOpportunityForwardAuction()" name="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types" required>
+          <select id="opportunity_type" class="form-control" ng-change="setOpportunityForwardAuction()" name="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types" required>
           </select>
         </div>
       </div>
@@ -40,7 +40,7 @@
       <div class="form-group">
         <label for="opportunity_vehicle_type" class="col-md-4 control-label">Vehicle Type</label>
         <div class="col-md-8">
-          <select id="opportunity_vehicle_type" name="opportunity_vehicle_type" ng-model="opportunity.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
+          <select id="opportunity_vehicle_type" class="form-control" name="opportunity_vehicle_type" ng-model="opportunity.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
             <option value=""></option>
           </select>
         </div>

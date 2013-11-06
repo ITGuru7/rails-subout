@@ -124,7 +124,7 @@ subout.config([
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
     }).otherwise({
-      redirectTo: "/dashboard"
+      redirectTo: "/available_opportunities"
     });
   }
 ]);
@@ -149,7 +149,7 @@ angular.element(document).ready(function() {
 var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
@@ -168,6 +168,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   if ($rootScope.filterRegionsOnHome === null) {
     $rootScope.filterRegionsOnHome = [];
   }
+  $rootScope.application_message = Setting.get({
+    key: "application_message"
+  });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
     if (v1 !== null) {
       return $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome);
@@ -552,6 +555,7 @@ WelcomePrelaunchCtrl = function(AuthToken) {
 
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
+  $rootScope.inPosting = false;
   if (!$scope.opportunity) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
@@ -1031,6 +1035,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
+  $scope.endOpportunity = function() {
+    if (!confirm("Are you sure to end your opportunity?")) {
+      return;
+    }
+    return Auction.cancel({
+      opportunityId: $scope.opportunity._id,
+      action: 'award',
+      api_token: $rootScope.token.api_token
+    }, {}, function(content) {
+      return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
   $scope.selectWinner = function(bid) {
     if (!confirm("Are you sure to accept this bid?")) {
       return;
@@ -1361,6 +1379,7 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   updateSelectedRegions();
   updateSelectedNotifications = function() {
     var t, _i, _len, _ref, _results;
+    $scope.daily_reminder = $rootScope.company.hasNotificationItem("daily-reminder");
     _ref = $rootScope.NOTIFICATION_TYPES;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -1368,14 +1387,38 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       if ($rootScope.company.hasNotificationItem(t.code)) {
         _results.push(t.enabled = true);
       } else {
-        _results.push(void 0);
+        _results.push(t.enabled = null);
       }
     }
     return _results;
   };
   updateSelectedNotifications();
-  $scope.setNotification = function(t) {
-    return t.enabled = !t.enabled;
+  $scope.setReminderNotification = function() {
+    var t, _i, _len, _ref, _results;
+    $scope.daily_reminder = !$scope.daily_reminder;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      _results.push(t.enabled = null);
+    }
+    return _results;
+  };
+  $scope.setNotification = function(n) {
+    var t, _i, _len, _ref, _results;
+    n.enabled = !n.enabled;
+    $scope.daily_reminder = null;
+    _ref = $rootScope.NOTIFICATION_TYPES;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      t = _ref[_i];
+      if (t.code === n.code) {
+        _results.push(t.enabled = n.enabled);
+      } else {
+        _results.push(void 0);
+      }
+    }
+    return _results;
   };
   updateCompanyAndCompanyProfile = function(company) {
     $rootScope.company = company;
@@ -1459,6 +1502,9 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
     $scope.companyProfileError = "";
     $scope.companyProfile.logo_id = $("#company_logo_id").val();
     finalNotifications = [];
+    if ($scope.daily_reminder) {
+      finalNotifications.push("daily-reminder");
+    }
     _ref = $rootScope.NOTIFICATION_TYPES;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       t = _ref[_i];
@@ -1573,7 +1619,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
           if ($rootScope.redirectToPath) {
             return $location.path($rootScope.redirectToPath);
           } else {
-            return $location.path("dashboard");
+            return $location.path("");
           }
         });
       } else {
@@ -2164,6 +2210,15 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   };
   Company.prototype.hasNotificationItem = function(code) {
     return _.indexOf(this.notification_items, code) !== -1;
+  };
+  Company.prototype.addNotificationItem = function(code) {
+    this.notification_items.push(code);
+    this.notifcation_items = _.uniq(this.notifiication_items);
+    return this.notification_items;
+  };
+  Company.prototype.removeNotificationItem = function(code) {
+    this.notifcation_items = _.without(this.notifiication_items, code);
+    return this.notification_items;
   };
   Company.prototype.addFavoriteBuyerId = function(buyerId) {
     return this.favoriting_buyer_ids.push(buyerId);

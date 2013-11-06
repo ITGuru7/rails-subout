@@ -73,7 +73,7 @@
           </div>
           <div ng-show="opportunity.status && opportunity.status != 'In progress'">
             <span class="label-field warning">Bidding ended</span><br>
-            <span ng-hide="opportunity.winning_bid_id">The poster of this opportunity has not yet selected a winner.</span>
+            <span ng-hide="opportunity.winning_bid_id || opportunity.status=='Awarded'">The poster of this opportunity has not yet selected a winner.</span>
           </div>
           <div ng-show="opportunity.reserve_amount">
             <span class="label-field">Starting price: </span>{{opportunity.reserve_amount | soCurrency}}
@@ -81,6 +81,7 @@
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-show="opportunity.bids.length == 0" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
             <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
+            <a class='btn btn-danger' ng-click="endOpportunity()">End this Opportunity</a>
           </div>
           <div class="actions" ng-show="opportunity.buyer_id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
@@ -112,8 +113,11 @@
             <td ng-show="opportunity.vehicle_count > 1"><strong>{{bid.vehicle_count}}</strong> vehicle(s)</td>
             <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
             <td>
-              <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></span>
+              <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
+                by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+              </span>
             </td>
+            <td ng-show="opportunity.buyer._id == company._id"><span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span></td>
             <td class="tpa">
                <img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa">
             </td>
@@ -138,6 +142,9 @@
               by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
             </td>
           </tr>
+          <tr ng-show="opportunity.buyer._id == company._id">
+            <span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span>
+          </td>
           <tr ng-show="bid.comment">
             <td>{{bid.comment}}</td>
           </tr>
