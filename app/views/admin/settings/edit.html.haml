@@ -1,6 +1,7 @@
 %h3= @setting.to_s
 .span7
-  = form_for @setting, url: admin_setting_path(@setting), html: { class: "form-horizontal" } do |f|
+  = form_for @setting, url: admin_setting_path(@setting.id), html: { class: "form-horizontal" } do |f|
+    = f.hidden_field :id
     .control-group
       = f.label :value, @setting.label, class: "control-label"
       .controls

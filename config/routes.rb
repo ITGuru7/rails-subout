@@ -101,5 +101,6 @@ Subout::Application.routes.draw do
     end
     resources :revenues, only: [:index]
     resources :settings, only: [:index, :update, :edit]
+    resources :email_templates, only: [:index, :update, :edit]
   end
 end

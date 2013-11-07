@@ -7,6 +7,6 @@
   - Setting.all.each do |setting|
     %tr
       %td= setting.to_s
-      %td= setting.value
-      %td= link_to "Edit", edit_admin_setting_path(setting), class: 'btn btn-primary'
+      %td= setting.value.html_safe
+      %td= link_to "Edit", edit_admin_setting_path(setting.id), class: 'btn btn-primary'
 

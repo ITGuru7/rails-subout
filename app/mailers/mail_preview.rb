@@ -34,6 +34,16 @@ class MailPreview < MailView
     Notifier.expired_auction_notification(opportunity.id)
   end
 
+  def completed_auction_notification_to_buyer 
+    opportunity = Opportunity.where(:winning_bid_id.ne => nil).last
+    Notifier.completed_auction_notification_to_buyer(opportunity.id)
+  end
+
+  def completed_auction_notification_to_supplier 
+    opportunity = Opportunity.where(:winning_bid_id.ne => nil).last
+    Notifier.completed_auction_notification_to_supplier(opportunity.id)
+  end
+
   def subscription_confirmation
     subscription = GatewaySubscription.last
     Notifier.subscription_confirmation(subscription.id)
@@ -45,9 +55,44 @@ class MailPreview < MailView
     Notifier.new_opportunity(opportunity.id, company.id)
   end
 
+  def expired_card
+    company = Company.last
+    Notifier.expired_card(company.id)
+  end
+
+  def locked_company
+    company = Company.last
+    Notifier.locked_company(company.id)
+  end
+
   def updated_product
     company = Company.last
     Notifier.updated_product(company.id)
+  end
+
+  def new_vehicle
+    vehicle = Vehicle.first
+    Notifier.new_vehicle(vehicle.id)
+  end
+
+  def update_vehicle
+    vehicle = Vehicle.first
+    Notifier.update_vehicle(vehicle.id, vehicle)
+  end
+
+  def remove_vehicle
+    vehicle = Vehicle.first
+    Notifier.remove_vehicle(vehicle.id)
+  end
+
+  def remind_registration_to_user
+    subscription = GatewaySubscription.last
+    Notifier.remind_registration_to_user(subscription.id)
+  end
+
+  def remind_registration_to_admin
+    subscription = GatewaySubscription.last
+    Notifier.remind_registration_to_admin(subscription.id)
   end
 
   def daily_reminder

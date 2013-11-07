@@ -1,0 +1,14 @@
+%h2 Email Templates
+%table.table.table-stripe.table-bordered
+  %tr
+    %th Name
+    %th Subject 
+    %th Description
+    %th
+  - EmailTemplate.all.each do |email_template|
+    %tr
+      %td= email_template.to_s
+      %td= email_template.subject
+      %td= email_template.description.html_safe
+      %td= link_to "Edit", edit_admin_email_template_path(email_template.id), class: 'btn btn-primary'
+

@@ -1,4 +1,8 @@
 class Notifier < ActionMailer::Base
+  include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::UrlHelper
+  include ActionView::Helpers::DateHelper
+
   default :from => "noreply@suboutapp.com"
 
   def send_known_favorite_invitation(buyer_id, supplier_id)
@@ -15,61 +19,71 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] New Favorite Guest Supplier Invitation from #{@buyer.name}", to: invitation.supplier_email)
   end
 
+  def send_mail_from_template(template_name, to)
+    email_template = EmailTemplate.by_name(template_name)
+    mail(subject: eval('"' + email_template.subject + '"', binding), to: to) do |format|
+      format.html { render inline: eval('"' + email_template.body_with_signature + '"', binding) }
+    end
+  end
+
   def new_bid(bid_id)
     if @bid = Bid.active.where(id: bid_id).first
       @opportunity = @bid.opportunity
-      @buyer = @opportunity.buyer
+      @poster = @opportunity.buyer
       @bidder = @bid.bidder
 
-      mail(subject: "[SubOut] New bid on: #{@opportunity.name}", to: @buyer.notifiable_email)
+      send_mail_from_template(__method__.to_s, @poster.notifiable_email)
     end
   end
 
   def won_auction_to_buyer(opportunity_id)
-    @auction = Opportunity.find(opportunity_id)
-    @bid = @auction.winning_bid
-    @poster = @auction.buyer
+    @opportunity = Opportunity.find(opportunity_id)
+    @bid = @opportunity.winning_bid
+    @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] #{@bid.bidder.name} has won the bidding on #{@auction.name}", to: @poster.notifiable_email)
+    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
   end
 
   def won_auction_to_supplier(opportunity_id)
-    @auction = Opportunity.find(opportunity_id)
-    @bid = @auction.winning_bid
-    @buyer = @auction.buyer
+    @opportunity = Opportunity.find(opportunity_id)
+    @bid = @opportunity.winning_bid
+    @poster = @opportunity.buyer
     @bidder = @bid.bidder
-    mail(subject: "[SubOut] You won the bidding on #{@auction.name}", to: @bidder.notifiable_email)
+
+    send_mail_from_template(__method__.to_s, @bidder.notifiable_email)
   end
 
   def finished_auction_to_bidder(opportunity_id, bidder_id)
-    @auction = Opportunity.find(opportunity_id)
+    @opportunity = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)
-    mail(subject: "[SubOut] You didn't win the bidding on #{@auction.name}.", to: @bidder.notifiable_email) if @bidder.notification_items.include?("opportunity-win")
+
+    send_mail_from_template(__method__.to_s, @bidder.notifiable_email) if @bidder.notification_items.include?("opportunity-win")
   end
 
   def expired_auction_notification(auction_id)
-    @auction = Opportunity.find(auction_id)
-    @poster = @auction.buyer
-    mail(subject: "[SubOut] Your auction #{@auction.name} is expired", to: @poster.notifiable_email)
+    @opportunity = Opportunity.find(auction_id)
+    @poster = @opportunity.buyer
+
+    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
   end
 
   def completed_auction_notification_to_buyer(opportunity_id)
-    @auction = Opportunity.find(opportunity_id)
-    @bid = @auction.winning_bid
-    @poster = @auction.buyer
+    @opportunity = Opportunity.find(opportunity_id)
+    @bid = @opportunity.winning_bid
+    @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @poster.notifiable_email)
+    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
   end
 
   def completed_auction_notification_to_supplier(opportunity_id)
-    @auction = Opportunity.find(opportunity_id)
-    @bid = @auction.winning_bid
-    @poster = @auction.buyer
+    @opportunity = Opportunity.find(opportunity_id)
+    @bid = @opportunity.winning_bid
+    @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    mail(subject: "[SubOut] Your auction #{@auction.name} is completed", to: @bidder.notifiable_email)
+    send_mail_from_template(__method__.to_s, @bidder.notifiable_email)
   end
 
   def subscription_confirmation(subscription_id)

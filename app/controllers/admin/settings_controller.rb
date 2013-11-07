@@ -2,7 +2,6 @@ class Admin::SettingsController < Admin::BaseController
   before_filter :load_setting, only: [:edit, :update]
 
   def edit
-    @setting = Setting.create(key: params[:id]) unless @setting.present?
   end
 
   def update
@@ -13,6 +12,6 @@ class Admin::SettingsController < Admin::BaseController
   private
 
   def load_setting
-    @setting = Setting.find_or_create_by(key: params[:id])
+    @setting = Setting.find(params[:id])
   end
 end
