@@ -226,6 +226,7 @@ class Company
     conditions = {
       #:buyer_id.in => self.favoriting_buyer_ids,
       canceled: false,
+      awarded: false,
       :bidding_ends_at.gt => Time.now,
       winning_bid_id: nil,
       :buyer_id.ne => self.id
