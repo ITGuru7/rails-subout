@@ -89,7 +89,7 @@ class Notifier < ActionMailer::Base
   def subscription_confirmation(subscription_id)
     @subscription = GatewaySubscription.find(subscription_id)
 
-    mail(subject: "[SubOut] confirm your subscription", to: @subscription.email)
+    send_mail_from_template(__method__.to_s, @subscription.email)
   end
 
   def new_opportunity(opportunity_id, company_id)
@@ -97,30 +97,34 @@ class Notifier < ActionMailer::Base
     return if @opportunity.canceled?
 
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] new opportunity arrived", to: @company.notifiable_email)
+
+    send_mail_from_template(__method__.to_s, @company.notifiable_email)
   end
 
   def expired_card(company_id)
     @company = Company.find(company_id)
     @card_update_link = @company.chargify_service_url
-    mail(subject: "[SubOut] Credit card is expired", to: @company.notifiable_email)
+
+    send_mail_from_template(__method__.to_s, @company.notifiable_email)
   end
 
   def locked_company(company_id)
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] Your company is locked", to: @company.notifiable_email)
+
+    send_mail_from_template(__method__.to_s, @company.notifiable_email)
   end
 
   def updated_product(company_id)
     @company = Company.find(company_id)
-    mail(subject: "[SubOut] updated subscription product", to: @company.notifiable_email)
+
+    send_mail_from_template(__method__.to_s, @company.notifiable_email)
   end
 
   def new_vehicle(vehicle_id)
     if @vehicle = Vehicle.find(vehicle_id) 
       @company = @vehicle.company
 
-      mail(subject: "[SubOut] New vehicle on: #{@company.name}", to: Setting.admin_email)
+      send_mail_from_template(__method__.to_s, Setting.admin_email)
     end
   end
 
@@ -129,7 +133,7 @@ class Notifier < ActionMailer::Base
       @company = @vehicle.company
       @old_vehicle = old_vehicle
 
-      mail(subject: "[SubOut] Vehicle is updated on: #{@company.name}", to: Setting.admin_email)
+      send_mail_from_template(__method__.to_s, Setting.admin_email)
     end
   end
 
@@ -137,24 +141,24 @@ class Notifier < ActionMailer::Base
     @vehicle = vehicle
     @company = Company.find(vehicle.company_id) 
 
-    mail(subject: "[SubOut] Vehicle is removed on: #{@company.name}", to: Setting.admin_email)
+    send_mail_from_template(__method__.to_s, Setting.admin_email)
   end
 
   def remind_registration_to_user(subscription_id)
     @subscription = GatewaySubscription.find(subscription_id)
 
-    mail(subject: "[SubOut] You didn't complete the registration to Subout", to: @subscription.email)
+    send_mail_from_template(__method__.to_s, @subscription.email)
   end
 
   def remind_registration_to_admin(subscription_id)
     @subscription = GatewaySubscription.find(subscription_id)
 
-    mail(subject: "[SubOut] #{@subscription.organization} didn't complete the registration in last 3 days", to: Setting.admin_email)
+    send_mail_from_template(__method__.to_s, Setting.admin_email)
   end
 
   def daily_reminder(company_id)
     @company = Company.find(company_id)
 
-    mail(subject: "[SubOut] Daily remind email", to: @company.notifiable_email)
+    send_mail_from_template(__method__.to_s, @company.notifiable_email)
   end
 end

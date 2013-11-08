@@ -18,7 +18,7 @@
     .control-group
       = f.button :submit, class: "btn btn-danger"
       = link_to "Cancel", admin_gateway_subscriptions_path, class: "btn"
-  - if @subscription.created_company.present?
+  - unless @subscription.created_company.present?
     %p.alert.alert-danger
       This subscription is not connected to any company.
       %br

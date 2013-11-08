@@ -82,7 +82,7 @@ class MailPreview < MailView
 
   def remove_vehicle
     vehicle = Vehicle.first
-    Notifier.remove_vehicle(vehicle.id)
+    Notifier.remove_vehicle(vehicle)
   end
 
   def remind_registration_to_user

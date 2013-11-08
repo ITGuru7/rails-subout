@@ -5,7 +5,7 @@
     .control-group
       = f.label :description, class: "control-label"
       .controls
-        = @email_template.description.html_safe
+        = f.text_area :description, rows: 8, class: "input-xxlarge"
     .control-group
       = f.label :subject, class: "control-label"
       .controls

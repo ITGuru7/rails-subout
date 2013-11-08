@@ -47,6 +47,8 @@ class EmailTemplate
     @subscription = GatewaySubscription.last
     @company = Company.last
     @vehicle = Vehicle.last
+    @old_vehicle = Vehicle.first
+    @card_update_link = @company.chargify_service_url
   end
 
   def exchange_double_quote
