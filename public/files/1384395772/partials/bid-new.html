@@ -116,16 +116,20 @@
       <div class="form-group">
         <label for="bid_comment" class="col-md-4 control-label">Brag about your company here</label>
         <div class="col-md-8">
-          <input type="text" id="bid_comment" name="bid_comment" ng-model="bid.comment" class="form-control">
+          <textarea id="bid_comment" name="bid_comment" ng-model="bid.comment" class="form-control"></textarea>
         </div>
       </div>
 
+      <div id="poster-message" class="help-block"><div class="inner text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
+
       <div class="form-group">
         <div class="col-md-offset-4 col-md-8">
-          <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
-            Bid Now
-          </button>
-          <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+          <div>
+            <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
+              Bid Now
+            </button>
+            <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+          </div>
         </div>
       </div>
     </form>

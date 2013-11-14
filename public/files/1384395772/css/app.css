@@ -7335,6 +7335,11 @@ form {
 #subout-brand {
   position: relative;
 }
+#application-message {
+  text-align: center;
+  font-weight: bold;
+  color: gray;
+}
 #logo img {
   margin-top: 0px;
   padding-bottom: 10px;
@@ -7969,6 +7974,9 @@ div#opportunity-show .description .content {
 #page-settings ul.nav-tabs li {
   font-size: 16px;
 }
+#page-settings ul.nav-tabs li a {
+  padding: 10px;
+}
 #page-settings .tab-content {
   padding: 10px 5px;
 }
@@ -8098,6 +8106,9 @@ div#opportunity-show .description .content {
 }
 #licensed-regions .checkbox {
   padding-left: 20px;
+}
+#available_opportunities {
+  min-height: 400px;
 }
 #available_opportunities .current-bid-amount {
   padding-right: 20px;
