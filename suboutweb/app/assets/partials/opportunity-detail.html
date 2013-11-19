@@ -34,6 +34,7 @@
               <li><span class="label-field">Winning amount: </span> <span>{{ opportunity.winner.amount | soCurrency }}</span></li>
             </ul>
           </div>
+          <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
           <div>
             <ul>
               <li><span class="label-field">Pick up time: </span>{{opportunity.start_date | soShortDate}} {{opportunity.start_time}}</li>
