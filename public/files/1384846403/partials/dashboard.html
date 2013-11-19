@@ -132,10 +132,11 @@
             </div>
             <div class="eventable-details" ng-show="event.selected" class="action-buttons">
               <div class="clearfix">
-                <div class="col-md-offset-3 col-md-5">
+                <div class="col-md-offset-3 col-md-6">
                   <div class="description">
                     <div><strong>Description</strong></div>
                     <div class="content">{{event.eventable.description}}</div>
+                    <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="event.eventable.buyer_message"></div></div>
                   </div>
                   <div class="winner" ng-show="event.eventable.winning_bid_id">
                     <span class="label-field">Winning Amount: </span> 
@@ -236,6 +237,7 @@
                 </td>
                 <td>
                   <div class="content">{{event.eventable.description}}</div>
+                  <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="event.eventable.buyer_message"></div></div>
                 </td>
               </tr>
               <tr ng-show="event.eventable.winning_bid_id && event.selected">

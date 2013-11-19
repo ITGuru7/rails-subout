@@ -149,7 +149,7 @@ angular.element(document).ready(function() {
 var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
@@ -168,6 +168,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   if ($rootScope.filterRegionsOnHome === null) {
     $rootScope.filterRegionsOnHome = [];
   }
+  $rootScope.application_message = Setting.get({
+    key: "application_message"
+  });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
     if (v1 !== null) {
       return $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome);
@@ -1032,6 +1035,20 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
+  $scope.endOpportunity = function() {
+    if (!confirm("Are you sure to end your opportunity?")) {
+      return;
+    }
+    return Auction.cancel({
+      opportunityId: $scope.opportunity._id,
+      action: 'award',
+      api_token: $rootScope.token.api_token
+    }, {}, function(content) {
+      return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
   $scope.selectWinner = function(bid) {
     if (!confirm("Are you sure to accept this bid?")) {
       return;
@@ -1496,7 +1513,6 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       }
     }
     $scope.companyProfile.notification_items = finalNotifications;
-    console.log(finalNotifications);
     return Company.update({
       companyId: $rootScope.company._id,
       company: $scope.companyProfile,
@@ -2288,7 +2304,9 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
       $.cookie(AuthToken, token);
       this.tokenValue = token;
       $rootScope.token = token;
-      $rootScope.pusher = new Pusher(token.pusher_key);
+      $rootScope.pusher = new Pusher(token.pusher_key, {
+        encrypted: true
+      });
       $rootScope.channel = $rootScope.pusher.subscribe('global');
       $rootScope.company = Company.get({
         companyId: token.company_id,

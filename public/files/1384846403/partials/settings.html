@@ -12,6 +12,7 @@
       <li ng-class="{active:selectedTab == 'fleet'}"><a href="#fleet" data-toggle="tab">Fleet</a></li>
       <li ng-class="{active:selectedTab == 'favorited-regions'}"><a href="#favorited-regions" data-toggle="tab">Regions</a></li>
       <li ng-class="{active:selectedTab == 'vehicles'}"><a href="#vehicles" data-toggle="tab">Vehicles</a></li>
+      <li ng-class="{active:selectedTab == 'others'}"><a href="#others" data-toggle="tab">Others</a></li>
     </ul>
     <div class="tab-content">
       <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane" id="user-login">
@@ -533,6 +534,29 @@
               <button class="btn btn-primary" ng-click="saveVehicles()" ng-show="companyProfile.vehicles.length > 0" ng-disabled="vehicleForm.$invalid">Register Vehicles</button>
             </div>
           </div>
+        </form>
+      </div>
+
+      <div ng-class="{active:selectedTab == 'others'}" class="tab-pane" id="others">
+        <form name="settingsOther" class="form-horizontal" novalidate>
+          <fieldset>
+            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+
+            <div class="form-group">
+              <label for="poster-message" class="col-md-4 control-label">Message to bidder</label>
+              <div class="col-md-8">
+                <textarea id="poster-message" name="poster_message" type="text" class="form-control" ng:model="companyProfile.poster_message"></textarea>
+              </div>
+            </div>
+
+            <hr />
+            <div class="form-group">
+              <div class="col-md-offset-4 col-md-8">
+                <button class="btn btn-primary" ng-click="saveCompanyProfile()" ng-disabled="settingsFleet.$invalid">Save</button>
+                <button data-dismiss="modal" type="button" class="btn btn-danger">Cancel</button>
+              </div>
+            </div>
+          </fieldset>
         </form>
       </div>
     </div>
