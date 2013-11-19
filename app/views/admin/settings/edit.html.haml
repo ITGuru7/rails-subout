@@ -1,4 +1,8 @@
 %h3= @setting.to_s
+- if @setting.errors.any?
+  - @setting.errors.full_messages.each do |error|
+    .alert.alert-error
+      = error
 .span7
   = form_for @setting, url: admin_setting_path(@setting.id), html: { class: "form-horizontal" } do |f|
     = f.hidden_field :id
