@@ -1,14 +1,21 @@
 <div id="opportunities">
   <div class="row">
-    <div class="welcome display-message top-banner col-md-9 col-sm-8">
+    <div class="welcome display-message top-banner col-md-6 col-sm-6 col-xs-12">
       <span class="display-message-extra">Welcome</span>
       <span class="company display-message-subject">{{company.name}}!</span>
       <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
     </div>
-    <div class="col-md-3 col-sm-4">
-      <div class="search">
-        <input ng-model="query" ui-keypress="{13:'fullTextSearch()'}" placeholder="Search opportunities for..."/>
-        <div class="glyphicon glyphicon-search"></div>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="form-group clearfix">
+          <a href="#modal" class="btn btn-primary pull-right" data-toggle="modal" ng-click="setOpportunity({}); displayNewOpportunityForm()">Post new opportunity</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <div class="search">
+          <input ng-model="query" ui-keypress="{13:'fullTextSearch()'}" placeholder="Search opportunities for..."/>
+          <div class="glyphicon glyphicon-search"></div>
+        </div>
       </div>
     </div>
   </div>
