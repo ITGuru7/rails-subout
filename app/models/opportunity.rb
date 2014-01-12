@@ -187,8 +187,8 @@ class Opportunity
     if self.vehicle_count != bid.vehicle_count #and self.bidding_ends_at > Time.now
       new_opportunity_attrs = self.attributes.except("_id", "reference_number", "created_at", "updated_at", "bidding_won_at", "value", "winning_bid_id", "bidding_done", "favorites_notified", "bidding_ends_at", "notified_regions")
       new_opportunity_attrs["vehicle_count"] = self.vehicle_count - bid.vehicle_count
-      new_opportunity_attrs["reserve_amount"] = self.reserve_amount / self.vehicle_count * new_opportunity_attrs["vehicle_count"] unless self.reserve_amount.blank?
-      new_opportunity_attrs["win_it_now_price"] = self.win_it_now_price / self.vehicle_count * new_opportunity_attrs["vehicle_count"] unless self.win_it_now_price.blank?
+      new_opportunity_attrs["reserve_amount"] = self.reserve_amount / self.vehicle_count * new_opportunity_attrs["vehicle_count"].to_i unless self.reserve_amount.blank?
+      new_opportunity_attrs["win_it_now_price"] = self.win_it_now_price / self.vehicle_count * new_opportunity_attrs["vehicle_count"].to_i unless self.win_it_now_price.blank?
       new_opportunity = Opportunity.create(new_opportunity_attrs)
       new_opportunity.update_value!
 
