@@ -2304,7 +2304,9 @@ suboutSvcs.factory("Authorize", function($rootScope, $location, AuthToken, Regio
       $.cookie(AuthToken, token);
       this.tokenValue = token;
       $rootScope.token = token;
-      $rootScope.pusher = new Pusher(token.pusher_key);
+      $rootScope.pusher = new Pusher(token.pusher_key, {
+        encrypted: true
+      });
       $rootScope.channel = $rootScope.pusher.subscribe('global');
       $rootScope.company = Company.get({
         companyId: token.company_id,
