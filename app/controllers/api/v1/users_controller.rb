@@ -1,7 +1,10 @@
 class Api::V1::UsersController < Api::V1::BaseController
   def update
-    current_user.update_with_password(params[:user])
-    render json: current_user
+    if current_user.update_with_password(params[:user])
+      render json: current_user
+    else
+      render json: {}, status: 422
+    end
   end
 
   def show

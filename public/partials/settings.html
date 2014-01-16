@@ -17,7 +17,7 @@
     <div class="tab-content">
       <div ng-class="{active:selectedTab == 'user-login'}" class="tab-pane" id="user-login">
         <form name="settingsUserLogin" class="form-horizontal" role="form" novalidate>
-            <p class="alert alert-error" ng:show="userProfileError">{{userProfileError}}</p>
+            <p class="alert alert-danger" ng:show="userProfileError">{{userProfileError}}</p>
 
             <div class="form-group" ng-class="{'has-error':settingsUserLogin.user_email.$invalid}">
               <label for="user_email" class="col-md-4 control-label">Email *</label>
@@ -124,7 +124,7 @@
       <div ng-class="{active:selectedTab == 'company-profile'}" class="tab-pane" id="company-profile">
         <form name="settingsCompanyProfile" class="form-horizontal" novalidate>
           <fieldset>
-            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+            <p class="alert alert-danger" ng:show="companyProfileError">{{companyProfileError}}</p>
 
             <div class="form-group two-lines" ng-class="{'has-error':settingsCompanyProfile.abbreviated_name.$invalid}">
               <label for="abbreviated_name" class="col-md-4 control-label">Company Abbreviated Name *</label>
@@ -308,7 +308,7 @@
       <div ng-class="{active:selectedTab == 'fleet'}" class="tab-pane" id="fleet">
         <form name="settingsFleet" class="form-horizontal" novalidate>
           <fieldset>
-            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+            <p class="alert alert-danger" ng:show="companyProfileError">{{companyProfileError}}</p>
 
             <div class="form-group">
               <label for="has_ada_vehicles" class="col-md-4 control-label">Fleet includes ADA vehicles?</label>
@@ -540,7 +540,7 @@
       <div ng-class="{active:selectedTab == 'others'}" class="tab-pane" id="others">
         <form name="settingsOther" class="form-horizontal" novalidate>
           <fieldset>
-            <p class="alert alert-error" ng:show="companyProfileError">{{companyProfileError}}</p>
+            <p class="alert alert-danger" ng:show="companyProfileError">{{companyProfileError}}</p>
 
             <div class="form-group">
               <label for="poster-message" class="col-md-4 control-label">Message to bidder</label>
