@@ -86,7 +86,7 @@
                   <span class="name">name</span>
                 </td>
                 <td>
-                  <span class="description">Name</span>
+                  <span class="description">Name of opportunity</span>
                 </td>
               </tr>
               <tr>
@@ -98,11 +98,43 @@
                 </td>
               </tr>
               <tr>
+                <td>
+                  <span class="name">tracking_id</span>
+                </td>
+                <td>
+                  <span class="description">Internal Memo or ID#</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="name">vehicle_type</span>
+                </td>
+                <td>
+                  <span class="description">Vehicle Type(Sedan, Limo, Party Bus, Limo Bus, Mini Bus, Motorcoach, Double Decker Motorcoach, Executive Coach, Sleeper Bus, School Bus)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="name">vehicle_count</span>
+                </td>
+                <td>
+                  <span class="description">Total number of buses needed(default: 1)</span>
+                </td>
+              </tr>
+              <tr>
                 <td class="required">
                   <span class="name">description</span>
                 </td>
                 <td>
                   <span class="description">Description</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="name">contact_phone</span>
+                </td>
+                <td>
+                  <span class="description">Phone number(It's available in only emergency type)</span>
                 </td>
               </tr>
               <tr>
@@ -122,19 +154,11 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <span class="name">tracking_id</span>
-                </td>
-                <td>
-                  <span class="description">Internal Memo or ID#</span>
-                </td>
-              </tr>
-              <tr>
                 <td class="required">
                   <span class="name">start_date</span>
                 </td>
                 <td>
-                  <span class="description">Departure date</span>
+                  <span class="description">Departure date(ex: 12/02/2013)</span>
                 </td>
               </tr>
               <tr>
@@ -142,7 +166,7 @@
                   <span class="name">start_time</span>
                 </td>
                 <td>
-                  <span class="description">Departure time</span>
+                  <span class="description">Departure time(ex: 22:00)</span>
                 </td>
               </tr>
               <tr>
@@ -150,7 +174,7 @@
                   <span class="name">end_date</span>
                 </td>
                 <td>
-                  <span class="description">Arrival date</span>
+                  <span class="description">Arrival date(ex: 12/04/2013)</span>
                 </td>
               </tr>
               <tr>
@@ -158,7 +182,7 @@
                   <span class="name">end_time</span>
                 </td>
                 <td>
-                  <span class="description">Arrival time</span>
+                  <span class="description">Arrival time(ex: 10:00)</span>
                 </td>
               </tr>
               <tr>
@@ -166,7 +190,7 @@
                   <span class="name">bidding_duration_hrs</span>
                 </td>
                 <td>
-                  <span class="description">Duration in hours</span>
+                  <span class="description">opportunity available hours</span>
                 </td>
               </tr>
               <tr>
@@ -174,7 +198,7 @@
                   <span class="name">quick_winnable</span>
                 </td>
                 <td>
-                  <span class="description">Enable win it now</span>
+                  <span class="description">Enable win it now(true or false)</span>
                 </td>
               </tr>
               <tr>
@@ -187,26 +211,26 @@
               </tr>
               <tr>
                 <td>
-                  <span class="name">for_favorites_only</span>
-                </td>
-                <td>
-                  <span class="description">Limit view to favorite only</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
                   <span class="name">forward_auction</span>
                 </td>
                 <td>
-                  <span class="description">False to buy and true to sell</span>
+                  <span class="description">false to buy and true to sell(true or false)</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span class="name">contact_phone</span>
+                  <span class="name">ada_required</span>
                 </td>
                 <td>
-                  <span class="description">Contact phone for emergency opportunity. Required if type is Emergency</span>
+                  <span class="description">Ada required(true or false)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="name">reserve_amount</span>
+                </td>
+                <td>
+                  <span class="description">Stargin price in USD</span>
                 </td>
               </tr>
             </tbody>

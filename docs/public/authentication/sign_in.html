@@ -119,8 +119,18 @@ X-Runtime: 0.007791
 Content-Length: 198</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
-              <h4>Body</h4>
-              <div class="response body" data-content-type="application/json; charset=utf-8"><textarea>{ "payload":{"api_token":"XKtCmbhztxay7k1KcX7M","authorized":true,"company_id":"51225cdc06557351ad000025","user_id":"51225cdc06557351ad000026","pusher_key":null}, "version":1.5, "deploy":1361088178}</textarea></div>
+            <h4>Body(authentication success)</h4>
+            <div class="response body" data-content-type="application/json; charset=utf-8">
+              <textarea>
+                { "payload":{"api_token":"XKtCmbhztxay7k1KcX7M","authorized":true,"company_id":"51225cdc06557351ad000025","user_id":"51225cdc06557351ad000026","pusher_key":null}, "version":1.5, "deploy":1361088178}
+              </textarea>
+            </div>
+            <h4>Body(authentication failed)</h4>
+            <div class="response body" data-content-type="application/json; charset=utf-8">
+              <textarea>
+                { "payload":{"authorized":false,"message":"Invalid username or password!"}, "version":1.5, "deploy":1389851147}
+              </textarea>
+            </div>
       </div>
     </div>
   </body>
