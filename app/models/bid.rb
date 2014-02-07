@@ -113,8 +113,8 @@ class Bid
       end
     end
 
-    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 10
-      errors.add :base, "You cannot bid over 10 times per day."
+    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 5
+      errors.add :base, "You cannot bid over 5 times per day."
     end
   end
 
@@ -126,12 +126,12 @@ class Bid
     if opportunity.forward_auction?
       max_amount = previous_bids.map(&:amount).max
       if max_amount && amount <= BigDecimal.new(max_amount.to_s)
-        errors.add :amount, "cannot be lower or equal to previous bid"
+        errors.add :amount, "cannot be lower or equal to previous bid.($#{max_amount})"
       end
     else
       min_amount = previous_bids.map(&:amount).min
       if min_amount && amount >= BigDecimal.new(min_amount.to_s)
-        errors.add :amount, "cannot be higher or equal to previous bid"
+        errors.add :amount, "cannot be higher or equal to previous bid.($#{min_amount})"
       end
     end
   end
