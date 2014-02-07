@@ -72,4 +72,17 @@
   %strong Notice:
   This email will be applied to company, subscription and user.
 
+.row
+%h4 Reset password
+= form_for @company.first_user, url: change_password_admin_company_path(@company), html: { method: "put", class: "form-horizontal" } do |f|
+  .control-group
+    = f.label :password, "New password", class: "control-label"
+    .controls
+      = f.password_field :password
+  .control-group
+    = f.label :password_confirmation, "Password confirmation", class: "control-label"
+    .controls
+      = f.password_field :password_confirmation
+      = f.submit "Submit", class: "btn btn-primary"
+
 = link_to "Back", :back, class: 'btn'

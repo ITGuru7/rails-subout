@@ -1,5 +1,5 @@
 class Admin::CompaniesController < Admin::BaseController
-  before_filter :load_company, only: [:edit, :update, :connect_subscription, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails]
+  before_filter :load_company, only: [:edit, :update, :connect_subscription, :cancel_subscription, :reactivate_subscription, :add_as_a_favorite, :lock_account, :unlock_account, :change_emails, :change_password]
 
   def index
     @sort_by = params[:sort_by] || "created_at"
@@ -28,6 +28,16 @@ class Admin::CompaniesController < Admin::BaseController
   def change_emails
     @company.change_emails!(params[:email])
     redirect_to edit_admin_company_path(@company), notice: 'All emails were updated successfully.'
+  end
+
+  def change_password
+    user = @company.first_user
+    if user.update_attributes(params[:user])
+      redirect_to edit_admin_company_path(@company), notice: 'Password were updated successfully.'
+    else
+      flash.now[:error] = user.errors.full_messages.join("<br/>")
+      render :edit 
+    end
   end
 
   def lock_account

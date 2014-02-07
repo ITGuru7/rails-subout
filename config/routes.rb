@@ -93,6 +93,7 @@ Subout::Application.routes.draw do
         put "unlock_account"
         put "add_as_a_favorite"
         put "change_emails"
+        put "change_password"
       end
       resources :vehicles, only: [:edit, :update]
     end
