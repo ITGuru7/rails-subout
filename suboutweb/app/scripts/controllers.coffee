@@ -230,7 +230,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
       $rootScope.setModal(suboutPartialPath('ada-required.html'))
       return
     $rootScope.bid = {
-      amount: Opportunity.defaultBidAmountFor(opportunity)
+      amount: opportunity.reserve_amount #Opportunity.defaultBidAmountFor(opportunity)
     }
     $rootScope.setOpportunity(opportunity)
     $rootScope.setModal(suboutPartialPath('bid-new.html'))

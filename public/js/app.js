@@ -424,7 +424,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     $rootScope.bid = {
-      amount: Opportunity.defaultBidAmountFor(opportunity)
+      amount: opportunity.reserve_amount
     };
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
