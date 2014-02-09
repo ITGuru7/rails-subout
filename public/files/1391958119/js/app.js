@@ -424,7 +424,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     $rootScope.bid = {
-      amount: Opportunity.defaultBidAmountFor(opportunity)
+      amount: opportunity.reserve_amount
     };
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
@@ -608,6 +608,15 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(content) {
         return showErrors(content.data.errors);
       });
+    }
+  };
+  $scope.isForSpecialRegion = function() {
+    var type;
+    type = $scope.opportunity.type;
+    if ((type === "Special") || (type === "Buy or Sell Parts and Vehicles")) {
+      return true;
+    } else {
+      return false;
     }
   };
   return $scope.setOpportunityForwardAuction = function() {
@@ -1889,6 +1898,9 @@ module.filter("timestamp", function() {
 
 module.filter("stringToDate", function() {
   return function(input) {
+    if (!input) {
+      return "";
+    }
     return Date.parse(input);
   };
 });

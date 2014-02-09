@@ -34,14 +34,16 @@
               <li><span class="label-field">Winning amount: </span> <span>{{ opportunity.winner.amount | soCurrency }}</span></li>
             </ul>
           </div>
-          <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
-          <div>
+          <div ng-show="!opportunity.is_for_special_region">
             <ul>
               <li><span class="label-field">Pick up time: </span>{{opportunity.start_date | soShortDate}} {{opportunity.start_time}}</li>
               <li><span class="label-field">Pick up location: </span>{{opportunity.start_location}}</li>
               <li><span class="label-field">Drop off time: </span>{{opportunity.end_date | soShortDate}} {{opportunity.end_time}}</li>
               <li><span class="label-field">Drop off location: </span>{{opportunity.end_location}}</li>
             </ul>
+          </div>
+          <div ng-show="opportunity.is_for_special_region">
+            <span class="label-field">Location: </span>{{opportunity.special_region}}
           </div>
           <div ng-show="opportunity.trip_type">
             <span class="label-field">Trip Type: </span>{{opportunity.trip_type}}
@@ -55,6 +57,7 @@
           <div class="description">
             <div><strong>Description</strong></div>
             <div class="content">{{opportunity.description}}</div>
+            <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
           </div>
           <div>
             <ul>
