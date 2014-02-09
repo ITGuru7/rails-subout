@@ -610,15 +610,6 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       });
     }
   };
-  $scope.isForSpecialRegion = function() {
-    var type;
-    type = $scope.opportunity.type;
-    if ((type === "Special") || (type === "Buy or Sell Parts and Vehicles")) {
-      return true;
-    } else {
-      return false;
-    }
-  };
   return $scope.setOpportunityForwardAuction = function() {
     var type;
     type = $scope.opportunity.type;
@@ -1898,9 +1889,6 @@ module.filter("timestamp", function() {
 
 module.filter("stringToDate", function() {
   return function(input) {
-    if (!input) {
-      return "";
-    }
     return Date.parse(input);
   };
 });
