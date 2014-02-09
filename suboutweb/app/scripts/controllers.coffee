@@ -396,6 +396,13 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       , (content) ->
         showErrors(content.data.errors)
 
+  $scope.isForSpecialRegion = ->
+    type = $scope.opportunity.type
+    if (type is "Special") or (type is "Buy or Sell Parts and Vehicles")
+      true
+    else
+      false
+
   $scope.setOpportunityForwardAuction = ->
     type = $scope.opportunity.type
     if type is "Vehicle Needed"

@@ -4,6 +4,8 @@ class Opportunity
   include Mongoid::Token
   include Mongoid::Search
 
+  ALL_REGIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+
   token field_name: :reference_number, retry: 5, length: 7, contains: :upper_alphanumeric
 
   field :name, type: String
@@ -12,6 +14,7 @@ class Opportunity
   field :end_location, type: String
   field :start_region
   field :end_region
+  field :special_region
   field :start_date, type: Date
   field :start_time, type: String
   field :end_date, type: Date
@@ -67,12 +70,12 @@ class Opportunity
   validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
-  validates_presence_of :start_date
-  validates_presence_of :end_date
-  validates_presence_of :start_location
+  validates_presence_of :start_date, if: '!is_for_special_region'
+  validates_presence_of :end_date, if: '!is_for_special_region'
+  validates_presence_of :start_location, if: '!is_for_special_region'
   #validates_presence_of :vehicle_type
-  validate :validate_locations
-  validate :validate_start_and_end_date
+  validate :validate_locations, if: '!is_for_special_region'
+  validate :validate_start_and_end_date, if: '!is_for_special_region'
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
 
@@ -86,6 +89,10 @@ class Opportunity
   search_in :reference_number, :name, :description
 
   paginates_per 30
+
+  def is_for_special_region
+    type == "Special" or type == "Buy or Sell Parts and Vehicles"
+  end
 
   def companies_to_notify
     options = []
@@ -156,7 +163,11 @@ class Opportunity
   end
 
   def regions
-    [self.start_region, self.end_region]
+    if is_for_special_region
+      self.special_region == 'All' ? Opportunity::ALL_REGIONS : [self.special_region]
+    else
+      [self.start_region, self.end_region].compact
+    end
   end
 
   def cancel!

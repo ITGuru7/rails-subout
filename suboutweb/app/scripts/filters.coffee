@@ -7,6 +7,7 @@ module.filter "timestamp", ->
 
 module.filter "stringToDate", ->
   (input) ->
+    return "" unless input
     Date.parse(input)
 
 module.filter "soShortDate", ($filter) ->

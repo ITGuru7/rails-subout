@@ -221,6 +221,7 @@ class Company
     unless regions.blank?
       options << {:start_region.in => regions}
       options << {:end_region.in => regions}
+      options << {:special_region.in => regions + ['All']}
     end
     
     conditions = {
