@@ -16,7 +16,7 @@ class Sms
 
     begin
       bitly = Bitly.new("suboutdev", "R_8ba0587adb559eb9b2576826a915b557")
-      short_url = bitly.shorten("http://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{opportunity.reference_number}").short_url
+      short_url = bitly.shorten("https://#{DEFAULT_HOST_WITH_PORT}/#/opportunities/#{opportunity.reference_number}").short_url
     rescue Exception => e
       puts e.backtrace
       short_url = ""    

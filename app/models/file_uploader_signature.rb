@@ -1,7 +1,7 @@
 class FileUploaderSignature
   def generate
     params_to_sign = {
-      callback: "http://#{DEFAULT_HOST_WITH_PORT}/cloudinary_cors.html",
+      callback: "https://#{DEFAULT_HOST_WITH_PORT}/cloudinary_cors.html",
       timestamp: Time.now.to_i
     }
 
