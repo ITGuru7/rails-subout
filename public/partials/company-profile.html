@@ -1,4 +1,4 @@
-<div id="company-profile" ng-controller="CompanyProfileCtrl">
+<div id="company-profile">
     <div class="modal-header">
         <button data-dismiss="modal" class="close" type="button">
             x
@@ -72,14 +72,11 @@
             <hr />
             <div class="row">
               <div class="add-to-favorites" ng-show="other_company.canBeAddedAsFavorite(company)">
-                <a ng-click="addToFavorites(other_company)" class="btn btn-small btn-success"><i class=" glyphicon glyphicon-plus"></i>Add to Favorites</a>
-                <button data-dismiss="modal" class="btn btn-small btn-danger" type="button">Cancel</button>
-
-                <a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a>
+                <a ng-click="addToFavorites(other_company)" class="btn btn-small btn-success"><i class="glyphicon glyphicon-plus"></i>Add to Favorites</a>
               </div>
+              <button data-dismiss="modal" class="btn btn-small btn-danger" type="button">Cancel</button>
+              <a href="#/companies/{{other_company._id}}" ng-click="closeModal()">Please click here to see more detailed information</a>
             </div>
         </section>
     </div>
 </div>
-<script>
-</script>

@@ -13,7 +13,7 @@ module.filter "stringToDate", ->
 module.filter "soShortDate", ($filter) ->
   (input) ->
     return "" unless input
-    $filter('date')(Date.parse(input), 'MM/dd/yyyy')
+    $filter('date')(input, 'MM/dd/yyyy')
 
 module.filter "soCurrency", ($filter) ->
   (input) ->

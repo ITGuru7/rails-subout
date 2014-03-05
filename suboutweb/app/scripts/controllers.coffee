@@ -1344,7 +1344,7 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
       $("body").scrollTop(0)
 
 CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Favorite, Company, Rating) ->
-
+  console.log "CompanyDetailCtrl"
   $scope.validateRate = (value) ->
     value != 0
 
