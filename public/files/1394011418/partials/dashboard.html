@@ -117,7 +117,8 @@
                       {{opportunity.name}}
                     </a>
                   </span>
-                  <span class="event-region" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region" ng-cloak ng-show="!opportunity.is_for_special_region">{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region" ng-cloak ng-show="opportunity.is_for_special_region">{{opportunity.special_region}}</span>
                   <span class="event-action" ng-cloak>
                     {{actionDescription(action)}}
                   </span>
@@ -146,9 +147,12 @@
                   <div ng-show="event.eventable.vehicle_count > 1">
                     <span>Vehicles needed:</span> {{event.eventable.vehicle_count}}<br />
                   </div>
-                  <div>
+                  <div ng-show="!event.eventable.is_for_special_region">
                     <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
                     <span>Drop off:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
+                  </div>
+                  <div ng-show="event.eventable.is_for_special_region">
+                    <span>Location:</span> {{event.eventable.special_region}}<br />
                   </div>
                   <div>
                     <span>Created on:</span> {{event.eventable.created_at|date}}
@@ -216,7 +220,8 @@
               </tr>
               <tr>
                 <td colspan='2'>
-                  <span class="event-region table-header" ng-cloak>{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region table-header" ng-cloak ng-show="!opportunity.is_for_special_region">{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
+                  <span class="event-region table-header" ng-cloak ng-show="opportunity.is_for_special_region">{{opportunity.special_region}}</span>
                   <span class="event-action" ng-cloak>
                     {{actionDescription(action)}}
                   </span>
@@ -248,13 +253,17 @@
                 <td class="table-header">Winning Amount:</td>
                 <td class="table-header"><span>{{ event.eventable.winner.amount | soCurrency }}</span></td>
               </tr>
-              <tr ng-show="event.selected">
+              <tr ng-show="!event.eventable.is_for_special_region && event.selected">
                 <td class="table-header">Departs:</td>
                 <td>{{event.eventable.start_date|date}} {{event.eventable.start_time}}</td>
               </tr>
-              <tr ng-show="event.selected">
+              <tr ng-show="!event.eventable.is_for_special_region && event.selected">
                 <td class="table-header">Arrives:</td>
                 <td>{{event.eventable.end_date|date}} {{event.eventable.end_time}}</td>
+              </tr>
+              <tr ng-show="event.eventable.is_for_special_region && event.selected">
+                <td class="table-header">Location:</td>
+                <td>{{event.eventable.location}}</td>
               </tr>
               <tr ng-show="event.selected">
                 <td class="table-header">Created on:</td>

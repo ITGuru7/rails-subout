@@ -424,7 +424,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       return;
     }
     $rootScope.bid = {
-      amount: Opportunity.defaultBidAmountFor(opportunity)
+      amount: opportunity.reserve_amount
     };
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
@@ -608,6 +608,15 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       }, function(content) {
         return showErrors(content.data.errors);
       });
+    }
+  };
+  $scope.isForSpecialRegion = function() {
+    var type;
+    type = $scope.opportunity.type;
+    if ((type === "Special") || (type === "Buy or Sell Parts and Vehicles")) {
+      return true;
+    } else {
+      return false;
     }
   };
   return $scope.setOpportunityForwardAuction = function() {
@@ -1712,6 +1721,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
+  console.log("CompanyDetailCtrl");
   $scope.validateRate = function(value) {
     return value !== 0;
   };
@@ -1889,6 +1899,9 @@ module.filter("timestamp", function() {
 
 module.filter("stringToDate", function() {
   return function(input) {
+    if (!input) {
+      return "";
+    }
     return Date.parse(input);
   };
 });
@@ -1898,7 +1911,7 @@ module.filter("soShortDate", function($filter) {
     if (!input) {
       return "";
     }
-    return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
+    return $filter('date')(input, 'MM/dd/yyyy');
   };
 });
 
