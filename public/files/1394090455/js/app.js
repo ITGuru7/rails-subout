@@ -610,6 +610,15 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       });
     }
   };
+  $scope.isForSpecialRegion = function() {
+    var type;
+    type = $scope.opportunity.type;
+    if ((type === "Special") || (type === "Buy or Sell Parts and Vehicles")) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   return $scope.setOpportunityForwardAuction = function() {
     var type;
     type = $scope.opportunity.type;
@@ -1731,7 +1740,8 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
     api_token: $rootScope.token.api_token,
     companyId: company_id
   }, function(company) {
-    return $scope.rating = company.ratingFromCompany($rootScope.company);
+    $scope.rating = company.ratingFromCompany($rootScope.company);
+    return console.log($scope.rating);
   }, function(error) {
     return $location.path("/dashboard");
   });
@@ -1889,6 +1899,9 @@ module.filter("timestamp", function() {
 
 module.filter("stringToDate", function() {
   return function(input) {
+    if (!input) {
+      return "";
+    }
     return Date.parse(input);
   };
 });
@@ -1898,7 +1911,7 @@ module.filter("soShortDate", function($filter) {
     if (!input) {
       return "";
     }
-    return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
+    return $filter('date')(input, 'MM/dd/yyyy');
   };
 });
 
@@ -2028,7 +2041,6 @@ suboutSvcs.factory("Rating", function($resource) {
       method: "PUT"
     }
   });
-  r1.search = r2.get.bind(r2);
   return r1;
 });
 
