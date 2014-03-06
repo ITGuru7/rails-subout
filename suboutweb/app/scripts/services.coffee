@@ -27,7 +27,7 @@ suboutSvcs.factory "Rating", ($resource) ->
   r1 = $resource "#{api_path}/ratings/:ratingId",
     {ratingId: '@ratingId'},
     update: { method: "PUT"}
-  r1.search = r2.get.bind(r2)
+  #r1.search = r2.get.bind(r2)
   r1
 
 suboutSvcs.factory "Opportunity", ($resource) ->

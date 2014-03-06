@@ -1344,7 +1344,6 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
       $("body").scrollTop(0)
 
 CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Favorite, Company, Rating) ->
-  console.log "CompanyDetailCtrl"
   $scope.validateRate = (value) ->
     value != 0
 
@@ -1364,6 +1363,7 @@ CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fav
     companyId: company_id
   ,(company)->
     $scope.rating = company.ratingFromCompany($rootScope.company)
+    console.log $scope.rating
   ,(error)->
     $location.path("/dashboard")
 

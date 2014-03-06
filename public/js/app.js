@@ -1721,7 +1721,6 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
-  console.log("CompanyDetailCtrl");
   $scope.validateRate = function(value) {
     return value !== 0;
   };
@@ -1741,7 +1740,8 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
     api_token: $rootScope.token.api_token,
     companyId: company_id
   }, function(company) {
-    return $scope.rating = company.ratingFromCompany($rootScope.company);
+    $scope.rating = company.ratingFromCompany($rootScope.company);
+    return console.log($scope.rating);
   }, function(error) {
     return $location.path("/dashboard");
   });
@@ -2041,7 +2041,6 @@ suboutSvcs.factory("Rating", function($resource) {
       method: "PUT"
     }
   });
-  r1.search = r2.get.bind(r2);
   return r1;
 });
 
