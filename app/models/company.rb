@@ -120,7 +120,11 @@ class Company
   end
 
   def notifiable?
-    notification_type != "None"
+    if created_from_subscription and created_from_subscription.state == 'canceled'
+      return false
+    end
+
+    return true
   end
 
   def favorite_suppliers

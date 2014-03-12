@@ -19,6 +19,10 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] New Favorite Guest Supplier Invitation from #{@buyer.name}", to: invitation.supplier_email)
   end
 
+  def send_mail_to_company(template_name, company)
+    send_mail_from_template(template_name, company.notifiable_email) if company.notifiable?
+  end
+
   def send_mail_from_template(template_name, to)
     email_template = EmailTemplate.by_name(template_name)
     mail(subject: eval('"' + email_template.subject + '"', binding), to: to) do |format|
@@ -32,7 +36,7 @@ class Notifier < ActionMailer::Base
       @poster = @opportunity.buyer
       @bidder = @bid.bidder
 
-      send_mail_from_template(__method__.to_s, @poster.notifiable_email)
+      send_mail_to_company(__method__.to_s, @poster) 
     end
   end
 
@@ -42,7 +46,7 @@ class Notifier < ActionMailer::Base
     @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
+    send_mail_to_company(__method__.to_s, @poster)
   end
 
   def won_auction_to_supplier(opportunity_id)
@@ -51,21 +55,21 @@ class Notifier < ActionMailer::Base
     @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    send_mail_from_template(__method__.to_s, @bidder.notifiable_email)
+    send_mail_to_company(__method__.to_s, @bidder)
   end
 
   def finished_auction_to_bidder(opportunity_id, bidder_id)
     @opportunity = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)
 
-    send_mail_from_template(__method__.to_s, @bidder.notifiable_email) if @bidder.notification_items.include?("opportunity-win")
+    send_mail_to_company(__method__.to_s, @bidder) if @bidder.notification_items.include?("opportunity-win")
   end
 
   def expired_auction_notification(auction_id)
     @opportunity = Opportunity.find(auction_id)
     @poster = @opportunity.buyer
 
-    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
+    send_mail_to_company(__method__.to_s, @poster)
   end
 
   def completed_auction_notification_to_buyer(opportunity_id)
@@ -74,7 +78,7 @@ class Notifier < ActionMailer::Base
     @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    send_mail_from_template(__method__.to_s, @poster.notifiable_email)
+    send_mail_to_company(__method__.to_s, @poster)
   end
 
   def completed_auction_notification_to_supplier(opportunity_id)
@@ -83,7 +87,7 @@ class Notifier < ActionMailer::Base
     @poster = @opportunity.buyer
     @bidder = @bid.bidder
 
-    send_mail_from_template(__method__.to_s, @bidder.notifiable_email)
+    send_mail_to_company(__method__.to_s, @bidder)
   end
 
   def subscription_confirmation(subscription_id)
@@ -98,26 +102,26 @@ class Notifier < ActionMailer::Base
 
     @company = Company.find(company_id)
 
-    send_mail_from_template(__method__.to_s, @company.notifiable_email)
+    send_mail_to_company(__method__.to_s, @company)
   end
 
   def expired_card(company_id)
     @company = Company.find(company_id)
     @card_update_link = @company.chargify_service_url
 
-    send_mail_from_template(__method__.to_s, @company.notifiable_email)
+    send_mail_to_company(__method__.to_s, @company)
   end
 
   def locked_company(company_id)
     @company = Company.find(company_id)
 
-    send_mail_from_template(__method__.to_s, @company.notifiable_email)
+    send_mail_to_company(__method__.to_s, @company)
   end
 
   def updated_product(company_id)
     @company = Company.find(company_id)
 
-    send_mail_from_template(__method__.to_s, @company.notifiable_email)
+    send_mail_to_company(__method__.to_s, @company)
   end
 
   def new_vehicle(vehicle_id)
@@ -159,6 +163,6 @@ class Notifier < ActionMailer::Base
   def daily_reminder(company_id)
     @company = Company.find(company_id)
 
-    send_mail_from_template(__method__.to_s, @company.notifiable_email)
+    send_mail_to_company(__method__.to_s, @company)
   end
 end
