@@ -137,25 +137,29 @@
       </div>
 
       <div class="visible-xs visible-sm">
-        <table ng-repeat="bid in opportunity.bids" class="mobile-bid-history table table-border">
-          <tr>
-            <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | soShortDate}}</strong></td>
-          </tr>
-          <tr ng-show="opportunity.buyer._id == company._id">
-            <td>
-              by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
-            </td>
-          </tr>
-          <tr ng-show="opportunity.buyer._id == company._id">
-            <span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span>
-          </td>
-          <tr ng-show="bid.comment">
-            <td>{{bid.comment}}</td>
-          </tr>
-          <tr ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" >
-            <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
-          </tr>
-        </table>  
+        <div ng-repeat="bid in opportunity.bids">
+          <table class="mobile-bid-history table table-border">
+            <tr>
+              <td><strong>{{bid.amount | soCurrency}}</strong> on <strong>{{bid.created_at | soShortDate}}</strong></td>
+            </tr>
+            <tr ng-show="opportunity.buyer._id == company._id">
+              <td>
+                by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+              </td>
+            </tr>
+            <tr ng-show="opportunity.buyer._id == company._id">
+              <td>
+                <span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span>
+              </td>
+            </tr>
+            <tr ng-show="bid.comment">
+              <td>{{bid.comment}}</td>
+            </tr>
+            <tr ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" >
+              <td><a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a></td>
+            </tr>
+          </table>  
+        </div>
       </div>
       <hr />
       <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
