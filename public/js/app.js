@@ -503,7 +503,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.alertError = function(errors) {
     var $alertError, close, errorMessage, errorMessages, _j, _len;
     errorMessages = $rootScope.errorMessages(errors);
-    $alertError = $("<div class='alert alert-error'></div>");
+    $alertError = $("<div class='alert alert-error alert-danger'></div>");
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
     $alertError.append(close);
     for (_j = 0, _len = errorMessages.length; _j < _len; _j++) {
@@ -562,7 +562,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    return jQuery("#modal").modal("hide");
+    jQuery("#modal").modal("hide");
+    return $rootScope.inPosting = false;
   };
   $scope.save = function() {
     var opportunity, showErrors;
@@ -1740,8 +1741,7 @@ CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeo
     api_token: $rootScope.token.api_token,
     companyId: company_id
   }, function(company) {
-    $scope.rating = company.ratingFromCompany($rootScope.company);
-    return console.log($scope.rating);
+    return $scope.rating = company.ratingFromCompany($rootScope.company);
   }, function(error) {
     return $location.path("/dashboard");
   });

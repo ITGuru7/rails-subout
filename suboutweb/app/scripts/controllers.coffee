@@ -299,7 +299,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
   $rootScope.alertError = (errors) ->
     errorMessages = $rootScope.errorMessages(errors)
-    $alertError = $("<div class='alert alert-error'></div>")
+    $alertError = $("<div class='alert alert-error alert-danger'></div>")
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>'
     $alertError.append close
     for errorMessage in errorMessages
@@ -340,6 +340,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   unless $scope.opportunity
     $scope.opportunity = {}
     $scope.opportunity.vehicle_count = 1
+
   $scope.types = [
     "Vehicle Needed",
     "Vehicle for Hire",
@@ -354,6 +355,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     #else
     #  jQuery("#modal").modal "hide"
     jQuery("#modal").modal "hide"
+    $rootScope.inPosting = false
 
   $scope.save = ->
     $rootScope.inPosting = true
@@ -1363,7 +1365,6 @@ CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fav
     companyId: company_id
   ,(company)->
     $scope.rating = company.ratingFromCompany($rootScope.company)
-    console.log $scope.rating
   ,(error)->
     $location.path("/dashboard")
 

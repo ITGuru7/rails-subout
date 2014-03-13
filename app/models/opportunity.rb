@@ -56,6 +56,7 @@ class Opportunity
   scope :by_region, ->(region) { where(start_region: region) }
   scope :expired, -> { where(expired_notification_sent: true) }
   scope :by_period, ->(start_date, end_date) { where(:created_at.gte => start_date.beginning_of_day, :created_at.lte => end_date.end_of_day) }
+  scope :last_12_hours, -> { where(:created_at.gte => 12.hours.ago) }
   
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
@@ -78,6 +79,7 @@ class Opportunity
   validate :validate_start_and_end_date, if: '!is_for_special_region'
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
+  validate :validate_opportunity_post_limit
 
   #TODO this validation doesn't work correctly, if we enable this, it doesn't save any vehicle_type or trip_type
   #validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"] }
@@ -391,6 +393,12 @@ class Opportunity
 
   def validate_win_it_now_price
     errors.add(:win_it_now_price, "cannot be blank in case 'Win it now?' option is enabled.") if self.quick_winnable && self.win_it_now_price.blank?
+  end
+
+  def validate_opportunity_post_limit
+    if buyer.subscription_plan == 'free' and buyer.auctions.last_12_hours.count >= 5
+      errors.add :base, "You cannot post opportunity over 5 times for 12 hours."
+    end
   end
 
   def validate_reseve_amount_and_win_it_now_price
