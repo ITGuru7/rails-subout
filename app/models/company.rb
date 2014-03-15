@@ -210,9 +210,18 @@ class Company
   end
 
   def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil, trip_type=nil, query=nil, regions=nil)
+    start_date = nil if start_date == "null" or start_date.blank?
+    begin
+      unless start_date.nil?
+        date = Date.parse(start_date) 
+        start_date = date.to_s 
+      end
+    rescue ArgumentError
+      start_date = nil
+    end
+
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
-    start_date = nil if start_date == "null" or start_date.blank?
     vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
     regions = nil if regions == "null" or regions.blank?
