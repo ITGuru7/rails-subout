@@ -7,7 +7,7 @@ class Api::V1::TokensController < Api::V1::BaseController
       subscription = user.company.created_from_subscription
       if user.access_locked?
         render :json => { authorized: false, message: "Your account is locked. Please contact admin."}
-      elsif (Rails.env.production? and subscription.is_canceled?) 
+      elsif (subscription.canceled?) 
         render :json => { authorized: false, message: "You could not sign in. Please contact admin."}
       elsif user.valid_password?(params[:password])
         if params[:deviceToken]

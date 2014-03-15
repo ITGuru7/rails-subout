@@ -158,11 +158,15 @@ class GatewaySubscription
     end
   end
 
-  def is_canceled?
-    if subscription = chargify_subscription and subscription.state == 'canceled'
-      return true
+  def canceled?
+    if Rails.env.production?
+      if subscription = chargify_subscription and subscription.state == 'canceled'
+        return true
+      end
+      return false
+    else
+      self.state == 'canceled'
     end
-    return false
   end
 
   def reactivate!
