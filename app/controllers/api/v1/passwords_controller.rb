@@ -2,11 +2,15 @@ class Api::V1::PasswordsController < Api::V1::BaseController
   skip_before_filter :restrict_access
 
   def create
-    user = User.send_reset_password_instructions(params[:user])
-    if user.errors.blank?
-      render json: {}
-    else
-      respond_with_namespace(user)
+    begin
+      user = User.send_reset_password_instructions(params[:user])
+      if user.errors.blank?
+        render json: {}
+      else
+        respond_with_namespace(user)
+      end
+    rescue Exception
+      render json: {}, status: 402
     end
   end
 
