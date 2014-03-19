@@ -57,6 +57,7 @@ class Company
   field :auctions_expired_count, type: Integer, default: 0
   field :bids_count, type: Integer, default: 0
   field :notification_items, type: Array, default: ["opportunity-new", "opportunity-complete", "opportunity-win", "bid-new", "mobile-opportunity-new"]
+  field :mode, type: String, default: 'normal' #normal, ghost ...
 
   scope :recent, -> { desc(:created_at) }
 

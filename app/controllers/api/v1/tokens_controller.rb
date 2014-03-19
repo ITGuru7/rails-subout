@@ -1,5 +1,6 @@
 class Api::V1::TokensController < Api::V1::BaseController
   skip_before_filter :restrict_access
+  skip_before_filter :restrict_ghost_user
 
   def create
     username = params[:email].downcase if params[:email]

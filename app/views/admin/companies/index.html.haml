@@ -10,6 +10,7 @@
       %th ID
       %th Company Name<br>Owner
       %th Email<br>Contact
+      %th Mode
       %th
         - if @sort_by != "created_at"
           = link_to "Sign up", admin_companies_path(sort_by: "created_at", sort_direction: "desc")
@@ -52,7 +53,11 @@
           = company.email
           %br
           #{company.contact_name}
+          %br
           = "(#{company.contact_phone})" if company.contact_phone
+        %td
+          %span.label{class: "#{company.mode == 'normal' ? 'label-important' : 'label-info'}"}
+            = company.mode
         %td= time_ago_in_words(company.created_at) + " ago" if company.created_at
         %td= time_ago_in_words(company.last_sign_in_at) + " ago" if company.last_sign_in_at
         %td= company.subscription_plan

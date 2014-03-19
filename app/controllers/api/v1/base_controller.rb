@@ -2,6 +2,7 @@ class Api::V1::BaseController < ActionController::Base
   respond_to :json
 
   before_filter :restrict_access
+  before_filter :restrict_ghost_user
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Mongoid::Errors::DocumentNotFound, :with => :render_404
@@ -13,6 +14,14 @@ class Api::V1::BaseController < ActionController::Base
     return if params[:api_token] and current_user
 
     head :unauthorized
+  end
+
+  def restrict_ghost_user
+    if current_user and current_user.company.mode == 'ghost'
+      if ['PUT', 'POST', 'DELETE'].include?(request.method)
+        render :json => {'errors' => {'base' => ['You have no permission to create or change anything now. Please sign up.']}}, :status => 403
+      end
+    end
   end
 
   def current_user

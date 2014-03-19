@@ -5,6 +5,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   d = new Date()
   $rootScope.years = [d.getFullYear()..1970]
   $rootScope.reload = null
+  $rootScope.sign_in_time = null
 
   salt =(key)->
     return $rootScope.api_token + "_" + key
@@ -1261,6 +1262,7 @@ SignInCtrl = ($scope, $rootScope, $location,
   $scope.signIn = ->
     Token.save {email: $scope.email, password: $scope.password}, (token) ->
       if token.authorized
+        $.cookie("signed_in_time", (new Date()).getTime())
         promise = Authorize.authenticate(token)
         promise.then ->
           if $rootScope.redirectToPath

@@ -159,6 +159,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return _results;
   }).apply(this);
   $rootScope.reload = null;
+  $rootScope.sign_in_time = null;
   salt = function(key) {
     return $rootScope.api_token + "_" + key;
   };
@@ -1624,6 +1625,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
     }, function(token) {
       var promise;
       if (token.authorized) {
+        $.cookie("signed_in_time", (new Date()).getTime());
         promise = Authorize.authenticate(token);
         return promise.then(function() {
           if ($rootScope.redirectToPath) {
@@ -2435,10 +2437,10 @@ suboutSvcs.factory("$appBrowser", function() {
   };
 });
 
-suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector) {
+suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector, $location, AuthToken) {
   return function(promise) {
     return promise.then((function(response) {
-      var $http, deploy, mime, payloadData, version;
+      var $http, current_time, deploy, mime, payloadData, signed_in_time, version;
       if (response.config.method === "POST") {
         $rootScope.inPosting = false;
       }
@@ -2461,6 +2463,16 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
+            if ($.cookie("signed_in_time")) {
+              signed_in_time = $.cookie("signed_in_time");
+              current_time = (new Date()).getTime();
+              if ((current_time - signed_in_time) / 1000 > 60 * 60) {
+                $.removeCookie("signed_in_time");
+                $.removeCookie(AuthToken);
+                alert("Your session is expired. You should purchase one of our packages and sign up.");
+                window.location.href = "http://subout.com/pricing";
+              }
+            }
           }
           response.data = payloadData;
         }

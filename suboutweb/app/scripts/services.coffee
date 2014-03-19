@@ -309,7 +309,7 @@ suboutSvcs.factory "$appBrowser", ->
       android or iOS
   }
 
-suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $injector) ->
+suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $injector, $location, AuthToken) ->
   (promise) ->
     promise.then ((response) ->
       # do something on success
@@ -333,6 +333,16 @@ suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $inject
           $http = $injector.get('$http')
           if($http.pendingRequests.length == 0)
             $('.loading-animation').removeClass('loading')
+
+            # ghost user time life checking
+            if $.cookie("signed_in_time")
+              signed_in_time = $.cookie("signed_in_time")
+              current_time = (new Date()).getTime()
+              if (current_time - signed_in_time)/1000 > 60 * 60 # checking time differences by seconds
+                $.removeCookie("signed_in_time")
+                $.removeCookie(AuthToken)
+                alert("Your session is expired. You should purchase one of our packages and sign up.")
+                window.location.href = "http://subout.com/pricing"
 
           response.data = payloadData
       response

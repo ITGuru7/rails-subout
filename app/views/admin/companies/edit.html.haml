@@ -73,6 +73,15 @@
   This email will be applied to company, subscription and user.
 
 .row
+%h4 Mode
+= form_tag change_mode_admin_company_path(@company), method: "put", class: "form-horizontal" do
+  = select_tag "mode", options_for_select(["normal", "ghost"], @company.mode)
+  = submit_tag "Submit", class: "btn btn-primary"
+%p
+  %strong Notice:
+  Ghost user can only browse site - can not bid and can not post new opportunity. 
+
+.row
 %h4 Reset password
 = form_for @company.first_user, url: change_password_admin_company_path(@company), html: { method: "put", class: "form-horizontal" } do |f|
   .control-group
