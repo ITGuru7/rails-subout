@@ -182,6 +182,8 @@ class Opportunity
 
   def win!(bid_id)
     bid = self.bids.active.find(bid_id)
+    bidder = bid.bidder
+    buyer = self.buyer
 
     self.bidding_done = true
     self.awarded = true
@@ -190,9 +192,12 @@ class Opportunity
     self.bidding_won_at = Time.now
     self.save(validate: false) # when poster select winner, the start date validation may be failed
 
-    self.buyer.inc(:total_sales, bid.amount.to_i)
-    bid.bidder.inc(:total_winnings, bid.amount.to_i)
-    bid.bidder.inc(:total_won_bids_count, 1)
+    buyer.total_sales += bid.amount.to_i
+    buyer.save(validate: false)
+
+    bidder.total_winnings += bid.amount.to_i
+    bidder.total_won_bids_count += 1
+    bidder.save(validate: false)
 
     Notifier.delay.won_auction_to_buyer(self.id) if self.buyer.notification_items.include?("opportunity-win")
     Notifier.delay.won_auction_to_supplier(self.id) if bid.bidder.notification_items.include?("opportunity-win")
