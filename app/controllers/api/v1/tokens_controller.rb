@@ -3,12 +3,12 @@ class Api::V1::TokensController < Api::V1::BaseController
   skip_before_filter :restrict_ghost_user
 
   def create
-    username = params[:email].downcase if params[:email]
+    username = params[:email].downcase.strip if params[:email]
     if user = User.where(:email => username).first
       subscription = user.company.created_from_subscription
       if user.access_locked?
         render :json => { authorized: false, message: "Your account is locked. Please contact admin."}
-      elsif (subscription and subscription.state == 'canceled') 
+      elsif (subscription and subscription.chargify_subscription and subscription.state == 'canceled') 
         render :json => { authorized: false, message: "You could not sign in. Please contact admin."}
       elsif user.valid_password?(params[:password])
         if params[:deviceToken]

@@ -5,9 +5,10 @@ class Setting
   field :key
   field :value
 
-  Setting::KEYS = ["admin_email", "application_message", "marketing_message"]
+  Setting::KEYS = ["admin_email", "application_message", "marketing_message", "promotion_message"]
   
   validates_presence_of :value
+  validates_uniqueness_of :key
   validate :validate_key
   validate :validate_santinized_length, if: :application_message? 
 
