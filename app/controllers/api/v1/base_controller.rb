@@ -19,7 +19,7 @@ class Api::V1::BaseController < ActionController::Base
   def restrict_ghost_user
     if current_user and current_user.company.mode == 'ghost'
       if ['PUT', 'POST', 'DELETE'].include?(request.method)
-        render :json => {'errors' => {'base' => ['You have no permission to create or change anything now. Please sign up.']}}, :status => 403
+        render :json => {'errors' => {'base' => ['You have not full permission to use our system. <a href="">Please click here to sign up.</a>']}}, :status => 403
       end
     end
   end
