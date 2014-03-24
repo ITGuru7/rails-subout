@@ -17,7 +17,7 @@
       <div class="alert alert-danger" ng-show="errors">
         <a class="close" ng-click="hideAlert()">&times;</a>
         <ul ng-repeat="error in errors">
-          <li>{{error}}</li>
+          <li ng-bind-html-unsafe="error"></li>
         </ul>
       </div>
 

@@ -159,6 +159,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return _results;
   }).apply(this);
   $rootScope.reload = null;
+  $rootScope.sign_in_time = null;
   salt = function(key) {
     return $rootScope.api_token + "_" + key;
   };
@@ -503,7 +504,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.alertError = function(errors) {
     var $alertError, close, errorMessage, errorMessages, _j, _len;
     errorMessages = $rootScope.errorMessages(errors);
-    $alertError = $("<div class='alert alert-error'></div>");
+    $alertError = $("<div class='alert alert-error alert-danger'></div>");
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
     $alertError.append(close);
     for (_j = 0, _len = errorMessages.length; _j < _len; _j++) {
@@ -562,7 +563,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    return jQuery("#modal").modal("hide");
+    jQuery("#modal").modal("hide");
+    return $rootScope.inPosting = false;
   };
   $scope.save = function() {
     var opportunity, showErrors;
@@ -1623,6 +1625,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
     }, function(token) {
       var promise;
       if (token.authorized) {
+        $.cookie("signed_in_time", (new Date()).getTime());
         promise = Authorize.authenticate(token);
         return promise.then(function() {
           if ($rootScope.redirectToPath) {
@@ -1910,7 +1913,7 @@ module.filter("soShortDate", function($filter) {
     if (!input) {
       return "";
     }
-    return $filter('date')(Date.parse(input), 'MM/dd/yyyy');
+    return $filter('date')(input, 'MM/dd/yyyy');
   };
 });
 
@@ -2040,7 +2043,6 @@ suboutSvcs.factory("Rating", function($resource) {
       method: "PUT"
     }
   });
-  r1.search = r2.get.bind(r2);
   return r1;
 });
 
@@ -2435,10 +2437,10 @@ suboutSvcs.factory("$appBrowser", function() {
   };
 });
 
-suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector) {
+suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector, $location, AuthToken) {
   return function(promise) {
     return promise.then((function(response) {
-      var $http, deploy, mime, payloadData, version;
+      var $http, current_time, deploy, mime, payloadData, signed_in_time, version;
       if (response.config.method === "POST") {
         $rootScope.inPosting = false;
       }
@@ -2461,6 +2463,16 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
+            if ($.cookie("signed_in_time")) {
+              signed_in_time = $.cookie("signed_in_time");
+              current_time = (new Date()).getTime();
+              if ((current_time - signed_in_time) / 1000 > 60 * 60) {
+                $.removeCookie("signed_in_time");
+                $.removeCookie(AuthToken);
+                alert("Your session is expired. You should purchase one of our packages and sign up.");
+                window.location.href = "http://subout.com/pricing";
+              }
+            }
           }
           response.data = payloadData;
         }
