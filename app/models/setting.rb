@@ -24,6 +24,10 @@ class Setting
     key.split('_').last.capitalize
   end
 
+  def self.get(key)
+    Setting.find_by(key: key).value
+  end
+
   def self.admin_email
     Setting.find_by(key: 'admin_email').value
   end
