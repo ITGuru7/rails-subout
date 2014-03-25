@@ -168,6 +168,16 @@ class Company
     subscription_plan == 'subout-basic-service'  
   end
 
+  def subout_free_subscriber?
+    subscription_plan == 'free'  
+  end
+
+  def has_canceled_subscription?
+    subscription = self.created_from_subscription
+    return true if subscription and subscription.chargify_subscription and subscription.state == 'canceled'
+    return false
+  end
+
   def create_initial_user!
     return unless users.empty?
     users.create!(email: email, password: password)
