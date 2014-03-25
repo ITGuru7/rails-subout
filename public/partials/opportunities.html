@@ -68,7 +68,7 @@
         </td>
         <td class="current-bid-amount">
           <span ng-show="opportunity.lowest_bid_amount">
-            {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
+            <span class="alert-danger">{{ opportunity.value | soCurrency }}</span> / <span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span>
           </span>
         </td>
         <td><span ng-show="opportunity.winner">{{opportunity.winner.name}} ({{ opportunity.winner.amount | soCurrency }})</span></td>
