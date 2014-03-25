@@ -146,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -159,6 +159,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return _results;
   }).apply(this);
   $rootScope.reload = null;
+  $rootScope.sign_in_time = null;
   salt = function(key) {
     return $rootScope.api_token + "_" + key;
   };
@@ -408,6 +409,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.setModal(suboutPartialPath('settings.html'));
     return $rootScope.setupFileUploader();
   };
+  $rootScope.displayNegotiationForm = function(bid) {
+    $rootScope.bid = bid;
+    $rootScope.setModal(suboutPartialPath('negotiation-new.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
   $rootScope.displayNewBidForm = function(opportunity) {
     if (!$rootScope.company.dot_number) {
       $rootScope.setModal(suboutPartialPath('dot-required.html'));
@@ -503,7 +509,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.alertError = function(errors) {
     var $alertError, close, errorMessage, errorMessages, _j, _len;
     errorMessages = $rootScope.errorMessages(errors);
-    $alertError = $("<div class='alert alert-error'></div>");
+    $alertError = $("<div class='alert alert-error alert-danger'></div>");
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>';
     $alertError.append(close);
     for (_j = 0, _len = errorMessages.length; _j < _len; _j++) {
@@ -562,7 +568,8 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    return jQuery("#modal").modal("hide");
+    jQuery("#modal").modal("hide");
+    return $rootScope.inPosting = false;
   };
   $scope.save = function() {
     var opportunity, showErrors;
@@ -628,6 +635,12 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
       return $scope.opportunity.forward_auction = true;
     }
   };
+};
+
+NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
+  if (!$scope.bid) {
+    return $scope.bid = {};
+  }
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
@@ -1623,6 +1636,7 @@ SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthT
     }, function(token) {
       var promise;
       if (token.authorized) {
+        $.cookie("signed_in_time", (new Date()).getTime());
         promise = Authorize.authenticate(token);
         return promise.then(function() {
           if ($rootScope.redirectToPath) {
@@ -1721,7 +1735,6 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
 
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
-  console.log("CompanyDetailCtrl");
   $scope.validateRate = function(value) {
     return value !== 0;
   };
@@ -2041,7 +2054,6 @@ suboutSvcs.factory("Rating", function($resource) {
       method: "PUT"
     }
   });
-  r1.search = r2.get.bind(r2);
   return r1;
 });
 
@@ -2436,10 +2448,10 @@ suboutSvcs.factory("$appBrowser", function() {
   };
 });
 
-suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector) {
+suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope, $injector, $location, AuthToken) {
   return function(promise) {
     return promise.then((function(response) {
-      var $http, deploy, mime, payloadData, version;
+      var $http, current_time, deploy, mime, payloadData, signed_in_time, version;
       if (response.config.method === "POST") {
         $rootScope.inPosting = false;
       }
@@ -2462,6 +2474,16 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
+            if ($.cookie("signed_in_time")) {
+              signed_in_time = $.cookie("signed_in_time");
+              current_time = (new Date()).getTime();
+              if ((current_time - signed_in_time) / 1000 > 60 * 60) {
+                $.removeCookie("signed_in_time");
+                $.removeCookie(AuthToken);
+                alert("Your session is expired. You should purchase one of our packages and sign up.");
+                window.location.href = "http://subout.com/pricing";
+              }
+            }
           }
           response.data = payloadData;
         }

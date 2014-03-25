@@ -1,4 +1,4 @@
-<div id="bid-new" ng-controller="BidNewCtrl">
+<div id="negotiation" ng-controller="NegotiationCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button">
       x
@@ -6,21 +6,7 @@
     <h3>Bid</h3>
   </div>
   <div class="modal-body">
-    <form name="newBid" class="form-horizontal">
-      <div class="alert alert-info" ng-show="company.isFreeUser()">
-        Your subscription plan is 'free' plan. You can bid only 5 times a day. <br />
-        Today's bid count: {{ company.today_bids_count }} <br />
-        <a ng-click="displaySettings('vehicles')" style="text-decoration: underline">
-        Please upgrade your subscription plan to bid more.
-        </a>
-      </div>
-      <div class="alert alert-danger" ng-show="errors">
-        <a class="close" ng-click="hideAlert()">&times;</a>
-        <ul ng-repeat="error in errors">
-          <li>{{error}}</li>
-        </ul>
-      </div>
-
+    <form name="newNegotiation" class="form-horizontal">
       <div class="form-group oportunity_name">
         <label class="col-md-4 control-label">Opportunity</label>
         <div class="col-md-8 opportunity-name">

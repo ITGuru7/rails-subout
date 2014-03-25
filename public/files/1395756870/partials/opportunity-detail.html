@@ -129,8 +129,9 @@
             <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
               <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
             </td>
-            <td ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id">
-              <a class='btn btn-primary btn-mini pull-right' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a>
+            <td ng-hide="opportunity.bidding_done || opportunity.buyer._id != company._id" class="text-right">
+              <a class='btn btn-warning btn-mini' ng-click="displayNegotiationForm(bid)"><i class='icon-ok'> </i>Negotiate</a>
+              <a class='btn btn-primary btn-mini' ng-click="selectWinner(bid)"><i class='icon-ok'> </i>Accept</a>
             </td>
           </tr>
         </table>

@@ -42,7 +42,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.isOldBrowser = $appBrowser.isOld()
 
   $rootScope.validateNumber = (value) ->
-    /^\d+$/.test(value)
+    /^-?\d+\.?\d*$/.test(value)
 
   $rootScope.validateOptionalNumber = (value) ->
     return true unless value
@@ -218,6 +218,12 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.selectedTab = selectedTab
     $rootScope.setModal(suboutPartialPath('settings.html'))
     $rootScope.setupFileUploader()
+
+  $rootScope.displayNegotiationForm = (opportunity, bid) ->
+    $rootScope.bid = bid
+    $rootScope.opportunity = opportunity
+    $rootScope.setModal(suboutPartialPath('negotiation-new.html'))
+    $rootScope.$broadcast('modalOpened')
 
   $rootScope.displayNewBidForm = (opportunity) ->
     unless $rootScope.company.dot_number
@@ -412,6 +418,24 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       $scope.opportunity.forward_auction = false
     else if type is "Vehicle for Hire"
       $scope.opportunity.forward_auction = true
+
+NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid) ->
+  bid = angular.copy($rootScope.bid)
+
+  $scope.bid =
+    amount: bid.amount
+
+  $scope.save = ->
+    MyBid.negotiate
+      bidId: $rootScope.bid._id
+      action: "negotiate"
+      bid: $scope.bid
+      api_token: $rootScope.token.api_token
+      opportunity_id: $rootScope.opportunity._id
+    , (data) ->
+      jQuery("#modal").modal "hide"
+    , (content) ->
+      $scope.errors = $rootScope.errorMessages(content.data.errors)
 
 BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid

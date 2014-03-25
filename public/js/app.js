@@ -146,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -199,7 +199,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.validateNumber = function(value) {
-    return /^\d+$/.test(value);
+    return /^-?\d+\.?\d*$/.test(value);
   };
   $rootScope.validateOptionalNumber = function(value) {
     if (!value) {
@@ -408,6 +408,12 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.selectedTab = selectedTab;
     $rootScope.setModal(suboutPartialPath('settings.html'));
     return $rootScope.setupFileUploader();
+  };
+  $rootScope.displayNegotiationForm = function(opportunity, bid) {
+    $rootScope.bid = bid;
+    $rootScope.opportunity = opportunity;
+    $rootScope.setModal(suboutPartialPath('negotiation-new.html'));
+    return $rootScope.$broadcast('modalOpened');
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     if (!$rootScope.company.dot_number) {
@@ -629,6 +635,27 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     } else if (type === "Vehicle for Hire") {
       return $scope.opportunity.forward_auction = true;
     }
+  };
+};
+
+NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid) {
+  var bid;
+  bid = angular.copy($rootScope.bid);
+  $scope.bid = {
+    amount: bid.amount
+  };
+  return $scope.save = function() {
+    return MyBid.negotiate({
+      bidId: $rootScope.bid._id,
+      action: "negotiate",
+      bid: $scope.bid,
+      api_token: $rootScope.token.api_token,
+      opportunity_id: $rootScope.opportunity._id
+    }, function(data) {
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
   };
 };
 
@@ -2086,6 +2113,9 @@ suboutSvcs.factory("MyBid", function($resource) {
       method: "GET"
     },
     cancel: {
+      method: "PUT"
+    },
+    negotiate: {
       method: "PUT"
     }
   });

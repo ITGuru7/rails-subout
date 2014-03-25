@@ -54,6 +54,7 @@ suboutSvcs.factory "MyBid", ($resource) ->
     {bidId: '@bidId', action: '@action'},
     paginate: {method: "GET"}
     cancel: {method: "PUT"}
+    negotiate: {method: "PUT"}
 
 suboutSvcs.factory "Region", ($resource) ->
   $resource "#{api_path}/regions", {}, {}

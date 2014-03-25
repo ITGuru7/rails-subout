@@ -65,6 +65,7 @@ Subout::Application.routes.draw do
 
       resources :bids do
         put :cancel, on: :member
+        put :negotiate, on: :member
       end
 
       resources :filters
