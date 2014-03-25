@@ -57,7 +57,9 @@ class Company
   field :auctions_expired_count, type: Integer, default: 0
   field :bids_count, type: Integer, default: 0
   field :notification_items, type: Array, default: ["opportunity-new", "opportunity-complete", "opportunity-win", "bid-new", "mobile-opportunity-new"]
-  field :mode, type: String, default: 'normal' #normal, ghost ...
+
+  Company::MODES = ['normal', 'ghost', 'benefit']
+  field :mode, type: String, default: 'normal'
 
   scope :recent, -> { desc(:created_at) }
 
@@ -103,6 +105,10 @@ class Company
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
   search_in :name, :email
+
+  def has_subscription_benefit?
+    self.mode == "ghost" or self.mode == "benefit" or self.subout_free_subscriber?
+  end
 
   def self.send_daily_remind_notification
     Company.where(:notification_items => ['daily-reminder']).each do |company|

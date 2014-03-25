@@ -8,7 +8,7 @@ class Api::V1::TokensController < Api::V1::BaseController
       subscription = user.company.created_from_subscription
       if user.access_locked?
         render :json => { authorized: false, message: "Your account is locked. Please contact admin."}
-      elsif (!user.company.subout_free_subscriber? and user.company.has_canceled_subscription?) 
+      elsif (!user.company.has_subscription_benefit? and user.company.has_canceled_subscription?) 
         render :json => { authorized: false, message: "Your subscription plan is canceled. Please contact admin."}
       elsif user.valid_password?(params[:password])
         if params[:deviceToken]
