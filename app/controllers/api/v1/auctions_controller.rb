@@ -54,12 +54,21 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     if @auction.canceled?
       render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
     elsif @auction.awarded?
-      render json: { errors: { base: ["This opportunity is awarded."] } }, status: :unprocessable_entity
+      render json: { errors: { base: ["This opportunity is already awarded by another bidder."] } }, status: :unprocessable_entity
     else
       @auction.win!(params[:bid_id])
       render json: {}
     end
   end
+
+  def create_negotiation
+    @auction = current_company.auctions.find(params[:id])
+    @auction.start_negotiation!(params[:bid][:id], params[:bid][:amount])
+
+    @serializer = OpportunitySerializer.new(@auction)
+    render json: @serializer
+  end
+
 
   def cancel
     @auction = Opportunity.find(params[:id])

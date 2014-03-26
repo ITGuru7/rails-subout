@@ -2,13 +2,16 @@ class Bid
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  STATES = %w(active canceled negotiating won)
+
   field :amount, type: Money
   field :comment, type: String
   field :auto_bidding_limit, type: Money
   field :canceled, type: Boolean, default: false
   field :vehicle_count, type: Integer, default: 1
   field :vehicle_count_limit, type: Integer
-  
+  field :state, type: String, default: "active"
+
   paginates_per 30
 
   belongs_to :opportunity, :inverse_of => :bids
@@ -33,7 +36,7 @@ class Bid
   validate :vehicle_count_limit_bidable, on: :create
   validates :comment, length: { maximum: 255 }
 
-  scope :active, -> { where(canceled: false) }
+  scope :active, -> { where(:state.ne => 'canceled') }
   scope :recent, -> { desc(:created_at) }
   scope :by_amount, -> { asc(:amount) }
   scope :today, -> { where(:created_at.gte => Date.today.beginning_of_day, :created_at.lte => Date.today.end_of_day) }
@@ -41,8 +44,14 @@ class Bid
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
 
+  STATES.each do |value|
+    define_method :"is_#{value}?" do 
+      self.state == value
+    end
+  end
+
   def status
-    if canceled?
+    if is_canceled?
       "Canceled by you"
     elsif opportunity.status == "Canceled"
       "Canceled by poster"
@@ -50,6 +59,8 @@ class Bid
       opportunity.winning_bid_id == id ? "Won" : "Not won"
     elsif opportunity.status == "Bidding ended"
       "Closed"
+    elsif is_negotiating? 
+      "In negotiation"
     else
       "In progress"
     end
@@ -72,7 +83,8 @@ class Bid
       errors.add(:base, "You cannot cancel a bid after 5 minutes")
       false
     else
-      update_attribute(:canceled, true)
+      self.state = 'canceled'
+      self.save
     end
   end
 

@@ -32,6 +32,7 @@ class Opportunity
   field :trip_type, type: String, default: ""
   field :canceled, type: Boolean, default: false
   field :awarded, type: Boolean, default: false
+  field :in_negotiation, type: Boolean, default: false
   field :forward_auction, type: Boolean, default: false
   field :expired_notification_sent, type: Boolean, default: false
   field :completed_notification_sent, type: Boolean, default: false
@@ -180,6 +181,23 @@ class Opportunity
     self.update_attributes(awarded: true, bidding_ends_at: Time.now)
   end
 
+  def start_negotiation!(bid_id, new_amount)
+    bid = self.bids.active.find(bid_id)
+    unless bid.is_canceled?
+      bid.state = "negotiating"
+      bid.amount = new_amount
+      bid.save
+
+      # send negotiation email to the bidder
+      Notifier.delay.new_negotiation(bid.id) 
+
+      unless in_negotiation
+        self.in_negotiation = true
+        self.save(validate: false)
+      end
+    end
+  end
+
   def win!(bid_id)
     bid = self.bids.active.find(bid_id)
     bidder = bid.bidder
@@ -191,6 +209,9 @@ class Opportunity
     self.value = bid.amount
     self.bidding_won_at = Time.now
     self.save(validate: false) # when poster select winner, the start date validation may be failed
+
+    bid.state = 'won'
+    bid.save
 
     buyer.total_sales += bid.amount.to_i
     buyer.save(validate: false)
@@ -324,10 +345,12 @@ class Opportunity
       "Canceled"
     elsif self.winning_bid_id
       "Bidding won"
-    elsif self.bidding_ended?
-      "Bidding ended"
     elsif self.awarded?
       "Awarded"
+    elsif self.bidding_ended?
+      "Bidding ended"
+    elsif self.in_negotiation?
+      "In negotiation"
     else
       "In progress"
     end

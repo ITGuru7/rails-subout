@@ -638,20 +638,19 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
-NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid) {
+NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Auction) {
   var bid;
   bid = angular.copy($rootScope.bid);
   $scope.bid = {
+    id: bid._id,
     amount: bid.amount
   };
   return $scope.save = function() {
-    return MyBid.negotiate({
-      bidId: $rootScope.bid._id,
-      action: "negotiate",
+    return Auction.start_negotiation({
       bid: $scope.bid,
-      api_token: $rootScope.token.api_token,
-      opportunity_id: $rootScope.opportunity._id
-    }, function(data) {
+      opportunityId: $rootScope.opportunity._id
+    }, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
       return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
@@ -1058,6 +1057,30 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   });
   $scope.hideAlert = function() {
     return $scope.errors = null;
+  };
+  $scope.acceptNegotiation = function(bid) {
+    if (!confirm("Are you sure to accept this offer?")) {
+      return;
+    }
+    return MyBid.accept_negotiation({
+      bidId: bid._id
+    }, {}, function(content) {
+      return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+  $scope.denyNegotiation = function(bid) {
+    if (!confirm("Are you sure to deny this offer?")) {
+      return;
+    }
+    return MyBid.deny_negotiation({
+      bidId: bid._id
+    }, {}, function(content) {
+      return $location.path("dashboard");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
   };
   $scope.cancelOpportunity = function() {
     if (!confirm("Are you sure to cancel your opportunity?")) {
@@ -2038,10 +2061,11 @@ suboutSvcs.factory("soValidateEmail", function() {
   };
 });
 
-suboutSvcs.factory("Auction", function($resource) {
+suboutSvcs.factory("Auction", function($resource, $rootScope) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId',
-    action: '@action'
+    action: '@action',
+    api_token: $rootScope.token.api_token
   }, {
     select_winner: {
       method: "PUT"
@@ -2054,6 +2078,12 @@ suboutSvcs.factory("Auction", function($resource) {
     },
     paginate: {
       method: "GET"
+    },
+    start_negotiation: {
+      method: "PUT",
+      params: {
+        action: "create_negotiation"
+      }
     }
   });
 });
@@ -2104,19 +2134,32 @@ suboutSvcs.factory("Opportunity", function($resource) {
   return Opportunity;
 });
 
-suboutSvcs.factory("MyBid", function($resource) {
+suboutSvcs.factory("MyBid", function($resource, $rootScope) {
   return $resource("" + api_path + "/bids/:bidId/:action", {
     bidId: '@bidId',
-    action: '@action'
+    action: '@action',
+    api_token: $rootScope.token.api_token
   }, {
     paginate: {
       method: "GET"
     },
     cancel: {
-      method: "PUT"
+      method: "PUT",
+      params: {
+        action: "cancel"
+      }
     },
-    negotiate: {
-      method: "PUT"
+    accept_negotiation: {
+      method: "PUT",
+      params: {
+        action: "accept_negotiation"
+      }
+    },
+    deny_negotiation: {
+      method: "PUT",
+      params: {
+        action: "deny_negotiation"
+      }
     }
   });
 });
@@ -2493,7 +2536,7 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
-            if ($.cookie("signed_in_time")) {
+            if ($.cookie("signed_in_time") && $rootScope.company.mode === "ghost") {
               signed_in_time = $.cookie("signed_in_time");
               current_time = (new Date()).getTime();
               if ((current_time - signed_in_time) / 1000 > 60 * 60) {

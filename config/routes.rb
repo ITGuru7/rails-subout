@@ -39,6 +39,7 @@ Subout::Application.routes.draw do
       resources :auctions do
         member do
           put :select_winner
+          put :create_negotiation
           put :cancel
           put :award
         end
@@ -64,8 +65,11 @@ Subout::Application.routes.draw do
       end
 
       resources :bids do
-        put :cancel, on: :member
-        put :negotiate, on: :member
+        member do
+          put :cancel
+          put :accept_negotiation
+          put :deny_negotiation
+        end
       end
 
       resources :filters

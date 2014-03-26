@@ -11,14 +11,15 @@ suboutSvcs.factory "soValidateEmail", ->
     re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     re.test(email)
 
-suboutSvcs.factory "Auction", ($resource) ->
+suboutSvcs.factory "Auction", ($resource, $rootScope) ->
   $resource "#{api_path}/auctions/:opportunityId/:action",
-    {opportunityId: '@opportunityId', action:'@action'},
+    {opportunityId: '@opportunityId', action:'@action', api_token: $rootScope.token.api_token },
     {
       select_winner: {method: "PUT"}
       cancel: {method: "PUT"}
       update: {method: "PUT"}
       paginate: {method: "GET"}
+      start_negotiation: {method: "PUT", params:{action: "create_negotiation"}}
     }
 
 suboutSvcs.factory "Rating", ($resource) ->
@@ -49,12 +50,13 @@ suboutSvcs.factory "Opportunity", ($resource) ->
     null
   Opportunity
 
-suboutSvcs.factory "MyBid", ($resource) ->
+suboutSvcs.factory "MyBid", ($resource, $rootScope) ->
   $resource "#{api_path}/bids/:bidId/:action",
-    {bidId: '@bidId', action: '@action'},
+    {bidId: '@bidId', action: '@action', api_token: $rootScope.token.api_token},
     paginate: {method: "GET"}
-    cancel: {method: "PUT"}
-    negotiate: {method: "PUT"}
+    cancel: {method: "PUT", params:{action: "cancel"}}
+    accept_negotiation: {method: "PUT", params:{action: "accept_negotiation"}}
+    deny_negotiation: {method: "PUT", params:{action: "deny_negotiation"}}
 
 suboutSvcs.factory "Region", ($resource) ->
   $resource "#{api_path}/regions", {}, {}
@@ -336,7 +338,7 @@ suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $inject
             $('.loading-animation').removeClass('loading')
 
             # ghost user time life checking
-            if $.cookie("signed_in_time")
+            if $.cookie("signed_in_time") and $rootScope.company.mode == "ghost"
               signed_in_time = $.cookie("signed_in_time")
               current_time = (new Date()).getTime()
               if (current_time - signed_in_time)/1000 > 60 * 60 # checking time differences by seconds

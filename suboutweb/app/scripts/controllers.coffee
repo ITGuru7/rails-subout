@@ -419,20 +419,19 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     else if type is "Vehicle for Hire"
       $scope.opportunity.forward_auction = true
 
-NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid) ->
+NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
   bid = angular.copy($rootScope.bid)
 
   $scope.bid =
+    id: bid._id
     amount: bid.amount
 
   $scope.save = ->
-    MyBid.negotiate
-      bidId: $rootScope.bid._id
-      action: "negotiate"
+    Auction.start_negotiation
       bid: $scope.bid
-      api_token: $rootScope.token.api_token
-      opportunity_id: $rootScope.opportunity._id
-    , (data) ->
+      opportunityId: $rootScope.opportunity._id
+    , (opportunity) ->
+      _.extend($rootScope.opportunity, opportunity)
       jQuery("#modal").modal "hide"
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
@@ -783,6 +782,33 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
 
   $scope.hideAlert = ->
     $scope.errors = null
+
+  $scope.acceptNegotiation = (bid)->
+    return unless confirm("Are you sure to accept this offer?")
+    MyBid.accept_negotiation(
+      {
+        bidId: bid._id
+      }
+      , {}
+      , (content) ->
+        $location.path "dashboard"
+      , (content) ->
+        $scope.errors = $rootScope.errorMessages(content.data.errors)
+    )
+
+  $scope.denyNegotiation = (bid)->
+    return unless confirm("Are you sure to deny this offer?")
+    MyBid.deny_negotiation(
+      {
+        bidId: bid._id
+      }
+      , {}
+      , (content) ->
+        $location.path "dashboard"
+      , (content) ->
+        $scope.errors = $rootScope.errorMessages(content.data.errors)
+    )
+
 
   $scope.cancelOpportunity = ->
     return unless confirm("Are you sure to cancel your opportunity?")

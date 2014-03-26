@@ -14,6 +14,11 @@ class MailPreview < MailView
     Notifier.new_bid(bid.id)
   end
 
+  def new_negotiation 
+    bid = Bid.last
+    Notifier.new_negotiation(bid.id)
+  end
+
   def won_auction_to_buyer
     opportunity = Opportunity.where(:winning_bid_id.ne => nil).last
     Notifier.won_auction_to_buyer(opportunity.id)

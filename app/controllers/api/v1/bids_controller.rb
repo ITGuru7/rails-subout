@@ -25,11 +25,25 @@ class Api::V1::BidsController < Api::V1::BaseController
     respond_with_namespace(bid.opportunity, bid)
   end
 
-  def negotiate
-    bid = opportunity.bids.find(params[:id])
-    #bid.negotiate()
+  def accept_negotiation
+    bid = current_company.bids.find(params[:id])
+    opportunity = bid.opportunity
 
-    respond_with_namespace(bid.opportunity, bid)
+    if opportunity.canceled?
+      render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
+    elsif opportunity.awarded?
+      render json: { errors: { base: ["This opportunity is already awarded by another bidder."] } }, status: :unprocessable_entity
+    else
+      opportunity.win!(params[:id])
+      render json: bid
+    end
+  end
+
+  # TODO: discuss the logic of this soon
+  def deny_negotiation 
+    bid = current_company.bids.find(params[:id])
+    bid.cancel
+    render json: bid
   end
 
   private

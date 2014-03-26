@@ -1,7 +1,7 @@
 class BidSerializer < ActiveModel::Serializer
   include ActionView::Helpers::NumberHelper
 
-  attributes :_id, :amount, :formatted_amount, :created_at, :comment, :status, :vehicle_count
+  attributes :_id, :amount, :formatted_amount, :created_at, :comment, :status, :vehicle_count, :state
 
   has_one :opportunity, serializer: OpportunityShortSerializer
 
