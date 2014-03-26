@@ -1064,8 +1064,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     }
     return MyBid.accept_negotiation({
       bidId: bid._id
-    }, {}, function(content) {
-      return $location.path("dashboard");
+    }, {}, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -1076,8 +1077,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
     }
     return MyBid.deny_negotiation({
       bidId: bid._id
-    }, {}, function(content) {
-      return $location.path("dashboard");
+    }, {}, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });

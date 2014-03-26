@@ -35,7 +35,7 @@ class Api::V1::BidsController < Api::V1::BaseController
       render json: { errors: { base: ["This opportunity is already awarded by another bidder."] } }, status: :unprocessable_entity
     else
       opportunity.win!(params[:id])
-      render json: bid
+      render json: opportunity, serializer: OpportunitySerializer
     end
   end
 
@@ -43,7 +43,7 @@ class Api::V1::BidsController < Api::V1::BaseController
   def deny_negotiation 
     bid = current_company.bids.find(params[:id])
     bid.cancel
-    render json: bid
+    render json: bid.opportunity, serializer: OpportunitySerializer
   end
 
   private

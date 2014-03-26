@@ -65,8 +65,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = current_company.auctions.find(params[:id])
     @auction.start_negotiation!(params[:bid][:id], params[:bid][:amount])
 
-    @serializer = OpportunitySerializer.new(@auction)
-    render json: @serializer
+    render json: @auction, serializer: OpportunitySerializer
   end
 
 

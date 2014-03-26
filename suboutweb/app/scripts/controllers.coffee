@@ -790,8 +790,9 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
         bidId: bid._id
       }
       , {}
-      , (content) ->
-        $location.path "dashboard"
+      , (opportunity) ->
+        _.extend($rootScope.opportunity, opportunity)
+        jQuery("#modal").modal "hide"
       , (content) ->
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
@@ -803,8 +804,9 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
         bidId: bid._id
       }
       , {}
-      , (content) ->
-        $location.path "dashboard"
+      , (opportunity) ->
+        _.extend($rootScope.opportunity, opportunity)
+        jQuery("#modal").modal "hide"
       , (content) ->
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
