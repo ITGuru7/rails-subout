@@ -72,7 +72,8 @@
           <i ng-show="sortBy == 'start_date' && sortDirection == 'desc'"  class="glyphicon glyphicon-chevron-down"></i>
           <i ng-show="sortBy == 'start_date' && sortDirection == 'asc'"  class="glyphicon glyphicon-chevron-up"></i>
         </th>
-        <th class="current-bid-amount">Bid Range</thupth>Actions</th>
+        <th class="current-bid-amount">Bid Range</th>
+        <th>Actions</th>
       </tr>
       <tr ng-repeat="opportunity in paginated_results" >
         <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
@@ -97,9 +98,8 @@
           <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
         </td>
         <td class="current-bid-amount">
-          <span ng-show="opportunity.lowest_bid_amount">
-            {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
-          </span>
+          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }} / </span>
+          <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
         </td>
         <td>
           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
@@ -142,9 +142,8 @@
       <tr>
         <td class="table-header">Bid Range</td>
         <td class="current-bid-amount">
-          <span ng-show="opportunity.lowest_bid_amount">
-            {{ opportunity.lowest_bid_amount | soCurrency }} / {{ opportunity.highest_bid_amount | soCurrency }}
-          </span>
+          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }} / </span>
+          <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
         </td>
       </tr>
       <tr>
