@@ -1,5 +1,6 @@
 class Api::V1::CompaniesController < Api::V1::BaseController
   skip_before_filter :restrict_access, only: :create
+  skip_before_filter :restrict_ghost_user, only: :create
   serialization_scope :current_company
 
   def index
