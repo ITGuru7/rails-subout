@@ -338,7 +338,7 @@ suboutSvcs.factory "myHttpInterceptor", ($q, $appVersioning, $rootScope, $inject
             $('.loading-animation').removeClass('loading')
 
             # ghost user time life checking
-            if $.cookie("signed_in_time") and $rootScope.company.mode == "ghost"
+            if $.cookie("signed_in_time") and $rootScope.company and $rootScope.company.mode == "ghost"
               signed_in_time = $.cookie("signed_in_time")
               current_time = (new Date()).getTime()
               if (current_time - signed_in_time)/1000 > 60 * 60 # checking time differences by seconds

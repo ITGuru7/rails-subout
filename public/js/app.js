@@ -2538,7 +2538,7 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
-            if ($.cookie("signed_in_time") && $rootScope.company.mode === "ghost") {
+            if ($.cookie("signed_in_time") && $rootScope.company && $rootScope.company.mode === "ghost") {
               signed_in_time = $.cookie("signed_in_time");
               current_time = (new Date()).getTime();
               if ((current_time - signed_in_time) / 1000 > 60 * 60) {
