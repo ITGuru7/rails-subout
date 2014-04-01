@@ -110,7 +110,7 @@ class Admin::CompaniesController < Admin::BaseController
         )
       end
 
-      if @company.created_from_subscription_id
+      unless @company.created_from_subscription.blank?
         @company.created_from_subscription.destroy
       end
 
