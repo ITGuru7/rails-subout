@@ -67,6 +67,12 @@ class Api::V1::CompaniesController < Api::V1::BaseController
     end
   end
 
+  def update_agreement
+    current_company.tac_agreement = true
+    current_company.save()
+    respond_with_serializer()
+  end
+
   def update_regions
     if current_company.update_regions!(params[:company][:regions])
       respond_with_serializer()

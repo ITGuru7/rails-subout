@@ -85,6 +85,7 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
     {companyId:'@companyId', action:'@action'},
     update: {method: "PUT"}
     search: {method: "GET", action: "search", isArray: true}
+    update_agreement: {method: "PUT", action: "update_agreement"}
     update_regions: {method: "PUT", action: "update_regions"}
     update_notifications: {method: "PUT", action: "update_notifications"}
     update_vehicles: {method: "PUT", action: "update_vehicles"}

@@ -1,6 +1,7 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
 
+
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
   $rootScope.years = [d.getFullYear()..1970]
@@ -225,6 +226,12 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('negotiation-new.html'))
     $rootScope.$broadcast('modalOpened')
 
+  $rootScope.displayTermsAndConditionsForm = ()->
+    if(!$rootScope.company.tac_agreement)
+      $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'))
+      $rootScope.$broadcast('modalOpened')
+      $('#modal').modal({backdrop: 'static', keyboard: false})
+
   $rootScope.displayNewBidForm = (opportunity) ->
     unless $rootScope.company.dot_number
       $rootScope.setModal(suboutPartialPath('dot-required.html'))
@@ -337,6 +344,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
     , (content) ->
       alert("An error occured on your bid!\n" + $rootScope.errorMessages(content.data.errors).join("\n"))
+
 )
 
 WelcomePrelaunchCtrl = (AuthToken) ->
@@ -590,6 +598,9 @@ NewFavoriteCtrl = ($scope, $rootScope, $route, $location, Favorite, Company, Fav
         successUpdate()
 
 AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter, soPagination) ->
+
+
+  $rootScope.displayTermsAndConditionsForm()
   $scope.filterDepatureDate = null
   $scope.opportunities = []
   $scope.pages = []
@@ -889,6 +900,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
     )
 
 DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) ->
+  $rootScope.displayTermsAndConditionsForm()
   $scope.$location = $location
   $scope.filters = Filter.query(api_token: $rootScope.token.api_token)
   $scope.query = $location.search().q
@@ -1321,6 +1333,7 @@ SignInCtrl = ($scope, $rootScope, $location,
             $location.path($rootScope.redirectToPath)
           else
             $location.path ""
+
       else
         $scope.message = token.message
 
@@ -1398,6 +1411,17 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
       $("body").scrollTop(0)
+
+TermsAndConditionsCtrl = ($rootScope, $location, $routeParams, $scope, $timeout, Company) ->
+  $scope.accept = ()->
+    Company.update_agreement
+      companyId: $rootScope.company._id
+      api_token: $rootScope.token.api_token
+      action: "update_agreement"
+      (company) ->
+        $rootScope.closeModal()
+      (error) ->
+        $rootScope.closeModal()
 
 CompanyDetailCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Favorite, Company, Rating) ->
   $scope.validateRate = (value) ->

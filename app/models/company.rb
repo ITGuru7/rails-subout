@@ -51,6 +51,7 @@ class Company
   field :poster_message
 
   field :active, type: Boolean
+  field :tac_agreement, type: Boolean, default: false
   field :company_msg_path, type: String, default: ->{ SecureRandom.uuid }
   field :member, type: Boolean, default: false
   field :auctions_count, type: Integer, default: 0

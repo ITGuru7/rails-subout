@@ -146,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -414,6 +414,16 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.opportunity = opportunity;
     $rootScope.setModal(suboutPartialPath('negotiation-new.html'));
     return $rootScope.$broadcast('modalOpened');
+  };
+  $rootScope.displayTermsAndConditionsForm = function() {
+    if (!$rootScope.company.tac_agreement) {
+      $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
+      $rootScope.$broadcast('modalOpened');
+      return $('#modal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    }
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     if (!$rootScope.company.dot_number) {
@@ -837,6 +847,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
 
 AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $filter, soPagination) {
   var availableToCurrentCompany;
+  $rootScope.displayTermsAndConditionsForm();
   $scope.filterDepatureDate = null;
   $scope.opportunities = [];
   $scope.pages = [];
@@ -1162,6 +1173,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
   var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
+  $rootScope.displayTermsAndConditionsForm();
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -1774,6 +1786,20 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   };
 };
 
+TermsAndConditionsCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Company) {
+  return $scope.accept = function() {
+    return Company.update_agreement({
+      companyId: $rootScope.company._id,
+      api_token: $rootScope.token.api_token,
+      action: "update_agreement"
+    }, function(company) {
+      return $rootScope.closeModal();
+    }, function(error) {
+      return $rootScope.closeModal();
+    });
+  };
+};
+
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
   $scope.validateRate = function(value) {
@@ -2208,6 +2234,10 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       method: "GET",
       action: "search",
       isArray: true
+    },
+    update_agreement: {
+      method: "PUT",
+      action: "update_agreement"
     },
     update_regions: {
       method: "PUT",
