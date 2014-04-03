@@ -45,6 +45,15 @@
           <div class="clearfix"></div>
         </section>
       </section>
+
+      <section id="site-info">
+        <section class="title"><h5>Site Infomation</h5></section>
+        <section  class="content">
+          <a href="http://subout.com/terms-conditions" target="_blank">How to Cancel your account</a>
+          <br/>
+          Email: support@subout.com
+        </section>
+      </section>
     </div>
     <div class="col-md-9 col-sm-9">
 
@@ -159,11 +168,11 @@
                   </div>
                   <div>
                     <div ng-hide="event.eventable.winning_bid_id">
-                      <div ng-show="event.eventable.status == 'In progress'">
+                      <div ng-show="event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation'">
                         <span>Bidding ends:</span>
                         <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
                       </div>
-                      <div ng-show="event.eventable.status && event.eventable.status != 'In progress'" class="warning">
+                      <div ng-show="event.eventable.status && event.eventable.status != 'In progress' && event.eventable.status != 'In negotiation'" class="warning">
                         <span>Bidding ended</span>
                       </div>
                       <div ng-show="event.eventable.reserve_amount">
@@ -176,7 +185,7 @@
                   </div>
                   <div style="display:none" ng-show="event.eventable._id">
                     <div>
-                      <div ng-show="opportunity.buyer_id != company._id && event.eventable.status == 'In progress'">
+                      <div ng-show="opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
                         <div>
                           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                         </div>
@@ -278,7 +287,7 @@
                 <td>{{event.eventable.win_it_now_price | soCurrency}}</td>
               </tr>
               <tr ng-show="event.selected && event.eventable._id">
-                <td ng-show="opportunity.buyer_id != company._id && opportunity.status && opportunity.status == 'In progress'" colspan='2'>
+                <td ng-show="opportunity.buyer_id != company._id && opportunity.status && (opportunity.status == 'In progress' || opportunity.status == 'In negotiation')" colspan='2'>
                   <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
                   <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
                     <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>

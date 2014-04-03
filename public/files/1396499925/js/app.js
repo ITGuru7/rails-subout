@@ -146,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -199,7 +199,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   }
   $rootScope.isOldBrowser = $appBrowser.isOld();
   $rootScope.validateNumber = function(value) {
-    return /^\d+$/.test(value);
+    return /^-?\d+\.?\d*$/.test(value);
   };
   $rootScope.validateOptionalNumber = function(value) {
     if (!value) {
@@ -408,6 +408,22 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.selectedTab = selectedTab;
     $rootScope.setModal(suboutPartialPath('settings.html'));
     return $rootScope.setupFileUploader();
+  };
+  $rootScope.displayNegotiationForm = function(opportunity, bid) {
+    $rootScope.bid = bid;
+    $rootScope.opportunity = opportunity;
+    $rootScope.setModal(suboutPartialPath('negotiation-new.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
+  $rootScope.displayTermsAndConditionsForm = function() {
+    if (!$rootScope.company.tac_agreement) {
+      $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
+      $rootScope.$broadcast('modalOpened');
+      return $('#modal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    }
   };
   $rootScope.displayNewBidForm = function(opportunity) {
     if (!$rootScope.company.dot_number) {
@@ -632,6 +648,26 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   };
 };
 
+NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Auction) {
+  var bid;
+  bid = angular.copy($rootScope.bid);
+  $scope.bid = {
+    id: bid._id,
+    amount: bid.amount
+  };
+  return $scope.save = function() {
+    return Auction.start_negotiation({
+      bid: $scope.bid,
+      opportunityId: $rootScope.opportunity._id
+    }, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+};
+
 BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
   if (!$scope.bid) {
     $scope.bid = {};
@@ -811,6 +847,7 @@ NewFavoriteCtrl = function($scope, $rootScope, $route, $location, Favorite, Comp
 
 AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, $filter, soPagination) {
   var availableToCurrentCompany;
+  $rootScope.displayTermsAndConditionsForm();
   $scope.filterDepatureDate = null;
   $scope.opportunities = [];
   $scope.pages = [];
@@ -1032,6 +1069,32 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
+  $scope.acceptNegotiation = function(bid) {
+    if (!confirm("Are you sure to accept this offer?")) {
+      return;
+    }
+    return MyBid.accept_negotiation({
+      bidId: bid._id
+    }, {}, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+  $scope.denyNegotiation = function(bid) {
+    if (!confirm("Are you sure to deny this offer?")) {
+      return;
+    }
+    return MyBid.deny_negotiation({
+      bidId: bid._id
+    }, {}, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
   $scope.cancelOpportunity = function() {
     if (!confirm("Are you sure to cancel your opportunity?")) {
       return;
@@ -1110,6 +1173,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
 
 DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
   var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
+  $rootScope.displayTermsAndConditionsForm();
   $scope.$location = $location;
   $scope.filters = Filter.query({
     api_token: $rootScope.token.api_token
@@ -1722,6 +1786,20 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   };
 };
 
+TermsAndConditionsCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Company) {
+  return $scope.accept = function() {
+    return Company.update_agreement({
+      companyId: $rootScope.company._id,
+      api_token: $rootScope.token.api_token,
+      action: "update_agreement"
+    }, function(company) {
+      return $rootScope.closeModal();
+    }, function(error) {
+      return $rootScope.closeModal();
+    });
+  };
+};
+
 CompanyDetailCtrl = function($rootScope, $location, $routeParams, $scope, $timeout, Favorite, Company, Rating) {
   var company_id;
   $scope.validateRate = function(value) {
@@ -2011,10 +2089,11 @@ suboutSvcs.factory("soValidateEmail", function() {
   };
 });
 
-suboutSvcs.factory("Auction", function($resource) {
+suboutSvcs.factory("Auction", function($resource, $rootScope) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId',
-    action: '@action'
+    action: '@action',
+    api_token: $rootScope.token.api_token
   }, {
     select_winner: {
       method: "PUT"
@@ -2027,6 +2106,12 @@ suboutSvcs.factory("Auction", function($resource) {
     },
     paginate: {
       method: "GET"
+    },
+    start_negotiation: {
+      method: "PUT",
+      params: {
+        action: "create_negotiation"
+      }
     }
   });
 });
@@ -2077,16 +2162,32 @@ suboutSvcs.factory("Opportunity", function($resource) {
   return Opportunity;
 });
 
-suboutSvcs.factory("MyBid", function($resource) {
+suboutSvcs.factory("MyBid", function($resource, $rootScope) {
   return $resource("" + api_path + "/bids/:bidId/:action", {
     bidId: '@bidId',
-    action: '@action'
+    action: '@action',
+    api_token: $rootScope.token.api_token
   }, {
     paginate: {
       method: "GET"
     },
     cancel: {
-      method: "PUT"
+      method: "PUT",
+      params: {
+        action: "cancel"
+      }
+    },
+    accept_negotiation: {
+      method: "PUT",
+      params: {
+        action: "accept_negotiation"
+      }
+    },
+    deny_negotiation: {
+      method: "PUT",
+      params: {
+        action: "deny_negotiation"
+      }
     }
   });
 });
@@ -2133,6 +2234,10 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       method: "GET",
       action: "search",
       isArray: true
+    },
+    update_agreement: {
+      method: "PUT",
+      action: "update_agreement"
     },
     update_regions: {
       method: "PUT",
@@ -2463,7 +2568,7 @@ suboutSvcs.factory("myHttpInterceptor", function($q, $appVersioning, $rootScope,
           $http = $injector.get('$http');
           if ($http.pendingRequests.length === 0) {
             $('.loading-animation').removeClass('loading');
-            if ($.cookie("signed_in_time")) {
+            if ($.cookie("signed_in_time") && $rootScope.company && $rootScope.company.mode === "ghost") {
               signed_in_time = $.cookie("signed_in_time");
               current_time = (new Date()).getTime();
               if ((current_time - signed_in_time) / 1000 > 60 * 60) {
