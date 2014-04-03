@@ -1793,6 +1793,7 @@ TermsAndConditionsCtrl = function($rootScope, $location, $routeParams, $scope, $
       api_token: $rootScope.token.api_token,
       action: "update_agreement"
     }, function(company) {
+      $rootScope.company.tac_agreement = true;
       return $rootScope.closeModal();
     }, function(error) {
       return $rootScope.closeModal();

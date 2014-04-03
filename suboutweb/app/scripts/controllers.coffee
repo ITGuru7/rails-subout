@@ -1419,6 +1419,7 @@ TermsAndConditionsCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,
       api_token: $rootScope.token.api_token
       action: "update_agreement"
       (company) ->
+        $rootScope.company.tac_agreement = true
         $rootScope.closeModal()
       (error) ->
         $rootScope.closeModal()
