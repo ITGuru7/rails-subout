@@ -4,7 +4,7 @@ class Api::V1::TokensController < Api::V1::BaseController
 
   def create
     username = params[:email].downcase.strip if params[:email]
-    if user = User.where(:email => username).first
+    if user = User.where(:email => /^#{username}$/i).first
       subscription = user.company.created_from_subscription
       if user.access_locked?
         render :json => { authorized: false, message: "Your account is locked. Please contact admin."}
