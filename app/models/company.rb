@@ -57,7 +57,7 @@ class Company
   field :auctions_count, type: Integer, default: 0
   field :auctions_expired_count, type: Integer, default: 0
   field :bids_count, type: Integer, default: 0
-  field :notification_items, type: Array, default: ["opportunity-new", "opportunity-complete", "opportunity-win", "bid-new", "mobile-opportunity-new"]
+  field :notification_items, type: Array, default: ["opportunity-new", "opportunity-win", "account-locked", "account-expired-card"]
 
   Company::MODES = ['normal', 'ghost', 'benefit']
   field :mode, type: String, default: 'normal'

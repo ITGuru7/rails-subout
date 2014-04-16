@@ -3,7 +3,7 @@ class Notifier < ActionMailer::Base
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::DateHelper
 
-  default :from => "noreply@suboutapp.com"
+  default :from => "noreplyme@suboutapp.com"
 
   def send_known_favorite_invitation(buyer_id, supplier_id)
     @buyer = Company.find(buyer_id)
