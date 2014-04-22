@@ -42,7 +42,8 @@ class Api::V1::BidsController < Api::V1::BaseController
   # TODO: discuss the logic of this soon
   def deny_negotiation 
     bid = current_company.bids.find(params[:id])
-    bid.cancel
+    bid.state = 'canceled'
+    bid.save
     render json: bid.opportunity, serializer: OpportunitySerializer
   end
 
