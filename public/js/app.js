@@ -440,9 +440,6 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       $rootScope.setModal(suboutPartialPath('ada-required.html'));
       return;
     }
-    $rootScope.bid = {
-      amount: opportunity.reserve_amount
-    };
     $rootScope.setOpportunity(opportunity);
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
@@ -673,6 +670,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     $scope.bid = {};
   }
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
+  $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity);
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -2142,17 +2140,11 @@ suboutSvcs.factory("Opportunity", function($resource) {
   Opportunity.defaultBidAmountFor = function(opportunity) {
     var amount;
     if (opportunity.forward_auction && opportunity.highest_bid_amount) {
-      amount = parseInt(opportunity.highest_bid_amount * 1.05);
-      if (opportunity.win_it_now_price && amount >= parseInt(opportunity.win_it_now_price)) {
-        amount = parseInt(opportunity.win_it_now_price) - 1;
-      }
+      amount = parseInt(opportunity.highest_bid_amount);
       return amount;
     }
     if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
-      amount = parseInt(opportunity.lowest_bid_amount * 0.95);
-      if (opportunity.win_it_now_price && amount <= parseInt(opportunity.win_it_now_price)) {
-        amount = parseInt(opportunity.win_it_now_price) + 1;
-      }
+      amount = parseInt(opportunity.lowest_bid_amount);
       return amount;
     }
     if (opportunity.reserve_amount) {

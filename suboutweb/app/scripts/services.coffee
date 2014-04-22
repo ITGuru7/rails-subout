@@ -37,14 +37,10 @@ suboutSvcs.factory "Opportunity", ($resource) ->
     paginate: {method: "GET"}
   Opportunity.defaultBidAmountFor = (opportunity) ->
     if opportunity.forward_auction and opportunity.highest_bid_amount
-      amount = parseInt(opportunity.highest_bid_amount * 1.05)
-      if opportunity.win_it_now_price and amount >= parseInt(opportunity.win_it_now_price)
-        amount = parseInt(opportunity.win_it_now_price) - 1
+      amount = parseInt(opportunity.highest_bid_amount)
       return amount
     if !opportunity.forward_auction and opportunity.lowest_bid_amount
-      amount = parseInt(opportunity.lowest_bid_amount * 0.95)
-      if opportunity.win_it_now_price and amount <= parseInt(opportunity.win_it_now_price)
-        amount = parseInt(opportunity.win_it_now_price) + 1
+      amount = parseInt(opportunity.lowest_bid_amount)
       return amount
     return opportunity.reserve_amount if opportunity.reserve_amount
     null

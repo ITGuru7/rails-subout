@@ -243,9 +243,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     if opportunity.ada_required and !$rootScope.company.has_ada_vehicles
       $rootScope.setModal(suboutPartialPath('ada-required.html'))
       return
-    $rootScope.bid = {
-      amount: opportunity.reserve_amount #Opportunity.defaultBidAmountFor(opportunity)
-    }
     $rootScope.setOpportunity(opportunity)
     $rootScope.setModal(suboutPartialPath('bid-new.html'))
     $rootScope.$broadcast('modalOpened')
@@ -447,6 +444,8 @@ NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
 BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count
+  $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity)
+
   $scope.hideAlert = ->
     $scope.errors = null
 
