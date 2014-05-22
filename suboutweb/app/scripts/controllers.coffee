@@ -226,6 +226,12 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('negotiation-new.html'))
     $rootScope.$broadcast('modalOpened')
 
+  $rootScope.displayNegotiationCounterForm = (opportunity, bid) ->
+    $rootScope.bid = bid
+    $rootScope.opportunity = opportunity
+    $rootScope.setModal(suboutPartialPath('negotiation-counter-form.html'))
+    $rootScope.$broadcast('modalOpened')
+
   $rootScope.displayTermsAndConditionsForm = ()->
     if(!$rootScope.company.tac_agreement)
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'))
@@ -423,6 +429,23 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       $scope.opportunity.forward_auction = false
     else if type is "Vehicle for Hire"
       $scope.opportunity.forward_auction = true
+
+NegotiationCounterOfferCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
+  bid = angular.copy($rootScope.bid)
+  $scope.bid =
+    id: bid._id
+    amount: bid.amount
+  console.log bid
+
+  $scope.save = ->
+    MyBid.counter_negotiation
+      bidId: $scope.bid.id
+      bid: $scope.bid
+    , (opportunity) ->
+      _.extend($rootScope.opportunity, opportunity)
+      jQuery("#modal").modal "hide"
+    , (content) ->
+      $scope.errors = $rootScope.errorMessages(content.data.errors)
 
 NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
   bid = angular.copy($rootScope.bid)

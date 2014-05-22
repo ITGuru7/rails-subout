@@ -53,6 +53,7 @@ suboutSvcs.factory "MyBid", ($resource, $rootScope) ->
     cancel: {method: "PUT", params:{action: "cancel"}}
     accept_negotiation: {method: "PUT", params:{action: "accept_negotiation"}}
     deny_negotiation: {method: "PUT", params:{action: "deny_negotiation"}}
+    counter_negotiation: {method: "PUT", params:{action: "counter_negotiation"}}
 
 suboutSvcs.factory "Region", ($resource) ->
   $resource "#{api_path}/regions", {}, {}

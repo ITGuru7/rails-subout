@@ -70,6 +70,7 @@ Subout::Application.routes.draw do
           put :cancel
           put :accept_negotiation
           put :deny_negotiation
+          put :counter_negotiation
         end
       end
 

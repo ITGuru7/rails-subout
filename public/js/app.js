@@ -146,7 +146,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -415,6 +415,12 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.setModal(suboutPartialPath('negotiation-new.html'));
     return $rootScope.$broadcast('modalOpened');
   };
+  $rootScope.displayNegotiationCounterForm = function(opportunity, bid) {
+    $rootScope.bid = bid;
+    $rootScope.opportunity = opportunity;
+    $rootScope.setModal(suboutPartialPath('negotiation-counter-form.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
   $rootScope.displayTermsAndConditionsForm = function() {
     if (!$rootScope.company.tac_agreement) {
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
@@ -642,6 +648,27 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     } else if (type === "Vehicle for Hire") {
       return $scope.opportunity.forward_auction = true;
     }
+  };
+};
+
+NegotiationCounterOfferCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Auction) {
+  var bid;
+  bid = angular.copy($rootScope.bid);
+  $scope.bid = {
+    id: bid._id,
+    amount: bid.amount
+  };
+  console.log(bid);
+  return $scope.save = function() {
+    return MyBid.counter_negotiation({
+      bidId: $scope.bid.id,
+      bid: $scope.bid
+    }, function(opportunity) {
+      _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
   };
 };
 
@@ -2180,6 +2207,12 @@ suboutSvcs.factory("MyBid", function($resource, $rootScope) {
       method: "PUT",
       params: {
         action: "deny_negotiation"
+      }
+    },
+    counter_negotiation: {
+      method: "PUT",
+      params: {
+        action: "counter_negotiation"
       }
     }
   });

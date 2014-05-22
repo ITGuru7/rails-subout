@@ -185,6 +185,8 @@ class Opportunity
     bid = self.bids.active.find(bid_id)
     unless bid.is_canceled?
       bid.state = "negotiating"
+      bid.counter_amount = bid.amount
+      bid.offer_amount = new_amount
       bid.amount = new_amount
       bid.save
 

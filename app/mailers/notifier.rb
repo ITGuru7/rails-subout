@@ -50,6 +50,16 @@ class Notifier < ActionMailer::Base
     end
   end
 
+  def counter_negotiation(bid_id)
+    if @bid = Bid.active.where(id: bid_id).first
+      @opportunity = @bid.opportunity
+      @poster = @opportunity.buyer
+      @bidder = @bid.bidder
+
+      send_mail_to_company(__method__.to_s, @poster) 
+    end
+  end
+
   def won_auction_to_buyer(opportunity_id)
     @opportunity = Opportunity.find(opportunity_id)
     @bid = @opportunity.winning_bid

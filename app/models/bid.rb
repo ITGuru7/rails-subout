@@ -5,6 +5,9 @@ class Bid
   STATES = %w(active canceled negotiating won)
 
   field :amount, type: Money
+  field :offer_amount, type: Money
+  field :counter_amount, type: Money
+
   field :comment, type: String
   field :auto_bidding_limit, type: Money
   field :canceled, type: Boolean, default: false
@@ -86,6 +89,15 @@ class Bid
       self.state = 'canceled'
       self.save
     end
+  end
+
+  def counter_negotiation!(new_amount)
+    self.amount = new_amount
+    self.counter_amount = new_amount
+    self.state = "negotiating"
+    self.save
+
+    Notifier.delay.counter_negotiation(self.id) 
   end
 
   private

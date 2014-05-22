@@ -47,6 +47,13 @@ class Api::V1::BidsController < Api::V1::BaseController
     render json: bid.opportunity, serializer: OpportunitySerializer
   end
 
+  def counter_negotiation 
+    bid = current_company.bids.find(params[:id])
+    new_amount = params[:bid][:amount]    
+    bid.counter_negotiation!(new_amount)
+    render json: bid.opportunity, serializer: OpportunitySerializer
+  end
+
   private
 
   def opportunity
