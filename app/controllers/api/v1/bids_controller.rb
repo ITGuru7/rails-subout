@@ -11,7 +11,8 @@ class Api::V1::BidsController < Api::V1::BaseController
   end
 
   def create
-    bid = opportunity.bids.build(params[:bid])
+    white_listed_fields = %W(amount auto_bidding_limit comment vehicle_count)
+    bid = opportunity.bids.build(params[:bid].slice(*white_listed_fields))
     bid.bidder = current_company
     bid.save
 

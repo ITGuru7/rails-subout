@@ -21,6 +21,12 @@ class BidObserver < Mongoid::Observer
         e.eventable = bid.opportunity
         e.actor_id = bid.bidder_id
       end
+    else
+      Event.create do |e|
+        e.action = {type: :bid_updated, details: {:amount => bid.amount, :bid_id => bid.id}}
+        e.eventable = bid.opportunity
+        e.actor_id = bid.bidder_id
+      end
     end
   end
 end
