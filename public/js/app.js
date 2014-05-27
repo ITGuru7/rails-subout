@@ -658,7 +658,6 @@ NegotiationCounterOfferCtrl = function($scope, $rootScope, Bid, Opportunity, MyB
     id: bid._id,
     amount: bid.amount
   };
-  console.log(bid);
   return $scope.save = function() {
     return MyBid.counter_negotiation({
       bidId: $scope.bid.id,
@@ -1262,7 +1261,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.refreshEvents(function() {
     if ($rootScope.channel) {
       return $rootScope.channel.bind('event_created', function(event) {
-        if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event)) {
+        if ($rootScope.company.canSeeEvent(event) && $scope.matchFilters(event) && $scope.isPublicEvent(event)) {
           $scope.events.unshift(event);
           updatePreviousEvents(event);
           return $scope.$apply();
@@ -1270,6 +1269,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       });
     }
   });
+  $scope.isPublicEvent = function(event) {
+    return event.action.details.visibility !== 'none';
+  };
   $scope.matchFilters = function(event) {
     return $scope.filterEventType(event) && $scope.filterRegion(event) && $scope.filterOpportunityType(event) && $scope.filterFullText(event) && $scope.filterCompany(event);
   };

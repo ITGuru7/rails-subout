@@ -19,11 +19,9 @@ class OpportunityObserver < Mongoid::Observer
       create_event(opportunity, :opportunity_awarded)
     elsif opportunity.winning_bid_id_changed?
       Event.create(actor_id: opportunity.winning_bid.bidder_id, action: {type: :opportunity_bidding_won}, eventable: opportunity)
-    else
+    elsif opportunity.start_region_changed? or opportunity.end_region_changed? or opportunity.for_favorites_only_changed?
       create_event(opportunity, :opportunity_updated)
-      if opportunity.start_region_changed? or opportunity.end_region_changed? or opportunity.for_favorites_only_changed?
-        opportunity.notify_companies(:new_opportunity)
-      end
+      opportunity.notify_companies(:new_opportunity)
     end
   end
 

@@ -435,7 +435,6 @@ NegotiationCounterOfferCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auct
   $scope.bid =
     id: bid._id
     amount: bid.amount
-  console.log bid
 
   $scope.save = ->
     MyBid.counter_negotiation
@@ -980,10 +979,13 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.refreshEvents ->
     if($rootScope.channel)
       $rootScope.channel.bind 'event_created', (event) ->
-        if $rootScope.company.canSeeEvent(event) and $scope.matchFilters(event)
+        if $rootScope.company.canSeeEvent(event) and $scope.matchFilters(event) and $scope.isPublicEvent(event)
           $scope.events.unshift event
           updatePreviousEvents(event)
           $scope.$apply()
+
+  $scope.isPublicEvent = (event) ->
+    event.action.details.visibility != 'none'
 
   $scope.matchFilters = (event) ->
     return $scope.filterEventType(event) and
