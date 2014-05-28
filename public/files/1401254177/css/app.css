@@ -7646,6 +7646,9 @@ div#opportunity-show .description .content {
   white-space: pre-wrap;
   padding-left: 5px;
 }
+div#opportunity-show .hidden-sm table td {
+  border: none;
+}
 #modal dt {
   color: #666550;
   font-weight: normal;
