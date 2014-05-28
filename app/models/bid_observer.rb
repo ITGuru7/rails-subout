@@ -21,9 +21,9 @@ class BidObserver < Mongoid::Observer
         e.eventable = bid.opportunity
         e.actor_id = bid.bidder_id
       end
-    elsif bid.offer_amount_changed? or bid.counter_amount_changed?
+    elsif bid.offer_amount_changed? or bid.counter_amount_changed? or bid.state == 'declined'
       Event.create do |e|
-        e.action = {type: :bid_negotiation, details: {:amount => bid.amount, :bid_id => bid.id, visibility: 'none'}}
+        e.action = {type: :bid_negotiation, details: {:amount => bid.amount, :bid_id => bid.id}}
         e.eventable = bid.opportunity
         e.actor_id = bid.bidder_id
       end

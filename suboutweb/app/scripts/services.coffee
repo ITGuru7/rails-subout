@@ -20,6 +20,7 @@ suboutSvcs.factory "Auction", ($resource, $rootScope) ->
       update: {method: "PUT"}
       paginate: {method: "GET"}
       start_negotiation: {method: "PUT", params:{action: "create_negotiation"}}
+      decline_negotiation: {method: "PUT", params:{action: "decline_negotiation"}}
     }
 
 suboutSvcs.factory "Rating", ($resource) ->
@@ -52,7 +53,7 @@ suboutSvcs.factory "MyBid", ($resource, $rootScope) ->
     paginate: {method: "GET"}
     cancel: {method: "PUT", params:{action: "cancel"}}
     accept_negotiation: {method: "PUT", params:{action: "accept_negotiation"}}
-    deny_negotiation: {method: "PUT", params:{action: "deny_negotiation"}}
+    decline_negotiation: {method: "PUT", params:{action: "decline_negotiation"}}
     counter_negotiation: {method: "PUT", params:{action: "counter_negotiation"}}
 
 suboutSvcs.factory "Region", ($resource) ->

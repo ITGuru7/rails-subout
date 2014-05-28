@@ -31,33 +31,36 @@ class Notifier < ActionMailer::Base
   end
 
   def new_bid(bid_id)
-    if @bid = Bid.active.where(id: bid_id).first
-      @opportunity = @bid.opportunity
-      @poster = @opportunity.buyer
-      @bidder = @bid.bidder
+    @bid = Bid.find(bid_id)
+    return unless @bid.is_active?
 
-      send_mail_to_company(__method__.to_s, @poster) 
-    end
+    @opportunity = @bid.opportunity
+    @poster = @opportunity.buyer
+    @bidder = @bid.bidder
+
+    send_mail_to_company(__method__.to_s, @poster) 
   end
 
   def new_negotiation(bid_id)
-    if @bid = Bid.active.where(id: bid_id).first
-      @opportunity = @bid.opportunity
-      @poster = @opportunity.buyer
-      @bidder = @bid.bidder
+    @bid = Bid.find(bid_id)
+    return unless @bid.is_active?
+    
+    @opportunity = @bid.opportunity
+    @poster = @opportunity.buyer
+    @bidder = @bid.bidder
 
-      send_mail_to_company(__method__.to_s, @bidder) 
-    end
+    send_mail_to_company(__method__.to_s, @bidder) 
   end
 
   def counter_negotiation(bid_id)
-    if @bid = Bid.active.where(id: bid_id).first
-      @opportunity = @bid.opportunity
-      @poster = @opportunity.buyer
-      @bidder = @bid.bidder
+    @bid = Bid.find(bid_id)
+    return unless @bid.is_active?
 
-      send_mail_to_company(__method__.to_s, @poster) 
-    end
+    @opportunity = @bid.opportunity
+    @poster = @opportunity.buyer
+    @bidder = @bid.bidder
+
+    send_mail_to_company(__method__.to_s, @poster) 
   end
 
   def won_auction_to_buyer(opportunity_id)
@@ -145,20 +148,18 @@ class Notifier < ActionMailer::Base
   end
 
   def new_vehicle(vehicle_id)
-    if @vehicle = Vehicle.find(vehicle_id) 
-      @company = @vehicle.company
+    @vehicle = Vehicle.find(vehicle_id) 
+    @company = @vehicle.company
 
-      send_mail_from_template(__method__.to_s, Setting.admin_email)
-    end
+    send_mail_from_template(__method__.to_s, Setting.admin_email)
   end
 
   def update_vehicle(vehicle_id, old_vehicle)
-    if @vehicle = Vehicle.find(vehicle_id) 
-      @company = @vehicle.company
-      @old_vehicle = old_vehicle
+    @vehicle = Vehicle.find(vehicle_id) 
+    @company = @vehicle.company
+    @old_vehicle = old_vehicle
 
-      send_mail_from_template(__method__.to_s, Setting.admin_email)
-    end
+    send_mail_from_template(__method__.to_s, Setting.admin_email)
   end
 
   def remove_vehicle(vehicle)

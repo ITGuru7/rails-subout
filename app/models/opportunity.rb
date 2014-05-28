@@ -344,7 +344,7 @@ class Opportunity
 
   def status
     if self.canceled?
-      "Canceled"
+      "Awarded outside of suboutapp.com"
     elsif self.winning_bid_id
       "Bidding won"
     elsif self.awarded?

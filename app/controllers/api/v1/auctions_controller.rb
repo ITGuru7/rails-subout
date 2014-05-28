@@ -61,6 +61,19 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     end
   end
 
+  def decline_negotiation
+    @auction = current_company.auctions.find(params[:id])
+    if @auction.canceled?
+      render json: { errors: { base: ["This opportunity is canceled."] } }, status: :unprocessable_entity
+    elsif @auction.awarded?
+      render json: { errors: { base: ["This opportunity is already awarded by another bidder."] } }, status: :unprocessable_entity
+    else
+      bid = @auction.bids.find(params[:bid_id])
+      bid.decline!
+      render json: {}
+    end
+  end
+
   def create_negotiation
     @auction = current_company.auctions.find(params[:id])
     @auction.start_negotiation!(params[:bid][:id], params[:bid][:amount])

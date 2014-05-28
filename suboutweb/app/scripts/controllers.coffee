@@ -829,19 +829,28 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
 
-  $scope.denyNegotiation = (bid)->
-    return unless confirm("Are you sure to deny this offer?")
-    MyBid.deny_negotiation(
+  $scope.declineOffer = (bid)->
+    return unless confirm("Are you sure to decline this offer?")
+    MyBid.decline_negotiation(
       {
         bidId: bid._id
       }
       , {}
       , (opportunity) ->
         _.extend($rootScope.opportunity, opportunity)
-        jQuery("#modal").modal "hide"
       , (content) ->
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
+
+  $scope.declineCounterOffer = (opportunity, bid)->
+    return unless confirm("Are you sure to decline this offer?")
+    Auction.decline_negotiation
+      bid_id: bid._id,
+      opportunityId: opportunity._id
+    , (opportunity) ->
+      _.extend($rootScope.opportunity, opportunity)
+    , (content) ->
+      $scope.errors = $rootScope.errorMessages(content.data.errors)
 
 
   $scope.cancelOpportunity = ->
@@ -979,13 +988,13 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.refreshEvents ->
     if($rootScope.channel)
       $rootScope.channel.bind 'event_created', (event) ->
-        if $rootScope.company.canSeeEvent(event) and $scope.matchFilters(event) and $scope.isPublicEvent(event)
+        if $rootScope.company.canSeeEvent(event) and $scope.matchFilters(event)
           $scope.events.unshift event
           updatePreviousEvents(event)
           $scope.$apply()
 
   $scope.isPublicEvent = (event) ->
-    event.action.details.visibility != 'none'
+    event.action.type != 'bid_negotiation'
 
   $scope.matchFilters = (event) ->
     return $scope.filterEventType(event) and
@@ -1077,6 +1086,8 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
   $scope.actionDescription = (action) ->
     switch action.type
+      when "opportunity_canceled"
+        "awarded outside of suboutapp.com"
       when "bid_created"
         "received bid #{$filter('soCurrency')(action.details.amount)}"
       when "bid_canceled"

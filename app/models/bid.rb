@@ -91,6 +91,16 @@ class Bid
     end
   end
 
+  def cancel!
+    self.state = 'canceled'
+    self.save
+  end
+
+  def decline!
+    self.state = 'declined'
+    self.save
+  end
+
   def counter_negotiation!(new_amount)
     self.amount = new_amount
     self.counter_amount = new_amount

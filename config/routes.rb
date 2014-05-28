@@ -40,6 +40,7 @@ Subout::Application.routes.draw do
         member do
           put :select_winner
           put :create_negotiation
+          put :decline_negotiation
           put :cancel
           put :award
         end
@@ -69,7 +70,7 @@ Subout::Application.routes.draw do
         member do
           put :cancel
           put :accept_negotiation
-          put :deny_negotiation
+          put :decline_negotiation
           put :counter_negotiation
         end
       end
