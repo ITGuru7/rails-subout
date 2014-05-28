@@ -2,7 +2,7 @@ class Bid
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  STATES = %w(active canceled negotiating won)
+  STATES = %w(active canceled negotiating won declined)
 
   field :amount, type: Money
   field :offer_amount, type: Money
@@ -64,6 +64,8 @@ class Bid
       "Closed"
     elsif is_negotiating? 
       "In negotiation"
+    elsif is_declined?
+      "Declined"
     else
       "In progress"
     end
