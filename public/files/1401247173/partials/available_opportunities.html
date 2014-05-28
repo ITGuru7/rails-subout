@@ -98,7 +98,8 @@
           <span class='created-at'>{{opportunity.start_date | stringToDate | date:'MMM dd'}}</span>
         </td>
         <td class="current-bid-amount">
-          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }} / </span>
+          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }}</span>
+          <span ng-show="opportunity.reserve_amount && opportunity.lowest_bid_amount"> / </span>
           <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
         </td>
         <td>
@@ -142,7 +143,8 @@
       <tr>
         <td class="table-header">Bid Range</td>
         <td class="current-bid-amount">
-          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }} / </span>
+          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }}</span>
+          <span ng-show="opportunity.reserve_amount && opportunity.lowest_bid_amount"> / </span>
           <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
         </td>
       </tr>
