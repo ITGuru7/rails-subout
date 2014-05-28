@@ -50,7 +50,11 @@ class Api::V1::BidsController < Api::V1::BaseController
     bid = current_company.bids.find(params[:id])
     new_amount = params[:bid][:amount]    
     bid.counter_negotiation!(new_amount)
-    render json: bid.opportunity, serializer: OpportunitySerializer
+    unless bid.errors.blank?
+      render json: { errors: bid.errors }, status: :unprocessable_entity
+    else
+      render json: bid.opportunity, serializer: OpportunitySerializer
+    end
   end
 
   private

@@ -77,8 +77,11 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   def create_negotiation
     @auction = current_company.auctions.find(params[:id])
     @auction.start_negotiation!(params[:bid][:id], params[:bid][:amount])
-
-    render json: @auction, serializer: OpportunitySerializer
+    unless @auction.errors.blank?
+      render json: { errors: @auction.errors }, status: :unprocessable_entity
+    else
+      render json: @auction, serializer: OpportunitySerializer
+    end
   end
 
 

@@ -32,7 +32,7 @@ class Notifier < ActionMailer::Base
 
   def new_bid(bid_id)
     @bid = Bid.find(bid_id)
-    return unless @bid.is_active?
+    return if @bid.is_canceled?
 
     @opportunity = @bid.opportunity
     @poster = @opportunity.buyer
@@ -43,7 +43,7 @@ class Notifier < ActionMailer::Base
 
   def new_negotiation(bid_id)
     @bid = Bid.find(bid_id)
-    return unless @bid.is_active?
+    return if @bid.is_canceled?
     
     @opportunity = @bid.opportunity
     @poster = @opportunity.buyer
@@ -54,7 +54,7 @@ class Notifier < ActionMailer::Base
 
   def counter_negotiation(bid_id)
     @bid = Bid.find(bid_id)
-    return unless @bid.is_active?
+    return if @bid.is_canceled?
 
     @opportunity = @bid.opportunity
     @poster = @opportunity.buyer

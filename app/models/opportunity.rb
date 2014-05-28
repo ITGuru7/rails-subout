@@ -183,6 +183,12 @@ class Opportunity
 
   def start_negotiation!(bid_id, new_amount)
     bid = self.bids.active.find(bid_id)
+
+    if bid.amount.to_f == new_amount.to_f
+      errors.add(:offer_amount, "should be different from current amount.") 
+      return
+    end
+
     unless bid.is_canceled?
       bid.state = "negotiating"
       bid.counter_amount = bid.amount

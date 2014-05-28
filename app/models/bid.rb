@@ -104,6 +104,9 @@ class Bid
   end
 
   def counter_negotiation!(new_amount)
+    if self.amount.to_f == new_amount.to_f
+      return errors.add(:offer_amount, "should be different from current amount.") 
+    end
     self.amount = new_amount
     self.counter_amount = new_amount
     self.state = "negotiating"
