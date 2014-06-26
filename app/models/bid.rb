@@ -43,6 +43,7 @@ class Bid
   scope :recent, -> { desc(:created_at) }
   scope :by_amount, -> { asc(:amount) }
   scope :today, -> { where(:created_at.gte => Date.today.beginning_of_day, :created_at.lte => Date.today.end_of_day) }
+  scope :month, -> { where(:created_at.gte => Date.today.beginning_of_month, :created_at.lte => Date.today.end_of_month) }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
@@ -152,8 +153,8 @@ class Bid
       end
     end
 
-    if bidder.subscription_plan == 'free' and bidder.bids.today.count >= 5
-      errors.add :base, "You cannot bid over 5 times per day."
+    if bidder.subscription_plan == 'free' and bidder.bids.month.count >= 5
+      errors.add :base, "You cannot bid over 5 times per month."
     end
   end
 
