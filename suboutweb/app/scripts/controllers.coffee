@@ -524,6 +524,7 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
       opportunityId: $rootScope.opportunity._id
     , (data) ->
       $rootScope.company.today_bids_count += 1
+      $rootScope.company.month_bids_count += 1
       jQuery("#modal").modal "hide"
 
     , (content) ->
