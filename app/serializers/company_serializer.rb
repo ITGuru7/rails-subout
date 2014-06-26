@@ -6,6 +6,7 @@ class CompanySerializer < ActiveModel::Serializer
     :vehicle_types, :notification_email, :score, :payment_methods, :today_bids_count, :month_bids_count, :mode,
     :address_line1, :address_line2, :city, :state, :country, :zip_code, :notification_items, :poster_message, :tac_agreement
 
+
   has_many :ratings_taken, serializer: RatingSerializer
   has_many :vehicles
 
