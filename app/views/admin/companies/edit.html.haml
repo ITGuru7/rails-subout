@@ -94,4 +94,4 @@
       = f.password_field :password_confirmation
       = f.submit "Submit", class: "btn btn-primary"
 
-= link_to "Back", :back, class: 'btn'
+= link_to "Back", admin_companies_path(anchor: "company-#{@company.id}"), class: 'btn'

@@ -42,7 +42,7 @@
       %th Actions
   %tbody
     - @companies.each_with_index do |company, index|
-      %tr
+      %tr{id: "company-#{company.id}"}
         %td= index + 1
         %td= company.id
         %td

@@ -355,10 +355,15 @@ class Company
     end
   end
 
+  def vehicles_count
+    self.vehicles.count
+  end
+
   def self.csv_column_names
     [
-      "_id","email", "name", "owner", "contact_name", "contact_phone", "created_at",
-      "last_sign_in_at", "subscription_plan", "auctions_count", "bids_count"
+      "_id","email", "name", "owner", "contact_name", "contact_phone", "mode", "created_at",
+      "last_sign_in_at", "subscription_plan", "vehicles_count", "auctions_count", "auctions_expired_count", 
+      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?"
     ]
   end
 
