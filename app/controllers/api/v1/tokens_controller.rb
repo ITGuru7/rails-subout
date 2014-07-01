@@ -23,7 +23,7 @@ class Api::V1::TokensController < Api::V1::BaseController
         render json: user.auth_token_hash
         user.update_tracked_fields!(request)
       else
-        render :json => { authorized: false, message: "Invalid username or password!"}
+        render :json => { authorized: false, message: "Invalid password!"}
       end
     else
       render :json => { authorized: false, message: "Invalid username or password!"}
