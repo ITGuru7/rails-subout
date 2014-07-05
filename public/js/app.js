@@ -1396,7 +1396,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "opportunity_canceled":
-        return "awarded outside of suboutapp.com";
+        return "awarded";
       case "bid_created":
         return "received bid " + ($filter('soCurrency')(action.details.amount));
       case "bid_canceled":

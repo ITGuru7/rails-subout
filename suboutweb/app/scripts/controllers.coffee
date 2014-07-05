@@ -1088,7 +1088,7 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.actionDescription = (action) ->
     switch action.type
       when "opportunity_canceled"
-        "awarded outside of suboutapp.com"
+        "awarded"
       when "bid_created"
         "received bid #{$filter('soCurrency')(action.details.amount)}"
       when "bid_canceled"

@@ -1,4 +1,8 @@
 %h2 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
+= form_for [:admin, @company], html: {class: 'form-horizontal'} do |f|
+  Company Name:
+  = f.text_field :name
+  = f.submit :submit, class: 'btn btn-danger', value: 'Submit'
 - if @subscription && @subscription.exists_on_chargify?
   %ul
     %li Subscription: #{@company.subscription_plan}
