@@ -658,7 +658,6 @@ NegotiationCounterOfferCtrl = function($scope, $rootScope, Bid, Opportunity, MyB
     id: bid._id,
     amount: bid.amount
   };
-  console.log(bid);
   return $scope.save = function() {
     return MyBid.counter_negotiation({
       bidId: $scope.bid.id,
@@ -770,6 +769,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       $rootScope.company.today_bids_count += 1;
+      $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
@@ -1107,15 +1107,27 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
   };
-  $scope.denyNegotiation = function(bid) {
-    if (!confirm("Are you sure to deny this offer?")) {
+  $scope.declineOffer = function(bid) {
+    if (!confirm("Are you sure to decline this offer?")) {
       return;
     }
-    return MyBid.deny_negotiation({
+    return MyBid.decline_negotiation({
       bidId: bid._id
     }, {}, function(opportunity) {
-      _.extend($rootScope.opportunity, opportunity);
-      return jQuery("#modal").modal("hide");
+      return _.extend($rootScope.opportunity, opportunity);
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+  $scope.declineCounterOffer = function(opportunity, bid) {
+    if (!confirm("Are you sure to decline this offer?")) {
+      return;
+    }
+    return Auction.decline_negotiation({
+      bid_id: bid._id,
+      opportunityId: opportunity._id
+    }, function(opportunity) {
+      return _.extend($rootScope.opportunity, opportunity);
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -1270,6 +1282,9 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       });
     }
   });
+  $scope.isPublicEvent = function(event) {
+    return event.action.type !== 'bid_negotiation';
+  };
   $scope.matchFilters = function(event) {
     return $scope.filterEventType(event) && $scope.filterRegion(event) && $scope.filterOpportunityType(event) && $scope.filterFullText(event) && $scope.filterCompany(event);
   };
@@ -1380,6 +1395,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   };
   $scope.actionDescription = function(action) {
     switch (action.type) {
+      case "opportunity_canceled":
+        return "awarded";
       case "bid_created":
         return "received bid " + ($filter('soCurrency')(action.details.amount));
       case "bid_canceled":
@@ -2138,6 +2155,12 @@ suboutSvcs.factory("Auction", function($resource, $rootScope) {
       params: {
         action: "create_negotiation"
       }
+    },
+    decline_negotiation: {
+      method: "PUT",
+      params: {
+        action: "decline_negotiation"
+      }
     }
   });
 });
@@ -2203,10 +2226,10 @@ suboutSvcs.factory("MyBid", function($resource, $rootScope) {
         action: "accept_negotiation"
       }
     },
-    deny_negotiation: {
+    decline_negotiation: {
       method: "PUT",
       params: {
-        action: "deny_negotiation"
+        action: "decline_negotiation"
       }
     },
     counter_negotiation: {

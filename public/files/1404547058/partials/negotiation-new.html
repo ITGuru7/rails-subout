@@ -1,13 +1,16 @@
-<div id="negotiationCounterOffer" ng-controller="NegotiationCounterOfferCtrl">
+<div id="negotiationNew" ng-controller="NegotiationNewCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button"> x </button>
     <h3>Bid Negotiation</h3>
   </div>
   <div class="modal-body">
+    <div ui-if="errors" class="alert alert-danger">
+      <p ng-repeat="error in errors">{{error}}</p>
+    </div>
     <form name="newNegotiation" class="form-horizontal">
 
       <div class="form-group">
-        <label for="bid_amount" class="col-md-4 control-label">Counter Offer Amount ($) *</label>
+        <label for="bid_amount" class="col-md-4 control-label">Desirable Amount ($) *</label>
         <div class="col-md-8">
           <input type="text"
                  id="bid_amount"
@@ -26,7 +29,7 @@
         <div class="col-md-offset-4 col-md-8">
           <div>
             <button ng-click="save()" class="btn btn-success" ng-disabled="newNegotiation.$invalid">
-              Negotiate
+              Negotiate Now
             </button>
           </div>
         </div>
