@@ -44,8 +44,8 @@ class Setting
     return unless value
 
     striped_value = HTML::FullSanitizer.new.sanitize(value)
-    if striped_value.length > 200
-      errors.add(:santinized_length, "cannot be greater than 200")
+    if striped_value.length > 2000
+      errors.add(:santinized_length, "cannot be greater than 2000")
     end
   end
 end

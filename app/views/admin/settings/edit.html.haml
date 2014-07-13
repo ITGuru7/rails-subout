@@ -12,7 +12,7 @@
         - if @setting.key == 'admin_email'
           = f.text_field :value
         - else
-          = f.text_area :value, class: "input-xlarge", rows: 5, data: { maxlength: 200 }
+          = f.text_area :value, class: "input-xlarge", rows: 10, cols: 80,  data: { maxlength: 2000 }
 
     .form-actions
       = f.submit "Update", class: "btn btn-danger"
