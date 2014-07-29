@@ -258,10 +258,6 @@ class Company
       options << {:special_region.in => regions + ['All']}
     end
 
-    unless vehicle_types.blank?
-      options << {:vehicle_type.in => vehicle_types}
-    end
-
     
     conditions = {
       #:buyer_id.in => self.favoriting_buyer_ids,
@@ -269,7 +265,8 @@ class Company
       awarded: false,
       :bidding_ends_at.gt => Time.now,
       winning_bid_id: nil,
-      :buyer_id.ne => self.id
+      :buyer_id.ne => self.id,
+      :vehicle_type.in => vehicle_types
     }
     conditions[:start_date] = start_date if start_date
     conditions[:trip_type] = trip_type if trip_type
