@@ -227,7 +227,7 @@ class Company
     self.favoriting_buyer_ids.include?(other_company.id)
   end
 
-  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_type=nil, trip_type=nil, query=nil, regions=nil)
+  def available_opportunities(sort_by = :bidding_ends_at, sort_direction = 'asc', start_date = nil, vehicle_types=nil, trip_type=nil, query=nil, regions=nil)
     start_date = nil if start_date == "null" or start_date.blank?
     begin
       unless start_date.nil?
@@ -240,12 +240,15 @@ class Company
 
     sort_by ||= :bidding_ends_at
     sort_direction ||= "asc"
-    vehicle_type = nil if vehicle_type == "null" or vehicle_type.blank?
+    vehicle_types = nil if vehicle_types == "null" or vehicle_types.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
     regions = nil if regions == "null" or regions.blank?
 
     options = []
     
+    vehicle_types = vehicle_types.split(',') unless vehicle_types.nil?
+    vehicle_types = Opportunity::ALL_VEHICLE_TYPES if vehicle_types.blank?
+
     regions = regions.split(',') unless regions.nil?
     regions = self.regions if regions.blank?
 
@@ -254,6 +257,11 @@ class Company
       options << {:end_region.in => regions}
       options << {:special_region.in => regions + ['All']}
     end
+
+    unless vehicle_types.blank?
+      options << {:vehicle_type.in => vehicle_types}
+    end
+
     
     conditions = {
       #:buyer_id.in => self.favoriting_buyer_ids,
@@ -264,7 +272,6 @@ class Company
       :buyer_id.ne => self.id
     }
     conditions[:start_date] = start_date if start_date
-    conditions[:vehicle_type] = vehicle_type if vehicle_type
     conditions[:trip_type] = trip_type if trip_type
     opportunities = Opportunity.any_of(*options).where(conditions)
     

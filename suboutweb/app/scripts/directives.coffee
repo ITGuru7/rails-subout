@@ -6,7 +6,7 @@ subout.directive 'multiple', ->
       selectAllText: "All"
       buttonText: (options, select)->
         if (options.length == 0)
-          return 'All regions <b class="caret"></b>'
+          return "#{attrs.placeholder} <b class='caret'></b>"
         else if (options.length > 3)
           return options.length + ' selected <b class="caret"></b>'
         else
