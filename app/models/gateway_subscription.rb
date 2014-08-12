@@ -183,7 +183,7 @@ class GatewaySubscription
   
   def self.send_expired_card_notification
     GatewaySubscription.all.each do |gs|
-      next if gs.created_company.nil? or gs.state != 'active'
+      next if gs.created_company.nil? or gs.state != 'active' or gs.product_handle == 'free'
 
       gs.update_credit_card_expired
 
