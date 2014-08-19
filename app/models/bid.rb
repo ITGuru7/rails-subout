@@ -15,6 +15,12 @@ class Bid
   field :vehicle_count_limit, type: Integer
   field :state, type: String, default: "active"
 
+  field :vehicle_year, type: Integer
+  field :vehicle_type, type: String
+  field :vehicle_type_other, type: String
+  field :vehicle_passenger_count, type: Integer
+  field :vehicle_gratuity_included, type: Boolean, default: 0
+
   paginates_per 30
 
   belongs_to :opportunity, :inverse_of => :bids
