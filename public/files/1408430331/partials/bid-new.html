@@ -113,12 +113,83 @@
           <p ng-show="newBid.bid_vehicle_count_limit.$error.vehicle_count_limit" class="help-block">Minimum bus count cannot be greater than vehicle count you are bidding.</p>
         </div>
       </div>
+
       <div class="form-group">
         <label for="bid_comment" class="col-md-4 control-label">Brag about your company here</label>
         <div class="col-md-8">
           <textarea id="bid_comment" name="bid_comment" ng-model="bid.comment" class="form-control"></textarea>
         </div>
       </div>
+
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_year.$invalid}">
+        <label for="bid_vehicle_year" class="col-md-4 control-label">
+          Bus year *
+        </label>
+        <div class="col-md-8">
+          <input type="text"
+                 id="bid_vehicle_year"
+                 name="bid_vehicle_year"
+                 ng-model="bid.vehicle_year"
+                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
+                 size="10"
+                 maxlength="10"
+                 required
+                 class="form-control">
+          <p ng-show="newBid.bid_vehicle_year.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error': newBid.bid_vehicle_type_other.$invalid && !bid.vehicle_type}">
+        <label for="bid_vehicle_type" class="col-md-4 control-label">
+          Bus type *
+        </label>
+        <div class="col-md-8">
+          <p>
+            <select id="bid_vehicle_type" class="form-control" name="bid_vehicle_type" ng-model="bid.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
+              <option value="">Other</option>
+            </select>
+          </p>
+
+          <p ui-if="!bid.vehicle_type">
+            <input type="text"
+                   id="bid_vehicle_type_other"
+                   name="bid_vehicle_type_other"
+                   ng-model="bid.vehicle_type_other"
+                   size="10"
+                   maxlength="10"
+                   required
+                   class="form-control">
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_passenger_count.$invalid}">
+        <label for="bid_vehicle_passenger_count" class="col-md-4 control-label">
+          Passenger count *
+        </label>
+        <div class="col-md-8">
+          <input type="text"
+                 id="bid_vehicle_passenger_count"
+                 name="bid_vehicle_passenger_count"
+                 ng-model="bid.vehicle_passenger_count"
+                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)'"
+                 size="10"
+                 maxlength="10"
+                 required
+                 class="form-control">
+          <p ng-show="newBid.bid_vehicle_year.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bid_vehicle_gratuity_included" class="checkbox">
+          <div class="col-md-offset-4 col-md-8">
+            <input id="bid_vehicle_gratuity_included" type="checkbox" ng-model="bid.vehicle_gratuity_included" value="1">
+            Is Gratuity included?
+          </div>
+        </label>
+      </div>
+
 
       <div id="poster-message" class="help-block"><div class="inner text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
 

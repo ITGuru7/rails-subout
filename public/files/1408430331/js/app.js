@@ -769,6 +769,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
       opportunityId: $rootScope.opportunity._id
     }, function(data) {
       $rootScope.company.today_bids_count += 1;
+      $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
@@ -1395,7 +1396,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "opportunity_canceled":
-        return "awarded outside of suboutapp.com";
+        return "awarded";
       case "bid_created":
         return "received bid " + ($filter('soCurrency')(action.details.amount));
       case "bid_canceled":
