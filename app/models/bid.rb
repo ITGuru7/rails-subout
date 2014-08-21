@@ -23,6 +23,8 @@ class Bid
 
   paginates_per 30
 
+  embeds_many :vehicles, :inverse_of => :bid
+
   belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company", counter_cache: :bids_count
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
