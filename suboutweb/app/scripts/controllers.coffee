@@ -467,6 +467,7 @@ NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
 BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count
+  $scope.bid.vehicle_count ||= 1
   $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity)
   $scope.bid.vehicles = []
 
