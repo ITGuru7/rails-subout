@@ -468,6 +468,11 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count
   $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity)
+  $scope.bid.vehicles = []
+
+  $scope.$watch "bid.vehicle_count", ->
+    $scope.bid.vehicles = []
+    _($scope.bid.vehicle_count).times -> $scope.bid.vehicles.push {}
 
   $scope.hideAlert = ->
     $scope.errors = null
