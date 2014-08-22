@@ -151,6 +151,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
+  $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
   $rootScope.years = (function() {
@@ -697,6 +698,13 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
   }
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
   $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity);
+  $scope.bid.vehicles = [];
+  $scope.$watch("bid.vehicle_count", function() {
+    $scope.bid.vehicles = [];
+    return _($scope.bid.vehicle_count).times(function() {
+      return $scope.bid.vehicles.push({});
+    });
+  });
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -1396,7 +1404,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "opportunity_canceled":
-        return "awarded outside of suboutapp.com";
+        return "awarded";
       case "bid_created":
         return "received bid " + ($filter('soCurrency')(action.details.amount));
       case "bid_canceled":
