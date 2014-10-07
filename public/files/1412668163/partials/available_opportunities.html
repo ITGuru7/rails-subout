@@ -24,19 +24,19 @@
       </div>
       <div class="form-group">
         <label>Vehicle Type: </label>
-        <select ng-model="filterVehicleType" data-placeholder="All" class="form-control" ng-options="t for t in VEHICLE_TYPES">
+        <select ng-model="filterVehicleType" data-placeholder="All Vehicle Types" class="form-control" ng-options="t for t in VEHICLE_TYPES" multiple="multiple">
           <option value=""></option>
         </select>
       </div>
       <div class="form-group">
         <label>Trip Type: </label>
-        <select ng-model="filterTripType" data-placeholder="All" class="form-control" ng-options="t for t in TRIP_TYPES">
+        <select ng-model="filterTripType" data-placeholder="All" class="form-control"  ng-options="t for t in TRIP_TYPES">
             <option value=""></option>
         </select>
       </div>
       <div class="form-group">
         <label>Region: </label>
-        <select ng-model="filterRegions" class="multiselect form-control" ng-options="r for r in allRegions" multiple="multiple">
+        <select ng-model="filterRegions" data-placeholder="All Regions" class="multiselect form-control" ng-options="r for r in allRegions" multiple="multiple">
         </select>
       </div>
       <div class="form-group">

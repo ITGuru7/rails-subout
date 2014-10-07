@@ -115,7 +115,19 @@
         <table class="bid-history table">
           <tr id="bid_{{bid._id}}" ng-repeat="bid in opportunity.bids" ng-class="{true:'alert-success'}[opportunity.reserve_amount && bid.amount <= opportunity.reserve_amount]">
             <td><strong>{{bid.amount | soCurrency}}</strong></td>
-            <td ng-show="opportunity.vehicle_count > 1"><strong>{{bid.vehicle_count}}</strong> vehicle(s)</td>
+            <td>
+              <div ng-show="opportunity.vehicle_count > 1"> <strong>{{bid.vehicle_count}}</strong> vehicle(s) </div>
+              <div ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
+                <div ng-repeat="vehicle in bid.vehicles">
+                  <p>
+                  <strong>Bus year:</strong> {{vehicle.year}}, 
+                  <strong>Type:</strong> {{vehicle.type && vehicle.type||vehicle.type_other}},
+                  <strong>Passengers:</strong> {{vehicle.passenger_count}},
+                  <strong>gratuity included?:</strong> {{vehicle.gratuity_included && 'Yes'||'No'}}
+                  </p>
+                </div>
+              </div>
+            </td>
             <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
             <td>
               <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">

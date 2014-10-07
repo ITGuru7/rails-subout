@@ -937,7 +937,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
         alert($rootScope.errorMessages(content.data.errors).join("\n"))
     )
 
-DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) ->
+DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter, $q) ->
   $rootScope.displayTermsAndConditionsForm()
   $scope.$location = $location
   $scope.filters = Filter.query(api_token: $rootScope.token.api_token)
@@ -967,14 +967,14 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
     Event.query queryOptions
     , (data) ->
+      $scope.loading = false
       if data.length is 0
         $scope.noMoreEvents = true
-        $scope.loading = false
       else
         angular.forEach data, (event) ->
           $scope.events.push(event)
-        $scope.loading = false
         $scope.currentPage += 1
+    
 
   $scope.refreshEvents = (callback) ->
     $scope.events = []
