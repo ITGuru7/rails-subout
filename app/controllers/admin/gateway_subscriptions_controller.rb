@@ -1,6 +1,8 @@
 class Admin::GatewaySubscriptionsController < Admin::BaseController
   def index
     @subscriptions = GatewaySubscription.by_category(params[:category]).recent
+    @subscriptions = @subscriptions.full_text_search(params[:search]) unless params[:search].blank?
+    @subscriptions = @subscriptions.page(params[:page]).per(20)
 
     respond_to do |format|
       format.html

@@ -4,7 +4,9 @@ class Admin::CompaniesController < Admin::BaseController
   def index
     @sort_by = params[:sort_by] || "created_at"
     @sort_direction = params[:sort_direction] || "desc"
-    @companies = Company.sort(@sort_by, @sort_direction).includes(:users).page(params[:page]).per(30)
+    @companies = Company.sort(@sort_by, @sort_direction).includes(:users)
+    @companies = @companies.full_text_search(params[:search]) unless params[:search].blank?
+    @companies = @companies.page(params[:page]).per(20)
 
     respond_to do |format|
       format.html

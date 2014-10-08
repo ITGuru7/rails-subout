@@ -105,7 +105,7 @@ class Company
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
-  search_in :name, :email
+  search_in :name, :email, :id
 
   def has_subscription_benefit?
     self.mode == "ghost" or self.mode == "benefit" or self.subout_free_subscriber?

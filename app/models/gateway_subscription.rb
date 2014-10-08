@@ -3,6 +3,7 @@ require 'my_chargify'
 class GatewaySubscription
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   REGION_NAMES = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'District of Columbia', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York' , 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', '
     Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas' , 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']
@@ -21,6 +22,8 @@ class GatewaySubscription
   field :card_expired_date, type: Date
   field :card_expired_email_sent, type: Boolean, default: false
   field :remind_email_sent, type: Boolean, default: false
+
+  search_in :email, :id, :first_name, :last_name, :organization, :subscription_id, :customer_id, :product_handle
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
   attr_accessible :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
