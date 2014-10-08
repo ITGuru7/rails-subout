@@ -26,6 +26,14 @@ module.filter "websiteUrl", ->
     else
       "http://#{url}"
 
+module.filter "excerpt", ->
+  (input, limit) ->
+    return "" unless input
+    if input.length > limit
+      return input.substring(0, limit) + "..."
+    else
+      return input
+
 evaluation = (input, evaluation) ->
   evaluator = Evaluators[evaluation.type]
   if $.isFunction(evaluator)

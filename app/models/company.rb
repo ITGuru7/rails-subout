@@ -247,8 +247,6 @@ class Company
     options = []
     
     vehicle_types = vehicle_types.split(',') unless vehicle_types.nil?
-    vehicle_types = Opportunity::ALL_VEHICLE_TYPES if vehicle_types.blank?
-
     regions = regions.split(',') unless regions.nil?
     regions = self.regions if regions.blank?
 
@@ -265,9 +263,10 @@ class Company
       awarded: false,
       :bidding_ends_at.gt => Time.now,
       winning_bid_id: nil,
-      :buyer_id.ne => self.id,
-      :vehicle_type.in => vehicle_types
+      :buyer_id.ne => self.id
     }
+
+    conditions[:vehicle_type.in] = vehicle_types unless vehicle_types.blank?
     conditions[:start_date] = start_date if start_date
     conditions[:trip_type] = trip_type if trip_type
     opportunities = Opportunity.any_of(*options).where(conditions)

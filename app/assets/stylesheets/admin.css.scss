@@ -13,3 +13,20 @@
  *= require_tree ./admin
 */
 
+.pagination{
+  .current{
+    font-weight: bold;
+    color: #000!important;
+  }
+  a, .gap, .current{
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #428bca;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+}
