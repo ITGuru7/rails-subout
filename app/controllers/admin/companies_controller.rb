@@ -38,7 +38,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def change_password
-    user = @company.first_user
+    user = @company.users.find(params[:user_id])
     if user.update_attributes(params[:user])
       redirect_to edit_admin_company_path(@company), notice: 'Password were updated successfully.'
     else
