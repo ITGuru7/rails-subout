@@ -6,7 +6,7 @@ class Admin::GatewaySubscriptionsController < Admin::BaseController
 
     respond_to do |format|
       format.html
-      format.csv { send_data @subscriptions.to_csv }
+      format.csv { send_data GatewaySubscription.recent.to_csv }
     end
   end
 

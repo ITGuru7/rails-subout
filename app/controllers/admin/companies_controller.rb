@@ -10,7 +10,7 @@ class Admin::CompaniesController < Admin::BaseController
 
     respond_to do |format|
       format.html
-      format.csv { send_data @companies.to_csv }
+      format.csv { send_data Company.sort(@sort_by, @sort_direction).includes(:users).to_csv }
     end
   end
 
