@@ -46,6 +46,7 @@ class User
   belongs_to :company, :class_name => "Company", :foreign_key => "company_id"
   has_many :mobile_keys
   validates_presence_of :email, :on => :create, :message => "can't be blank"
+  validates_uniqueness_of :email
 
   ## Needed for simple_role and cancan
   field :role, :type => String
