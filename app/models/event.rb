@@ -9,9 +9,13 @@ class Event
   field :cached_eventable_type
   field :eventable_reference_number
 
-  belongs_to :actor, :class_name => "Company"
+  belongs_to :actor, :class_name => "Company", index: true
   embeds_one :action, class_name: "EventAction"
-  belongs_to :eventable, class_name: "Opportunity"
+  belongs_to :eventable, class_name: "Opportunity", index: true
+
+  index eventable_company_id: 1
+  index cached_eventable_type: 1
+  index "action.type" => 1
 
   paginates_per 30
   search_in eventable: :fulltext
