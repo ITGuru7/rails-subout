@@ -51,7 +51,6 @@ class Opportunity
   field :notified_regions, type: Array, default: [] 
   field :favorites_notified, type: Boolean, default: false
 
-  index _keywords: 1
   index start_date: 1
   index end_date: 1
   index type: 1
@@ -102,7 +101,7 @@ class Opportunity
   before_save :set_bidding_ends_at, unless: 'self.canceled'
   before_save :set_vehicle_count, if: 'self.vehicle_count.blank?'
 
-  search_in :reference_number, :name, :description
+  search_in :reference_number, :name
 
   paginates_per 30
 

@@ -948,7 +948,6 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.regionFilterOptions = $rootScope.allRegions
   $scope.filterRegions = $rootScope.filterRegionsOnHome
 
-
   Company.query
     api_token: $rootScope.token.api_token
   , (data) ->
@@ -956,25 +955,22 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
   $scope.loadMoreEvents = ->
     return if $scope.noMoreEvents or $scope.loading
-
     $scope.loading = true
-
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
     queryOptions.regions = $scope.filterRegions
-
     queryOptions.page = $scope.currentPage
 
     Event.query queryOptions
     , (data) ->
-      $scope.loading = false
       if data.length is 0
         $scope.noMoreEvents = true
+        $scope.loading = false
       else
         angular.forEach data, (event) ->
           $scope.events.push(event)
+        $scope.loading = false
         $scope.currentPage += 1
-    
 
   $scope.refreshEvents = (callback) ->
     $scope.events = []
