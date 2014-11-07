@@ -86,7 +86,16 @@
           <span ng-show="opportunity.vehicle_type">Vehicle Type: {{opportunity.vehicle_type}}<br></span>
           <span ng-show="opportunity.trip_type">Trip Type: {{opportunity.trip_type}}<br></span>
           <br />
+          <div ng-show="opportunity.expanded || opportunity.description.length < 100">
           {{opportunity.description}}
+          <br/>
+          <a ng-click="opportunity.expanded=false" ng-hide="opportunity.description.length < 100">Close detail</a>
+          </div>
+          <div ng-hide="opportunity.expanded || opportunity.description.length < 100">
+          {{opportunity.description | excerpt:100 }}
+          <br/>
+          <a ng-click="opportunity.expanded=true">See detail</a>
+          </div
         </td>
         <td>
           <span class='created-at timeago' relative-time title="{{opportunity.created_at}}">{{opportunity.created_at|date}}</span>

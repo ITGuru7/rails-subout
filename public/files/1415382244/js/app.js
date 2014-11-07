@@ -151,6 +151,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
+  $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
   $rootScope.years = (function() {
@@ -692,11 +693,20 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
+  var _base;
   if (!$scope.bid) {
     $scope.bid = {};
   }
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
+  (_base = $scope.bid).vehicle_count || (_base.vehicle_count = 1);
   $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity);
+  $scope.bid.vehicles = [];
+  $scope.$watch("bid.vehicle_count", function() {
+    $scope.bid.vehicles = [];
+    return _($scope.bid.vehicle_count).times(function() {
+      return $scope.bid.vehicles.push({});
+    });
+  });
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -1208,7 +1218,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter, $q) {
   var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
   $rootScope.displayTermsAndConditionsForm();
   $scope.$location = $location;
@@ -2050,6 +2060,19 @@ module.filter("websiteUrl", function() {
       return url;
     } else {
       return "http://" + url;
+    }
+  };
+});
+
+module.filter("excerpt", function() {
+  return function(input, limit) {
+    if (!input) {
+      return "";
+    }
+    if (input.length > limit) {
+      return input.substring(0, limit) + "...";
+    } else {
+      return input;
     }
   };
 });
