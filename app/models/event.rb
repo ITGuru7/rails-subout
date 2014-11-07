@@ -15,6 +15,8 @@ class Event
 
   index eventable_company_id: 1
   index cached_eventable_type: 1
+  index created_at: 1
+  index updated_at: 1
   index "action.type" => 1
 
   paginates_per 30
