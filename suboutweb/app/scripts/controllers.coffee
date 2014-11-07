@@ -971,6 +971,8 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
           $scope.events.push(event)
         $scope.loading = false
         $scope.currentPage += 1
+    , () ->
+      $scope.loading = false
 
   $scope.refreshEvents = (callback) ->
     $scope.events = []
