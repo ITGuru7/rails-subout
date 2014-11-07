@@ -8,7 +8,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     events = events.where(:cached_eventable_type => params[:opportunity_type]) if params[:opportunity_type]
     events = events.where(:actor_id => params[:company_id]) if params[:company_id]
-    events = events.search(params[:q]) if params[:q]
+    events = events.search(params[:q])
     render json: events
   end
 end

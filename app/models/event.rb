@@ -43,7 +43,6 @@ class Event
     if query.present? and query.start_with?("#")
       query = query[1..-1]
     end
-
     self.full_text_search(query)
   end
 
