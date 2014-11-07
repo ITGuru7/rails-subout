@@ -101,7 +101,7 @@ class Opportunity
   before_save :set_bidding_ends_at, unless: 'self.canceled'
   before_save :set_vehicle_count, if: 'self.vehicle_count.blank?'
 
-  search_in :reference_number, :name, :description
+  search_in :reference_number, :name
 
   paginates_per 30
 
