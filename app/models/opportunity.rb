@@ -52,13 +52,9 @@ class Opportunity
   field :favorites_notified, type: Boolean, default: false
 
   index start_date: 1
-  index end_date: 1
-  index type: 1
   index vehicle_type: 1
   index trip_type: 1
-  index start_location: 1
   index start_region: 1
-  index end_location: 1
   index end_region: 1
 
   attr_accessor :viewer
