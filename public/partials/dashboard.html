@@ -97,9 +97,6 @@
             <div class="pill region" ng-repeat="region in filterRegions">
               {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
-            <div class="pill" ng-show="$location.search().company_id">
-              {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>
-            </div>
             <div class="pill" ng-show="$location.search().q">
               {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
             </div>

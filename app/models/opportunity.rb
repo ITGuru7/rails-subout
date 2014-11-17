@@ -51,7 +51,10 @@ class Opportunity
   field :notified_regions, type: Array, default: [] 
   field :favorites_notified, type: Boolean, default: false
 
+  index created_at: 1
   index start_date: 1
+  index bidding_ends_at: 1
+
   index vehicle_type: 1
   index trip_type: 1
   index start_region: 1

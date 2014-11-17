@@ -948,11 +948,6 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.regionFilterOptions = $rootScope.allRegions
   $scope.filterRegions = $rootScope.filterRegionsOnHome
 
-  Company.query
-    api_token: $rootScope.token.api_token
-  , (data) ->
-    $scope.companies = data
-
   $scope.loadMoreEvents = ->
     return if $scope.noMoreEvents or $scope.loading
     $scope.loading = true
@@ -1085,10 +1080,6 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       "Canceled"
     else
       "Unknown"
-
-  $scope.companyName = (companyId) ->
-    company = _.find($scope.companies, (company) -> company._id == companyId)
-    if company then _.str.trim(company.abbreviated_name) else companyId
 
   $scope.actionDescription = (action) ->
     switch action.type
