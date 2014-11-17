@@ -117,10 +117,16 @@
             <td><strong>{{bid.amount | soCurrency}}</strong></td>
             <td>
               <div ng-show="opportunity.vehicle_count > 1"> <strong>{{bid.vehicle_count}}</strong> vehicle(s) </div>
-              <div><strong>Bus year:</strong> {{bid.vehicle_count}}</div>
-              <div><strong>Bus type:</strong> {{bid.vehicle_type && bid.vehicle_type||bid.vehicle_type_other}}</div>
-              <div><strong>Passenger count:</strong> {{bid.vehicle_passenger_count}}</div>
-              <div><strong>Is gratuity included?:</strong> {{bid.vehicle_gratuity_included && 'Yes'||'No'}}</div>
+              <div ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
+                <div ng-repeat="vehicle in bid.vehicles">
+                  <p>
+                  <strong>Bus year:</strong> {{vehicle.year}}, 
+                  <strong>Type:</strong> {{vehicle.type && vehicle.type||vehicle.type_other}},
+                  <strong>Passengers:</strong> {{vehicle.passenger_count}},
+                  <strong>gratuity included?:</strong> {{vehicle.gratuity_included && 'Yes'||'No'}}
+                  </p>
+                </div>
+              </div>
             </td>
             <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
             <td>

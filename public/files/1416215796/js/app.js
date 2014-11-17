@@ -151,6 +151,7 @@ var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl,
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
+  $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
   $rootScope.years = (function() {
@@ -692,11 +693,20 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
 };
 
 BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
+  var _base;
   if (!$scope.bid) {
     $scope.bid = {};
   }
   $scope.bid.vehicle_count = $scope.opportunity.vehicle_count;
+  (_base = $scope.bid).vehicle_count || (_base.vehicle_count = 1);
   $scope.bid.amount = Opportunity.defaultBidAmountFor($scope.opportunity);
+  $scope.bid.vehicles = [];
+  $scope.$watch("bid.vehicle_count", function() {
+    $scope.bid.vehicles = [];
+    return _($scope.bid.vehicle_count).times(function() {
+      return $scope.bid.vehicles.push({});
+    });
+  });
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
@@ -1208,7 +1218,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   };
 };
 
-DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter) {
+DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid, Favorite, Opportunity, $filter, $q) {
   var getRegionFilterOptions, setRegionFilter, updatePreviousEvents;
   $rootScope.displayTermsAndConditionsForm();
   $scope.$location = $location;
@@ -1221,11 +1231,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.events = [];
   $scope.regionFilterOptions = $rootScope.allRegions;
   $scope.filterRegions = $rootScope.filterRegionsOnHome;
-  Company.query({
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.companies = data;
-  });
   $scope.loadMoreEvents = function() {
     var queryOptions;
     if ($scope.noMoreEvents || $scope.loading) {
@@ -1247,6 +1252,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
         $scope.loading = false;
         return $scope.currentPage += 1;
       }
+    }, function() {
+      return $scope.loading = false;
     });
   };
   $scope.refreshEvents = function(callback) {
@@ -1380,17 +1387,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return "Canceled";
     } else {
       return "Unknown";
-    }
-  };
-  $scope.companyName = function(companyId) {
-    var company;
-    company = _.find($scope.companies, function(company) {
-      return company._id === companyId;
-    });
-    if (company) {
-      return _.str.trim(company.abbreviated_name);
-    } else {
-      return companyId;
     }
   };
   $scope.actionDescription = function(action) {
@@ -1932,7 +1928,7 @@ subout.directive('multiple', function() {
         buttonText: function(options, select) {
           var selected;
           if (options.length === 0) {
-            return 'All regions <b class="caret"></b>';
+            return "" + attrs.placeholder + " <b class='caret'></b>";
           } else if (options.length > 3) {
             return options.length + ' selected <b class="caret"></b>';
           } else {
@@ -2050,6 +2046,19 @@ module.filter("websiteUrl", function() {
       return url;
     } else {
       return "http://" + url;
+    }
+  };
+});
+
+module.filter("excerpt", function() {
+  return function(input, limit) {
+    if (!input) {
+      return "";
+    }
+    if (input.length > limit) {
+      return input.substring(0, limit) + "...";
+    } else {
+      return input;
     }
   };
 });
