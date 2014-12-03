@@ -105,7 +105,7 @@ class Company
   after_create :accept_invitation!, if: "created_from_invitation_id.present?"
   after_create :confirm_subscription!, if: "created_from_subscription_id.present?"
 
-  search_in :name, :email, :id
+  search_in :name, :email
 
   def has_subscription_benefit?
     self.mode == "ghost" or self.mode == "benefit" or self.subout_free_subscriber?
@@ -362,11 +362,19 @@ class Company
     self.vehicles.count
   end
 
+  def chargify_subscription_id
+    self.created_from_subscription.subscription_id rescue nil
+  end
+
+  def chargify_customer_id
+    self.created_from_subscription.customer_id rescue nil
+  end
+
   def self.csv_column_names
     [
       "_id","email", "name", "owner", "contact_name", "contact_phone", "mode", "created_at",
       "last_sign_in_at", "subscription_plan", "vehicles_count", "auctions_count", "auctions_expired_count", 
-      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?"
+      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?", "chargify_subscription_id", "chargify_customer_id"
     ]
   end
 
