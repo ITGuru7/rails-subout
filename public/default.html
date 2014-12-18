@@ -26,7 +26,7 @@
 
   <body ng-controller="AppCtrl" data-subout-deploy="--DEPLOY--">
     <div id="pageWrapper" class="container">
-      <div id="subout-navbar" class="navbar" ui-if="userSignedIn()">
+      <div id="subout-navbar" class="navbar" ng-if="userSignedIn()">
         <div class="navbar-inner row-fluid">
           <div class="span3">
             <a class="brand" href="#">SubOut</a>

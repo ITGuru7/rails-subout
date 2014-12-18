@@ -4,7 +4,7 @@
     <h3>Bid Negotiation</h3>
   </div>
   <div class="modal-body">
-    <div ui-if="errors" class="alert alert-danger">
+    <div ng-if="errors" class="alert alert-danger">
       <p ng-repeat="error in errors">{{error}}</p>
     </div>
     <form name="newNegotiation" class="form-horizontal">
