@@ -10,6 +10,16 @@ class StaticController < ApplicationController
     render :inline => File.read(file_name), :layout => nil
   end
 
+  def embedded
+    setup_headers
+
+    index_name = 'production'
+    index_name = 'development' if Rails.env.development? || Rails.env.test?
+    
+    file_name = "public/embedded_#{index_name}.html"
+    render :inline => File.read(file_name), :layout => nil
+  end
+
   def asset
     setup_headers
 

@@ -1,6 +1,6 @@
 api_path = "/api/v1"
 
-suboutSvcs = angular.module("suboutServices", ["ngResource"])
+suboutSvcs = angular.module("suboutServices", ["ngResource", "angular-abortable-requests"])
 
 suboutSvcs.factory "Setting", ($resource) ->
   $resource "#{api_path}/settings/:key",
@@ -13,7 +13,7 @@ suboutSvcs.factory "soValidateEmail", ->
 
 suboutSvcs.factory "Auction", ($resource, $rootScope) ->
   $resource "#{api_path}/auctions/:opportunityId/:action",
-    {opportunityId: '@opportunityId', action:'@action', api_token: $rootScope.token.api_token },
+    {opportunityId: '@opportunityId', action:'@action', api_token: '@api_token' },
     {
       select_winner: {method: "PUT"}
       cancel: {method: "PUT"}
@@ -72,8 +72,10 @@ suboutSvcs.factory "Comment", ($resource) ->
     {opportunityId: "@opportunityId"},
     {}
 
-suboutSvcs.factory "Event", ($resource) ->
-  Event = $resource "#{api_path}/events/:eventId", {}, {}
+suboutSvcs.factory "Event", ($resource, RequestFactory) ->
+  #Event = $resource "#{api_path}/events/:eventId", {}, {}
+
+  Event = RequestFactory.createResource {url: "#{api_path}/events/:eventId"}
   Event::isBidableBy = (company) ->
     this.eventable.bidable and this.eventable.buyer_id isnt company._id
   Event

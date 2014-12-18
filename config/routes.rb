@@ -7,6 +7,7 @@ Subout::Application.routes.draw do
   root :to => 'static#index'
   get '/' => 'static#index'
   get '/index.html' => 'static#index'
+  get '/embedded.html' => 'static#embedded'
 
   # this is used for cache busting locally
   if Rails.env.development?

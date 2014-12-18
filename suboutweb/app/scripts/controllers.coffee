@@ -2,6 +2,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
 
 
+  $rootScope.opportunity_retail_form_path = suboutPartialPath("opportunity-retail-form.html")
   $rootScope._ = _
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
@@ -354,6 +355,64 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 WelcomePrelaunchCtrl = (AuthToken) ->
   $.removeCookie(AuthToken)
 
+OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
+  $rootScope.inPosting = false
+  unless $scope.opportunity
+    $scope.opportunity = {}
+    $scope.opportunity.vehicle_count = 1
+
+  $scope.types = [
+    "Vehicle Needed",
+    "Vehicle for Hire",
+    "Special",
+    "Emergency",
+    "Buy or Sell Parts and Vehicles"
+  ]
+
+  successUpdate = ->
+    #if $rootScope.isMobile
+    #  $location.path('/dashboard')
+    #else
+    #  jQuery("#modal").modal "hide"
+    jQuery("#modal").modal "hide"
+    $rootScope.inPosting = false
+
+  $scope.save = ->
+    $rootScope.inPosting = true
+    opportunity = $scope.opportunity
+    opportunity.bidding_ends = $('#opportunity_ends').val()
+    opportunity.start_date = $('#opportunity_start_date').val()
+    opportunity.end_date = $('#opportunity_end_date').val()
+    opportunity.image_id = $('#opportunity_image_id').val()
+    # ui-mask removes colon(:)
+    opportunity.start_time = $("#opportunity_start_time").val()
+    opportunity.end_time = $("#opportunity_end_time").val()
+    opportunity.win_it_now_price = null if opportunity.quick_winnable == false
+
+    showErrors = (errors) ->
+     
+      if $rootScope.isMobile
+        alert $rootScope.errorMessages(errors).join('\n')
+      else
+        $alertError = $rootScope.alertError(errors)
+        $("#modal form .alert-error").remove()
+        $("#modal form").append($alertError)
+        $("#modal .modal-body").scrollTop($("#modal form").height())
+
+
+  $scope.isForSpecialRegion = ->
+    type = $scope.opportunity.type
+    if (type is "Special") or (type is "Buy or Sell Parts and Vehicles")
+      true
+    else
+      false
+
+  $scope.setOpportunityForwardAuction = ->
+    type = $scope.opportunity.type
+    if type is "Vehicle Needed"
+      $scope.opportunity.forward_auction = false
+    else if type is "Vehicle for Hire"
+      $scope.opportunity.forward_auction = true
 OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   $rootScope.inPosting = false
   unless $scope.opportunity

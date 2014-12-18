@@ -37,10 +37,15 @@ namespace :subout do
       end
 
       index_file = dir + '/index_development.html'
-      replacement_file = dir + '/index_production.html'
+      index_replacement_file = dir + '/index_production.html'
+
+      embedded_file = dir + '/embedded_development.html'
+      embedded_replacement_file = dir + '/embedded_production.html'
+
       token = '--DEPLOY--'
       replacement_files = {
-        index_file => replacement_file
+        index_file => replacement_file,
+        index_embedded_file => embedded_replacement_file
       }
       replacement_files.each do |origin, dest|
         text = File.read(origin)

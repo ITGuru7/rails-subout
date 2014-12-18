@@ -14,7 +14,7 @@ suboutPartialPath = (file) ->
   return path
 
 subout = angular.module("subout",
-  ["ui","suboutFilters", "suboutServices","ngCookies"])
+  ["ui.utils", "ui.date", "suboutFilters", "suboutServices","ngCookies", "ngRoute"])
 
 subout.run(['$rootScope','$appVersioning','$location', '$analytics', ($rootScope, $versioning, $location, $analytics) ->
   $rootScope.$on '$routeChangeStart', (scope, next, current) ->
@@ -107,6 +107,9 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
    ).when("/add-favorite",
     templateUrl: suboutPartialPath("add-new-favorite.html")
     resolve: resolveAuth
+  ).when("/new-retail-opportunity",
+    templateUrl: suboutPartialPath("opportunity-retail-form.html")
+    controller: OpportunityRetailFormCtrl
   ).otherwise redirectTo: "/available_opportunities"
 
 ])
