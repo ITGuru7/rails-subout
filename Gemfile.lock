@@ -68,7 +68,7 @@ GEM
       crack (>= 0.1.4)
       httparty (>= 0.7.6)
       oauth2 (>= 0.5.0, < 0.9)
-    bootstrap-sass (2.2.2.0)
+    bootstrap-sass (3.1.1.1)
       sass (~> 3.2)
     bourne (1.1.2)
       mocha (= 0.10.5)
@@ -379,7 +379,7 @@ DEPENDENCIES
   american_date
   awesome_print
   bitly
-  bootstrap-sass
+  bootstrap-sass (~> 3.1.1.0)
   chargify_api_ares
   cloudinary
   coffee-rails
@@ -413,7 +413,7 @@ DEPENDENCIES
   rails (= 3.2.11)
   rspec-rails
   rspec_api_documentation!
-  sass-rails
+  sass-rails (>= 3.2)
   shoulda-matchers
   sidekiq
   sinatra

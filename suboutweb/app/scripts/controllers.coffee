@@ -370,10 +370,6 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
   ]
 
   successUpdate = ->
-    #if $rootScope.isMobile
-    #  $location.path('/dashboard')
-    #else
-    #  jQuery("#modal").modal "hide"
     jQuery("#modal").modal "hide"
     $rootScope.inPosting = false
 
@@ -384,20 +380,25 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
     opportunity.start_date = $('#opportunity_start_date').val()
     opportunity.end_date = $('#opportunity_end_date').val()
     opportunity.image_id = $('#opportunity_image_id').val()
-    # ui-mask removes colon(:)
     opportunity.start_time = $("#opportunity_start_time").val()
     opportunity.end_time = $("#opportunity_end_time").val()
     opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
     showErrors = (errors) ->
-     
       if $rootScope.isMobile
         alert $rootScope.errorMessages(errors).join('\n')
       else
         $alertError = $rootScope.alertError(errors)
-        $("#modal form .alert-error").remove()
-        $("#modal form").append($alertError)
-        $("#modal .modal-body").scrollTop($("#modal form").height())
+        $("form .alert-error").remove()
+        $("form").append($alertError)
+
+    Auction.save
+      opportunity: opportunity
+      api_token: null
+    , (data) ->
+      successUpdate()
+    , (content) ->
+      showErrors(content.data.errors)
 
 
   $scope.isForSpecialRegion = ->
@@ -413,6 +414,7 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
       $scope.opportunity.forward_auction = false
     else if type is "Vehicle for Hire"
       $scope.opportunity.forward_auction = true
+
 OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   $rootScope.inPosting = false
   unless $scope.opportunity

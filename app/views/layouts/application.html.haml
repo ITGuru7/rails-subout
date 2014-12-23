@@ -8,4 +8,6 @@
 
   %body
     .container-fluid
-      = yield
+      .content
+        = render 'shared/flashes'
+        = yield

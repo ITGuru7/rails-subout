@@ -2,6 +2,14 @@ class ApplicationController < ActionController::Base
   before_filter :check_uri
   before_filter :https_redirect
 
+  def after_sign_in_path_for(resource)
+    # check for the class of the object to determine what type it is
+    case resource.class
+    when Retailer
+      edit_retailers_profile_path
+    end
+  end
+
   private
 
   def check_uri
@@ -16,4 +24,5 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
 end

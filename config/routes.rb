@@ -16,6 +16,12 @@ Subout::Application.routes.draw do
   end
 
   devise_for :users, skip: [:registrations, :sessions, :passwords, :confirmations]
+  devise_for :retailers, :controllers => { :registrations => "retailers/registrations" }
+
+  namespace :retailers do
+    resource :profile
+    root to: 'profiles#edit'
+  end
 
   namespace :api, defaults: {format: 'json'}  do
     namespace :v1 do

@@ -1,5 +1,8 @@
-@import "bootstrap/bootstrap";
+@import "bootstrap";
 
+.navbar-inner{
+  border-radius: 0px!important;
+}
 #subscriptions {
   td {
     max-width: 300px;
