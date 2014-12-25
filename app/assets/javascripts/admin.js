@@ -12,9 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.datepicker
+//= require jquery-ui/datepicker
 //= require jquery/jquery.cookie
 //= require jquery/jquery.maxlength
+//= require bootstrap
 //= require admin/global
 //= require_tree ./admin
 $(function() {

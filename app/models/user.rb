@@ -3,7 +3,7 @@ class User
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :token_authenticatable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :lockable
 
   before_save :ensure_authentication_token
@@ -63,8 +63,8 @@ class User
     {
       api_token: authentication_token,
       authorized: true,
-      company_id: company_id,
-      user_id: _id,
+      company_id: company_id.to_s,
+      user_id: _id.to_s,
       pusher_key: Pusher.key
     }
   end

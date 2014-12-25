@@ -2,7 +2,7 @@ class Vehicle
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  attr_protected :company_id, :editable
+  # attr_protected :company_id, :editable
 
   field :year, type: Integer
   field :make, type: String

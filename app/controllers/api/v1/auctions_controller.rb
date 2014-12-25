@@ -23,10 +23,10 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       }
       @auction = Opportunity.new(params[:opportunity].slice(*white_listed_fields))
     else
-      @auction = Opportunity.new(params[:opportunity])
+      @auction = Opportunity.new(opportunity_params)
     end
-    @auction.buyer = current_company
 
+    @auction.buyer = current_company
     @auction.save
 
     respond_with_namespace(@auction)
@@ -104,4 +104,11 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       render json: { errors: { base: ["This opportunity cannot be awarded"] } }, status: :unprocessable_entity
     end
   end
+
+  private
+
+  def opportunity_params
+    params.require(:opportunity).permit(:name, :type, :forward_auction, :tracking_id, :vehicle_type, :vehicle_count, :description, :start_location, :end_location, :trip_type, :start_date, :start_time, :end_date, :end_time, :bidding_duration_hrs, :image_id, :reserve_amount)
+  end
+ 
 end

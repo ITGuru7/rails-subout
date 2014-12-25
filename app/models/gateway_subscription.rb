@@ -26,7 +26,7 @@ class GatewaySubscription
   search_in :email, :id, :first_name, :last_name, :organization, :subscription_id, :customer_id, :product_handle
 
   has_one :created_company, class_name: "Company", inverse_of: :created_from_subscription
-  attr_accessible :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
+  # attr_accessible :product_handle, :subscription_id, :customer_id, :email, :first_name, :last_name, :organization, :state
 
   after_save :update_chargify_email, if: "self.email_changed?"
 

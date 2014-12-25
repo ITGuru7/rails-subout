@@ -7,7 +7,7 @@ class Opportunity
   ALL_REGIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
   ALL_VEHICLE_TYPES = ["Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"]
 
-  token field_name: :reference_number, retry: 5, length: 7, contains: :upper_alphanumeric
+  token field_name: :reference_number, retry_count: 7, length: 7, contains: :upper_alphanumeric
 
   field :name, type: String
   field :description, type: String
@@ -145,10 +145,10 @@ class Opportunity
     MobileKey.push_message_to_ios(ios_keys.uniq, {alert: self.name, id: self.id}) if ios_keys.any?
 
     if self.for_favorites_only?
-      self.set(:favorites_notified, true)
+      self.update_attribute(:favorites_notified, true)
     else
       notified_regions = (self.regions + self.notified_regions).uniq
-      self.set(:notified_regions, notified_regions) 
+      self.update_attribute(:notified_regions, notified_regions) 
     end
   end
 
@@ -388,7 +388,7 @@ class Opportunity
       value = forward_auction? ? highest_bid_amount : lowest_bid_amount
       value ||= 0
     end
-    self.set(:value, value.to_i * 100)
+    self.update_attribute(:value, value.to_i * 100)
   end
 
   def lowest_bid_amount

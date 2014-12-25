@@ -264,9 +264,12 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('add-new-favorite.html'))
 
   $rootScope.setOpportunity = (opportunity) ->
-    $rootScope.opportunity = Opportunity.get
-      api_token: $rootScope.token.api_token
-      opportunityId: opportunity._id
+    if opportunity.id
+      $rootScope.opportunity = Opportunity.get
+        api_token: $rootScope.token.api_token
+        opportunityId: opportunity._id
+    else
+      $rootScope.opportunity = opportunity
 
   $rootScope.cloneOpportunity = (opportunity) ->
     $rootScope.opportunity = angular.copy(opportunity)
@@ -421,6 +424,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     $scope.opportunity = {}
     $scope.opportunity.vehicle_count = 1
 
+  console.log $scope.opportunity
   $scope.types = [
     "Vehicle Needed",
     "Vehicle for Hire",
@@ -430,10 +434,6 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   ]
 
   successUpdate = ->
-    #if $rootScope.isMobile
-    #  $location.path('/dashboard')
-    #else
-    #  jQuery("#modal").modal "hide"
     jQuery("#modal").modal "hide"
     $rootScope.inPosting = false
 
@@ -450,7 +450,6 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
     showErrors = (errors) ->
-     
       if $rootScope.isMobile
         alert $rootScope.errorMessages(errors).join('\n')
       else
@@ -470,6 +469,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       , (content) ->
         showErrors(content.data.errors)
     else
+      console.log opportunity
       Auction.save
         opportunity: opportunity
         api_token: $rootScope.token.api_token

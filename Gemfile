@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '1.9.3'
+ruby '2.1.5'
 
-gem 'rails', '3.2.11'
+gem 'rails', '4.1.8'
 
 gem "mongoid"
 gem 'haml-rails'
@@ -14,19 +14,20 @@ gem 'slim', require: nil
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'kaminari'
-gem 'kiqstand'
-gem "active_model_serializers", github: "rails-api/active_model_serializers"
+#gem 'kiqstand'
+gem "active_model_serializers", '=0.9.2'
 gem "rspec_api_documentation", github: "ooleem/rspec_api_documentation"
 gem 'httparty'
 gem 'cloudinary'
 gem 'american_date'
 gem 'ffaker'
-gem 'mongoid_token', github: 'samnang/mongoid_token'
+gem 'mongoid_token', github: 'xingle/mongoid_token'
+#gem 'mongoid_token', github: 'thetron/mongoid_token'
+gem 'mongoid-observers'
 gem 'geocoder'
 gem 'mongoid_search'
 gem 'bitly'
 gem "jquery-rails"
-gem 'jquery-ui-rails'
 gem "awesome_print"
 gem "chargify_api_ares"
 gem 'newrelic_rpm'
@@ -44,8 +45,9 @@ group :assets do
   gem 'therubyracer'
   gem 'uglifier'
   gem 'coffee-rails'
-  gem 'sass-rails', '>= 3.2'
-  gem 'bootstrap-sass', '~> 3.1.1.0'
+  gem 'sass-rails'
+  gem 'bootstrap-sass'
+  gem 'jquery-ui-rails'
 end
 
 group :development, :test do

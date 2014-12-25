@@ -2,7 +2,7 @@ class Rating
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  attr_protected :score, :editable
+  # attr_protected :score, :editable
 
   field :communication, type: Integer, default: 0
   field :punctuality, type: Integer, default: 0

@@ -6,18 +6,23 @@
     = javascript_include_tag "admin"
     = csrf_meta_tags
   %body
-    .navbar.navbar-inverse
-      .navbar-inner
-        .container
+    %nav.navbar.navbar-inverse
+      .container-fluid 
+        .navbar-header 
+          %button.navbar-toggle.collapsed{"data-target" => "#navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
           = link_to "Admin", admin_path, class: "brand"
-          .nav-collapse.collapse
-            %ul.nav
-              %li= link_to "Companies", admin_companies_path
-              %li= link_to "Subscriptions", admin_gateway_subscriptions_path
-              %li= link_to "Favorite Invitations", admin_favorite_invitations_path
-              %li= link_to "Revenues", admin_revenues_path
-              %li= link_to "Settings", admin_settings_path
-              %li= link_to "Email Templates", admin_email_templates_path
+        #navbar-collapse-1.navbar-collapse.collapse
+          %ul.nav.navbar-nav
+            %li= link_to "Companies", admin_companies_path
+            %li= link_to "Subscriptions", admin_gateway_subscriptions_path
+            %li= link_to "Favorite Invitations", admin_favorite_invitations_path
+            %li= link_to "Revenues", admin_revenues_path
+            %li= link_to "Settings", admin_settings_path
+            %li= link_to "Email Templates", admin_email_templates_path
     .container-fluid
       - if flash[:error]
         %p.alert.alert-error
