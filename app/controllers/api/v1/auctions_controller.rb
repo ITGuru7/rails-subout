@@ -16,12 +16,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def create
     if params[:opportunity][:clone]
-      white_listed_fields = %W{
-        name type tracking_id description image_id contact_phone start_location end_location
-        start_date start_time end_date end_time bidding_duration_hrs ada_required for_favorites_only
-        forward_auction quick_winnable win_it_now_price reserve_amount vehicle_type trip_type vehicle_count special_region
-      }
-      @auction = Opportunity.new(params[:opportunity].slice(*white_listed_fields))
+      @auction = Opportunity.new(cloned_opportunity_params)
     else
       @auction = Opportunity.new(opportunity_params)
     end
@@ -109,6 +104,15 @@ class Api::V1::AuctionsController < Api::V1::BaseController
 
   def opportunity_params
     params.require(:opportunity).permit(:name, :type, :forward_auction, :tracking_id, :vehicle_type, :vehicle_count, :description, :start_location, :end_location, :trip_type, :start_date, :start_time, :end_date, :end_time, :bidding_duration_hrs, :image_id, :reserve_amount)
+  end
+
+  def cloned_opportunity_params
+    white_listed_fields = %W{
+      name type tracking_id description image_id contact_phone start_location end_location
+      start_date start_time end_date end_time bidding_duration_hrs ada_required for_favorites_only
+      forward_auction quick_winnable win_it_now_price reserve_amount vehicle_type trip_type vehicle_count special_region
+    }
+    params.require(:opportunity).permit(white_listed_fields)
   end
  
 end
