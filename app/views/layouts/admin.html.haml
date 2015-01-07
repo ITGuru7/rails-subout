@@ -2,7 +2,7 @@
 %html
   %head
     %title Subout
-    = stylesheet_link_tag    "admin", :media => "all"
+    = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "admin"
     = csrf_meta_tags
   %body
@@ -14,7 +14,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          = link_to "Admin", admin_path, class: "brand"
+          = link_to "Admin", admin_path, class: "navbar-brand"
         #navbar-collapse-1.navbar-collapse.collapse
           %ul.nav.navbar-nav
             %li= link_to "Companies", admin_companies_path
@@ -23,6 +23,7 @@
             %li= link_to "Revenues", admin_revenues_path
             %li= link_to "Settings", admin_settings_path
             %li= link_to "Email Templates", admin_email_templates_path
+
     .container-fluid
       - if flash[:error]
         %p.alert.alert-error

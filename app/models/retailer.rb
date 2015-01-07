@@ -37,4 +37,6 @@ class Retailer
 
   ## Token authenticatable
   # field :authentication_token, :type => String
+
+  field :domains, :type => String
 end

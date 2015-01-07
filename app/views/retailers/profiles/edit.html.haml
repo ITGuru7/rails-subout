@@ -1,0 +1,5 @@
+= bootstrap_form_for @retailer, url: retailers_profile_path(@retailer), layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10" do |f|
+  = f.hidden_field :id
+  = f.text_field :domains
+  = f.form_group do
+    = f.submit "Update", class: "btn btn-danger"

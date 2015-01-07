@@ -36,6 +36,7 @@ gem 'mail_view'
 gem 'unicorn'
 gem 'urbanairship'
 gem 'email_validator'
+gem 'bootstrap_form'
 
 group :production do
   gem "airbrake"
@@ -45,8 +46,9 @@ group :assets do
   gem 'therubyracer'
   gem 'uglifier'
   gem 'coffee-rails'
-  gem 'sass-rails'
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '~> 3.3.1'
+  gem 'sass-rails', '>= 3.2'
+  gem 'autoprefixer-rails'
   gem 'jquery-ui-rails'
 end
 

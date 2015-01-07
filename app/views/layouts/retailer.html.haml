@@ -2,20 +2,20 @@
 %html
   %head
     %title Subout
-    = stylesheet_link_tag    "admin", :media => "all"
-    = javascript_include_tag "admin"
+    = stylesheet_link_tag    "application", :media => "all"
+    = javascript_include_tag "application"
     = csrf_meta_tags
   %body
-    .navbar.navbar-inverse
+    %nav.navbar.navbar-inverse
       .navbar-inner
-        .container
-          = link_to "Subout", "#", class: "brand"
-          %ul.nav.navbar.navbar-right.pull-right
+        .container-fluid
+          .navbar-header
+            = link_to "Subout", "#", class: "navbar-brand"
+          %ul.nav.navbar-nav.navbar-right
             %li
-              = link_to "Retailer", edit_retailers_profile_path(type: 'retailer')
-            %li
-              = link_to "User", edit_retailers_profile_path(type: 'user')
-    .container-fluid
+              = link_to "Setting", edit_retailers_profile_path
+
+    .container
       - if flash[:error]
         %p.alert.alert-error
           = h flash[:error]
@@ -24,4 +24,5 @@
         %p.alert.alert-info
           = h flash[:notice]
           %a.close(href="#") x
+
       = yield
