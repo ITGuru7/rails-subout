@@ -386,14 +386,31 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
     opportunity.end_time = $("#opportunity_end_time").val()
     opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
+    showErrors = (errors) ->
+      if $rootScope.isMobile
+        alert $rootScope.errorMessages(errors).join('\n')
+      else
+        $alertError = $rootScope.alertError(errors)
+        $("form .alert-error").remove()
+        $("form").append($alertError)
+
+    showInfos = (infos) ->
+      if $rootScope.isMobile
+        alert $rootScope.errorMessages(infos).join('\n')
+      else
+        $alertInfo = $rootScope.alertInfo(infos)
+        $("form .alert-info").remove()
+        $("form").append($alertInfo)
+      
     Auction.save
       opportunity: opportunity
       referrer: document.referrer
       retailer: $location.search().retailer
     , (data) ->
-      console.log 'success'
+      showInfos(["Posted successfully."])
+      $scope.opportunity = {}
     , (content) ->
-      console.log 'failed'
+      showErrors(content.data.errors)
 
 
   $scope.isForSpecialRegion = ->
@@ -461,7 +478,6 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
       , (content) ->
         showErrors(content.data.errors)
     else
-      console.log opportunity
       Auction.save
         opportunity: opportunity
         api_token: $rootScope.token.api_token
