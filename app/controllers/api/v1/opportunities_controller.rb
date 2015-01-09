@@ -13,7 +13,6 @@ class Api::V1::OpportunitiesController < Api::V1::BaseController
   def show
     if @opportunity = Opportunity.where('$or' => [{:id => params[:id]}, {:reference_number => params[:id]}]).first
       @opportunity.viewer = current_company
-
       respond_with_namespace(@opportunity)
     else
       render json: { errors: { base: "Record not found" } }, status: 404

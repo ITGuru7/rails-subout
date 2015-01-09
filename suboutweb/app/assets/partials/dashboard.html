@@ -184,7 +184,7 @@
                   </div>
                   <div ng-show="event.eventable._id">
                     <div>
-                      <div ng-show="opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
+                      <div ng-show="opportunity.buyer && opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
                         <div>
                           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                         </div>

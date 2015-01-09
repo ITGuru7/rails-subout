@@ -39,4 +39,5 @@ class Retailer
   # field :authentication_token, :type => String
 
   field :domains, :type => String
+  has_many :opportunities
 end

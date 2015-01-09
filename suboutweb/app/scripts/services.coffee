@@ -13,7 +13,7 @@ suboutSvcs.factory "soValidateEmail", ->
 
 suboutSvcs.factory "Auction", ($resource, $rootScope) ->
   $resource "#{api_path}/auctions/:opportunityId/:action",
-    {opportunityId: '@opportunityId', action:'@action', api_token: '@api_token' },
+    {opportunityId: '@opportunityId', action:'@action', api_token: '@api_token', referrer: '@referrer', retailer: '@retailer' },
     {
       select_winner: {method: "PUT"}
       cancel: {method: "PUT"}
@@ -124,13 +124,19 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::isFreeUser = ->
     this.subscription_plan is "free"
 
+  Company::canBid = (opportunity) ->
+    return false unless opportunity.buyer
+    return true if opportunity.buyer_id != this._id && opportunity.status == 'In progress'
+
   Company::canCancelOrEdit = (opportunity) ->
     unless opportunity.type is 'Emergency'
       return false unless opportunity.status
+      return false unless  opportunity.buyer
       return false if this._id isnt opportunity.buyer._id
       return opportunity.status is 'In progress'
     else
       return false unless opportunity.status
+      return false unless  opportunity.buyer
       return false if this._id isnt opportunity.buyer._id
       return opportunity.status is 'In progress'
 

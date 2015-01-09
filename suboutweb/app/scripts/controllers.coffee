@@ -52,6 +52,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     /^\d*$/.test(value)
 
   $rootScope.userSignedIn = ->
+    return false if $location.path() == '/new-retail-opportunity'
     return false if $location.path() == '/sign_in'
     return true if $rootScope.token?.authorized or $.cookie(AuthToken)
 
@@ -359,7 +360,9 @@ WelcomePrelaunchCtrl = (AuthToken) ->
   $.removeCookie(AuthToken)
 
 OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
+  $rootScope.retailer = true
   $rootScope.inPosting = false
+
   unless $scope.opportunity
     $scope.opportunity = {}
     $scope.opportunity.vehicle_count = 1
@@ -372,10 +375,6 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
     "Buy or Sell Parts and Vehicles"
   ]
 
-  successUpdate = ->
-    jQuery("#modal").modal "hide"
-    $rootScope.inPosting = false
-
   $scope.save = ->
     $rootScope.inPosting = true
     opportunity = $scope.opportunity
@@ -387,21 +386,14 @@ OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
     opportunity.end_time = $("#opportunity_end_time").val()
     opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
-    showErrors = (errors) ->
-      if $rootScope.isMobile
-        alert $rootScope.errorMessages(errors).join('\n')
-      else
-        $alertError = $rootScope.alertError(errors)
-        $("form .alert-error").remove()
-        $("form").append($alertError)
-
     Auction.save
       opportunity: opportunity
-      api_token: null
+      referrer: document.referrer
+      retailer: $location.search().retailer
     , (data) ->
-      successUpdate()
+      console.log 'success'
     , (content) ->
-      showErrors(content.data.errors)
+      console.log 'failed'
 
 
   $scope.isForSpecialRegion = ->

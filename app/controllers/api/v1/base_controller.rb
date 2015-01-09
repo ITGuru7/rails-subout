@@ -12,7 +12,6 @@ class Api::V1::BaseController < ActionController::Base
 
   def restrict_access
     return if params[:api_token] and current_user
-
     head :unauthorized
   end
 

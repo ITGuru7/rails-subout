@@ -8,26 +8,7 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require jquery-ui/datepicker
 */
 
-body{
-  margin: 0;
-}
-
-.pagination{
-  .current{
-    font-weight: bold;
-    color: #000!important;
-  }
-  a, .gap, .current{
-    position: relative;
-    float: left;
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
-    color: #428bca;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-  }
-}
+@import 'admin/global';

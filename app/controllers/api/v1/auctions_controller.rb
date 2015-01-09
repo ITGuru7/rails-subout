@@ -1,4 +1,6 @@
 class Api::V1::AuctionsController < Api::V1::BaseController
+  skip_before_filter :restrict_access, :restrict_ghost_user, only: [:create]
+  before_filter :restrict_access_retailer_or_company, only: [:create]
   def index
     params[:page] ||= 1
     sort_by = params[:sort_by] || "created_at"
@@ -21,10 +23,15 @@ class Api::V1::AuctionsController < Api::V1::BaseController
       @auction = Opportunity.new(opportunity_params)
     end
 
-    @auction.buyer = current_company
-    @auction.save
-
-    respond_with_namespace(@auction)
+    if !@retailer.blank?
+      @auction.retailer = @retailer
+      @auction.save
+      render json: {}
+    else
+      @auction.buyer = current_company
+      @auction.save
+      respond_with_namespace @auction
+    end
   end
 
   def update
@@ -101,6 +108,11 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   end
 
   private
+  def restrict_access_retailer_or_company
+    @retailer = Retailer.where(id: params[:retailer]).first
+    return if (params[:api_token] and current_user) or (@retailer and @retailer.domains.include? URI.parse(params[:referrer]).host)
+    head :unauthorized
+  end
 
   def opportunity_params
     params.require(:opportunity).permit(:name, :type, :forward_auction, :tracking_id, :vehicle_type, :vehicle_count, :description, :start_location, :end_location, :trip_type, :start_date, :start_time, :end_date, :end_time, :bidding_duration_hrs, :image_id, :reserve_amount)

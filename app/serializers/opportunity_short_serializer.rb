@@ -10,10 +10,10 @@ class OpportunityShortSerializer < ActiveModel::Serializer
   end
 
   def buyer_name
-    object.buyer.name
+    object.buyer.try(:name)
   end
 
   def buyer_abbreviated_name
-    object.buyer.abbreviated_name
+    object.buyer.try(:abbreviated_name)
   end
 end
