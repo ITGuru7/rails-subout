@@ -44,8 +44,8 @@ namespace :subout do
 
       token = '--DEPLOY--'
       replacement_files = {
-        index_file => replacement_file,
-        index_embedded_file => embedded_replacement_file
+        index_file => index_replacement_file,
+        embedded_file => embedded_replacement_file
       }
       replacement_files.each do |origin, dest|
         text = File.read(origin)

@@ -7,7 +7,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width" initial-scale="1.0" />
-    <link rel="stylesheet" href="/files/1416215796/css/app.css" />
+    <link rel="stylesheet" href="/files/1421043456/css/app.css" />
 <!--[if lte IE 7]>
   <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
 <![endif]-->
@@ -22,8 +22,8 @@
       };
       eval_ = eval;
     </script>
-    <script src="/files/1416215796/js/vendor.js"></script>
-    <script src="/files/1416215796/js/app.js"></script>
+    <script src="/files/1421043456/js/vendor.js"></script>
+    <script src="/files/1421043456/js/app.js"></script>
 <script type="text/ng-template" id="pagination">
     <ul class="pagination">
       <li ng-class="{disabled: page == 1}">
@@ -45,9 +45,9 @@
 </script>
   </head>
 
-  <body data-subout-deploy="1416215796">
+  <body data-subout-deploy="1421043456">
   <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
-      <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ui-if="userSignedIn()">
+      <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ng-if="userSignedIn()">
         <div class="row">
           <ul id="top-links" class="pull-right">
             <li><a  href="#modal" data-taget="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
@@ -110,7 +110,7 @@
           </div>
         </div>
       </div>
-      <div id="application-message" ui-if="userSignedIn()">
+      <div id="application-message" ng-if="userSignedIn()">
         <p class="inner" ng-bind-html-unsafe="application_message.value"></p>
       </div>
       <div id="content" ng-view="content" class="ng-cloak"></div>
