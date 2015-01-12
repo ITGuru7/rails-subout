@@ -37,6 +37,7 @@ gem 'unicorn'
 gem 'urbanairship'
 gem 'email_validator'
 gem 'bootstrap_form'
+gem 'rails_12factor'
 
 group :production do
   gem "airbrake"
