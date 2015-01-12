@@ -1,7 +1,7 @@
 class Api::V1::CompaniesController < Api::V1::BaseController
   skip_before_filter :restrict_access, only: :create
   skip_before_filter :restrict_ghost_user, only: [:create, :update_agreement]
-  serialization_scope :current_company
+  #serialization_scope :current_company
 
   def index
     companies = Company.companies_for(current_company)
