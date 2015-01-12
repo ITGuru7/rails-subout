@@ -1,10 +1,5 @@
 <div id="opportunity-form">
-  <div class="modal-header">
-    <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Opportunity</h3>
-  </div>
-  <div class="modal-body">
-    <form name="newOpportunity" class="form-horizontal" ng-controller="OpportunityFormCtrl" novalidate>
+    <form name="newOpportunity" class="form-horizontal" ng-controller="OpportunityRetailFormCtrl" novalidate>
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_name.$invalid}">
         <label for="opportunity_name" class="col-md-4 control-label">Opportunity Title *</label>
         <div class="col-md-8">
@@ -156,7 +151,7 @@
                      type="text" 
                      class="form-control" 
                      ng-model="opportunity.start_time" 
-                     ui-mask="'99:99'" 
+                     ui-mask="99:99" 
                      ng-required="!isForSpecialRegion()">
               <span class="time glyphicon glyphicon-time"></span>
               </div>
@@ -186,7 +181,7 @@
                      type="text" 
                      class="form-control" 
                      ng-model="opportunity.end_time" 
-                     ui-mask="'99:99'" 
+                     ui-mask="99:99" 
                      ng-required="!isForSpecialRegion()">
               <span class="time glyphicon glyphicon-time"></span>
               </div>
@@ -198,7 +193,7 @@
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_bidding_ends.$invalid}">
         <label for="opportunity_bidding_ends" class="col-md-4 control-label">Bidding Duration *</label>
         <div class="col-md-8">
-          <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="form-control" ng-model="opportunity.bidding_duration_hrs" ui-mask="'9?9'" required>
+          <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="form-control" ng-model="opportunity.bidding_duration_hrs" ui-mask="9?9" required>
           <span class="time">hours</span>
         </div>
       </div>
@@ -233,7 +228,7 @@
         </label>
       </div>
 
-      <div class="form-group" ui-if="opportunity.quick_winnable"  ng-class="{'has-error':newOpportunity.win_it_now_price.$invalid}">
+      <div class="form-group" ng-if="opportunity.quick_winnable"  ng-class="{'has-error':newOpportunity.win_it_now_price.$invalid}">
         <label for="opportunity_win_it_now_price" class="col-md-4 control-label">Win it now price</label>
         <div class="col-md-8">
           <input id="opportunity_win_it_now_price" type="text" name="win_it_now_price" ng-model="opportunity.win_it_now_price" ui-validate="{ win_it_now_price: 'validateOptionalNumber($value)' }" size="31" class="form-control">
@@ -254,10 +249,9 @@
       <div class="form-group">
         <div class="col-md-offset-4 col-md-8">
           <button ng-click="save()" class="btn btn-primary" ng-disabled="newOpportunity.$invalid || inPosting">
-            Save Opportunity
+            Post Opportunity
           </button>
         </div>
       </div>
     </form>
-  </div>
 </div>

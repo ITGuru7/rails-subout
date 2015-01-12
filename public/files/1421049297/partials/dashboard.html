@@ -97,9 +97,6 @@
             <div class="pill region" ng-repeat="region in filterRegions">
               {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
-            <div class="pill" ng-show="$location.search().company_id">
-              {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>
-            </div>
             <div class="pill" ng-show="$location.search().q">
               {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
             </div>
@@ -113,7 +110,7 @@
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
             ng-repeat="event in events"
             ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-            <div ui-if="isPublicEvent(event)">
+            <div ng-if="isPublicEvent(event)">
             
             <div class="event-summary">
               <div class="row">
@@ -153,7 +150,7 @@
                   <div class="winner" ng-show="event.eventable.winning_bid_id">
                     <span class="label-field">Winning Amount: </span> 
                     <span>{{ event.eventable.winner.amount | soCurrency }}</span>
-                    <span ui-if="event.eventable.winner.vehicle_count > 1">({{ event.eventable.winner.vehicle_count }} vehicles)</span>
+                    <span ng-if="event.eventable.winner.vehicle_count > 1">({{ event.eventable.winner.vehicle_count }} vehicles)</span>
                   </div>
                   <div ng-show="event.eventable.vehicle_count > 1">
                     <span>Vehicles needed:</span> {{event.eventable.vehicle_count}}<br />
@@ -185,9 +182,9 @@
                       </div>
                     </div>
                   </div>
-                  <div style="display:none" ng-show="event.eventable._id">
+                  <div ng-show="event.eventable._id">
                     <div>
-                      <div ng-show="opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
+                      <div ng-show="opportunity.buyer && opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
                         <div>
                           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
                         </div>
@@ -217,7 +214,7 @@
           <div class="visible-xs visible-sm">
             <div ng-repeat="event in events"
               ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-              <div ui-if="isPublicEvent(event)">
+              <div ng-if="isPublicEvent(event)">
                   <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}">
                     <tr>
                       <td>
