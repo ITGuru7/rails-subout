@@ -1,6 +1,6 @@
 # config/unicorn.rb
 worker_processes 5
-timeout 55
+timeout 120
 preload_app true
 
 before_fork do |server, worker|
