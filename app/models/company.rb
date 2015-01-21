@@ -374,7 +374,7 @@ class Company
     [
       "_id","email", "name", "owner", "contact_name", "contact_phone", "mode", "created_at",
       "last_sign_in_at", "subscription_plan", "vehicles_count", "auctions_count", "auctions_expired_count", 
-      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?", "chargify_subscription_id", "chargify_customer_id"
+      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?", "chargify_subscription_id", "chargify_customer_id", "tpa"
     ]
   end
 
@@ -389,6 +389,10 @@ class Company
         csv << csv_column_names.map { |column| item.csv_value_for(column) }
       end
     end
+  end
+
+  def to_csv
+    Company.csv_column_names.map { |column| self.csv_value_for(column) }.to_csv
   end
 
   def upgraded_recently
