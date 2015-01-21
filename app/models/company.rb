@@ -3,7 +3,7 @@ class Company
   include Mongoid::Timestamps
   include Mongoid::Search
 
-  attr_protected :logo_url, :vehicles
+  # attr_protected :logo_url, :vehicles
   field :name, type: String
   field :email, type: String
 
@@ -65,7 +65,7 @@ class Company
   scope :recent, -> { desc(:created_at) }
 
   attr_accessor :password, :password_confirmation
-  attr_protected :ratings_taken
+  # attr_protected :ratings_taken
 
   belongs_to :created_from_invitation, class_name: 'FavoriteInvitation', inverse_of: :created_company
   belongs_to :created_from_subscription, class_name: 'GatewaySubscription', inverse_of: :created_company
@@ -374,7 +374,7 @@ class Company
     [
       "_id","email", "name", "owner", "contact_name", "contact_phone", "mode", "created_at",
       "last_sign_in_at", "subscription_plan", "vehicles_count", "auctions_count", "auctions_expired_count", 
-      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?", "chargify_subscription_id", "chargify_customer_id"
+      "bids_count", "total_won_bids_count", "total_winnings", "access_locked?", "chargify_subscription_id", "chargify_customer_id", "tpa"
     ]
   end
 
