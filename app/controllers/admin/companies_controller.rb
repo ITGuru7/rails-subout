@@ -18,6 +18,7 @@ class Admin::CompaniesController < Admin::BaseController
         self.response.headers["Last-Modified"] = Time.now.ctime.to_s
        
         self.response_body = Enumerator.new do |yielder|
+          yielder << Company.csv_column_names.to_csv
           Company.sort(@sort_by, @sort_direction).includes(:users).each do |company|
             yielder << company.to_csv
           end
