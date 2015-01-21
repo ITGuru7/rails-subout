@@ -10,7 +10,19 @@ class Admin::CompaniesController < Admin::BaseController
 
     respond_to do |format|
       format.html
-      format.csv { send_data Company.sort(@sort_by, @sort_direction).includes(:users).to_csv }
+      format.csv { 
+        #send_data Company.sort(@sort_by, @sort_direction).includes(:users).to_csv 
+        self.response.headers["Content-Type"] ||= 'text/csv'
+        self.response.headers["Content-Disposition"] = "attachment; filename=companies.csv"
+        self.response.headers["Content-Transfer-Encoding"] = "binary"
+        self.response.headers["Last-Modified"] = Time.now.ctime.to_s
+       
+        self.response_body = Enumerator.new do |yielder|
+          Company.sort(@sort_by, @sort_direction).includes(:users).each do |company|
+            yielder << company.to_csv
+          end
+        end
+      }
     end
   end
 

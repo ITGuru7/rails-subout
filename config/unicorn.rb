@@ -3,6 +3,9 @@ worker_processes 5
 timeout 120
 preload_app true
 
+port = (ENV["PORT"] || 3000).to_i
+listen port, :tcp_nopush => false
+
 before_fork do |server, worker|
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'

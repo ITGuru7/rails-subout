@@ -391,6 +391,10 @@ class Company
     end
   end
 
+  def to_csv
+    Company.csv_column_names.map { |column| self.csv_value_for(column) }.to_csv
+  end
+
   def upgraded_recently
     last_upgraded_at = self.last_upgraded_at || self.created_at
     last_upgraded_at > 1.month.ago
