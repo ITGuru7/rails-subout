@@ -52,7 +52,7 @@ class Admin::CompaniesController < Admin::BaseController
 
   def change_password
     user = @company.users.find(params[:user_id])
-    if user.update_attributes(params[:user])
+    if user.update_attributes(params.require(:user).permit(:password, :password_confirmation))
       redirect_to edit_admin_company_path(@company), notice: 'Password were updated successfully.'
     else
       flash.now[:error] = user.errors.full_messages.join("<br/>")
