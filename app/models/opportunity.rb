@@ -71,7 +71,7 @@ class Opportunity
   scope :last_12_hours, -> { where(:created_at.gte => 12.hours.ago) }
   
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
-  belongs_to :retailer
+  belongs_to :retailer, class_name: "Consumer"
 
   # has_one :event, as: :eventable
   has_many :bids

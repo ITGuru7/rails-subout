@@ -1,0 +1,57 @@
+= bootstrap_form_for @quote_request, url: consumers_quote_requests_path(@quote_request, consumer_id: @consumer.id), authenticity_token: false, layout: :vertical do |f|
+  = f.text_field :first_name
+  = f.text_field :last_name
+  = f.text_field :email
+  = f.text_field :phone
+  = f.select :vehicle_type, [""] + QuoteRequest::VEHICLE_TYPES
+  = f.text_field :vehicle_count
+  = f.text_field :passengers
+  = f.text_field :pick_up_location, label: 'Pick up address'
+  = f.datetime_select :pick_up_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Pick up date'
+  
+  = f.text_field :drop_off_location, label: 'Drop off address'
+  = f.datetime_select :drop_off_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Drop off date'
+
+  = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
+  = f.text_area :description
+
+  = f.submit "Request Quote", class: "btn btn-danger"
+
+  .errors
+
+
+
+:javascript
+  var init_subout_quote_request_form = function(){
+
+    var form = jQuery("#new_quote_request");
+    jQuery(form).submit(function(e){
+      e.preventDefault();
+      var posting = jQuery.post( form.attr('action'), form.serialize());
+      posting.done(function(data){
+        form.html(data);
+      });
+      posting.fail(function(data){
+        form.addClass('error');
+
+        var errors_html = jQuery('.errors', form).html('');
+        var errors = data.responseJSON.payload.errors;
+        var error_messages = data.responseJSON.payload.error_messages;
+
+        for(i=0;i<error_messages.length;i++){
+          errors_html.append("<p class='error'>"+error_messages[i]+"</p>");
+        }
+
+        for(field in errors){
+          jQuery('#quote_request_' + field).addClass('error');
+        }
+
+      });
+    });
+  }
+
+  if(typeof jQuery=='undefined') {
+    alert("jQuery is required");
+  }else{
+    init_subout_quote_request_form();
+  }
