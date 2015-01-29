@@ -1,8 +1,6 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
 
-
-  $rootScope.opportunity_retail_form_path = suboutPartialPath("opportunity-retail-form.html")
   $rootScope._ = _
   $rootScope.stars = [1,2,3,4,5]
   d = new Date()
@@ -358,74 +356,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
 WelcomePrelaunchCtrl = (AuthToken) ->
   $.removeCookie(AuthToken)
-
-OpportunityRetailFormCtrl = ($scope, $rootScope, $location, Auction) ->
-  $rootScope.retailer = true
-  $rootScope.inPosting = false
-
-  unless $scope.opportunity
-    $scope.opportunity = {}
-    $scope.opportunity.vehicle_count = 1
-
-  $scope.types = [
-    "Vehicle Needed",
-    "Vehicle for Hire",
-    "Special",
-    "Emergency",
-    "Buy or Sell Parts and Vehicles"
-  ]
-
-  $scope.save = ->
-    $rootScope.inPosting = true
-    opportunity = $scope.opportunity
-    opportunity.bidding_ends = $('#opportunity_ends').val()
-    opportunity.start_date = $('#opportunity_start_date').val()
-    opportunity.end_date = $('#opportunity_end_date').val()
-    opportunity.image_id = $('#opportunity_image_id').val()
-    opportunity.start_time = $("#opportunity_start_time").val()
-    opportunity.end_time = $("#opportunity_end_time").val()
-    opportunity.win_it_now_price = null if opportunity.quick_winnable == false
-
-    showErrors = (errors) ->
-      if $rootScope.isMobile
-        alert $rootScope.errorMessages(errors).join('\n')
-      else
-        $alertError = $rootScope.alertError(errors)
-        $("form .alert-error").remove()
-        $("form").append($alertError)
-
-    showInfos = (infos) ->
-      if $rootScope.isMobile
-        alert $rootScope.errorMessages(infos).join('\n')
-      else
-        $alertInfo = $rootScope.alertInfo(infos)
-        $("form .alert-info").remove()
-        $("form").append($alertInfo)
-      
-    Auction.save
-      opportunity: opportunity
-      referrer: document.referrer
-      retailer: $location.search().retailer
-    , (data) ->
-      showInfos(["Posted successfully."])
-      $scope.opportunity = {}
-    , (content) ->
-      showErrors(content.data.errors)
-
-
-  $scope.isForSpecialRegion = ->
-    type = $scope.opportunity.type
-    if (type is "Special") or (type is "Buy or Sell Parts and Vehicles")
-      true
-    else
-      false
-
-  $scope.setOpportunityForwardAuction = ->
-    type = $scope.opportunity.type
-    if type is "Vehicle Needed"
-      $scope.opportunity.forward_auction = false
-    else if type is "Vehicle for Hire"
-      $scope.opportunity.forward_auction = true
 
 OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   $rootScope.inPosting = false
@@ -854,6 +784,29 @@ OpportunityCtrl = ($scope, $rootScope, $location, Auction, soPagination) ->
 
   $scope.loadMoreOpportunities($scope.page)
 
+QuoteRequestDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid, QuoteRequest) ->
+  fiveMinutes = 5 * 60 * 1000
+  quote_request_id = $routeParams.quote_request_reference_number
+  
+  updateFiveMinutesAgo = ->
+    $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes
+    $timeout updateFiveMinutesAgo, 5000
+  updateFiveMinutesAgo()
+
+  loadQuoteRequest = ->
+    $scope.quote_request = QuoteRequest.get
+      api_token: $rootScope.token.api_token
+      quoteRequestId: quote_request_id
+    , (content) ->
+      # success
+      true
+    , (content) ->
+      alert("Record not found")
+      $location.path("/dashboard")
+
+  loadQuoteRequest()
+
+
 OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) ->
   fiveMinutes = 5 * 60 * 1000
   opportunity_id = $routeParams.opportunity_reference_number
@@ -1164,10 +1117,11 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.toggleEvent = (event) ->
     event.selected = !event.selected
     if event.selected and event.eventable._id
-      event.eventable = Opportunity.get
+      Event.get
         api_token: $rootScope.token.api_token
-        opportunityId: event.eventable._id
-      , ->
+        eventId: event._id
+      , (data)->
+        event.eventable = data.eventable
         setTimeout (-> $(".relative_time").timeago()), 1
 
   $scope.fullTextSearch = (event) ->

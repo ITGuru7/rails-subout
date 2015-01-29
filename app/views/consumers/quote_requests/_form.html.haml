@@ -6,11 +6,11 @@
   = f.select :vehicle_type, [""] + QuoteRequest::VEHICLE_TYPES
   = f.text_field :vehicle_count
   = f.text_field :passengers
-  = f.text_field :pick_up_location, label: 'Pick up address'
-  = f.datetime_select :pick_up_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Pick up date'
+  = f.text_field :start_location, label: 'Pick up address'
+  = f.datetime_select :start_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Pick up date'
   
-  = f.text_field :drop_off_location, label: 'Drop off address'
-  = f.datetime_select :drop_off_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Drop off date'
+  = f.text_field :end_location, label: 'Drop off address'
+  = f.datetime_select :end_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Drop off date'
 
   = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
   = f.text_area :description

@@ -13,7 +13,7 @@ suboutSvcs.factory "soValidateEmail", ->
 
 suboutSvcs.factory "Auction", ($resource, $rootScope) ->
   $resource "#{api_path}/auctions/:opportunityId/:action",
-    {opportunityId: '@opportunityId', action:'@action', api_token: '@api_token', referrer: '@referrer', retailer: '@retailer' },
+    {opportunityId: '@opportunityId', action:'@action', api_token: '@api_token'},
     {
       select_winner: {method: "PUT"}
       cancel: {method: "PUT"}
@@ -46,6 +46,12 @@ suboutSvcs.factory "Opportunity", ($resource) ->
     return opportunity.reserve_amount if opportunity.reserve_amount
     null
   Opportunity
+
+suboutSvcs.factory "QuoteRequest", ($resource) ->
+  QuoteRequest = $resource "#{api_path}/quote_requests/:quoteRequestId",
+    {},
+    paginate: {method: "GET"}
+  QuoteRequest
 
 suboutSvcs.factory "MyBid", ($resource, $rootScope) ->
   $resource "#{api_path}/bids/:bidId/:action",

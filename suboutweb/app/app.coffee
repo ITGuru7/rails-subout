@@ -86,6 +86,10 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
     templateUrl: suboutPartialPath("opportunity-detail.html")
     controller: OpportunityDetailCtrl
     resolve: resolveAuth
+  ).when("/quote_requests/:quote_request_reference_number",
+    templateUrl: suboutPartialPath("quote-request-detail.html")
+    controller: QuoteRequestDetailCtrl
+    resolve: resolveAuth
   ).when("/favorites",
     templateUrl: suboutPartialPath("favorites.html")
     controller: FavoritesCtrl
@@ -107,9 +111,6 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
    ).when("/add-favorite",
     templateUrl: suboutPartialPath("add-new-favorite.html")
     resolve: resolveAuth
-  ).when("/new-retail-opportunity",
-    templateUrl: suboutPartialPath("opportunity-retail-form.html")
-    controller: OpportunityRetailFormCtrl
   ).otherwise redirectTo: "/available_opportunities"
 
 ])

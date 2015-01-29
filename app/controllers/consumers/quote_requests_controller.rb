@@ -1,5 +1,9 @@
 class Consumers::QuoteRequestsController < Consumers::BaseController
   skip_before_filter :authenticate_consumer!
+  skip_before_filter :verify_authenticity_token
+  
+  before_filter :check_consumer
+
   layout false
 
   def new
@@ -7,7 +11,8 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
   end
 
   def create
-    @quote_request = QuoteRequest.new(quote_request_params)
+    @quote_request = @consumer.quote_requests.new(quote_request_params)
+    @quote_request.consumer_host = @consumer_host
     if @quote_request.save
       render :thankyou
     else
@@ -15,17 +20,15 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
     end
   end
 
-  def embedded_script
-    @quote_request = QuoteRequest.new
-  end
-
-  def embedded_html
-    @quote_request = QuoteRequest.new
-  end
-
   private
   def quote_request_params
     params.require(:quote_request).permit(:first_name, :last_name, :email, :phone, :vehicle_type, :vehicle_count, :passengers, 
-      :pick_up_location, :pick_up_date, :drop_off_location, :drop_off_date, :trip_type, :description)
+      :start_location, :start_date, :end_location, :end_date, :trip_type, :description)
+  end
+
+  def check_consumer
+    @consumer = Consumer.where(id: params[:consumer_id]).first
+    @consumer_host = URI.parse(request.referrer).host
+    head :unauthorized if !@consumer.valid_domain?(@consumer_host)
   end
 end

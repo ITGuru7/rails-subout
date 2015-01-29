@@ -11,7 +11,7 @@ class Event
 
   belongs_to :actor, :class_name => "Company", index: true
   embeds_one :action, class_name: "EventAction"
-  belongs_to :eventable, class_name: "Opportunity", index: true
+  belongs_to :eventable, index: true, polymorphic: true
 
   index eventable_company_id: 1
   index updated_at: 1
@@ -19,17 +19,17 @@ class Event
   paginates_per 30
   search_in eventable: :fulltext
 
-  before_create :copy_eventable_fields
+  before_create :copy_eventable_fields, :if=>"eventable_type=='Opportunity'"
 
   def self.recent
     order_by(:updated_at => :desc).includes(:actor)
   end
 
   def self.for(company)
-    events = Array.new
 
     options = [
       {:eventable_company_id.in => company.favoriting_buyer_ids + [company.id]},
+      {:eventable_company_id=>nil},
       {:eventable_for_favorites_only => false}
     ]
 

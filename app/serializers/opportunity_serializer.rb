@@ -34,15 +34,15 @@ class OpportunitySerializer < ActiveModel::Serializer
   end
 
   def buyer_name
-    object.buyer.name if !object.is_retail?
+    object.buyer.try(:name) if !object.is_retail?
   end
 
   def buyer_abbreviated_name
-    object.buyer.abbreviated_name if !object.is_retail?
+    object.buyer.try(:abbreviated_name) if !object.is_retail?
   end
 
   def buyer_message
-    object.buyer.poster_message if !object.is_retail?
+    object.buyer.try(:poster_message) if !object.is_retail?
   end
 
   def start_date

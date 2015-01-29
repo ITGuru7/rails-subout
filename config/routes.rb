@@ -44,6 +44,8 @@ Subout::Application.routes.draw do
         end
       end
 
+      resources :quote_requests
+
       resources :auctions do
         member do
           put :select_winner

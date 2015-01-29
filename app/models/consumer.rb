@@ -39,5 +39,11 @@ class Consumer
   # field :authentication_token, :type => String
 
   field :domains, :type => String
-  has_many :opportunities
+  has_many :quote_requests
+
+  def valid_domain?(domain)
+    return false if domain.blank?
+    return false if self.domains.blank?
+    self.domains.delete(' ').split(',').include? domain
+  end
 end

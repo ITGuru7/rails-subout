@@ -1,4 +1,4 @@
-class EventSerializer < ActiveModel::Serializer
+class EventShortSerializer < ActiveModel::Serializer
   attributes :_id, :created_at, :regions, :eventable_company_id, :actor, :eventable_type, :eventable
 
   #for the speeding
@@ -8,11 +8,11 @@ class EventSerializer < ActiveModel::Serializer
 
   def eventable
     if object.eventable_type=="Opportunity"
-      return OpportunitySerializer.new(object.eventable)
+      return OpportunityShortSerializer.new(object.eventable)
     end
 
     if object.eventable_type=="QuoteRequest"
-      return QuoteRequestSerializer.new(object.eventable)
+      return QuoteRequestShortSerializer.new(object.eventable)
     end
 
   end
