@@ -166,6 +166,12 @@ class QuoteRequest
     true
   end
 
+  def notify_companies
+    Company.all.each do |company|
+      Notifier.delay_for(1.minutes).new_quote_request(self.id, company.id) if company.notification_items.include?("opportunity-new")
+    end
+  end
+
   def self.send_expired_notification
     where(:created_at.lte => 2.days.ago, expired_notification_sent: false).each do |quote_request|
       Notifier.delay.expired_quote_request_notification(quote_request.id)

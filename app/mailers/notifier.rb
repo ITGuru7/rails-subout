@@ -49,6 +49,12 @@ class Notifier < ActionMailer::Base
     send_mail_from_template('new_quote', @quote_request.email)
   end
 
+  def new_quote_request(quote_request_id, company_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @company = Company.find(company_id)
+    send_mail_to_company(__method__.to_s, @company)
+  end
+
   def new_negotiation(bid_id)
     @bid = Bid.find(bid_id)
     return if @bid.is_canceled?
