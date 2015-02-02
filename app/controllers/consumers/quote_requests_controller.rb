@@ -1,6 +1,6 @@
 class Consumers::QuoteRequestsController < Consumers::BaseController
-  skip_before_filter :authenticate_consumer!
-  skip_before_filter :verify_authenticity_token
+  skip_before_filter :authenticate_consumer!, only: [:create]
+  skip_before_filter :verify_authenticity_token, only: [:create]
   
   before_filter :check_consumer
 
