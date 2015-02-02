@@ -15,8 +15,7 @@
           %ul.nav.navbar-nav.navbar-right
             - if consumer_signed_in?
               %li
-                = link_to 'Logout', destroy_consumer_session_path, :method => :delete
-
+                = link_to 'Logout', destroy_consumer_session_path
     .container
       - if flash[:error]
         %p.alert.alert-error
