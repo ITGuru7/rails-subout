@@ -254,6 +254,20 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('bid-new.html'))
     $rootScope.$broadcast('modalOpened')
 
+  $rootScope.displayNewQuoteForm = (quote_request) ->
+    unless $rootScope.company.dot_number
+      $rootScope.setModal(suboutPartialPath('dot-required.html'))
+      return
+    if $rootScope.company.subscription_plan != 'free' && $rootScope.subscription
+      if !$rootScope.subscription.has_valid_credit_card
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'))
+        return
+    
+    $rootScope.setQuoteRequest(quote_request)
+    $rootScope.setModal(suboutPartialPath('quote-new.html'))
+    $rootScope.$broadcast('modalOpened')
+
+
   $rootScope.displayNewOpportunityForm = ->
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
     $rootScope.setupFileUploader()
@@ -262,6 +276,14 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.$broadcast('clearNewFavoriteForm')
     $rootScope.setModal(suboutPartialPath('add-new-favorite.html'))
 
+  $rootScope.setQuoteRequest = (quote_request) ->
+    if quote_request.id
+      $rootScope.quote_request = QuoteRequest.get
+        api_token: $rootScope.token.api_token
+        quoteRequestId: quote_request._id
+    else
+      $rootScope.quote_request = quote_request
+  
   $rootScope.setOpportunity = (opportunity) ->
     if opportunity.id
       $rootScope.opportunity = Opportunity.get
@@ -462,6 +484,42 @@ NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
       jQuery("#modal").modal "hide"
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
+
+QuoteNewCtrl = ($scope, $rootScope, Bid, QuoteRequest, Quote) ->
+  $scope.quote = {} unless $scope.quote
+  $scope.quote.vehicle_count = $scope.quote_request.vehicle_count
+  $scope.quote.vehicle_count ||= 1
+  $scope.quote.vehicles = []
+
+  $scope.$watch "quote.vehicle_count", ->
+    $scope.quote.vehicles = []
+    _($scope.quote.vehicle_count).times -> $scope.quote.vehicles.push {}
+
+  $scope.hideAlert = ->
+    $scope.errors = null
+
+  $scope.$on 'modalOpened', ->
+    $scope.hideAlert()
+
+  $scope.validateVehicleCountLimit = (value) ->
+    return true if isNaN(value) or value == ""
+    value = parseFloat(value)
+    value <= $scope.quote_request.vehicle_count
+
+  $scope.save = ->
+    console.log(123123)
+    Quote.save
+      quote: $scope.quote
+      api_token: $rootScope.token.api_token
+      quoteRequestId: $rootScope.quote_request._id
+    , (data) ->
+      $rootScope.company.today_bids_count += 1
+      $rootScope.company.month_bids_count += 1
+      jQuery("#modal").modal "hide"
+
+    , (content) ->
+      $scope.errors = $rootScope.errorMessages(content.data.errors)
+
 
 BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
   $scope.bid = {} unless $scope.bid

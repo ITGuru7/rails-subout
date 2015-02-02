@@ -49,6 +49,9 @@ class EmailTemplate
     @vehicle = Vehicle.last
     @old_vehicle = Vehicle.first
     @card_update_link = @company.chargify_service_url
+    @quote = Quote.last
+    @quoter = @quote.quoter
+    @quote_request = @quote.quote_request
   end
 
   def exchange_double_quote

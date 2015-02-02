@@ -20,8 +20,9 @@ class Api::V1::CompaniesController < Api::V1::BaseController
   end
 
   def update
-    company = params[:company].except(:favoriting_buyer_ids, :regions)
-    current_company.update_attributes(company)
+    company_params = params.require(:company).permit(:abbreviated_name, :dot_number, :insurance, :logo_id, :since, :owner, :contact_name, :contact_phone, :email, :website, :cell_phone,
+        :address_line1, :address_line2, :city, :state, :country, :zip_code, :payment_methods, :notification_email, :notification_type, :poster_message, :regions, :fleet, :fleet_size, :vehicle_types=>[], :notification_items=>[])
+    current_company.update_attributes(company_params)
     respond_with_serializer()
   end
 

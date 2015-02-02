@@ -44,7 +44,9 @@ Subout::Application.routes.draw do
         end
       end
 
-      resources :quote_requests
+      resources :quote_requests do
+        resources :quotes
+      end
 
       resources :auctions do
         member do

@@ -29,6 +29,7 @@ class QuoteRequest
   field :consumer_host, type: String
 
   belongs_to :consumer
+  has_many :quotes
 
   validates :vehicle_count, numericality: { greater_than: 0 }, unless: 'vehicle_count.blank?'
   validates :passengers, numericality: { greater_than: 0 }, unless: 'passengers.blank?'
@@ -55,6 +56,28 @@ class QuoteRequest
     "Coroprate Group",
     "Weddings"
   ]
+
+  def name
+    "#{first_name}, #{last_name}"
+  end
+
+  def to_html
+    [
+      "<strong>Vehicle type:</strong> #{vehicle_type}",
+      "<strong>Vehicle count:</strong> #{vehicle_count}",
+      "<strong>Passengers:</strong> #{passengers}",
+      "<strong>Pick up address:</strong> #{start_location}",
+      "<strong>Pick up date:</strong> #{start_date.to_s(:long)}",
+      "<strong>Drop off address:</strong> #{end_location}",
+      "<strong>Drop off date:</strong> #{end_date.to_s(:long)}",
+      "<strong>Trip type:</strong> #{trip_type}",
+      "<strong>Description:</strong> #{description}",
+    ].join("<br>")
+  end
+
+  def quotable?
+    self.created_at + 2.days > Time.now
+  end
 
   def validate_dates
     errors.add(:start_date, "cannot be before now") if self.start_date && (self.start_date <= Time.now)

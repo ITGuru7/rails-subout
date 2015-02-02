@@ -14,6 +14,11 @@ class MailPreview < MailView
     Notifier.new_bid(bid.id)
   end
 
+  def new_quote
+    quote = Quote.last
+    Notifier.new_quote(quote.id)
+  end
+
   def new_negotiation 
     bid = Bid.last
     Notifier.new_negotiation(bid.id)

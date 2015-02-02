@@ -77,6 +77,7 @@ class Company
   has_many :vehicles
   has_many :auctions, class_name: "Opportunity", foreign_key: 'buyer_id'
   has_many :bids, foreign_key: 'bidder_id'
+  has_many :quotes, foreign_key: 'quoter_id'
 
 
   accepts_nested_attributes_for :users
