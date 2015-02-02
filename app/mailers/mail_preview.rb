@@ -70,6 +70,12 @@ class MailPreview < MailView
     Notifier.new_opportunity(opportunity.id, company.id)
   end
 
+  def new_quote_request
+    quote_request = QuoteRequest.last
+    company = Company.last
+    Notifier.new_quote_request(quote_request.id, company.id)
+  end
+
   def expired_card
     company = Company.last
     Notifier.expired_card(company.id)
