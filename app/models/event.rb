@@ -19,7 +19,7 @@ class Event
   paginates_per 30
   search_in eventable: :fulltext
 
-  before_create :copy_eventable_fields, :if=>"eventable_type=='Opportunity'"
+  before_create :copy_eventable_fields
 
   def self.recent
     order_by(:updated_at => :desc).includes(:actor)
@@ -47,10 +47,15 @@ class Event
   private
 
   def copy_eventable_fields
-    self.regions = eventable.regions
-    self.cached_eventable_type = eventable.type
-    self.eventable_for_favorites_only = eventable.for_favorites_only
-    self.eventable_company_id = eventable.buyer_id
-    self.eventable_reference_number = eventable.reference_number
+    if self.eventable_type=='Opportunity'
+      self.regions = eventable.regions
+      self.cached_eventable_type = eventable.type
+      self.eventable_for_favorites_only = eventable.for_favorites_only
+      self.eventable_company_id = eventable.buyer_id
+      self.eventable_reference_number = eventable.reference_number
+    else
+      self.regions = eventable.regions
+      self.eventable_reference_number = eventable.reference_number
+    end
   end
 end

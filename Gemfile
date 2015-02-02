@@ -35,6 +35,7 @@ gem 'mail_view'
 gem 'urbanairship'
 gem 'email_validator'
 gem 'bootstrap_form'
+gem 'date_validator'
 gem 'rails_12factor'
 gem 'unicorn'
 

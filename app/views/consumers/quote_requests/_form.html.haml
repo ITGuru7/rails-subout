@@ -7,10 +7,12 @@
   = f.text_field :vehicle_count
   = f.text_field :passengers
   = f.text_field :start_location, label: 'Pick up address'
-  = f.datetime_select :start_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Pick up date'
+  = f.text_field :start_date, label: 'Pick up date', help: "mm/dd/yyyy"
+  = f.text_field :start_time, help: "hh:mm"
   
   = f.text_field :end_location, label: 'Drop off address'
-  = f.datetime_select :end_date, :start_year => Time.now.year, :end_year => Time.now.year + 1, label: 'Drop off date'
+  = f.text_field :end_date, label: 'Drop off date', help: "mm/dd/yyyy"
+  = f.text_field :end_time, help: "hh:mm"
 
   = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
   = f.text_area :description
@@ -18,8 +20,6 @@
   = f.submit "Request Quote", class: "btn btn-danger"
 
   .errors
-
-
 
 :javascript
   var init_subout_quote_request_form = function(){

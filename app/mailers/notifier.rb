@@ -103,6 +103,11 @@ class Notifier < ActionMailer::Base
     send_mail_to_company(__method__.to_s, @poster)
   end
 
+  def expired_quote_request_notification(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    send_mail_from_template('expired_quote_request', @quote_request.email)
+  end
+
   def completed_auction_notification_to_buyer(opportunity_id)
     @opportunity = Opportunity.find(opportunity_id)
     @bid = @opportunity.winning_bid

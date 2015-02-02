@@ -15,6 +15,15 @@
 
 %h3 Embedded HTML
 %hr
+%h4 Javascript
+%p.alert.alert-info
+  Consumer form requires the jQuery, please add jQuery plugin on your website if its not included.
+%pre
+  %code
+    :escaped
+      <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+%h4 HTML
 - @quote_request = QuoteRequest.new
-%textarea.form-control{readonly: true, rows: 30}
-  = raw CGI.escapeHTML(render 'consumers/quote_requests/form')
+%pre
+  %code
+    = raw CGI.escapeHTML(render 'consumers/quote_requests/form')
