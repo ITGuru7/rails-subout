@@ -90,7 +90,7 @@
           <div class="actions" ng-show="opportunity.buyer_id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
           </div>
-          <div ng-show="opportunity.buyer_id != company._id && opportunity.status == 'In progress'">
+          <div ng-show="company.canBid(opportunity)">
             <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
             <span ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
               &nbsp;<a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
@@ -107,9 +107,8 @@
         </div>
       </div>
 
+      <div ng-if="opportunity.buyer && !opportunity.canceled">
       <hr />
-
-      <div ui-if="!opportunity.canceled">
       <h4>Bid History</h4>
       <div class="hidden-xs hidden-sm">
         <table class="bid-history table">
@@ -237,37 +236,40 @@
         </div>
       </div>
       </div>
-      <hr />
-      <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
-      <h4>{{opportunity.buyer.name}}'s Comments</h4>
-      <ul class="comments">
-        <li ng-repeat="comment in opportunity.comments">
-          <div>
-            <span class="timeago" relative-time="comment.created_at" title="{{comment.created_at}}">{{comment.created_at|date}}</span>
-          </div>
-          <div class="comment-body">{{comment.body}}</div>
-        </li>
-      </ul>
-      <div>
-        <form name="newComment" class="form-horizontal">
-          <div class="alert alert-danger" ng-show="errors">
-            <a class="close" ng-click="hideAlert()">&times;</a>
-            <ul ng-repeat="error in errors">
-              <li>{{error}}</li>
-            </ul>
-          </div>
-          <div class="form-group" ng-show="opportunity.buyer_id == company._id">
-            <label for="comment_body" class="col-sm-3 control-label">New Comment: </label>
-            <div class="col-sm-9">
-              <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="form-control">
+
+      <div ng-if="opportunity.buyer">
+        <hr />
+        <div>Have a question about this opportunity? <a href="mailto:{{opportunity.buyer.email}}">Ask {{opportunity.buyer.contact_name}} ({{opportunity.buyer.email}})</a></div>
+        <h4>{{opportunity.buyer.name}}'s Comments</h4>
+        <ul class="comments">
+          <li ng-repeat="comment in opportunity.comments">
+            <div>
+              <span class="timeago" relative-time="comment.created_at" title="{{comment.created_at}}">{{comment.created_at|date}}</span>
             </div>
-          </div>
-          <div class="form-group" ng-show="opportunity.buyer_id == company._id">
-            <div class="col-sm-offset-3 col-sm-9">
-              <button ng-click="addComment()" class="btn btn-success" ng-disabled="newComment.$invalid">Add</button>
+            <div class="comment-body">{{comment.body}}</div>
+          </li>
+        </ul>
+        <div>
+          <form name="newComment" class="form-horizontal">
+            <div class="alert alert-danger" ng-show="errors">
+              <a class="close" ng-click="hideAlert()">&times;</a>
+              <ul ng-repeat="error in errors">
+                <li>{{error}}</li>
+              </ul>
             </div>
-          </div>
-        </form>
+            <div class="form-group" ng-show="opportunity.buyer_id == company._id">
+              <label for="comment_body" class="col-sm-3 control-label">New Comment: </label>
+              <div class="col-sm-9">
+                <input type="text" id="comment_body" name="comment_body" ng-model="comment.body" class="form-control">
+              </div>
+            </div>
+            <div class="form-group" ng-show="opportunity.buyer_id == company._id">
+              <div class="col-sm-offset-3 col-sm-9">
+                <button ng-click="addComment()" class="btn btn-success" ng-disabled="newComment.$invalid">Add</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

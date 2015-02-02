@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count.$invalid}" ui-if="opportunity.vehicle_count > 1">
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count.$invalid}" ng-if="opportunity.vehicle_count > 1">
         <label for="bid_vehicle_count" class="col-md-4 control-label">
           Vehicle count *
         </label>
@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count_limit.$invalid}" ui-if="opportunity.vehicle_count > 1">
+      <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count_limit.$invalid}" ng-if="opportunity.vehicle_count > 1">
         <label for="bid_vehicle_count_limit" class="col-md-4 control-label">
           Minimum vehicle count
         </label>
@@ -146,7 +146,7 @@
               <option value="">Other</option>
             </select>
           </p>
-          <p ui-if="!vehicle.type">
+          <p ng-if="!vehicle.type">
             <input type="text"
                    id="bid_vehicle_type_other"
                    name="bid_vehicle_type_other"

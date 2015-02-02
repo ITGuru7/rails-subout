@@ -97,9 +97,6 @@
             <div class="pill region" ng-repeat="region in filterRegions">
               {{region}}<button type="button" ng-click="removeRegionFilter(region)" class="close">×</button>
             </div>
-            <div class="pill" ng-show="$location.search().company_id">
-              {{companyName($location.search().company_id)}}<button type="button" ng-click="clearCompanyFilter()" class="close">×</button>
-            </div>
             <div class="pill" ng-show="$location.search().q">
               {{$location.search().q}}<button type="button" ng-click="query=null;fullTextSearch()" class="close">×</button>
             </div>
@@ -111,113 +108,157 @@
         <section id="activity-stream">
           <div class="hidden-xs hidden-sm event clearfix"
             ng-class="{expanded: event.selected, owner: event.actor._id == company._id}"
-            ng-repeat="event in events"
-            ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-            <div ui-if="isPublicEvent(event)">
-            
-            <div class="event-summary">
-              <div class="row">
-                <span class="col-md-3">
-                  <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
-                  <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
-                  <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
-                </span>
-                <span class="col-md-9 col-sm-9">
-                  <span class="opportunity-name">
-                    <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
-                      {{opportunity.name}}
-                    </a>
-                  </span>
-                  <span class="event-region" ng-cloak ng-show="!opportunity.is_for_special_region">{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
-                  <span class="event-region" ng-cloak ng-show="opportunity.is_for_special_region">{{opportunity.special_region}}</span>
-                  <span class="event-action" ng-cloak>
-                    {{actionDescription(action)}}
-                  </span>
-                  <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)"></a>
+            ng-repeat="event in events">
 
-                  <div class="pull-right expand-collapse">
-                    <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                    <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
-                  </div>
-                </span>
-              </div>
-            </div>
-            <div class="eventable-details" ng-show="event.selected" class="action-buttons">
-              <div class="clearfix">
-                <div class="col-md-offset-3 col-md-6">
-                  <div class="description">
-                    <div><strong>Description</strong></div>
-                    <div class="content">{{event.eventable.description}}</div>
-                    <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="event.eventable.buyer_message"></div></div>
-                  </div>
-                  <div class="winner" ng-show="event.eventable.winning_bid_id">
-                    <span class="label-field">Winning Amount: </span> 
-                    <span>{{ event.eventable.winner.amount | soCurrency }}</span>
-                    <span ui-if="event.eventable.winner.vehicle_count > 1">({{ event.eventable.winner.vehicle_count }} vehicles)</span>
-                  </div>
-                  <div ng-show="event.eventable.vehicle_count > 1">
-                    <span>Vehicles needed:</span> {{event.eventable.vehicle_count}}<br />
-                  </div>
-                  <div ng-show="!event.eventable.is_for_special_region">
-                    <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
-                    <span>Drop off:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
-                  </div>
-                  <div ng-show="event.eventable.is_for_special_region">
-                    <span>Location:</span> {{event.eventable.special_region}}<br />
-                  </div>
-                  <div>
-                    <span>Created on:</span> {{event.eventable.created_at|date}}
-                  </div>
-                  <div>
-                    <div ng-hide="event.eventable.winning_bid_id">
-                      <div ng-show="event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation'">
-                        <span>Bidding ends:</span>
-                        <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
+            <div ng-if="isPublicEvent(event)">
+              <div ng-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
+                <div class="event-summary">
+                  <div class="row">
+                    <span class="col-md-3">
+                      <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
+                      <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
+                      <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
+                    </span>
+                    <span class="col-md-9 col-sm-9">
+                      <span class="opportunity-name">
+                        <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>{{opportunity.name}}</a>
+                      </span>
+                      <span class="event-region" ng-cloak ng-show="!opportunity.is_for_special_region">{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
+                      <span class="event-region" ng-cloak ng-show="opportunity.is_for_special_region">{{opportunity.special_region}}</span>
+                      <span class="event-action" ng-cloak>
+                        {{actionDescription(action)}}
+                      </span>
+                      <a href="#modal" data-toggle="modal" ng-click="displayCompanyProfile(actor._id)"></a>
+
+                      <div class="pull-right expand-collapse">
+                        <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
+                        <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
                       </div>
-                      <div ng-show="event.eventable.status && event.eventable.status != 'In progress' && event.eventable.status != 'In negotiation'" class="warning">
-                        <span>Bidding ended</span>
-                      </div>
-                      <div ng-show="event.eventable.reserve_amount">
-                        <span>Starting price: </span>{{event.eventable.reserve_amount | soCurrency}}
-                      </div>
-                      <div ng-show="event.eventable.quick_winnable">
-                        <span>Buy now:</span> {{event.eventable.win_it_now_price | soCurrency}}
-                      </div>
-                    </div>
+                    </span>
                   </div>
-                  <div style="display:none" ng-show="event.eventable._id">
-                    <div>
-                      <div ng-show="opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">
-                        <div>
-                          <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a>
-                        </div>
-                        <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                          <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
-                        </div>
+                </div>
+                <div class="eventable-details clearfix" ng-show="event.selected" class="action-buttons">
+                    <div class="col-md-offset-3 col-md-6">
+                      <div class="description">
+                        <div><strong>Description</strong></div>
+                        <div class="content">{{event.eventable.description}}</div>
+                        <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="event.eventable.buyer_message"></div></div>
+                      </div>
+                      <div class="winner" ng-show="event.eventable.winning_bid_id">
+                        <span class="label-field">Winning Amount: </span> 
+                        <span>{{ event.eventable.winner.amount | soCurrency }}</span>
+                        <span ng-if="event.eventable.winner.vehicle_count > 1">({{ event.eventable.winner.vehicle_count }} vehicles)</span>
+                      </div>
+                      <div ng-show="event.eventable.vehicle_count > 1">
+                        <span>Vehicles needed:</span> {{event.eventable.vehicle_count}}<br />
+                      </div>
+                      <div ng-show="!event.eventable.is_for_special_region">
+                        <span>Pick up:</span> {{event.eventable.start_date | soShortDate}} {{event.eventable.start_time}}<br />
+                        <span>Drop off:</span> {{event.eventable.end_date | soShortDate}} {{event.eventable.end_time}}
+                      </div>
+                      <div ng-show="event.eventable.is_for_special_region">
+                        <span>Location:</span> {{event.eventable.special_region}}<br />
                       </div>
                       <div>
+                        <span>Created on:</span> {{event.eventable.created_at|date}}
+                      </div>
+
+                      <div ng-hide="event.eventable.winning_bid_id">
+                        <div ng-show="event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation'">
+                          <span>Bidding ends:</span>
+                          <span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span>
+                        </div>
+                        <div ng-show="event.eventable.status && event.eventable.status != 'In progress' && event.eventable.status != 'In negotiation'" class="warning">
+                          <span>Bidding ended</span>
+                        </div>
+                        <div ng-show="event.eventable.reserve_amount">
+                          <span>Starting price: </span>{{event.eventable.reserve_amount | soCurrency}}
+                        </div>
+                        <div ng-show="event.eventable.quick_winnable">
+                          <span>Buy now:</span> {{event.eventable.win_it_now_price | soCurrency}}
+                        </div>
+                      </div>
+
+                      <div ng-show="event.eventable._id">
+                        <span ng-show="opportunity.buyer && opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">  
+                          <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a><br/>
+                          <span ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
+                            <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+                          </span>
+                        </span>
+                        <br/>
                         <a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a>
                       </div>
                     </div>
+                    <div class="col-md-4">
+                      <a ng-show="event.eventable.image_url && !isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
+                        <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
+                      </a>
+                      <a ng-show="event.eventable.image_url && isOldBrowser"  href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}" target="_blank">
+                        <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
+                      </a>
+                    </div>
+                </div>
+              </div>
+
+              <div ng-if="event.eventable_type=='QuoteRequest'" ng-init="quote_request=event.eventable; actor=event.actor; action=event.action">
+                <div class="event-summary">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <i class="glyphicon glyphicon-hand-up" title="{{quote_request.trip_type}}"></i>
+                      <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
+                    </div>
+                    <div class="col-md-9 col-sm-9">
+                      <span class="opportunity-name">
+                        <a ng-click="toggleEvent(event)" title="{{quote_request.name}}" ng-cloak>{{quote_request.name}}</a>
+                      </span>
+                      <span class="event-region" ng-cloak>{{ALL_REGIONS[quote_request.start_region]}}-&gt;{{ALL_REGIONS[quote_request.end_region]}}</span>
+                      <span class="event-action" ng-cloak>{{actionDescription(action)}}</span>
+
+                      <div class="pull-right expand-collapse">
+                        <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
+                        <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <a ng-show="event.eventable.image_url && !isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
-                    <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
-                  </a>
-                  <a ng-show="event.eventable.image_url && isOldBrowser"  href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}" target="_blank">
-                    <img class="img-responsive" ng-src="{{event.eventable.image_url}}" />
-                  </a>
+                <div class="eventable-details clearfix" ng-show="event.selected" class="action-buttons">
+                    <div class="col-md-offset-3 col-md-6">
+                      <div class="description">
+                        <div><strong>Description</strong></div>
+                        <div class="content">{{quote_request.description}}</div>
+                      </div>
+                      <div ng-show="quote_request.vehicle_count > 1">
+                        <span>Vehicles needed:</span> {{quote_request.vehicle_count}}<br />
+                      </div>
+                      <div>
+                        <span>Pick up:</span> {{quote_request.start_date | soShortDate}} {{quote_request.start_time}}<br />
+                        <span>Drop off:</span> {{quote_request.end_date | soShortDate}} {{quote_request.end_time}}
+                      </div>
+                      <div>
+                        <span>Created on:</span> {{quote_request.created_at|date}}
+                      </div>
+
+                      <div>
+                        <span>Bidding ends:</span>
+                          <span ng-class='{relative_time:quote_request.bidding_ends_at}' title="{{quote_request.bidding_ends_at}}">
+                            {{quote_request.bidding_ends_at|date}}
+                          </span>
+                      </div>
+
+                      <div ng-show="event.eventable._id">
+                        <a href="#/quote_requests/{{quote_request.reference_number}}">See more...</a>
+                      </div>
+                    </div>
                 </div>
               </div>
             </div>
-          </div>
           </div>
           <!-- mobile view event stream -->
           <div class="visible-xs visible-sm">
             <div ng-repeat="event in events"
               ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-              <div ui-if="isPublicEvent(event)">
+              <div ng-if="isPublicEvent(event)">
                   <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}">
                     <tr>
                       <td>

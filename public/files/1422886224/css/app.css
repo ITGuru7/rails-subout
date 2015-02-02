@@ -1075,7 +1075,20 @@ disabled look for already selected choices in the results dropdown
   .select2-search input {
       background-position: 100% -21px !important;
   }
-}/**
+}/* Include this file in your html if you are using the CSP mode. */
+
+@charset "UTF-8";
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+.ng-cloak, .x-ng-cloak,
+.ng-hide {
+  display: none !important;
+}
+
+ng\:form {
+  display: block;
+}
+/**
  * import components to builds angular-ui.css
  */
 

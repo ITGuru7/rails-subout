@@ -17,7 +17,7 @@
       </form>
       <ul>
         <li ng-repeat="foundCompany in foundCompanies">
-          <span ui-if="foundCompany._id != company._id">
+          <span ng-if="foundCompany._id != company._id">
             {{foundCompany.name}}
             <a ng-click="addToFavorites(foundCompany)">Add to Favorites</a>
           </span>

@@ -21,7 +21,7 @@ suboutPartialPath = function(file) {
   return path;
 };
 
-subout = angular.module("subout", ["ui", "suboutFilters", "suboutServices", "ngCookies"]);
+subout = angular.module("subout", ["ui.utils", "ui.date", "suboutFilters", "suboutServices", "ngCookies", "ngRoute"]);
 
 subout.run([
   '$rootScope', '$appVersioning', '$location', '$analytics', function($rootScope, $versioning, $location, $analytics) {
@@ -102,6 +102,10 @@ subout.config([
       templateUrl: suboutPartialPath("opportunity-detail.html"),
       controller: OpportunityDetailCtrl,
       resolve: resolveAuth
+    }).when("/quote_requests/:quote_request_reference_number", {
+      templateUrl: suboutPartialPath("quote-request-detail.html"),
+      controller: QuoteRequestDetailCtrl,
+      resolve: resolveAuth
     }).when("/favorites", {
       templateUrl: suboutPartialPath("favorites.html"),
       controller: FavoritesCtrl,
@@ -146,7 +150,7 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
@@ -210,6 +214,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   };
   $rootScope.userSignedIn = function() {
     var _ref1;
+    if ($location.path() === '/new-retail-opportunity') {
+      return false;
+    }
     if ($location.path() === '/sign_in') {
       return false;
     }
@@ -451,6 +458,21 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
   };
+  $rootScope.displayNewQuoteForm = function(quote_request) {
+    if (!$rootScope.company.dot_number) {
+      $rootScope.setModal(suboutPartialPath('dot-required.html'));
+      return;
+    }
+    if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
+      if (!$rootScope.subscription.has_valid_credit_card) {
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+        return;
+      }
+    }
+    $rootScope.setQuoteRequest(quote_request);
+    $rootScope.setModal(suboutPartialPath('quote-new.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
   $rootScope.displayNewOpportunityForm = function() {
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
     return $rootScope.setupFileUploader();
@@ -459,11 +481,25 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.$broadcast('clearNewFavoriteForm');
     return $rootScope.setModal(suboutPartialPath('add-new-favorite.html'));
   };
+  $rootScope.setQuoteRequest = function(quote_request) {
+    if (quote_request.id) {
+      return $rootScope.quote_request = QuoteRequest.get({
+        api_token: $rootScope.token.api_token,
+        quoteRequestId: quote_request._id
+      });
+    } else {
+      return $rootScope.quote_request = quote_request;
+    }
+  };
   $rootScope.setOpportunity = function(opportunity) {
-    return $rootScope.opportunity = Opportunity.get({
-      api_token: $rootScope.token.api_token,
-      opportunityId: opportunity._id
-    });
+    if (opportunity.id) {
+      return $rootScope.opportunity = Opportunity.get({
+        api_token: $rootScope.token.api_token,
+        opportunityId: opportunity._id
+      });
+    } else {
+      return $rootScope.opportunity = opportunity;
+    }
   };
   $rootScope.cloneOpportunity = function(opportunity) {
     var property, _j, _len, _ref1;
@@ -581,6 +617,7 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
   }
+  console.log($scope.opportunity);
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     jQuery("#modal").modal("hide");
@@ -685,6 +722,49 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
       opportunityId: $rootScope.opportunity._id
     }, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+};
+
+QuoteNewCtrl = function($scope, $rootScope, Bid, QuoteRequest, Quote) {
+  var _base;
+  if (!$scope.quote) {
+    $scope.quote = {};
+  }
+  $scope.quote.vehicle_count = $scope.quote_request.vehicle_count;
+  (_base = $scope.quote).vehicle_count || (_base.vehicle_count = 1);
+  $scope.quote.vehicles = [];
+  $scope.$watch("quote.vehicle_count", function() {
+    $scope.quote.vehicles = [];
+    return _($scope.quote.vehicle_count).times(function() {
+      return $scope.quote.vehicles.push({});
+    });
+  });
+  $scope.hideAlert = function() {
+    return $scope.errors = null;
+  };
+  $scope.$on('modalOpened', function() {
+    return $scope.hideAlert();
+  });
+  $scope.validateVehicleCountLimit = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.quote_request.vehicle_count;
+  };
+  return $scope.save = function() {
+    console.log(123123);
+    return Quote.save({
+      quote: $scope.quote,
+      api_token: $rootScope.token.api_token,
+      quoteRequestId: $rootScope.quote_request._id
+    }, function(data) {
+      $rootScope.company.today_bids_count += 1;
+      $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
@@ -1065,6 +1145,29 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
   return $scope.loadMoreOpportunities($scope.page);
 };
 
+QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid, QuoteRequest) {
+  var fiveMinutes, loadQuoteRequest, quote_request_id, updateFiveMinutesAgo;
+  fiveMinutes = 5 * 60 * 1000;
+  quote_request_id = $routeParams.quote_request_reference_number;
+  updateFiveMinutesAgo = function() {
+    $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
+    return $timeout(updateFiveMinutesAgo, 5000);
+  };
+  updateFiveMinutesAgo();
+  loadQuoteRequest = function() {
+    return $scope.quote_request = QuoteRequest.get({
+      api_token: $rootScope.token.api_token,
+      quoteRequestId: quote_request_id
+    }, function(content) {
+      return true;
+    }, function(content) {
+      alert("Record not found");
+      return $location.path("/dashboard");
+    });
+  };
+  return loadQuoteRequest();
+};
+
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
   var fiveMinutes, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
@@ -1231,11 +1334,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.events = [];
   $scope.regionFilterOptions = $rootScope.allRegions;
   $scope.filterRegions = $rootScope.filterRegionsOnHome;
-  Company.query({
-    api_token: $rootScope.token.api_token
-  }, function(data) {
-    return $scope.companies = data;
-  });
   $scope.loadMoreEvents = function() {
     var queryOptions;
     if ($scope.noMoreEvents || $scope.loading) {
@@ -1257,6 +1355,8 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
         $scope.loading = false;
         return $scope.currentPage += 1;
       }
+    }, function() {
+      return $scope.loading = false;
     });
   };
   $scope.refreshEvents = function(callback) {
@@ -1392,17 +1492,6 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
       return "Unknown";
     }
   };
-  $scope.companyName = function(companyId) {
-    var company;
-    company = _.find($scope.companies, function(company) {
-      return company._id === companyId;
-    });
-    if (company) {
-      return _.str.trim(company.abbreviated_name);
-    } else {
-      return companyId;
-    }
-  };
   $scope.actionDescription = function(action) {
     switch (action.type) {
       case "opportunity_canceled":
@@ -1418,10 +1507,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
     if (event.selected && event.eventable._id) {
-      return event.eventable = Opportunity.get({
+      return Event.get({
         api_token: $rootScope.token.api_token,
-        opportunityId: event.eventable._id
-      }, function() {
+        eventId: event._id
+      }, function(data) {
+        event.eventable = data.eventable;
         return setTimeout((function() {
           return $(".relative_time").timeago();
         }), 1);
@@ -2139,7 +2229,7 @@ var api_path, suboutSvcs,
 
 api_path = "/api/v1";
 
-suboutSvcs = angular.module("suboutServices", ["ngResource"]);
+suboutSvcs = angular.module("suboutServices", ["ngResource", "angular-abortable-requests"]);
 
 suboutSvcs.factory("Setting", function($resource) {
   return $resource("" + api_path + "/settings/:key", {
@@ -2159,7 +2249,7 @@ suboutSvcs.factory("Auction", function($resource, $rootScope) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId',
     action: '@action',
-    api_token: $rootScope.token.api_token
+    api_token: '@api_token'
   }, {
     select_winner: {
       method: "PUT"
@@ -2228,6 +2318,16 @@ suboutSvcs.factory("Opportunity", function($resource) {
   return Opportunity;
 });
 
+suboutSvcs.factory("QuoteRequest", function($resource) {
+  var QuoteRequest;
+  QuoteRequest = $resource("" + api_path + "/quote_requests/:quoteRequestId", {}, {
+    paginate: {
+      method: "GET"
+    }
+  });
+  return QuoteRequest;
+});
+
 suboutSvcs.factory("MyBid", function($resource, $rootScope) {
   return $resource("" + api_path + "/bids/:bidId/:action", {
     bidId: '@bidId',
@@ -2278,15 +2378,23 @@ suboutSvcs.factory("Bid", function($resource) {
   }, {});
 });
 
+suboutSvcs.factory("Quote", function($resource) {
+  return $resource("" + api_path + "/quote_requests/:quoteRequestId/quotes", {
+    quoteRequestId: "@quoteRequestId"
+  }, {});
+});
+
 suboutSvcs.factory("Comment", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/comments", {
     opportunityId: "@opportunityId"
   }, {});
 });
 
-suboutSvcs.factory("Event", function($resource) {
+suboutSvcs.factory("Event", function($resource, RequestFactory) {
   var Event;
-  Event = $resource("" + api_path + "/events/:eventId", {}, {});
+  Event = RequestFactory.createResource({
+    url: "" + api_path + "/events/:eventId"
+  });
   Event.prototype.isBidableBy = function(company) {
     return this.eventable.bidable && this.eventable.buyer_id !== company._id;
   };
@@ -2377,9 +2485,20 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
   Company.prototype.isFreeUser = function() {
     return this.subscription_plan === "free";
   };
+  Company.prototype.canBid = function(opportunity) {
+    if (!opportunity.buyer) {
+      return false;
+    }
+    if (opportunity.buyer_id !== this._id && opportunity.status === 'In progress') {
+      return true;
+    }
+  };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (opportunity.type !== 'Emergency') {
       if (!opportunity.status) {
+        return false;
+      }
+      if (!opportunity.buyer) {
         return false;
       }
       if (this._id !== opportunity.buyer._id) {
@@ -2388,6 +2507,9 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
       return opportunity.status === 'In progress';
     } else {
       if (!opportunity.status) {
+        return false;
+      }
+      if (!opportunity.buyer) {
         return false;
       }
       if (this._id !== opportunity.buyer._id) {
