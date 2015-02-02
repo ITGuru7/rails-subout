@@ -14,7 +14,6 @@ class EventSerializer < ActiveModel::Serializer
     if object.eventable_type=="QuoteRequest"
       return QuoteRequestSerializer.new(object.eventable)
     end
-
   end
 
   def actor

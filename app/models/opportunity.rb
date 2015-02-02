@@ -71,7 +71,6 @@ class Opportunity
   scope :last_12_hours, -> { where(:created_at.gte => 12.hours.ago) }
   
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
-  belongs_to :retailer, class_name: "Consumer"
 
   #has_one :event, as: :eventable
   has_many :bids
@@ -81,7 +80,7 @@ class Opportunity
   validates :win_it_now_price, numericality: { greater_than: 0 }, unless: 'win_it_now_price.blank?'
   validates :bidding_duration_hrs, numericality: { greater_than: 0 }, presence: true
   validates :vehicle_count, numericality: { greater_than: 0}, unless: 'vehicle_count.blank?'
-  validates_presence_of :buyer_id, if: '!is_retail?'
+  validates_presence_of :buyer_id
   validates_presence_of :name
   validates_presence_of :description
   validates_presence_of :start_date, if: '!is_for_special_region'
@@ -90,9 +89,9 @@ class Opportunity
   #validates_presence_of :vehicle_type
   validate :validate_locations, if: '!is_for_special_region'
   validate :validate_start_and_end_date, if: '!is_for_special_region'
-  validate :validate_win_it_now_price, if: '!is_retail?'
-  validate :validate_reseve_amount_and_win_it_now_price, if: '!is_retail?'
-  validate :validate_opportunity_post_limit, if: '!is_retail?'
+  validate :validate_win_it_now_price
+  validate :validate_reseve_amount_and_win_it_now_price
+  validate :validate_opportunity_post_limit
 
   #TODO this validation doesn't work correctly, if we enable this, it doesn't save any vehicle_type or trip_type
   #validates :vehicle_type, inclusion: { in: [nil, "Sedan", "Limo", "Party Bus", "Limo Bus", "Mini Bus", "Motorcoach", "Double Decker Motorcoach", "Executive Coach", "Sleeper Bus", "School Bus"] }
@@ -107,10 +106,6 @@ class Opportunity
 
   def is_for_special_region
     type == "Special" or type == "Buy or Sell Parts and Vehicles"
-  end
-
-  def is_retail?
-    !self.retailer.blank?
   end
 
   def companies_to_notify

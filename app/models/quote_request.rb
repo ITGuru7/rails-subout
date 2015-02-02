@@ -118,4 +118,14 @@ class QuoteRequest
     true
   end
 
+  def self.send_expired_notification
+    where(:created_at.lte => Time.now, expired_notification_sent: false).each do |opportunity|
+      if opportunity.buyer
+        opportunity.buyer.inc(:auctions_expired_count, 1)
+        Notifier.delay.expired_auction_notification(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-expire")
+      end
+      opportunity.set(:expired_notification_sent, true)
+    end
+  end
+
 end
