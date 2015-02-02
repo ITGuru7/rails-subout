@@ -61,7 +61,7 @@ namespace :subout do
 
   namespace :data do
     # event data update
-    def fix_event_data_for_consumer_form
+    task :fix_event_data_for_consumer_form do
       Event.all.each do |event|
         event.eventable_type = "Opportunity"
         event.save
