@@ -1,4 +1,4 @@
-= bootstrap_form_for @quote_request, url: consumers_quote_requests_path(@quote_request, consumer_id: @consumer.id), authenticity_token: false, layout: :vertical do |f|
+= bootstrap_form_for @quote_request, url: consumers_quote_requests_url(@quote_request, consumer_id: @consumer.id), authenticity_token: false, layout: :vertical do |f|
   = f.text_field :first_name
   = f.text_field :last_name
   = f.text_field :email

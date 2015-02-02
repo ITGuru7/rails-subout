@@ -22,13 +22,13 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
 
   private
   def quote_request_params
-    params.require(:quote_request).permit(:first_name, :last_name, :email, :phone, :vehicle_type, :vehicle_count, :passengers, 
+    params.require(:quote_request).permit(:first_name, :last_name, :email, :phone, :vehicle_type, :vehicle_count, :passengers,
       :start_location, :start_date, :start_time, :end_location, :end_date, :end_time, :trip_type, :description)
   end
 
   def check_consumer
     @consumer = Consumer.where(id: params[:consumer_id]).first
     @consumer_host = URI.parse(request.referrer).host
-    head :unauthorized if !@consumer.valid_domain?(@consumer_host)
+    head :unauthorized if @consumer.blank? or !@consumer.valid_domain?(@consumer_host)
   end
 end
