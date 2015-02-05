@@ -3,15 +3,21 @@ class OpportunitySerializer < ActiveModel::Serializer
     :end_date, :end_time, :bidding_duration_hrs, :bidding_ends_at, :bidding_done, :quick_winnable, :bidable?, :image_id,
     :winning_bid_id, :win_it_now_price, :type, :vehicle_type, :trip_type, :canceled, :in_negotiation, :forward_auction, :winner, :tracking_id, :reference_number,
     :buyer_name, :buyer_abbreviated_name, :buyer_message, :image_url, :large_image_url, :start_location, :end_location, :created_at, :status, :buyer_id, :contact_phone,
-    :highest_bid_amount, :lowest_bid_amount, :reserve_amount, :ada_required, :start_date, :icon, :vehicle_count, :special_region, :is_for_special_region, :value
+    :highest_bid_amount, :lowest_bid_amount, :reserve_amount, :ada_required, :start_date, :icon, :vehicle_count, :special_region, :is_for_special_region, :value, :for_quote_only
 
+  
   has_one :buyer, serializer: ActorSerializer
-
-  has_many :recent_bids, serializer: BidShortSerializer, key: "bids"
+  has_many :recent_bids, serializer: BidShortSerializer
   has_many :comments, serializer: CommentSerializer
+  has_one :quote_request
 
   def icon
-    "icon-#{object.type.parameterize}"
+    "icon-#{object.type.parameterize}" if object.type
+  end
+
+  def reference_number
+    return object.quote_request.reference_number if object.quote_request
+    object.reference_number
   end
 
   def winner

@@ -740,6 +740,8 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
       $scope.reloadOpportunities()
 
   $scope.loadMoreOpportunities = (page = 1) ->
+    regions = null
+    regions = $scope.filterRegions.join(',') if $scope.filterRegions
     soPagination.paginate($scope, Opportunity, page,
       {
         sort_by: $scope.sortBy
@@ -747,7 +749,7 @@ AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter,
         start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd")
         vehicle_type: $scope.filterVehicleType
         trip_type: $scope.filterTripType
-        regions: $scope.filterRegions
+        regions: regions
       },
       (scope, data) -> { results: data.opportunities } )
 
@@ -1029,23 +1031,22 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.filterRegions = $rootScope.filterRegionsOnHome
 
   $scope.loadMoreEvents = ->
-    return if $scope.noMoreEvents or $scope.loading
+    return if $scope.noMoreEvents or $rootScope.loading
     $scope.loading = true
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
     queryOptions.regions = $scope.filterRegions
     queryOptions.page = $scope.currentPage
-
+    
     Event.query queryOptions
     , (data) ->
       if data.length is 0
         $scope.noMoreEvents = true
-        $scope.loading = false
       else
         angular.forEach data, (event) ->
           $scope.events.push(event)
-        $scope.loading = false
         $scope.currentPage += 1
+      $scope.loading = false
     , () ->
       $scope.loading = false
 
@@ -1140,14 +1141,12 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       $location.search('opportunity_type', null)
     else
       $location.search('opportunity_type', opportunity_type)
-    $scope.refreshEvents()
 
   $scope.setEventType = (eventType) ->
     if $location.search().event_type == eventType
       $location.search('event_type', null)
     else
       $location.search('event_type', eventType)
-    $scope.refreshEvents()
 
   $scope.eventTypeLabel = (eventType) ->
     if eventType == "opportunity_created"
@@ -1217,7 +1216,6 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
     return $location.absUrl()
   ,(newPath, oldPath)->
     $scope.query = $location.search().q
-    $scope.refreshEvents()
 
 SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, GatewaySubscription, $config) ->
   token = $rootScope.token

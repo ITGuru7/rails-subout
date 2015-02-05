@@ -14,7 +14,7 @@ gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'kaminari'
 #gem 'kiqstand'
-gem "active_model_serializers", '0.9.2'
+gem "active_model_serializers", '0.8.0'
 gem "rspec_api_documentation", github: "ooleem/rspec_api_documentation"
 gem 'httparty'
 gem 'cloudinary'

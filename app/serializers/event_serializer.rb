@@ -7,13 +7,8 @@ class EventSerializer < ActiveModel::Serializer
   #has_one :eventable, polymorphic: true
 
   def eventable
-    if object.eventable_type=="Opportunity"
-      return OpportunitySerializer.new(object.eventable)
-    end
-
-    if object.eventable_type=="QuoteRequest"
-      return QuoteRequestSerializer.new(object.eventable)
-    end
+    return QuoteRequestShortSerializer.new(object.eventable) if object.eventable_type=="QuoteRequest"
+    return OpportunityShortSerializer.new(object.eventable)
   end
 
   def actor

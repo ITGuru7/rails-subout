@@ -1,11 +1,15 @@
 class Quote
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Token
+
+  token field_name: :reference_number, retry_count: 7, length: 7, contains: :upper_alphanumeric
 
   field :amount, type: Money
   field :comment, type: String
 
   field :vehicle_count, type: Integer, default: 1
+  field :state, type: String, default: "active"
 
   paginates_per 30
 
@@ -13,6 +17,8 @@ class Quote
 
   belongs_to :quote_request, :inverse_of => :quotes
   belongs_to :quoter, class_name: "Company", counter_cache: :bids_count
+
+  has_one :bid
 
 
   validates_presence_of :quoter_id, on: :create, message: "can't be blank"
@@ -29,6 +35,7 @@ class Quote
 
   validates :comment, length: { maximum: 255 }
 
+  scope :active, -> { where(:state.ne => 'canceled') }
   scope :recent, -> { desc(:created_at) }
   scope :by_amount, -> { asc(:amount) }
   scope :today, -> { where(:created_at.gte => Date.today.beginning_of_day, :created_at.lte => Date.today.end_of_day) }
@@ -40,7 +47,25 @@ class Quote
   end
 
   def vehicles_html
-    self.vehicles.map(&:to_html).join("<br>")
+    self.vehicles.map(&:to_html).join("<br/><br/>")
+  end
+
+  def to_html(detail=false)
+<<-EOS
+    <tr>
+    <td>
+      <p><strong>Name:</strong> #{self.quoter.name}</p>
+      <p><strong>Email:</strong> #{self.quoter.email}</p>
+      <p><strong>Phone:</strong> #{self.quoter.contact_phone}</p>
+    </td>
+    <td>$#{self.amount}</td>
+    <td>#{self.comment}</td>
+    <td>#{self.vehicles_html}</td>
+    #{
+      (detail)? "<td><a href='http://#{DEFAULT_HOST_WITH_PORT}/consumers/quote_requests/#{self.quote_request.reference_number}/select_winner?quote_reference_number=#{self.reference_number}&retailer_id=#{self.quote_request.retailer.id}&consumer_email=#{self.quote_request.email}'>ACCEPT</a></td>" : ""
+    }
+    </tr>
+EOS
   end
 
   private

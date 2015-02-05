@@ -16,20 +16,28 @@ class QuoteRequest
   field :passengers, type: Integer
 
   field :start_location, type: String
-  field :start_date, type: DateTime
+  field :start_date, type: Date
   field :start_time, type: String
   field :start_region, type: String
 
   field :end_location, type: String
-  field :end_date, type: DateTime
+  field :end_date, type: Date
   field :end_time, type: String
   field :end_region, type: String
 
   field :trip_type, type: String
   field :description, type: String
 
-  field :consumer_host, type: String
+  field :retailer_host, type: String
   field :expired_notification_sent, type: Boolean, default: false
+
+  field :state, type: String
+
+  field :winning_quote_id, type: String
+  field :awarded, type: Boolean, default: false
+  field :bidding_won_at, type: Time
+
+  attr_accessor :viewer
   
   index created_at: 1
   index start_date: 1
@@ -40,10 +48,16 @@ class QuoteRequest
   index end_region: 1
 
 
-  belongs_to :consumer
+  belongs_to :retailer
   has_many :quotes
+  has_one :opportunity
+  belongs_to :winning_quote, :class_name => "Quote"
 
   search_in :reference_number
+
+  def fulltext
+    [reference_number, name, description].join(' ')
+  end
 
   validates_presence_of :first_name, :last_name, :email, :phone, :start_location, :end_location, :description
 
@@ -85,8 +99,20 @@ class QuoteRequest
     "Weddings"
   ]
 
+  def recent_quotes
+    result = self.quotes.active.recent.map do |quote|
+      quote.quote_request = self # to prevent loading opportunity again from db while serializing see BidShortSerializer#comment
+      quote
+    end
+    result.uniq { |quote| quote.quoter_id }
+  end
+
   def name
     "#{first_name}, #{last_name}"
+  end
+
+  def quotes_html
+    self.quotes.map{|quote| quote.to_html(true)}.join('')
   end
 
   def to_html
@@ -95,16 +121,16 @@ class QuoteRequest
       "<strong>Vehicle count:</strong> #{vehicle_count}",
       "<strong>Passengers:</strong> #{passengers}",
       "<strong>Pick up address:</strong> #{start_location}",
-      "<strong>Pick up date:</strong> #{start_date.to_s(:long)}",
+      "<strong>Pick up date:</strong> #{starts_at.to_s(:long)}",
       "<strong>Drop off address:</strong> #{end_location}",
-      "<strong>Drop off date:</strong> #{end_date.to_s(:long)}",
+      "<strong>Drop off date:</strong> #{ends_at.to_s(:long)}",
       "<strong>Trip type:</strong> #{trip_type}",
       "<strong>Description:</strong> #{description}",
     ].join("<br>")
   end
 
   def quotable?
-    self.created_at + 2.days > Time.now
+    self.created_at + 2.days > Time.now && self.awarded == false
   end
 
   def validate_dates
@@ -121,11 +147,11 @@ class QuoteRequest
   end
 
   def starts_at
-    Time.parse("#{self.start_date} #{self.start_time}")
+    Time.parse("#{self.start_date.to_date} #{self.start_time}")
   end
 
   def ends_at
-    Time.parse("#{self.end_date} #{self.end_time}")
+    Time.parse("#{self.end_date.to_date} #{self.end_time}")
   end
 
   def regions
@@ -164,6 +190,29 @@ class QuoteRequest
     return false if location.country != "United States"
     return false if location.state.blank?
     true
+  end
+
+  def win!(quote_id)
+    self.opportunity.awarded = true
+    self.opportunity.save(validate: false)
+
+    quote = self.quotes.active.find(quote_id)
+    quoter = quote.quoter
+
+    self.awarded = true
+    self.winning_quote_id = quote.id
+    self.bidding_won_at = Time.now
+    self.save(validate: false) # when poster select winner, the start date validation may be failed
+
+    quote.state = 'won'
+    quote.save
+
+    quoter.total_winnings += quote.amount.to_i
+    quoter.total_won_bids_count += 1
+    quoter.save(validate: false)
+
+    Notifier.delay.won_quote_to_consumer(self.id)
+    Notifier.delay.won_quote_to_quoter(self.id) if quoter.notification_items.include?("opportunity-win")
   end
 
   def notify_companies

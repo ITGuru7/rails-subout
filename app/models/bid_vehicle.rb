@@ -19,6 +19,9 @@ class BidVehicle
   end
 
   def to_html
-    "<strong>Year:</strong> #{year}, <strong>Type:</strong> #{type || type_other}, <strong>Passengers:</strong> #{passenger_count}, <strong>Gratuity included?:</strong> #{gratuity_included}"
+    ["<strong>Year:</strong> #{year}",
+    "<strong>Type:</strong> #{type || type_other}",
+    "<strong>Passengers:</strong> #{passenger_count}",
+    "<strong>Gratuity included?:</strong> #{gratuity_included}"].join('<br/>')
   end
 end

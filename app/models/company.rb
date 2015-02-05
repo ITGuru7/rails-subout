@@ -245,21 +245,18 @@ class Company
     trip_type = nil if trip_type == "null" or trip_type.blank?
     regions = nil if regions == "null" or regions.blank?
 
-    options = []
-    
     vehicle_types = vehicle_types.split(',') unless vehicle_types.nil?
     regions = regions.split(',') unless regions.nil?
     regions = self.regions if regions.blank?
 
+    options = []
     unless regions.blank?
       options << {:start_region.in => regions}
       options << {:end_region.in => regions}
       options << {:special_region.in => regions + ['All']}
     end
 
-    
     conditions = {
-      #:buyer_id.in => self.favoriting_buyer_ids,
       canceled: false,
       awarded: false,
       :bidding_ends_at.gt => Time.now,

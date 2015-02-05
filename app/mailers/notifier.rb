@@ -95,6 +95,22 @@ class Notifier < ActionMailer::Base
     send_mail_to_company(__method__.to_s, @bidder)
   end
 
+  def won_quote_to_consumer(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @quote = @quote_request.winning_quote
+    @quoter = @quote.quoter
+
+    send_mail_from_template(__method__.to_s, @quote_request.email)
+  end
+
+  def won_quote_to_quoter(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @quote = @quote_request.winning_quote
+    @quoter = @quote.quoter
+
+    send_mail_to_company(__method__.to_s, @quoter)
+  end
+
   def finished_auction_to_bidder(opportunity_id, bidder_id)
     @opportunity = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)

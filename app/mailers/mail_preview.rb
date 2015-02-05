@@ -39,6 +39,16 @@ class MailPreview < MailView
     Notifier.won_auction_to_supplier(opportunity.id)
   end
 
+  def won_quote_to_consumer
+    quote_request = QuoteRequest.where(:winning_quote_id.ne => nil).last
+    Notifier.won_quote_to_consumer(quote_request.id)
+  end
+
+  def won_quote_to_quoter
+    quote_request = QuoteRequest.where(:winning_quote_id.ne => nil).last
+    Notifier.won_quote_to_quoter(quote_request.id)
+  end
+
   def finished_auction_to_bidder
     opportunity = Opportunity.where(:winning_bid_id.ne => nil).last
     Notifier.finished_auction_to_bidder(opportunity.id, opportunity.bids.first.bidder_id)

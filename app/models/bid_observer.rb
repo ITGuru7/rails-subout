@@ -2,6 +2,8 @@ class BidObserver < Mongoid::Observer
   observe :bid
   
   def after_create(bid)
+    return if !bid.quote.blank?
+
     Event.create do |e|
       e.action = {type: :bid_created, details: {:amount => bid.amount, :bid_id => bid.id}}
       e.eventable = bid.opportunity

@@ -1,10 +1,10 @@
-%h3 Consumer Setting
+%h3 Website domain setting
 %hr
-- if @consumer.domains.blank?
+- if @retailer.domains.blank?
   %p.alert.alert-warning
     Please update domains as which you are going to insert subout consumer form
 %br
-= bootstrap_form_for @consumer, url: consumers_profile_path(@consumer), layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10" do |f|
+= bootstrap_form_for @retailer, url: retailers_profile_path(@retailer), layout: :horizontal, label_col: "col-sm-2", control_col: "col-sm-10" do |f|
   = f.hidden_field :id
   = f.text_field :domains, help: "You can add comma delimited domains"
 
@@ -29,4 +29,4 @@
     = raw CGI.escapeHTML(render 'consumers/quote_requests/form')
 
 %h3 Preview
-%iframe{src:"#{new_consumers_quote_request_path(consumer_id: @consumer.id)}", style: "width: 100%; height: 400px;"}
+%iframe{src:"#{new_consumers_quote_request_path(retailer_id: @retailer.id)}", style: "width: 100%; height: 400px;"}

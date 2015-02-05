@@ -47,6 +47,9 @@ class Opportunity
   field :bidding_won_at, type: Time
   field :ada_required, type: Boolean, default: false
 
+  field :for_quote_only, type: Boolean, default: false
+  belongs_to :quote_request
+
   #if the regions have been changed we keep track of the old ones here so we know who's already been notified
   field :notified_regions, type: Array, default: [] 
   field :favorites_notified, type: Boolean, default: false
@@ -103,6 +106,31 @@ class Opportunity
   search_in :reference_number, :name
 
   paginates_per 30
+
+  def self.create_from_quote_request!(quote_request)
+    opportunity = Opportunity.new
+    opportunity.name = quote_request.name
+    opportunity.vehicle_type = quote_request.vehicle_type
+    opportunity.vehicle_count = quote_request.vehicle_count
+    opportunity.start_location = quote_request.start_location
+    opportunity.start_date = quote_request.start_date
+    opportunity.start_time = quote_request.start_time
+    opportunity.start_region = quote_request.start_region
+    opportunity.end_location = quote_request.end_location
+    opportunity.end_date = quote_request.end_date
+    opportunity.end_time = quote_request.end_time
+    opportunity.end_region = quote_request.end_region
+    opportunity.description = quote_request.description
+
+    opportunity.canceled = false
+    opportunity.awarded = false
+    opportunity.bidding_duration_hrs = 2
+    opportunity.winning_bid_id = nil
+    opportunity.for_quote_only = true
+    
+    opportunity.quote_request = quote_request
+    opportunity.save(:validate => false)
+  end
 
   def is_for_special_region
     type == "Special" or type == "Buy or Sell Parts and Vehicles"

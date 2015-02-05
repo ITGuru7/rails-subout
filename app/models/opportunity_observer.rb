@@ -4,6 +4,9 @@ class OpportunityObserver < Mongoid::Observer
   observe :opportunity
 
   def after_create(opportunity)
+    #need to skip if its quote request one
+    return if opportunity.for_quote_only
+
     create_event(opportunity, :opportunity_created)
     opportunity.notify_companies(:new_opportunity)
     opportunity.set(:was_ever_favorite_only, true) if opportunity.for_favorites_only?

@@ -21,6 +21,8 @@ class Bid
 
   belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company", counter_cache: :bids_count
+  belongs_to :quote
+
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
 
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
@@ -56,6 +58,15 @@ class Bid
     end
   end
 
+  def self.create_from_quote(quote)
+    bid = Bid.new
+    bid.amount = quote.amount
+    bid.opportunity = quote.quote_request.opportunity
+    bid.bidder = quote.quoter
+    bid.quote = quote
+    bid.save(:validate => false)
+  end
+
   def status
     if is_canceled?
       "Canceled by you"
@@ -63,6 +74,8 @@ class Bid
       "Canceled by poster"
     elsif opportunity.status == "Bidding won"
       opportunity.winning_bid_id == id ? "Won" : "Not won"
+    elsif opportunity.awarded?
+      "Closed"
     elsif opportunity.status == "Bidding ended"
       "Closed"
     elsif is_negotiating? 
