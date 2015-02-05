@@ -19,7 +19,7 @@
           <div ng-show="detailed_company.score">
             <span ng-repeat="s in stars" ng-class="{ hide: s > detailed_company.score }"> 
               <img src="/img/icon-star.png">
-              <img src="/img/icon-star-half.png" ui-if="detailed_company.score - s > 0 && detailed_company.score - s < 1">  
+              <img src="/img/icon-star-half.png" ng-if="detailed_company.score - s > 0 && detailed_company.score - s < 1">  
             </span>
               ( {{detailed_company.score}} )
           </div>
@@ -163,7 +163,7 @@
                 <div class="col-sm-3">
                   <span ng-repeat="s in stars" ng-class="{ hide: s > r.score }"> 
                     <img src="/img/icon-star.png">  
-                    <img src="/img/icon-star-half.png" ui-if="r.score - s > 0 && r.score - s < 1">  
+                    <img src="/img/icon-star-half.png" ng-if="r.score - s > 0 && r.score - s < 1">  
                   </span>
                   ({{r.score}})
                   From
