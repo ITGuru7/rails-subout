@@ -22,7 +22,7 @@ class Event
   before_create :copy_eventable_fields
 
   def self.recent
-    order_by(:updated_at => :desc).includes(:actor)
+    order_by(:created_at => :desc).includes(:actor)
   end
 
   def self.for(company)
