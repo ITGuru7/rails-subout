@@ -160,7 +160,7 @@ class Opportunity
 
     companies_to_notify.each do |company|
       Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id) if company.notification_items.include?("opportunity-new")
-      Sms.new_opportunity(self, company) if company.cell_phone.present? && self.emergency?
+      Sms.new_opportunity(self, company) if company.cell_phone.present? # && self.emergency?
 
       user = company.users.first
       if company.notification_items.include?("mobile-opportunity-new")
