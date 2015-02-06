@@ -7,7 +7,7 @@ class OpportunitySerializer < ActiveModel::Serializer
 
   
   has_one :buyer, serializer: ActorSerializer
-  has_many :recent_bids, serializer: BidShortSerializer
+  has_many :recent_bids, serializer: BidShortSerializer, :key=>"bids"
   has_many :comments, serializer: CommentSerializer
   has_one :quote_request
 

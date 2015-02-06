@@ -14,7 +14,7 @@ class Event
   belongs_to :eventable, index: true, polymorphic: true
 
   index eventable_company_id: 1
-  index created_at: 1
+  index updated_at: 1
 
   paginates_per 30
   search_in eventable: :fulltext
@@ -22,7 +22,7 @@ class Event
   before_create :copy_eventable_fields
 
   def self.recent
-    order_by(:created_at => :desc).includes(:actor)
+    order_by(:updated_at => :desc).includes(:actor)
   end
 
   def self.for(company)
