@@ -1031,7 +1031,8 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
   $scope.filterRegions = $rootScope.filterRegionsOnHome
 
   $scope.loadMoreEvents = ->
-    return if $scope.noMoreEvents or $rootScope.loading
+    return if $scope.noMoreEvents or $scope.loading
+    console.log(111)
     $scope.loading = true
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
