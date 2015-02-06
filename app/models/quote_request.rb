@@ -162,12 +162,12 @@ class QuoteRequest
     unless DEVELOPMENT_MODE
       start_location_info = start_location.blank? ? nil : Geocoder.search(start_location).first
       self.start_region = start_location_info.try(:state)
-      errors.add :start_location, "is not valid, please try again" unless valid_location?(start_location_info)
+      errors.add :start_location, "is not valid" unless valid_location?(start_location_info)
 
       end_location_info = end_location.blank? ? start_location_info : Geocoder.search(end_location).first
       self.end_region = end_location_info.try(:state)
       if !end_location.blank? and !valid_location?(end_location_info)
-        errors.add :end_location, "is not valid, please try again"
+        errors.add :end_location, "is not valid"
       end
     else
       self.start_region = "Massachusetts" unless self.start_region

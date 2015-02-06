@@ -17,7 +17,7 @@
   = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
   = f.text_area :description
 
-  = f.submit "Request Quote", class: "btn btn-danger"
+  = f.submit "Request Quote", class: "btn btn-danger", id: "submit-quote-request"
 
   .errors
 
@@ -27,12 +27,16 @@
     var form = jQuery("#new_quote_request");
     jQuery(form).submit(function(e){
       e.preventDefault();
+      $("#submit-quote-request").attr("disabled", true);
+
       var posting = jQuery.post( form.attr('action'), form.serialize());
       posting.done(function(data){
         form.html(data);
+        $("#submit-quote-request").attr("disabled", false);
       });
       posting.fail(function(data){
         form.addClass('error');
+        $("#submit-quote-request").attr("disabled", false);
 
         var errors_html = jQuery('.errors', form).html('');
         var errors = data.responseJSON.payload.errors;
