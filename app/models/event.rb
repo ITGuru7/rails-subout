@@ -14,6 +14,7 @@ class Event
   belongs_to :eventable, index: true, polymorphic: true
 
   index eventable_company_id: 1
+  index created_at: 1
   index updated_at: 1
 
   paginates_per 30
