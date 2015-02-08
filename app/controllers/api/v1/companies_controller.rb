@@ -34,15 +34,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
       subscription = GatewaySubscription.where(subscription_id: chargify_id).first
     end
 
-    company = Company.new(params[:company])
-
-    if subscription.blank?
-      company.errors.add(:base, "Invalid chargify subscription.")
-    else
-      if subscription.created_company.present?
-        company.errors.add(:base, "Subscription is already used.")
-      end
-    end
+    company = Company.new(params.require(:company).permit(:name, :email, :abbreviated_name, :dot_number, :insurance, :logo_id, :since, :owner, :contact_name, :contact_phone, :website, :fleet, :fleet_size, :has_ada_vehicles, :users_attributes=>[:email, :password, :password_confirmation]))
 
     if company.errors.any?
       render json: { errors: company.sign_up_errors }, status: 422
@@ -53,6 +45,7 @@ class Api::V1::CompaniesController < Api::V1::BaseController
     company.prelaunch = false
 
     if company.save
+      @current_user = company.users.last
       respond_with_namespace(company)
     else
       render json: { errors: company.sign_up_errors }, status: 422
