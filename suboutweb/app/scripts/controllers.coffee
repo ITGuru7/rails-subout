@@ -1142,12 +1142,14 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
       $location.search('opportunity_type', null)
     else
       $location.search('opportunity_type', opportunity_type)
+    $scope.refreshEvents()
 
   $scope.setEventType = (eventType) ->
     if $location.search().event_type == eventType
       $location.search('event_type', null)
     else
       $location.search('event_type', eventType)
+    $scope.refreshEvents()
 
   $scope.eventTypeLabel = (eventType) ->
     if eventType == "opportunity_created"
