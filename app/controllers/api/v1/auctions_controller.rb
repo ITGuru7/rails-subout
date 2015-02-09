@@ -37,7 +37,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
     @auction = current_company.auctions.find(params[:id])
 
     if @auction.editable?
-      @auction.update!(params[:opportunity])
+      @auction.update!(opportunity_params)
       respond_with_namespace(@auction)
     else
       render json: { errors: { base: ["This opportunity is not editable."] } }, status: :unprocessable_entity

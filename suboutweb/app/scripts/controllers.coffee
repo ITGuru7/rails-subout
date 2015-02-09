@@ -385,7 +385,6 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     $scope.opportunity = {}
     $scope.opportunity.vehicle_count = 1
 
-  console.log $scope.opportunity
   $scope.types = [
     "Vehicle Needed",
     "Vehicle for Hire",
@@ -1032,7 +1031,6 @@ DashboardCtrl = ($scope, $rootScope, $location, Company, Event, Filter, Tag, Bid
 
   $scope.loadMoreEvents = ->
     return if $scope.noMoreEvents or $scope.loading
-    console.log(111)
     $scope.loading = true
     queryOptions = angular.copy($location.search())
     queryOptions.api_token = $rootScope.token.api_token
