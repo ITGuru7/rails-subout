@@ -63,6 +63,7 @@ class Company
   field :mode, type: String, default: 'normal'
 
   scope :recent, -> { desc(:created_at) }
+  scope :active, -> { where(:locked_at=>nil) }
 
   attr_accessor :password, :password_confirmation
   # attr_protected :ratings_taken

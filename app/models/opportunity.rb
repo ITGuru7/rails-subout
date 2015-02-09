@@ -143,7 +143,7 @@ class Opportunity
     else
       options << {:regions.in => regions}
     end
-    companies = Company.where(locked_at: nil).any_of(*options).excludes(id: self.buyer_id) - notified_companies
+    companies = Company.active.any_of(*options).excludes(id: self.buyer_id) - notified_companies
     companies.select { |c| notify_to_vehicle_owner?(c.vehicle_types) }
   end
 
@@ -160,7 +160,7 @@ class Opportunity
 
     companies_to_notify.each do |company|
       Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id) if company.notification_items.include?("opportunity-new")
-      Sms.new_opportunity(self, company) if company.cell_phone.present? # && self.emergency?
+      Sms.new_opportunity(self, company) if company.cell_phone.present? && company.notification_items.include?("mobile-opportunity-new") # && self.emergency?
 
       user = company.users.first
       if company.notification_items.include?("mobile-opportunity-new")
@@ -238,7 +238,7 @@ class Opportunity
       bid.save
 
       # send negotiation email to the bidder
-      Notifier.delay.new_negotiation(bid.id) 
+      Notifier.delay.new_negotiation(bid.id)
 
       unless in_negotiation
         self.in_negotiation = true

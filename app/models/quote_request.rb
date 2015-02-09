@@ -216,7 +216,7 @@ class QuoteRequest
   end
 
   def notify_companies
-    Company.all.each do |company|
+    Company.active.each do |company|
       Notifier.delay_for(1.minutes).new_quote_request(self.id, company.id) if company.notification_items.include?("opportunity-new")
     end
   end
