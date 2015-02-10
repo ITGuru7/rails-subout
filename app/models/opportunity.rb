@@ -198,9 +198,7 @@ class Opportunity
     where(:end_date.lte => Date.today, completed_notification_sent: false, :winning_bid_id.ne => nil).each do |opportunity|
       Notifier.delay.completed_auction_notification_to_buyer(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-complete")
       Notifier.delay.completed_auction_notification_to_supplier(opportunity.id) if opportunity.winning_bid.bidder.notification_items.include?("opportunity-complete")
-
-      opportunity.set(:completed_notification_sent, true)
-
+      opportunity.set(:completed_notification_sent=>true)
       opportunity.unlock_rating(opportunity.winning_bid.bidder.id, opportunity.buyer.id)
       opportunity.unlock_rating(opportunity.buyer.id, opportunity.winning_bid.bidder.id)
     end
