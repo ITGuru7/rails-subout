@@ -76,12 +76,17 @@
         <th>Actions</th>
       </tr>
       <tr ng-repeat="opportunity in paginated_results" >
-        <td><a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a></td>
+        <td>
+          <a class="reference-number" href="#/dashboard?q=%23{{opportunity.reference_number}}">#{{opportunity.reference_number}}</a>
+        </td>
         <td>
           <i class="glyphicon {{opportunity.icon}}" title="{{opportunity.type}}"></i>
           <i ng-show="opportunity.ada_required" class="ada-required" title="ADA vehicle"></i>
         </td>
-        <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
+        <td>
+          <a href="#/opportunities/{{opportunity.reference_number}}" ng-if="opportunity.for_quote_only==false">{{opportunity.name}}</a>
+          <a href="#/quote_requests/{{opportunity.reference_number}}" ng-if="opportunity.for_quote_only==true">{{opportunity.name}}</a>
+        </td>
         <td>
           <span ng-show="opportunity.vehicle_type">Vehicle Type: {{opportunity.vehicle_type}}<br></span>
           <span ng-show="opportunity.trip_type">Trip Type: {{opportunity.trip_type}}<br></span>
@@ -112,8 +117,13 @@
           <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
         </td>
         <td>
-          <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
-          <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+          <span ng-if="opportunity.for_quote_only==false">
+            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
+            <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
+          </span>
+          <span ng-if="opportunity.for_quote_only==true">
+            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewQuoteForm(opportunity.quote_request)">Quote</a>
+          </span>
         </td>
       </tr>
     </table>

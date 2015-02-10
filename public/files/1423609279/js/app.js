@@ -102,6 +102,10 @@ subout.config([
       templateUrl: suboutPartialPath("opportunity-detail.html"),
       controller: OpportunityDetailCtrl,
       resolve: resolveAuth
+    }).when("/quote_requests/:quote_request_reference_number", {
+      templateUrl: suboutPartialPath("quote-request-detail.html"),
+      controller: QuoteRequestDetailCtrl,
+      resolve: resolveAuth
     }).when("/favorites", {
       templateUrl: suboutPartialPath("favorites.html"),
       controller: FavoritesCtrl,
@@ -123,9 +127,6 @@ subout.config([
     }).when("/add-favorite", {
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
-    }).when("/new-retail-opportunity", {
-      templateUrl: suboutPartialPath("opportunity-retail-form.html"),
-      controller: OpportunityRetailFormCtrl
     }).otherwise({
       redirectTo: "/available_opportunities"
     });
@@ -149,12 +150,11 @@ $.cloudinary.config({
 angular.element(document).ready(function() {
   return angular.bootstrap(document, ['subout']);
 });
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, OpportunityRetailFormCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
-  $rootScope.opportunity_retail_form_path = suboutPartialPath("opportunity-retail-form.html");
   $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
   d = new Date();
@@ -458,6 +458,21 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.setModal(suboutPartialPath('bid-new.html'));
     return $rootScope.$broadcast('modalOpened');
   };
+  $rootScope.displayNewQuoteForm = function(quote_request) {
+    if (!$rootScope.company.dot_number) {
+      $rootScope.setModal(suboutPartialPath('dot-required.html'));
+      return;
+    }
+    if ($rootScope.company.subscription_plan !== 'free' && $rootScope.subscription) {
+      if (!$rootScope.subscription.has_valid_credit_card) {
+        $rootScope.setModal(suboutPartialPath('update-credit-card.html'));
+        return;
+      }
+    }
+    $rootScope.setQuoteRequest(quote_request);
+    $rootScope.setModal(suboutPartialPath('quote-new.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
   $rootScope.displayNewOpportunityForm = function() {
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
     return $rootScope.setupFileUploader();
@@ -465,6 +480,16 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.displayNewFavoriteForm = function() {
     $rootScope.$broadcast('clearNewFavoriteForm');
     return $rootScope.setModal(suboutPartialPath('add-new-favorite.html'));
+  };
+  $rootScope.setQuoteRequest = function(quote_request) {
+    if (quote_request.id) {
+      return $rootScope.quote_request = QuoteRequest.get({
+        api_token: $rootScope.token.api_token,
+        quoteRequestId: quote_request._id
+      });
+    } else {
+      return $rootScope.quote_request = quote_request;
+    }
   };
   $rootScope.setOpportunity = function(opportunity) {
     if (opportunity.id) {
@@ -585,78 +610,6 @@ WelcomePrelaunchCtrl = function(AuthToken) {
   return $.removeCookie(AuthToken);
 };
 
-OpportunityRetailFormCtrl = function($scope, $rootScope, $location, Auction) {
-  $rootScope.retailer = true;
-  $rootScope.inPosting = false;
-  if (!$scope.opportunity) {
-    $scope.opportunity = {};
-    $scope.opportunity.vehicle_count = 1;
-  }
-  $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
-  $scope.save = function() {
-    var opportunity, showErrors, showInfos;
-    $rootScope.inPosting = true;
-    opportunity = $scope.opportunity;
-    opportunity.bidding_ends = $('#opportunity_ends').val();
-    opportunity.start_date = $('#opportunity_start_date').val();
-    opportunity.end_date = $('#opportunity_end_date').val();
-    opportunity.image_id = $('#opportunity_image_id').val();
-    opportunity.start_time = $("#opportunity_start_time").val();
-    opportunity.end_time = $("#opportunity_end_time").val();
-    if (opportunity.quick_winnable === false) {
-      opportunity.win_it_now_price = null;
-    }
-    showErrors = function(errors) {
-      var $alertError;
-      if ($rootScope.isMobile) {
-        return alert($rootScope.errorMessages(errors).join('\n'));
-      } else {
-        $alertError = $rootScope.alertError(errors);
-        $("form .alert-error").remove();
-        return $("form").append($alertError);
-      }
-    };
-    showInfos = function(infos) {
-      var $alertInfo;
-      if ($rootScope.isMobile) {
-        return alert($rootScope.errorMessages(infos).join('\n'));
-      } else {
-        $alertInfo = $rootScope.alertInfo(infos);
-        $("form .alert-info").remove();
-        return $("form").append($alertInfo);
-      }
-    };
-    return Auction.save({
-      opportunity: opportunity,
-      referrer: document.referrer,
-      retailer: $location.search().retailer
-    }, function(data) {
-      showInfos(["Posted successfully."]);
-      return $scope.opportunity = {};
-    }, function(content) {
-      return showErrors(content.data.errors);
-    });
-  };
-  $scope.isForSpecialRegion = function() {
-    var type;
-    type = $scope.opportunity.type;
-    if ((type === "Special") || (type === "Buy or Sell Parts and Vehicles")) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  return $scope.setOpportunityForwardAuction = function() {
-    var type;
-    type = $scope.opportunity.type;
-    if (type === "Vehicle Needed") {
-      return $scope.opportunity.forward_auction = false;
-    } else if (type === "Vehicle for Hire") {
-      return $scope.opportunity.forward_auction = true;
-    }
-  };
-};
-
 OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   var successUpdate;
   $rootScope.inPosting = false;
@@ -664,7 +617,6 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
   }
-  console.log($scope.opportunity);
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     jQuery("#modal").modal("hide");
@@ -776,6 +728,49 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
   };
 };
 
+QuoteNewCtrl = function($scope, $rootScope, Bid, QuoteRequest, Quote) {
+  var _base;
+  if (!$scope.quote) {
+    $scope.quote = {};
+  }
+  $scope.quote.vehicle_count = $scope.quote_request.vehicle_count;
+  (_base = $scope.quote).vehicle_count || (_base.vehicle_count = 1);
+  $scope.quote.vehicles = [];
+  $scope.$watch("quote.vehicle_count", function() {
+    $scope.quote.vehicles = [];
+    return _($scope.quote.vehicle_count).times(function() {
+      return $scope.quote.vehicles.push({});
+    });
+  });
+  $scope.hideAlert = function() {
+    return $scope.errors = null;
+  };
+  $scope.$on('modalOpened', function() {
+    return $scope.hideAlert();
+  });
+  $scope.validateVehicleCountLimit = function(value) {
+    if (isNaN(value) || value === "") {
+      return true;
+    }
+    value = parseFloat(value);
+    return value <= $scope.quote_request.vehicle_count;
+  };
+  return $scope.save = function() {
+    console.log(123123);
+    return Quote.save({
+      quote: $scope.quote,
+      api_token: $rootScope.token.api_token,
+      quoteRequestId: $rootScope.quote_request._id
+    }, function(data) {
+      $rootScope.company.today_bids_count += 1;
+      $rootScope.company.month_bids_count += 1;
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+    });
+  };
+};
+
 BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
   var _base;
   if (!$scope.bid) {
@@ -856,6 +851,17 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     value = parseFloat(value);
     return value <= $scope.bid.vehicle_count;
   };
+  $scope.showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form .alert-error").remove();
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    }
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -866,7 +872,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
       $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
-      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+      return $scope.errors = $scope.showErrors(content.data.errors);
     });
   };
 };
@@ -1018,8 +1024,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     }
   });
   $scope.loadMoreOpportunities = function(page) {
+    var regions;
     if (page == null) {
       page = 1;
+    }
+    regions = null;
+    if ($scope.filterRegions) {
+      regions = $scope.filterRegions.join(',');
     }
     return soPagination.paginate($scope, Opportunity, page, {
       sort_by: $scope.sortBy,
@@ -1027,7 +1038,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
       trip_type: $scope.filterTripType,
-      regions: $scope.filterRegions
+      regions: regions
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -1147,6 +1158,29 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
     });
   };
   return $scope.loadMoreOpportunities($scope.page);
+};
+
+QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid, QuoteRequest) {
+  var fiveMinutes, loadQuoteRequest, quote_request_id, updateFiveMinutesAgo;
+  fiveMinutes = 5 * 60 * 1000;
+  quote_request_id = $routeParams.quote_request_reference_number;
+  updateFiveMinutesAgo = function() {
+    $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
+    return $timeout(updateFiveMinutesAgo, 5000);
+  };
+  updateFiveMinutesAgo();
+  loadQuoteRequest = function() {
+    return $scope.quote_request = QuoteRequest.get({
+      api_token: $rootScope.token.api_token,
+      quoteRequestId: quote_request_id
+    }, function(content) {
+      return true;
+    }, function(content) {
+      alert("Record not found");
+      return $location.path("/dashboard");
+    });
+  };
+  return loadQuoteRequest();
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
@@ -1328,14 +1362,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
         $scope.noMoreEvents = true;
-        return $scope.loading = false;
       } else {
         angular.forEach(data, function(event) {
           return $scope.events.push(event);
         });
-        $scope.loading = false;
-        return $scope.currentPage += 1;
+        $scope.currentPage += 1;
       }
+      return $scope.loading = false;
     }, function() {
       return $scope.loading = false;
     });
@@ -1488,10 +1521,11 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.toggleEvent = function(event) {
     event.selected = !event.selected;
     if (event.selected && event.eventable._id) {
-      return event.eventable = Opportunity.get({
+      return Event.get({
         api_token: $rootScope.token.api_token,
-        opportunityId: event.eventable._id
-      }, function() {
+        eventId: event._id
+      }, function(data) {
+        event.eventable = data.eventable;
         return setTimeout((function() {
           return $(".relative_time").timeago();
         }), 1);
@@ -1537,8 +1571,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   return $rootScope.$watch(function() {
     return $location.absUrl();
   }, function(newPath, oldPath) {
-    $scope.query = $location.search().q;
-    return $scope.refreshEvents();
+    return $scope.query = $location.search().q;
   });
 };
 
@@ -2229,9 +2262,7 @@ suboutSvcs.factory("Auction", function($resource, $rootScope) {
   return $resource("" + api_path + "/auctions/:opportunityId/:action", {
     opportunityId: '@opportunityId',
     action: '@action',
-    api_token: '@api_token',
-    referrer: '@referrer',
-    retailer: '@retailer'
+    api_token: '@api_token'
   }, {
     select_winner: {
       method: "PUT"
@@ -2300,6 +2331,16 @@ suboutSvcs.factory("Opportunity", function($resource) {
   return Opportunity;
 });
 
+suboutSvcs.factory("QuoteRequest", function($resource) {
+  var QuoteRequest;
+  QuoteRequest = $resource("" + api_path + "/quote_requests/:quoteRequestId", {}, {
+    paginate: {
+      method: "GET"
+    }
+  });
+  return QuoteRequest;
+});
+
 suboutSvcs.factory("MyBid", function($resource, $rootScope) {
   return $resource("" + api_path + "/bids/:bidId/:action", {
     bidId: '@bidId',
@@ -2347,6 +2388,12 @@ suboutSvcs.factory("Product", function($resource) {
 suboutSvcs.factory("Bid", function($resource) {
   return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
     opportunityId: "@opportunityId"
+  }, {});
+});
+
+suboutSvcs.factory("Quote", function($resource) {
+  return $resource("" + api_path + "/quote_requests/:quoteRequestId/quotes", {
+    quoteRequestId: "@quoteRequestId"
   }, {});
 });
 
