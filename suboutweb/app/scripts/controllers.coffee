@@ -580,6 +580,15 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
     value = parseFloat(value)
     value <= $scope.bid.vehicle_count
 
+  $scope.showErrors = (errors) ->
+    if $rootScope.isMobile
+      alert $rootScope.errorMessages(errors).join('\n')
+    else
+      $alertError = $rootScope.alertError(errors)
+      $("#modal form .alert-error").remove()
+      $("#modal form").append($alertError)
+      $("#modal .modal-body").scrollTop($("#modal form").height())
+
   $scope.save = ->
     Bid.save
       bid: $scope.bid
@@ -591,7 +600,9 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
       jQuery("#modal").modal "hide"
 
     , (content) ->
-      $scope.errors = $rootScope.errorMessages(content.data.errors)
+      $scope.errors = $scope.showErrors(content.data.errors)
+
+
 
 MyBidCtrl = ($scope, $rootScope, MyBid, $location, soPagination) ->
   $scope.my_bids = []
