@@ -190,7 +190,7 @@ class Opportunity
         opportunity.buyer.inc(:auctions_expired_count=>1)
         Notifier.delay.expired_auction_notification(opportunity.id) if opportunity.buyer.notification_items.include?("opportunity-expire")
       end
-      opportunity.set(:expired_notification_sent, true)
+      opportunity.set(:expired_notification_sent=>true)
     end
   end
 
