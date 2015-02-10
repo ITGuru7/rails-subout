@@ -23,7 +23,7 @@ class Admin::GatewaySubscriptionsController < Admin::BaseController
 
   def update
     @subscription = GatewaySubscription.find(params[:id])
-    @subscription.update_attributes(params[:gateway_subscription])
+    @subscription.update_attributes(params.require(:gateway_subscription).permit(:email, :product_handle))
     @subscription.update_product!(params[:gateway_subscription][:product_handle])
 
     redirect_to edit_admin_gateway_subscription_path(@subscription), notice: "Subscription updated"
