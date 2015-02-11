@@ -617,7 +617,6 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
   }
-  console.log($scope.opportunity);
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     jQuery("#modal").modal("hide");
@@ -852,6 +851,17 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     value = parseFloat(value);
     return value <= $scope.bid.vehicle_count;
   };
+  $scope.showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form .alert-error").remove();
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    }
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -862,7 +872,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
       $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
-      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+      return $scope.errors = $scope.showErrors(content.data.errors);
     });
   };
 };
@@ -1014,8 +1024,13 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
     }
   });
   $scope.loadMoreOpportunities = function(page) {
+    var regions;
     if (page == null) {
       page = 1;
+    }
+    regions = null;
+    if ($scope.filterRegions) {
+      regions = $scope.filterRegions.join(',');
     }
     return soPagination.paginate($scope, Opportunity, page, {
       sort_by: $scope.sortBy,
@@ -1023,7 +1038,7 @@ AvailableOpportunityCtrl = function($scope, $rootScope, $location, Opportunity, 
       start_date: $filter('date')($scope.filterDepatureDate, "yyyy-MM-dd"),
       vehicle_type: $scope.filterVehicleType,
       trip_type: $scope.filterTripType,
-      regions: $scope.filterRegions
+      regions: regions
     }, function(scope, data) {
       return {
         results: data.opportunities
@@ -1347,14 +1362,13 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
     return Event.query(queryOptions, function(data) {
       if (data.length === 0) {
         $scope.noMoreEvents = true;
-        return $scope.loading = false;
       } else {
         angular.forEach(data, function(event) {
           return $scope.events.push(event);
         });
-        $scope.loading = false;
-        return $scope.currentPage += 1;
+        $scope.currentPage += 1;
       }
+      return $scope.loading = false;
     }, function() {
       return $scope.loading = false;
     });
@@ -1557,8 +1571,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   return $rootScope.$watch(function() {
     return $location.absUrl();
   }, function(newPath, oldPath) {
-    $scope.query = $location.search().q;
-    return $scope.refreshEvents();
+    return $scope.query = $location.search().q;
   });
 };
 
@@ -1870,6 +1883,7 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, Au
 };
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken, Authorize) {
+  var showErrors;
   $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
@@ -1904,6 +1918,16 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
+  showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("form .alert-error").remove();
+      return $("form").append($alertError);
+    }
+  };
   return $scope.signUp = function() {
     $scope.company.users_attributes = {
       "0": $scope.user
@@ -1922,8 +1946,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
         });
       });
     }, function(content) {
-      $scope.errors = $rootScope.errorMessages(content.data.errors);
-      return $("body").scrollTop(0);
+      return showErrors(content.data.errors);
     });
   };
 };

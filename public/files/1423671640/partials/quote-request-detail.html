@@ -59,11 +59,51 @@
               </span>
           </div>
           <div>
-            <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewQuoteForm(quote_request)">Quote</a>
+            <a ng-if="quote_request.quotable==true" href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewQuoteForm(quote_request)">Quote</a>
           </div>
 
         </div>
-      </div>  
+      </div>
+
+        <hr />
+        <h4>Bid History</h4>
+        <div class="hidden-xs hidden-sm">
+          <table class="bid-history table">
+            <tr ng-repeat="bid in quote_request.recent_quotes">
+              <td><strong>{{bid.amount | soCurrency}}</strong></td>
+              <td>
+                <div ng-show="quote_request.vehicle_count > 1"> <strong>{{bid.vehicle_count}}</strong> vehicle(s) </div>
+                <div ng-show="bid.bidder._id == company._id">
+                  <div ng-repeat="vehicle in bid.vehicles">
+                    <p>
+                    <strong>Bus year:</strong> {{vehicle.year}}, 
+                    <strong>Type:</strong> {{vehicle.type && vehicle.type||vehicle.type_other}},
+                    <strong>Passengers:</strong> {{vehicle.passenger_count}},
+                    <strong>gratuity included?:</strong> {{vehicle.gratuity_included && 'Yes'||'No'}}
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
+              <td>
+                <span ng-show="bid.bidder._id == company._id">
+                  by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+                </span>
+              </td>
+              <td ng-show="quote_request.buyer._id == company._id"><span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span></td>
+              <td class="tpa">
+                 <img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa">
+              </td>
+              <td>{{bid.comment}}</td>
+              <td>
+                  <span class="text-info" ng-show="quote_request.buyer._id == company._id || bid.bidder._id == company._id">
+                    <strong>Status: </strong>
+                    <span>{{bid.state}}</span>
+                  </span>
+              </td>
+            </tr>
+          </table>
+        </div>
     </div>
   </div>
 </div>

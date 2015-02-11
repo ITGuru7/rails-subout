@@ -111,7 +111,7 @@
             ng-repeat="event in events">
 
             <div ng-if="isPublicEvent(event)">
-              <div ng-if="event.eventable_type=='Opportunity'" ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
+              <div ng-if="event.eventable.for_quote_only==false" ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
                 <div class="event-summary">
                   <div class="row">
                     <span class="col-md-3">
@@ -201,7 +201,7 @@
                 </div>
               </div>
 
-              <div ng-if="event.eventable_type=='QuoteRequest'" ng-init="quote_request=event.eventable; actor=event.actor; action=event.action">
+              <div ng-if="event.eventable.for_quote_only==true" ng-init="quote_request=event.eventable; actor=event.actor; action=event.action">
                 <div class="event-summary">
                   <div class="row">
                     <div class="col-md-3">
