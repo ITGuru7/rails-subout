@@ -3,6 +3,11 @@ ruby '2.1.2'
 gem 'rails', '4.1.8'
 
 gem "mongoid"
+
+gem "bson"
+gem "moped", github: "mongoid/moped"
+gem 'mongoid_token', github: 'xingle/mongoid_token'
+
 gem 'haml-rails'
 gem 'pusher'
 gem 'thin'
@@ -13,14 +18,16 @@ gem 'slim', require: nil
 gem 'mongoid_rails_migrations'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'kaminari'
+
 #gem 'kiqstand'
+
 gem "active_model_serializers", '0.8.0'
 gem "rspec_api_documentation", github: "ooleem/rspec_api_documentation"
 gem 'httparty'
 gem 'cloudinary'
 gem 'american_date'
 gem 'ffaker'
-gem 'mongoid_token', github: 'xingle/mongoid_token'
+
 #gem 'mongoid_token', github: 'thetron/mongoid_token'
 gem 'mongoid-observers'
 gem 'geocoder'

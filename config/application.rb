@@ -5,8 +5,11 @@ require "action_mailer/railtie"
 require "active_resource/railtie"
 require "rails/test_unit/railtie"
 require "sprockets/railtie"
-
 require 'securerandom'
+
+require "bson"
+require "moped"
+Moped::BSON = BSON
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line

@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/mongoid/moped.git
+  revision: 6a58755e81e63b7a6a16a613fb22d0730e05c454
+  specs:
+    moped (2.0.3)
+      bson (~> 2.2)
+      connection_pool (~> 2.0)
+      optionable (~> 0.2.0)
+
+GIT
   remote: git://github.com/ooleem/rspec_api_documentation.git
   revision: c65caa46d7017520f6de4693d92e4b1af277f32e
   specs:
@@ -217,10 +226,6 @@ GEM
     mongoid_search (0.3.2)
       fast-stemmer (~> 1.0.0)
       mongoid (>= 3.0.0)
-    moped (2.0.3)
-      bson (~> 2.2)
-      connection_pool (~> 2.0)
-      optionable (~> 0.2.0)
     multi_json (1.10.1)
     multi_test (0.1.1)
     multi_xml (0.5.5)
@@ -396,6 +401,7 @@ DEPENDENCIES
   bitly
   bootstrap-sass (~> 3.3.1)
   bootstrap_form
+  bson
   chargify_api_ares
   cloudinary
   coffee-rails
@@ -421,6 +427,7 @@ DEPENDENCIES
   mongoid_rails_migrations
   mongoid_search
   mongoid_token!
+  moped!
   newrelic_moped
   newrelic_rpm
   pry
