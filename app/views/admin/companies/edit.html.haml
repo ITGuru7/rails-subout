@@ -99,5 +99,8 @@
       .controls
         = f.password_field :password_confirmation
         = f.submit "Submit", class: "btn btn-primary"
+%hr
+.clearfix
+  = link_to "Back", admin_companies_path(anchor: "company-#{@company.id}"), class: 'btn'
+  = link_to "DELETE THIS COMPANY", admin_company_path(@company), class: 'btn btn-danger', method: :delete, data:{ confirm: "Are you sure to delete this company?" }
 
-= link_to "Back", admin_companies_path(anchor: "company-#{@company.id}"), class: 'btn'

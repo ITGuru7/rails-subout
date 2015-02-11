@@ -34,6 +34,16 @@ class Admin::CompaniesController < Admin::BaseController
     end
   end
 
+  def destroy
+    @company = Company.find(params[:id])
+    if @company.has_canceled_subscription? or @company.created_from_subscription.blank?
+      @company.destroy
+      redirect_to admin_companies_path, notice: 'Company is deleted.'
+    else
+      redirect_to edit_admin_company_path(@company), notice: 'Company cannot be deleted.'
+    end
+  end
+
   def update
     @company.update_attributes(params[:company])
 
