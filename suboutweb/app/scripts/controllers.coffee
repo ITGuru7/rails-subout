@@ -1520,6 +1520,14 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
   $scope.hideAlert = ->
     $scope.errors = null
 
+  showErrors = (errors) ->
+    if $rootScope.isMobile
+      alert $rootScope.errorMessages(errors).join('\n')
+    else
+      $alertError = $rootScope.alertError(errors)
+      $("form .alert-error").remove()
+      $("form").append($alertError)
+
   $scope.signUp = ->
     $scope.company.users_attributes = { "0": $scope.user }
     $scope.company.logo_id = $("#company_logo_id").val()
@@ -1532,8 +1540,7 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
         Authorize.authenticate(token).then ->
           $location.path("/dashboard").search({})
     , (content) ->
-      $scope.errors = $rootScope.errorMessages(content.data.errors)
-      $("body").scrollTop(0)
+      showErrors(content.data.errors)
 
 TermsAndConditionsCtrl = ($rootScope, $location, $routeParams, $scope, $timeout, Company) ->
   $scope.accept = ()->
