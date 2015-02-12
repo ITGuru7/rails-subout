@@ -6,6 +6,7 @@ exports.config =
   paths:
     public: '../public'
     ignored: /(\/styles\/bootstrap\/)|(\/custom\/)|(bootstrap-3.0.0)/
+    watched: ['app', 'scripts', 'vendor']
   files:
     javascripts:
       joinTo:
@@ -13,6 +14,7 @@ exports.config =
         'js/vendor.js': /^vendor/
         'test/scenarios.js': /^test(\/|\\)e2e/
         'test/unit.js': /^test(\/|\\)unit/
+
       order:
         before: [
           'vendor/scripts/console-helper.js'
@@ -39,6 +41,7 @@ exports.config =
     stylesheets:
       joinTo:
         'css/app.css': /^(app|vendor)/
+        'mo/css/app.css': /^(app|vendor)/
       order:
         before: [
           'vendor/styles/jquery-ui/jquery-ui-1.9.1.custom.css'

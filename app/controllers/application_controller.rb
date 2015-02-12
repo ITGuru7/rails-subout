@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   before_filter :check_uri
   before_filter :https_redirect
+  before_filter :prepare_mobile
   layout :layout_by_resource
 
   def after_sign_in_path_for(resource)
@@ -40,4 +41,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  private
+
+  def prepare_mobile
+    session[:mobile] = params[:mobile] if !params[:mobile].nil?
+  end
+
+  def mobile_device?
+    if session[:mobile]
+      session[:mobile] == "1"
+    else
+      request.user_agent =~ /Mobile|webOS/
+    end
+  end
+
+  helper_method :mobile_device?
 end

@@ -22,3 +22,6 @@ public/js/app.js
 *.rdb
 *.swp
 dump
+
+/suboutweb/node_modules
+/suboutmob/node_modules

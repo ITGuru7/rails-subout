@@ -79,7 +79,7 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
     controller: OpportunityCtrl
     resolve: resolveAuth
   ).when("/available_opportunities",
-    templateUrl: "partials/available_opportunities.html"
+    templateUrl: suboutPartialPath("available_opportunities.html")
     controller: AvailableOpportunityCtrl
     resolve: resolveAuth
   ).when("/opportunities/:opportunity_reference_number",

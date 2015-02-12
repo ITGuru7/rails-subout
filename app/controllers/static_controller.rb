@@ -6,8 +6,13 @@ class StaticController < ApplicationController
     index_name = 'production'
     index_name = 'development' if Rails.env.development? || Rails.env.test?
     
-    file_name = "public/index_#{index_name}.html"
-    render :inline => File.read(file_name), :layout => nil
+    if !mobile_device?
+      file_name = "public/index_#{index_name}.html"
+      render :inline => File.read(file_name), :layout => nil
+    else
+      file_name = "public/mo/index_#{index_name}.html"
+      render :inline => File.read(file_name), :layout => nil
+    end
   end
 
   def embedded
@@ -26,8 +31,10 @@ class StaticController < ApplicationController
     timestamp = params[:timestamp]
     path      = params[:path]
     timestamp = Time.now.to_i if timestamp == '--DEPLOY--'
+    
     qs = path.include?("?") ? "&" : "?"
     redirect_to "/#{path}#{qs}t=#{timestamp}"
+    
   end
 
   def setup_headers
