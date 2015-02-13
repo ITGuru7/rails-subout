@@ -461,6 +461,7 @@ NegotiationCounterOfferCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auct
     MyBid.counter_negotiation
       bidId: $scope.bid.id
       bid: $scope.bid
+      api_token: $rootScope.token.api_token
     , (opportunity) ->
       _.extend($rootScope.opportunity, opportunity)
       jQuery("#modal").modal "hide"
@@ -478,6 +479,7 @@ NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
     Auction.start_negotiation
       bid: $scope.bid
       opportunityId: $rootScope.opportunity._id
+      api_token: $rootScope.token.api_token
     , (opportunity) ->
       _.extend($rootScope.opportunity, opportunity)
       jQuery("#modal").modal "hide"
@@ -506,7 +508,6 @@ QuoteNewCtrl = ($scope, $rootScope, Bid, QuoteRequest, Quote) ->
     value <= $scope.quote_request.vehicle_count
 
   $scope.save = ->
-    console.log(123123)
     Quote.save
       quote: $scope.quote
       api_token: $rootScope.token.api_token
