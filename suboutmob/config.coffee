@@ -29,13 +29,17 @@ exports.config =
           'vendor/scripts/jquery/jquery.maskedinput.js'
           'vendor/scripts/bootstrap/bootstrap.min.js'
           'vendor/scripts/bootstrap/bootstrap-multiselect.js'
-          'vendor/scripts/angular/angular.min.js'
           'vendor/scripts/select2/select2.js'
+          'vendor/scripts/select2/select2.js'
+
+          'vendor/scripts/angular/angular.min.js'
           'vendor/scripts/angular-ui/angular-ui.js'
           'vendor/scripts/angular/angular-resource.js'
           'vendor/scripts/angular/angular-cookies.js'
-          'vendor/scripts/underscore/underscore-min.js'
-          'vendor/scripts/underscore/underscore.string.js'
+
+          'vendor/styles/mobile-angular-ui/js/mobile-angular-ui.min.js'
+          'vendor/styles/mobile-angular-ui/js/mobile-angular-ui.gestures.min.js'
+
         ]
     stylesheets:
       joinTo:

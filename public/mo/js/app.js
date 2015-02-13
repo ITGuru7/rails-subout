@@ -20,11 +20,10 @@ suboutPartialPath = function(file) {
   path = app_prefix + '/partials/' + file;
   deploy = suboutDeployTimestamp();
   path = '/files/' + deploy + path;
-  console.log(path);
   return path;
 };
 
-subout = angular.module("subout", ["ui.utils", "ui.date", "suboutFilters", "suboutServices", "ngCookies", "ngRoute"]);
+subout = angular.module("subout", ["ui.utils", "ui.date", "suboutFilters", "suboutServices", "ngCookies", "ngRoute", "mobile-angular-ui"]);
 
 subout.run([
   '$rootScope', '$appVersioning', '$location', '$analytics', function($rootScope, $versioning, $location, $analytics) {
@@ -150,9 +149,7 @@ $.cloudinary.config({
   "cloud_name": "subout"
 });
 
-angular.element(document).ready(function() {
-  return angular.bootstrap(document, ['subout']);
-});
+
 var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 

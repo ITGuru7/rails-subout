@@ -14,11 +14,10 @@ suboutPartialPath = (file) ->
   deploy = suboutDeployTimestamp()
 
   path = '/files/' + deploy + path
-  console.log path
   return path
 
 subout = angular.module("subout",
-  ["ui.utils", "ui.date", "suboutFilters", "suboutServices","ngCookies", "ngRoute"])
+  ["ui.utils", "ui.date", "suboutFilters", "suboutServices","ngCookies", "ngRoute", "mobile-angular-ui"])
 
 subout.run(['$rootScope','$appVersioning','$location', '$analytics', ($rootScope, $versioning, $location, $analytics) ->
   $rootScope.$on '$routeChangeStart', (scope, next, current) ->

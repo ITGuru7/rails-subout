@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="subout">
   <head>
     <title>Subout</title>
     <meta charset="utf-8" />
@@ -37,83 +37,61 @@
     </ul>
 </script>
   </head>
-
   <body data-subout-deploy="--DEPLOY--">
-  <div id="pageWrapper" class="container" ng-class="{ signin: !userSignedIn()}">
-      <div id="subout-navbar" class="navbar" ng-class="{mobile: isMobile}" ng-if="userSignedIn()">
-        <div class="row">
-          <ul id="top-links" class="pull-right">
-            <li><a  href="#modal" data-taget="#modal" data-toggle="modal" ng-click="displaySettings()">Settings</a></li>
-            <li><a ng-click="signOut()">Sign Out</a></li>
-          </ul>
-          
-        </div>
-        <div class="navbar-inner row">
-          <div class="col-md-3 col-sm-4">
-            <div id="subout-brand">
-              <a href="#" id="logo"><img src="/img/logo.png" class="img-responsive"></a>
-              <div id="subout-loading" class="loading-animation"></div>
-            </div>
+    <!-- Sidebars -->
+    <div class="sidebar sidebar-left">
+      <div class="scrollable">
+        <h1 class="scrollable-header">
+          <a href="#" id="logo"><img src="/img/logo.png" style="max-height: 30px;"></a>
+        </h1>  
+        <div class="scrollable-content">
+          <div class="list-group" ui-turn-off='uiSidebarLeft'>
+            <a class="list-group-item" href="#/available_opportunities">Buy/Bid Now</a>
+            <a class="list-group-item" href="#/dashboard">Subout Activity</a>
+            <a class="list-group-item" href="#/bids">My Bids</a>
+            <a class="list-group-item" href="#/opportunities">My Opportunities</a>
           </div>
-
-          <div class="col-md-9 col-sm-8">
-            <nav class="navbar navbar-subout" role="navigation">
-              <div class="navbar-header visible-xs">
-                <div class="pull-left">{{currentMenuName()}}</div>
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
-                   <span class="sr-only">Toggle navigation</span>
-                   <span class="icon-bar"></span>
-                   <span class="icon-bar"></span>
-                   <span class="icon-bar"></span>
-                </button>
-              </div>
-              <div class="collapse navbar-collapse navbar-collapse-1">
-                <div class="hidden-sm hidden-xs">
-                  <ul id="menu" class="nav navbar navbar-nav">
-                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
-                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Subout Activity</a></li>
-                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-                    <li ng-class="{active: currentPath()=='/opportunities'}">
-                    </li>
-                    <!--<li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>-->
-                  </ul>
-                </div>
-                <div class="visible-sm">
-                  <ul id="menu" class="nav navbar navbar-nav nav-mobile">
-                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
-                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Subout Activity</a></li>
-                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-                    <!--<li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>-->
-                  </ul>
-                </div>
-                <div class="visible-xs">
-                  <ul id="menu" class="nav navbar nav-mobile">
-                    <li ng-class="{active: currentPath()=='/available_opportunities'}"><a href="#/available_opportunities">Buy/Bid Now</a></li>
-                    <li ng-class="{active: currentPath()=='/dashboard'}"><a href="#/dashboard">Subout Activity</a></li>
-                    <li ng-class="{active: currentPath()=='/bids'}"><a href="#/bids">My Bids</a></li>
-                    <li ng-class="{active: currentPath()=='/opportunities'}"><a href="#/opportunities">My Opportunities</a></li>
-                    <!--<li ng-class="{active: currentPath()=='/favorites'}"><a href="#/favorites">Favorites</a></li>-->
-                  </ul>
-                </div>
-              </div>
-            </nav>
-
-          </div>
-        </div>
-      </div>
-      <div id="application-message" ng-if="userSignedIn()">
-        <p class="inner" ng-bind-html-unsafe="application_message.value"></p>
-      </div>
-      <div id="content" ng-view="content" class="ng-cloak"></div>
-      <div id="modal" class="modal fade" role="modal">
-        <div class="modal-dialog">
-          <div id="modal-stage" class="modal-content" ng-include="modal"></div>
         </div>
       </div>
     </div>
 
+    <div class="sidebar sidebar-right" ui-yield-to="sidebar-right">
+      Sidebar right
+    </div>
+    <!-- Navbars -->
+
+    <div class="app" ng-swipe-right='Ui.turnOn("uiSidebarLeft")' ng-swipe-left='Ui.turnOff("uiSidebarLeft")'>
+
+      <div class="navbar navbar-app navbar-absolute-top">
+        <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
+          Subout
+        </div>
+        <div class="btn-group pull-left">
+          <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle">
+            <i class="fa fa-bars"></i> Menu
+          </div>
+        </div>
+
+        <div class="btn-group pull-right" ui-yield-to="navbarAction">
+          <div ui-toggle="uiSidebarRight" class="btn ng-scope">
+            Filter <i class="fa fa-bars"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="navbar navbar-app navbar-absolute-bottom" ui-yield-to="footer">
+        Sidebar right
+      </div>
+
+      <!-- App Body -->
+      <div class="app-body" ng-class="{loading: loading}">
+        <div class="app-content">
+            <ng-view></ng-view>
+        </div>
+      </div>
+    </div>
+    
+    <div ui-yield-to="modals" id="modal"></div>
     <script type="text/javascript">
       var _gaq = _gaq || [];
       var googleAnalyticsKey = null;
