@@ -617,7 +617,6 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     $scope.opportunity = {};
     $scope.opportunity.vehicle_count = 1;
   }
-  console.log($scope.opportunity);
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
     jQuery("#modal").modal("hide");
@@ -699,7 +698,8 @@ NegotiationCounterOfferCtrl = function($scope, $rootScope, Bid, Opportunity, MyB
   return $scope.save = function() {
     return MyBid.counter_negotiation({
       bidId: $scope.bid.id,
-      bid: $scope.bid
+      bid: $scope.bid,
+      api_token: $rootScope.token.api_token
     }, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
       return jQuery("#modal").modal("hide");
@@ -719,7 +719,8 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
   return $scope.save = function() {
     return Auction.start_negotiation({
       bid: $scope.bid,
-      opportunityId: $rootScope.opportunity._id
+      opportunityId: $rootScope.opportunity._id,
+      api_token: $rootScope.token.api_token
     }, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
       return jQuery("#modal").modal("hide");
@@ -757,7 +758,6 @@ QuoteNewCtrl = function($scope, $rootScope, Bid, QuoteRequest, Quote) {
     return value <= $scope.quote_request.vehicle_count;
   };
   return $scope.save = function() {
-    console.log(123123);
     return Quote.save({
       quote: $scope.quote,
       api_token: $rootScope.token.api_token,
@@ -852,6 +852,17 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     value = parseFloat(value);
     return value <= $scope.bid.vehicle_count;
   };
+  $scope.showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form .alert-error").remove();
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    }
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -862,7 +873,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
       $rootScope.company.month_bids_count += 1;
       return jQuery("#modal").modal("hide");
     }, function(content) {
-      return $scope.errors = $rootScope.errorMessages(content.data.errors);
+      return $scope.errors = $scope.showErrors(content.data.errors);
     });
   };
 };
@@ -1341,7 +1352,7 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.filterRegions = $rootScope.filterRegionsOnHome;
   $scope.loadMoreEvents = function() {
     var queryOptions;
-    if ($scope.noMoreEvents || $rootScope.loading) {
+    if ($scope.noMoreEvents || $scope.loading) {
       return;
     }
     $scope.loading = true;
@@ -1469,17 +1480,19 @@ DashboardCtrl = function($scope, $rootScope, $location, Company, Event, Filter, 
   $scope.$watch("regionFilter", setRegionFilter);
   $scope.setOpportunityTypeFilter = function(opportunity_type) {
     if ($location.search().opportunity_type === opportunity_type) {
-      return $location.search('opportunity_type', null);
+      $location.search('opportunity_type', null);
     } else {
-      return $location.search('opportunity_type', opportunity_type);
+      $location.search('opportunity_type', opportunity_type);
     }
+    return $scope.refreshEvents();
   };
   $scope.setEventType = function(eventType) {
     if ($location.search().event_type === eventType) {
-      return $location.search('event_type', null);
+      $location.search('event_type', null);
     } else {
-      return $location.search('event_type', eventType);
+      $location.search('event_type', eventType);
     }
+    return $scope.refreshEvents();
   };
   $scope.eventTypeLabel = function(eventType) {
     if (eventType === "opportunity_created") {
@@ -1871,6 +1884,7 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, Au
 };
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken, Authorize) {
+  var showErrors;
   $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
@@ -1905,6 +1919,16 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   $scope.hideAlert = function() {
     return $scope.errors = null;
   };
+  showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("form .alert-error").remove();
+      return $("form").append($alertError);
+    }
+  };
   return $scope.signUp = function() {
     $scope.company.users_attributes = {
       "0": $scope.user
@@ -1923,8 +1947,7 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
         });
       });
     }, function(content) {
-      $scope.errors = $rootScope.errorMessages(content.data.errors);
-      return $("body").scrollTop(0);
+      return showErrors(content.data.errors);
     });
   };
 };
