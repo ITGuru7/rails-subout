@@ -147,7 +147,10 @@
                   <span>{{bid.state}}</span>
                   <span ng-show="bid.state=='negotiating'">
                     - Offer: {{bid.offer_amount | soCurrency}}
+                    ,
+                    <span ng-show="bid.amount == bid.counter_amount">Counter Offer: {{bid.counter_amount | soCurrency}}</span>
                   </span>
+
                 </span>
             </td>
             <td class="text-right">
