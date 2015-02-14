@@ -29,8 +29,9 @@ exports.config =
           'vendor/scripts/jquery/jquery.maskedinput.js'
           'vendor/scripts/bootstrap/bootstrap.min.js'
           'vendor/scripts/bootstrap/bootstrap-multiselect.js'
-          'vendor/scripts/select2/select2.js'
-          'vendor/scripts/select2/select2.js'
+          'vendor/scripts/underscore/underscore-min.js'
+          'vendor/scripts/underscore/underscore.string.js'
+          'vendor/scripts/lodash.min.js'
 
           'vendor/scripts/angular/angular.min.js'
           'vendor/scripts/angular-ui/angular-ui.js'

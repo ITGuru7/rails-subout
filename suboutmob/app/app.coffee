@@ -17,7 +17,7 @@ suboutPartialPath = (file) ->
   return path
 
 subout = angular.module("subout",
-  ["ui.utils", "ui.date", "suboutFilters", "suboutServices","ngCookies", "ngRoute", "mobile-angular-ui"])
+  ["ui.utils", "ui.date", "suboutFilters", "suboutServices","ngCookies", "ngRoute", "mobile-angular-ui", 'angularjs-dropdown-multiselect', 'ui.bootstrap'])
 
 subout.run(['$rootScope','$appVersioning','$location', '$analytics', ($rootScope, $versioning, $location, $analytics) ->
   $rootScope.$on '$routeChangeStart', (scope, next, current) ->
