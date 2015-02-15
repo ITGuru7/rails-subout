@@ -8,6 +8,10 @@
     = csrf_meta_tags
   %body
     .container
+      .header
+        %br
+        = image_tag('logo.png')
+
       - if flash[:error]
         %p.alert.alert-error
           = h flash[:error]
@@ -18,3 +22,8 @@
           %a.close(href="#") x
 
       = yield
+
+      #buy-sell-connect.row
+        .inner.col-md-12
+          %p Subout consumer form.
+          %p It's time to embed and request quote.

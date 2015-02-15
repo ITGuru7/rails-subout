@@ -69,7 +69,14 @@
           </tr>
           <tr>
             <td class="table-header">Name</td>
-            <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
+            <td>
+              <a ng-if="opportunity.for_quote_only==false" href="#/opportunities/{{opportunity.reference_number}}" title="{{opportunity.name}}">
+                {{opportunity.name}}
+              </a>
+              <a ng-if="opportunity.for_quote_only!=false" href="#/quote_requests/{{opportunity.reference_number}}" title="{{opportunity.name}}">
+                {{opportunity.name}}
+              </a>
+            </td>
           </tr>
           <tr>
             <td class="table-header">Description</td>

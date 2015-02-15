@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   private
   def layout_by_resource
     if devise_controller? && resource_name == :retailer
-      "retailer"
+      "devise"
     else
       "application"
     end
