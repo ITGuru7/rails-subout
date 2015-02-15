@@ -24,11 +24,10 @@ namespace :subout do
         `rm -fr #{dir_path}`
       end
 
-      current = dir
       destination = dir + "/files/#{deploy}"
       `mkdir -p #{destination}`
 
-      targets = ['/css','/images','/img','/js','/partials','/fonts']
+      targets = ['/css','/images','/img','/js','/partials','/fonts', '/mo']
       targets.each do |target|
         start_path = dir + target
         final_path = destination + target
@@ -39,20 +38,20 @@ namespace :subout do
       index_file = dir + '/index_development.html'
       index_replacement_file = dir + '/index_production.html'
 
-      embedded_file = dir + '/embedded_development.html'
-      embedded_replacement_file = dir + '/embedded_production.html'
+      index_mo_file = dir + '/mo/index_development.html'
+      index_mo_replacement_file = dir + '/mo/index_production.html'
 
       token = '--DEPLOY--'
       replacement_files = {
         index_file => index_replacement_file,
-        embedded_file => embedded_replacement_file
+        index_mo_file => index_mo_replacement_file
+
       }
       replacement_files.each do |origin, dest|
         text = File.read(origin)
         text = text.gsub(/--DEPLOY--/, deploy)
         File.open(dest, 'w') { |file| file.write(text) }
       end
-
 
       `echo "#{deploy}" > ./deploy.txt`
     end

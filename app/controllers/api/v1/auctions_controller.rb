@@ -109,7 +109,7 @@ class Api::V1::AuctionsController < Api::V1::BaseController
   private
 
   def opportunity_params
-    params.require(:opportunity).permit(:name, :type, :forward_auction, :tracking_id, :vehicle_type, :vehicle_count, :description, :start_location, :end_location, :trip_type, :start_date, :start_time, :end_date, :end_time, :bidding_duration_hrs, :image_id, :reserve_amount)
+    params.require(:opportunity).permit(:name, :type, :forward_auction, :tracking_id, :vehicle_type, :vehicle_count, :special_region, :description, :start_location, :end_location, :trip_type, :start_date, :start_time, :end_date, :end_time, :bidding_duration_hrs, :image_id, :reserve_amount)
   end
 
   def cloned_opportunity_params

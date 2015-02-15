@@ -914,6 +914,8 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
   fiveMinutes = 5 * 60 * 1000
   opportunity_id = $routeParams.opportunity_reference_number
 
+  $scope.comment = {}
+  
   updateFiveMinutesAgo = ->
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes
     $timeout updateFiveMinutesAgo, 5000
@@ -1038,9 +1040,9 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
   $scope.addComment = ->
     $scope.hideAlert()
     Comment.save
-      comment: $scope.comment
       api_token: $rootScope.token.api_token
       opportunityId: $scope.opportunity._id
+      comment: $scope.comment
     , (content) ->
       $scope.hideAlert()
       $scope.opportunity.comments.push(content)

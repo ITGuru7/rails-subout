@@ -24,7 +24,7 @@
     <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   </div>
   
-  <div class="hidden-xs hidden-sm">
+  <div>
     <table class="table">
       <tr>
         <th>Reference #</th>
@@ -76,49 +76,5 @@
     </table>
   </div>
 
-  <div class="visible-xs visible-sm">
-    <table class="table table-border" ng-repeat="opportunity in paginated_results">
-      <tr>
-        <td class="table-header reference-number">Reference #</td>
-        <td>{{opportunity.reference_number}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Type</td>
-        <td>{{opportunity.type}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Name</td>
-        <td><a href="#/opportunities/{{opportunity.reference_number}}">{{opportunity.name}}</a></td>
-      </tr>
-      <tr>
-        <td class="table-header">Description</td>
-        <td>{{opportunity.description}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Ends</td>
-        <td>
-          <span class='created-at timeago' relative-time title="{{opportunity.bidding_ends_at}}">{{opportunity.bidding_ends_at|date}}</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="table-header">Winning Bidder</td>
-        <td>{{opportunity.winner.name}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Amount</td>
-        <td>
-          <span ng-show="opportunity.winner.name">{{ opportunity.winner.amount | soCurrency }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="table-header">Bid range</td>
-        <td class="current-bid-amount">
-          <span ng-show="opportunity.reserve_amount" class="alert-danger">{{ opportunity.reserve_amount | soCurrency }}</span>
-          <span ng-show="opportunity.reserve_amount && opportunity.lowest_bid_amount"> / </span>
-          <span ng-show="opportunity.lowest_bid_amount"><span class="alert-info">{{ opportunity.lowest_bid_amount | soCurrency }} ~ {{ opportunity.highest_bid_amount | soCurrency }}</span></span>
-        </td>
-      </tr>
-    </table>
-  </div>
   <div class="clearfix"><div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div></div>
 </div>

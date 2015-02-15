@@ -17,7 +17,7 @@
     <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   </div>
 
-  <div class="hidden-xs hidden-sm">
+  <div>
     <table class="table">
       <tr>
         <th>Opportunity</th>
@@ -39,33 +39,6 @@
     </table>
   </div>
 
-  <div class="visible-xs visible-sm">
-    <table ng-repeat="bid in paginated_results" class="table table-border">
-      <tr>
-        <td class="table-header">Opportunity</td>
-        <td>
-          <a href="#/opportunities/{{bid.opportunity.reference_number}}" ng-if="bid.opportunity.for_quote_only==false">{{bid.opportunity.name}}</a>
-          <a href="#/quote_requests/{{bid.opportunity.reference_number}}" ng-if="bid.opportunity.for_quote_only==true">{{bid.opportunity.name}}</a>
-        </td>
-      </tr>
-      <tr>
-        <td class="table-header">Amount</td>
-        <td>${{bid.amount}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Comment</td>
-        <td>{{bid.comment}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Status</td>
-        <td>{{bid.status}}</td>
-      </tr>
-      <tr>
-        <td class="table-header">Date</td>
-        <td>{{bid.created_at | date}}</td>
-      </tr>
-    </table>
-  </div>
   <div class="clearfix">
     <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div>
   </div>

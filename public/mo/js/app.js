@@ -1311,6 +1311,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   var fiveMinutes, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
   opportunity_id = $routeParams.opportunity_reference_number;
+  $scope.comment = {};
   updateFiveMinutesAgo = function() {
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
     return $timeout(updateFiveMinutesAgo, 5000);
@@ -1433,9 +1434,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   $scope.addComment = function() {
     $scope.hideAlert();
     return Comment.save({
-      comment: $scope.comment,
       api_token: $rootScope.token.api_token,
-      opportunityId: $scope.opportunity._id
+      opportunityId: $scope.opportunity._id,
+      comment: $scope.comment
     }, function(content) {
       $scope.hideAlert();
       $scope.opportunity.comments.push(content);
@@ -2534,9 +2535,11 @@ suboutSvcs.factory("Quote", function($resource) {
 });
 
 suboutSvcs.factory("Comment", function($resource) {
-  return $resource("" + api_path + "/opportunities/:opportunityId/comments", {
+  var Comment;
+  Comment = $resource("" + api_path + "/opportunities/:opportunityId/comments", {
     opportunityId: "@opportunityId"
   }, {});
+  return Comment;
 });
 
 suboutSvcs.factory("Event", function($resource, RequestFactory) {
