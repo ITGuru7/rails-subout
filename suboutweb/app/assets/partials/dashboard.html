@@ -23,7 +23,6 @@
           <ul>
             <li class="filter" ng-class="{active: $location.search().event_type == 'opportunity_created'}"><a ng-click="setEventType('opportunity_created')">New Opportunities</a></li>
             <li class="filter" ng-class="{active: $location.search().event_type =='bid_created'}"><a ng-click="setEventType('bid_created')">Recent Bids</a></li>
-            <!-- <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_bidding_won'}"><a ng-click="setEventType('opportunity_bidding_won')">Recently Won</a></li> -->
             <li class="filter" ng-class="{active: $location.search().event_type =='opportunity_canceled'}"><a ng-click="setEventType('opportunity_canceled')">Cancellations</a></li>
           </ul>
         </section>
@@ -46,14 +45,6 @@
         </section>
       </section>
 
-      <!--<section id="site-info">
-        <section class="title"><h5>Site Infomation</h5></section>
-        <section  class="content">
-          <a href="http://subout.com/terms-conditions" target="_blank">How to Cancel your account</a>
-          <br/>
-          Email: support@subout.com
-        </section>
-      </section>-->
     </div>
     <div class="col-md-9 col-sm-9">
 
@@ -180,7 +171,7 @@
                       </div>
 
                       <div ng-show="event.eventable._id">
-                        <span ng-show="opportunity.buyer && opportunity.buyer_id != company._id && (event.eventable.status == 'In progress' || event.eventable.status == 'In negotiation')">  
+                        <span ng-show="company.canBid(event.eventable)">  
                           <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(event.eventable)">Bid</a><br/>
                           <span ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
                             <a class="btn btn-success btn-small win-it-now" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
@@ -254,109 +245,6 @@
               </div>
             </div>
           </div>
-          <!-- mobile view event stream -->
-          <div class="visible-xs visible-sm">
-            <div ng-repeat="event in events"
-              ng-init="opportunity=event.eventable; actor=event.actor; action=event.action">
-              <div ng-if="isPublicEvent(event)">
-                  <table class="table table-border event" ng-class="{expanded: event.selected, owner: event.actor._id == company._id}">
-                    <tr>
-                      <td>
-                        <i class="glyphicon {{opportunity.icon}}"></i>
-                        <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
-                      </td>
-                      <td>
-                        <div class="pull-right expand-collapse">
-                          <a class="reference-number" ng-click="refNumSearch(event.eventable.reference_number)">#{{event.eventable.reference_number}}</a>
-                          <i ng-click="toggleEvent(event)" title="{{{true: 'Collapse'}[event.selected] || 'Expand'}}" class="glyphicon" ng-class="{true: 'glyphicon-chevron-down'}[event.selected] || 'glyphicon-chevron-right'"></i>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan='2'>
-                        <span class="event-region table-header" ng-cloak ng-show="!opportunity.is_for_special_region">{{ALL_REGIONS[opportunity.start_region]}}-&gt;{{ALL_REGIONS[opportunity.end_region]}}</span>
-                        <span class="event-region table-header" ng-cloak ng-show="opportunity.is_for_special_region">{{opportunity.special_region}}</span>
-                        <span class="event-action" ng-cloak>
-                          {{actionDescription(action)}}
-                        </span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <span class="opportunity-name">
-                          <a ng-click="toggleEvent(event)" title="{{opportunity.name}}" ng-cloak>
-                            {{opportunity.name}}
-                          </a>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr ng-show="event.selected">
-                      <td class="table-header">
-                        Description
-                      </td>
-                      <td>
-                        <div class="content">{{event.eventable.description}}</div>
-                        <div class="help-block"><div class="text-danger" ng-bind-html-unsafe="event.eventable.buyer_message"></div></div>
-                      </td>
-                    </tr>
-                    <tr ng-show="event.eventable.winning_bid_id && event.selected">
-                      <td class="table-header">Winner:</td>
-                      <td>{{event.eventable.winner.name}}</td>
-                    </tr>
-                    <tr ng-show="event.eventable.winning_bid_id && event.selected">
-                      <td class="table-header">Winning Amount:</td>
-                      <td class="table-header"><span>{{ event.eventable.winner.amount | soCurrency }}</span></td>
-                    </tr>
-                    <tr ng-show="!event.eventable.is_for_special_region && event.selected">
-                      <td class="table-header">Departs:</td>
-                      <td>{{event.eventable.start_date|date}} {{event.eventable.start_time}}</td>
-                    </tr>
-                    <tr ng-show="!event.eventable.is_for_special_region && event.selected">
-                      <td class="table-header">Arrives:</td>
-                      <td>{{event.eventable.end_date|date}} {{event.eventable.end_time}}</td>
-                    </tr>
-                    <tr ng-show="event.eventable.is_for_special_region && event.selected">
-                      <td class="table-header">Location:</td>
-                      <td>{{event.eventable.location}}</td>
-                    </tr>
-                    <tr ng-show="event.selected">
-                      <td class="table-header">Created on:</td>
-                      <td>{{event.eventable.created_at|date}}</td>
-                    </tr>
-                    <tr ng-show="!event.eventable.winning_bid_id && event.selected">
-                      <td class="table-header">Bidding Ends:</td>
-                      <td class="table-header"><span ng-class='{relative_time:event.eventable.bidding_ends_at}' title="{{event.eventable.bidding_ends_at}}">{{event.eventable.bidding_ends_at|date}}</span></td>
-                    </tr>
-                    <tr ng-show="!event.eventable.winning_bid_id && event.selected && event.eventable.quick_winnable">
-                      <td>Buy now:</td>
-                      <td>{{event.eventable.win_it_now_price | soCurrency}}</td>
-                    </tr>
-                    <tr ng-show="event.selected && event.eventable._id">
-                      <td ng-show="opportunity.buyer_id != company._id && opportunity.status && (opportunity.status == 'In progress' || opportunity.status == 'In negotiation')" colspan='2'>
-                        <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
-                        <div ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-                          <a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr ng-show="event.selected && event.eventable._id">
-                      <td colspan='2'><a href="#/opportunities/{{event.eventable.reference_number}}">See more...</a></td>
-                    </tr>
-                    <tr ng-show="event.eventable.image_url && event.selected">
-                      <td colspan="2">
-                        <a ng-show="!isOldBrowser" rel="lightbox" href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}">
-                          <img ng-src="{{event.eventable.image_url}}" />
-                        </a>
-                        <a ng-show="isOldBrowser"  href="{{event.eventable.large_image_url}}" title="{{event.eventable.name}}" target="_blank">
-                          <img ng-src="{{event.eventable.image_url}}" />
-                        </a>
-                      </td>
-                    </tr>
-                  </table>
-              </div>
-            </div>
-          </div>
-          <!-- end here -->
         </section>
         <div class="load-more" ng-hide="noMoreEvents">
           <span ng-show="loading" class="content-loading-animation"></span>

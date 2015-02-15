@@ -1,12 +1,18 @@
+<div ui-content-for="title">
+  <span>My Bids</span>
+</div>
+
 <div ui-content-for="footer">
   <div class="btn-group justified">
     <a href="#modal" class="btn btn-navbar" data-toggle="modal" ng-click="setOpportunity({}); displayNewOpportunityForm()">+ Post new opportunity</a>
   </div>
 </div>
+
 <div class="scrollable">
   <div class="scrollable-content">
-    <div id="bids">
-      <div>
+    <div id="bids" class="section">
+      <br/>
+      <div class="alert alert-info">
         <div class="welcome display-message top-banner">
           <span class="display-message-extra">Welcome</span>
           <span class="company display-message-subject">{{company.name}}!</span>

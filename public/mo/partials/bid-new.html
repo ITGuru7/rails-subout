@@ -1,12 +1,11 @@
 <div id="bid-new" ng-controller="BidNewCtrl">
   <div class="modal-header">
-    <button data-dismiss="modal" class="close" type="button">
-      x
-    </button>
-    <h3>Bid</h3>
+    <button class="close" 
+            ui-turn-off="modal1">&times;</button>
+    <h4 class="modal-title">Bid</h4>
   </div>
   <div class="modal-body">
-    <form name="newBid" class="form-horizontal">
+    <form name="newBid">
       <div class="alert alert-info" ng-show="company.isFreeUser()">
         Your subscription plan is 'free' plan. You can bid only 5 times a month. <br />
         This month's bid count: {{ company.month_bids_count }} <br />
@@ -16,15 +15,12 @@
       </div>
 
       <div class="form-group oportunity_name">
-        <label class="col-md-4 control-label">Opportunity</label>
-        <div class="col-md-8 opportunity-name">
-          <h4>{{opportunity.name}}</h4>
-        </div>
+        <h4 class="opportunity-name">{{opportunity.name}}</h4>
       </div>
 
       <div class="form-group bid_amount" ng-class="{'has-error':newBid.bid_amount.$invalid || !validateReserveAmount(bid.amount)}">
-        <label for="bid_amount" class="col-md-4 control-label">Bid Amount ($) *</label>
-        <div class="col-md-8">
+        <label for="bid_amount">Bid Amount ($) *</label>
+        <div>
           <input type="text"
                  id="bid_amount"
                  name="bid_amount"
@@ -36,20 +32,22 @@
                  class="form-control">
 
           <span ng-show="opportunity.reserve_amount">Starting price: {{opportunity.reserve_amount | soCurrency}}</span>
-          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
-          <p ng-show="!validateReserveAmount(bid.amount)" class="help-block">
-            <span ng-hide="opportunity.forward_auction">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
-            <span ng-show="opportunity.forward_auction">$ value you posted is less than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
-          </p>
-          <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
         </div>
+
+        <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+        <p ng-show="!validateReserveAmount(bid.amount)" class="help-block">
+          <span ng-hide="opportunity.forward_auction">$ value you posted is larger than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
+          <span ng-show="opportunity.forward_auction">$ value you posted is less than the starting bid. Your bid will be posted however the chances of you winning the bid may be lessened.</span>
+        </p>
+        <p ng-show="newBid.bid_amount.$error.win_it_now_price" class="help-block">You can win now!</p>
+
       </div>
 
       <div class="form-group" ng-class="{'has-error':newBid.bid_auto_bidding_limit.$invalid}">
-        <label for="bid_auto_bidding_limit" class="col-md-4 control-label">
+        <label for="bid_auto_bidding_limit">
           <span ng-show="opportunity.forward_auction">Maximum</span><span ng-hide="opportunity.forward_auction">Minimum</span> Bid Amount ($)
         </label>
-        <div class="col-md-8">
+        <div>
           <input type="text"
                  id="bid_auto_bidding_limit"
                  name="bid_auto_bidding_limit"
@@ -58,7 +56,8 @@
                  size="10"
                  maxlength="10"
                  class="form-control">
-
+        </div>
+        <div>
           <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
           <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="help-block">
             <span ng-show="opportunity.forward_auction">Maximum amount cannot be lower than bid amount.</span>
@@ -69,10 +68,10 @@
       </div>
 
       <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count.$invalid}" ng-if="opportunity.vehicle_count > 1">
-        <label for="bid_vehicle_count" class="col-md-4 control-label">
+        <label for="bid_vehicle_count">
           Vehicle count *
         </label>
-        <div class="col-md-8">
+        <div>
           <input type="text"
                  id="bid_vehicle_count"
                  name="bid_vehicle_count"
@@ -84,16 +83,18 @@
                  required
                  class="form-control">
           <span ng-show="opportunity.reserve_amount">(Vehicles needed: {{opportunity.vehicle_count}})</span>
+        </div>
+        <div>
           <p ng-show="newBid.bid_vehicle_count.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
           <p ng-show="newBid.bid_vehicle_count.$error.vehicle_count" class="help-block">Vehicle count cannot be greater than poster needs.</p>
         </div>
       </div>
 
       <div class="form-group" ng-class="{'has-error':newBid.bid_vehicle_count_limit.$invalid}" ng-if="opportunity.vehicle_count > 1">
-        <label for="bid_vehicle_count_limit" class="col-md-4 control-label">
+        <label for="bid_vehicle_count_limit">
           Minimum vehicle count
         </label>
-        <div class="col-md-8">
+        <div>
           <input type="text"
                  id="bid_vehicle_count_limit"
                  name="bid_vehicle_count_limit"
@@ -102,30 +103,26 @@
                  size="10"
                  maxlength="10"
                  class="form-control">
-
+        </div>
+        <div>
           <p ng-show="newBid.bid_vehicle_count_limit.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
           <p ng-show="newBid.bid_vehicle_count_limit.$error.vehicle_count_limit" class="help-block">Minimum bus count cannot be greater than vehicle count you are bidding.</p>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="bid_comment" class="col-md-4 control-label">Brag about your company here</label>
-        <div class="col-md-8">
+        <label for="bid_comment">Brag about your company here</label>
+        <div>
           <textarea id="bid_comment" name="bid_comment" ng-model="bid.comment" class="form-control"></textarea>
         </div>
       </div>
 
       <hr/>
 
-      <div class="row">
-        <label class="col-sm-3">Bus year *</label>
-        <label class="col-sm-3">Bus type *</label>
-        <label class="col-sm-3">Passenger count *</label>
-        <label class="col-sm-3">Is graduity included?</label>
-      </div>
-      <div ng-repeat="vehicle in bid.vehicles">
+      <div ng-repeat="vehicle in bid.vehicles" class="well">
       <ng-form name="vform" class="row" style="margin: 0;">
-        <div class="col-sm-3">
+        <div class="form-group">
+          <label>Bus year*</label>
           <input type="text"
                  ng-model="vehicle.year"
                  ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
@@ -134,13 +131,14 @@
                  required
                  class="form-control">
         </div>
-        <div class="col-sm-3">
+        <div class="form-group">
+          <label>Bus type*</label>
           <p>
             <select id="bid_vehicle_type" class="form-control" name="bid_vehicle_type" ng-model="vehicle.type" ng-options="t for t in VEHICLE_TYPES">
               <option value="">Other</option>
             </select>
           </p>
-          <p ng-if="!vehicle.type">
+          <div ng-if="!vehicle.type">
             <input type="text"
                    id="bid_vehicle_type_other"
                    name="bid_vehicle_type_other"
@@ -148,9 +146,10 @@
                    size="10"
                    maxlength="10"
                    class="form-control">
-          </p>
+          </div>
         </div>
-        <div class="col-sm-3">
+        <div class="form-group">
+          <label>Passenger count *</label>
           <input type="text"
                  ng-model="vehicle.passenger_count"
                  ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
@@ -159,9 +158,10 @@
                  required
                  class="form-control">
         </div>
-        <div class="col-sm-3">
+        <div class="form-group">
           <label for="bid_vehicle_gratuity_included" class="checkbox">
               <input id="bid_vehicle_gratuity_included" type="checkbox" ng-model="vehicle.gratuity_included" value="1">
+              Is graduity included?
           </label>
         </div>
       </ng-form>
@@ -171,14 +171,10 @@
       <div id="poster-message" class="help-block"><div class="inner text-danger" ng-bind-html-unsafe="opportunity.buyer_message"></div></div>
 
       <div class="form-group">
-        <div class="col-md-offset-4 col-md-8">
-          <div>
-            <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
-              Bid Now
-            </button>
-            <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
-          </div>
-        </div>
+          <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
+            Bid Now
+          </button>
+          <a class="btn btn-success win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
       </div>
     </form>
   </div>

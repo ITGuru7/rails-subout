@@ -50,6 +50,7 @@
             <a class="list-group-item" href="#/dashboard">Subout Activity</a>
             <a class="list-group-item" href="#/bids">My Bids</a>
             <a class="list-group-item" href="#/opportunities">My Opportunities</a>
+            <a class="list-group-item" ng-click="signOut()">Sign Out</a>
           </div>
         </div>
       </div>
@@ -72,15 +73,22 @@
           </div>
         </div>
 
+        <div class="btn-group pull-right">
+          <a href="" ui-turn-on="modal1" ng-click="displaySettings('company-profile')" class="btn"><i class="glyphicon glyphicon-cog"></i> Setting</a>
+        </div>
+
         <div class="btn-group pull-right" ui-yield-to="navbarAction">
+          
+        </div>
+        <!-- <div class="btn-group pull-right" ui-yield-to="navbarAction">
           <div ui-toggle="uiSidebarRight" class="btn ng-scope">
             Filter <i class="fa fa-bars"></i>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="navbar navbar-app navbar-absolute-bottom" ui-yield-to="footer" ng-if="userSignedIn()">
-        footer
+        <!-- footer -->      
       </div>
 
       <!-- App Body -->
@@ -91,7 +99,22 @@
       </div>
     </div>
     
-    <div ui-yield-to="modals" id="modal"></div>
+    <div ui-yield-to="modals">
+    </div>
+
+    <div class="modal" id="modal1" ui-if="modal1" ui-state='modal1'>
+      <div class="scrollable">
+        <div class="scrollable-content">
+          <div class="modal-backdrop in"></div>
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div ng-include="modal"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript">
       var _gaq = _gaq || [];
       var googleAnalyticsKey = null;

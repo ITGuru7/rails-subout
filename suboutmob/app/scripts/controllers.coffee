@@ -1,5 +1,5 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
-  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
+  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, SharedState) ->
 
   $rootScope._ = _
   $rootScope.stars = [1,2,3,4,5]
@@ -23,18 +23,6 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.$watch "filterRegionsOnHome", (v1, v2)->
     if v1 != null
       $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome)
-
-  $('#modal').on('hidden', () ->
-    $scope = angular.element(document).scope()
-    $scope.modal = ''
-    $rootScope.opportunity = null
-    modalElement = $('#modal-stage')
-    modalScope = angular.element(modalElement.find('.ng-scope')).scope()
-    modalScope.$destroy() if modalScope
-    modalElement.html('')
-    $('.loading-animation').removeClass('loading')
-    unless($scope.$$phase) then $scope.$apply()
-  )
 
   if $appBrowser.isReallyOld()
     window.location = "/upgrade_browser.html"
@@ -71,7 +59,10 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.modal = url
 
   $rootScope.closeModal = () ->
-    $('#modal').modal("hide")
+    SharedState.turnOff('modal1')
+    $rootScope.modal = ''
+    $rootScope.opportunity = null
+
 
   $rootScope.signOut = ->
     $.removeCookie(AuthToken)
@@ -324,6 +315,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
 
   $rootScope.displayNewOpportunityForm = ->
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
+    console.log suboutPartialPath('opportunity-form.html')
     $rootScope.setupFileUploader()
 
   $rootScope.displayNewFavoriteForm = () ->
@@ -403,6 +395,10 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
       $alertError.append "<p>#{errorMessage}</p>"
     $alertError
 
+  $rootScope.showErrors = (errors) ->
+    alert $rootScope.errorMessages(errors).join('\n')
+
+
   $rootScope.alertInfo = (messages) ->
     $alertInfo = $("<div class='alert alert-info'></div>")
     close = '<a class="close" data-dismiss="alert" href="#">&times;</a>'
@@ -423,7 +419,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
       api_token: $rootScope.token.api_token
       opportunityId: opportunity._id
     , ->
-      jQuery("#modal").modal "hide"
+      $rootScope.closeModal()
 
     , (content) ->
       alert("An error occured on your bid!\n" + $rootScope.errorMessages(content.data.errors).join("\n"))
@@ -448,7 +444,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
   ]
 
   successUpdate = ->
-    jQuery("#modal").modal "hide"
+    $rootScope.closeModal()
     $rootScope.inPosting = false
 
   $scope.save = ->
@@ -463,15 +459,7 @@ OpportunityFormCtrl = ($scope, $rootScope, $location, Auction) ->
     opportunity.end_time = $("#opportunity_end_time").val()
     opportunity.win_it_now_price = null if opportunity.quick_winnable == false
 
-    showErrors = (errors) ->
-      if $rootScope.isMobile
-        alert $rootScope.errorMessages(errors).join('\n')
-      else
-        $alertError = $rootScope.alertError(errors)
-        $("#modal form .alert-error").remove()
-        $("#modal form").append($alertError)
-        $("#modal .modal-body").scrollTop($("#modal form").height())
-
+    
     if opportunity._id
       Auction.update
         opportunityId: opportunity._id
@@ -517,7 +505,7 @@ NegotiationCounterOfferCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auct
       bid: $scope.bid
     , (opportunity) ->
       _.extend($rootScope.opportunity, opportunity)
-      jQuery("#modal").modal "hide"
+      $rootScope.closeModal()
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
 
@@ -534,7 +522,7 @@ NegotiationNewCtrl = ($scope, $rootScope, Bid, Opportunity, MyBid, Auction) ->
       opportunityId: $rootScope.opportunity._id
     , (opportunity) ->
       _.extend($rootScope.opportunity, opportunity)
-      jQuery("#modal").modal "hide"
+      $rootScope.closeModal()
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
 
@@ -568,7 +556,7 @@ QuoteNewCtrl = ($scope, $rootScope, Bid, QuoteRequest, Quote) ->
     , (data) ->
       $rootScope.company.today_bids_count += 1
       $rootScope.company.month_bids_count += 1
-      jQuery("#modal").modal "hide"
+      $rootScope.closeModal()
 
     , (content) ->
       $scope.errors = $rootScope.errorMessages(content.data.errors)
@@ -634,15 +622,6 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
     value = parseFloat(value)
     value <= $scope.bid.vehicle_count
 
-  $scope.showErrors = (errors) ->
-    if $rootScope.isMobile
-      alert $rootScope.errorMessages(errors).join('\n')
-    else
-      $alertError = $rootScope.alertError(errors)
-      $("#modal form .alert-error").remove()
-      $("#modal form").append($alertError)
-      $("#modal .modal-body").scrollTop($("#modal form").height())
-
   $scope.save = ->
     Bid.save
       bid: $scope.bid
@@ -651,7 +630,7 @@ BidNewCtrl = ($scope, $rootScope, Bid, Opportunity) ->
     , (data) ->
       $rootScope.company.today_bids_count += 1
       $rootScope.company.month_bids_count += 1
-      jQuery("#modal").modal "hide"
+      $rootScope.closeModal()
 
     , (content) ->
       $scope.errors = $scope.showErrors(content.data.errors)
@@ -978,7 +957,7 @@ OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, 
       , {}
       , (opportunity) ->
         _.extend($rootScope.opportunity, opportunity)
-        jQuery("#modal").modal "hide"
+        $rootScope.closeModal()
       , (content) ->
         $scope.errors = $rootScope.errorMessages(content.data.errors)
     )
@@ -1351,25 +1330,24 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
         $scope.subout_bus_price = data.product.components[0].component.unit_price
         updateAdditionalPrice()
 
-    GatewaySubscription.get
-      subscriptionId: $rootScope.company.subscription_id
-      api_token: $rootScope.token.api_token
-      (subscription) ->
-        $rootScope.subscription = subscription
-        $scope.subscription = subscription
-      (error) ->
-        $rootScope.subscription = null
-
+    if $rootScope.company.subscription_id
+      GatewaySubscription.get
+        subscriptionId: $rootScope.company.subscription_id
+        api_token: $rootScope.token.api_token
+        (subscription) ->
+          $rootScope.subscription = subscription
+          $scope.subscription = subscription
+        (error) ->
+          $rootScope.subscription = null
+    else
+      $rootScope.subscription = null
+  
   loadProductInfo()
 
   $rootScope.setupFileUploader()
 
   successUpdate = ()->
     $rootScope.closeModal()
-    #if $rootScope.isMobile
-    #  $location.path('/dashboard')
-    #else
-    #  $rootScope.closeModal()
 
   $scope.saveUserProfile = ->
     $scope.userProfileError = ""
@@ -1495,10 +1473,14 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.paymentMethodOptions = paymentMethodOptions()
 
 SignInCtrl = ($scope, $rootScope, $location,
-  Token, Company, User, AuthToken, Authorize, Setting) ->
+  Token, Company, User, AuthToken, Authorize, Setting, $sce) ->
   $.removeCookie(AuthToken)
-  $scope.marketing_message = Setting.get
+  Setting.get
     key: "marketing_message"
+  , (message)->
+    message.value = $sce.trustAsHtml(message.value)
+    $scope.marketing_message = message
+
 
   $scope.signIn = ->
     Token.save {email: $scope.email, password: $scope.password}, (token) ->
@@ -1573,14 +1555,6 @@ SignUpCtrl = ($scope, $rootScope, $routeParams, $location,
 
   $scope.hideAlert = ->
     $scope.errors = null
-
-  showErrors = (errors) ->
-    if $rootScope.isMobile
-      alert $rootScope.errorMessages(errors).join('\n')
-    else
-      $alertError = $rootScope.alertError(errors)
-      $("form .alert-error").remove()
-      $("form").append($alertError)
 
   $scope.signUp = ->
     $scope.company.users_attributes = { "0": $scope.user }

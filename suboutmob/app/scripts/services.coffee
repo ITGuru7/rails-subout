@@ -45,6 +45,12 @@ suboutSvcs.factory "Opportunity", ($resource) ->
       return amount
     return opportunity.reserve_amount if opportunity.reserve_amount
     null
+
+    if this.state_by_state_subscriber
+      this.regions.join(', ')
+    else
+      "Nationwide"
+
   Opportunity
 
 suboutSvcs.factory "QuoteRequest", ($resource) ->
@@ -69,7 +75,7 @@ suboutSvcs.factory "Product", ($resource) ->
   $resource "#{api_path}/products/:productHandle", {}, {}
 
 suboutSvcs.factory "Bid", ($resource) ->
-  $resource "#{api_path}/opportunities/:opportunityId/bids",
+  Bid = $resource "#{api_path}/opportunities/:opportunityId/bids",
     {opportunityId: "@opportunityId"},
     {}
 
@@ -138,6 +144,16 @@ suboutSvcs.factory "Company", ($resource, $rootScope) ->
   Company::canBid = (opportunity) ->
     return false unless opportunity.buyer
     return true if opportunity.buyer_id != this._id && opportunity.status == 'In progress'
+  Company::isMyOpportunity = (opportunity)->
+    return false unless opportunity.buyer
+    return (opportunity.buyer_id == this._id)
+
+  Company::isMyBid = (bid)->
+    return false unless bid.bidder
+    return (bid.bidder_id == this._id)
+
+  Company::isRelated = (opportunity, bid)->
+    this.isMyOpportunity(opportunity) || this.isMyBid(bid)
 
   Company::canCancelOrEdit = (opportunity) ->
     unless opportunity.type is 'Emergency'

@@ -33,23 +33,29 @@
   </div>
 </div>
 
+<div ui-content-for="modals">
+
+</div>
+
 <div ui-content-for="footer">
   <div class="btn-group justified">
-    <a href="#modal" class="btn btn-navbar" data-toggle="modal" ng-click="setOpportunity({}); displayNewOpportunityForm()">+ Post new opportunity</a>
+    <a href="" ui-turn-on="modal1" class="btn btn-navbar" ng-click="setOpportunity({}); displayNewOpportunityForm()"><i class="glyphicon glyphicon-plus"></i> Post new opportunity</a>
+    <a href="" ui-toggle="uiSidebarRight" class="btn btn-navbar"><i class="glyphicon glyphicon-search"></i> Filter</a>
   </div>
 </div>
 
 <div class="scrollable">
   <div class="scrollable-content">
     <div id="available_opportunities" class="col-sm-12">
-      <div class="clearfix"> <div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div> </div>
-      <p class="welcome display-message top-banner pull-left">
+      <div class="clearfix"><div class="pull-right" ng-show="maxPage > 1" ng-include="'pagination'"></div></div>
+      <br/>
+      <p class="alert alert-info">
         <span class="display-message-extra">Welcome</span>
         <span class="company display-message-subject">{{company.name}}!</span>
         <span class="display-message sales-info" sales-info-messages="salesInfoMessages"></span>
       </p>
       <p class="alert alert-info" ng-show="company.regions.length == 0">
-          <a href="#modal" data-toggle="modal" ng-click="displaySettings('favorited-regions')" style="text-decoration:underline;">Click here to add your favorite regions</a>
+          <a href="" ui-turn-on="modal1" ng-click="displaySettings('favorited-regions')" style="text-decoration:underline;">Click here to add your favorite regions</a>
       </p>
       <div>
         <table ng-repeat="opportunity in paginated_results" class="table table-border">
@@ -92,7 +98,7 @@
           <tr>
             <td class="table-header">Actions</td>
             <td>
-              <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
+              <a class="btn btn-success btn-small" href="" ui-turn-on="modal1" ng-click="displayNewBidForm(opportunity)">Bid</a><br />
               <a class="btn btn-success btn-small win-it-now" ng-show="opportunity.quick_winnable" ng-click="winOpportunityNow(opportunity)">Win Now ({{opportunity.win_it_now_price | soCurrency}})</a>
             </td>
           </tr>

@@ -1,13 +1,15 @@
 <div id="opportunity-form">
   <div class="modal-header">
-    <button data-dismiss="modal" class="close" type="button">x</button>
-    <h3>Opportunity</h3>
+    <button class="close" 
+            ui-turn-off="modal1">&times;</button>
+    <h4 class="modal-title">Opportunity</h4>
   </div>
+
   <div class="modal-body">
-    <form name="newOpportunity" class="form-horizontal" ng-controller="OpportunityFormCtrl" novalidate>
+    <form name="newOpportunity" ng-controller="OpportunityFormCtrl" novalidate>
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_name.$invalid}">
-        <label for="opportunity_name" class="col-md-4 control-label">Opportunity Title *</label>
-        <div class="col-md-8">
+        <label for="opportunity_name">Opportunity Title *</label>
+        <div>
           <input type="text" id="opportunity_name" name="opportunity_name" ng-model="opportunity.name" size="30" 
             class="form-control" required>
 
@@ -23,23 +25,23 @@
       </div>
 
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_type.$invalid}">
-        <label for="opportunity_type" class="col-md-4 control-label">Opportunity Type *</label>
-        <div class="col-md-8">
+        <label for="opportunity_type">Opportunity Type *</label>
+        <div>
           <select id="opportunity_type" class="form-control" ng-change="setOpportunityForwardAuction()" name="opportunity_type" ng-model="opportunity.type" ng-options="t for t in types" required>
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="opportunity_tracking_id" class="col-md-4 control-label">Internal Memo or ID#</label>
-        <div class="col-md-8">
+        <label for="opportunity_tracking_id">Internal Memo or ID#</label>
+        <div>
           <input type="text" id="opportunity_tracking_id" ng-model="opportunity.tracking_id" size="30" class="form-control">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="opportunity_vehicle_type" class="col-md-4 control-label">Vehicle Type</label>
-        <div class="col-md-8">
+        <label for="opportunity_vehicle_type">Vehicle Type</label>
+        <div>
           <select id="opportunity_vehicle_type" class="form-control" name="opportunity_vehicle_type" ng-model="opportunity.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
             <option value=""></option>
           </select>
@@ -47,23 +49,23 @@
       </div>
 
       <div class="form-group">
-        <label for="opportunity_vehicle_count" class="col-md-4 control-label">Vehicle Count</label>
-        <div class="col-md-8">
+        <label for="opportunity_vehicle_count">Vehicle Count</label>
+        <div>
           <input type="text" id="opportunity_vehicle_count" ng-model="opportunity.vehicle_count" size="30" class="form-control">
           <p class="help-block">Total number of buses needed</p>
         </div>
       </div>
 
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_description.$invalid}">
-        <label for="opportunity_description" class="col-md-4 control-label">Description *</label>
-        <div class="col-md-8">
+        <label for="opportunity_description">Description *</label>
+        <div>
           <textarea id="opportunity_description" name="opportunity_description" rows="5" ng-model="opportunity.description" cols="40" class="form-control" required></textarea>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="opportunity_image_id" class="col-md-4 control-label">Opportunity image</label>
-        <div class="col-md-8">
+        <label for="opportunity_image_id">Opportunity image</label>
+        <div>
           <input ng-init="setupFileUploader()" class="cloudinary-fileupload" data-url="https://api.cloudinary.com/v1_1/subout/auto/upload" name="file" type="file"></input>
           <input type="hidden" id="opportunity_image_id" class="file-upload-public-id" value="{{opportunity.image_id}}" ng-model="opportunity.image_id">
           <div id="progress">
@@ -74,15 +76,15 @@
       </div>
 
       <div class="form-group" ng-show="opportunity.type == 'Emergency'">
-        <label for="opportunity_contact_phone" class="col-md-4 control-label">Contact Phone #</label>
-        <div class="col-md-8">
+        <label for="opportunity_contact_phone">Contact Phone #</label>
+        <div>
           <input id="opportunity_contact_phone" type="text" ng-model="opportunity.contact_phone" size="30" class="form-control">
         </div>
       </div>
 
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_special_region.$invalid}" ng-show="isForSpecialRegion()">
-        <label for="opportunity_special_region" class="col-md-4 control-label">Location</label>
-        <div class="col-md-8">
+        <label for="opportunity_special_region">Location</label>
+        <div>
           <select id="opportunity_special_region" 
                   class="form-control" 
                   name="opportunity_special_region" 
@@ -95,8 +97,8 @@
 
       <div ng-show="!isForSpecialRegion() && opportunity.type">
         <div class="form-group two-lines" ng-class="{'has-error':newOpportunity.opportunity_start_location.$invalid}">
-          <label for="opportunity_start_location" class="col-md-4 control-label">Pick up terminal or address *</label>
-          <div class="col-md-8">
+          <label for="opportunity_start_location">Pick up terminal or address *</label>
+          <div>
             <input id="opportunity_start_location" 
                    name="opportunity_start_location" 
                    type="text" 
@@ -109,25 +111,17 @@
         </div>
 
         <div class="form-group two-lines">
-          <div class="col-md-4">
-            <div class="visible-xs visible-sm">
-              <label for="opportunity_end_location" class="control-label">Drop off</label>
-              <p class="help-block">(if applicable)</p>
+            <label for="opportunity_end_location" class="control-label">Drop off</label>
+            <p class="help-block">(if applicable)</p>
+            <div>
+              <input id="opportunity_end_location" type="text" ng-model="opportunity.end_location" size="30" class="form-control">
+              <p class="help-block">ex: San Francisco, CA</p>
             </div>
-            <div class="hidden-xs hidden-sm">
-              <label for="opportunity_end_location" class="control-label col-md-12">Drop off</label>
-              <p class="help-block col-md-12 text-right">(if applicable)</p>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <input id="opportunity_end_location" type="text" ng-model="opportunity.end_location" size="30" class="form-control">
-            <p class="help-block">ex: San Francisco, CA</p>
-          </div>
         </div>
 
         <div class="form-group">
-          <label for="opportunity_trip_type" class="col-md-4 control-label">Trip Type</label>
-          <div class="col-md-8">
+          <label for="opportunity_trip_type">Trip Type</label>
+          <div>
             <select id="opportunity_trip_type" name="opportunity_trip_type" class="form-control" ng-model="opportunity.trip_type" ng-options="t for t in TRIP_TYPES">
               <option value=""></option>
             </select>
@@ -135,69 +129,61 @@
         </div>
 
         <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_start_date.$invalid}">
-          <label for="opportunity_start_date" class="col-md-4 control-label">Pick up date *</label>
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-md-6 col-sm-6">
-                <input id="opportunity_start_date" 
-                       name="opportunity_start_date" 
-                       type="text" 
-                       ng-model="opportunity.start_date" 
-                       class="form-control" 
-                       size="10" 
-                       ui-date="dateOptions" 
-                       ui-date-format 
-                       ng-required="!isForSpecialRegion()">
-                <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
-              </div>
-              <div class="col-md-6 col-sm-6">
-              <input id="opportunity_start_time" 
-                     name="opportunity_start_time" 
-                     type="text" 
-                     class="form-control" 
-                     ng-model="opportunity.start_time" 
-                     ui-mask="99:99" 
-                     ng-required="!isForSpecialRegion()">
-              <span class="time glyphicon glyphicon-time"></span>
-              </div>
-            </div>
+          <label for="opportunity_start_date">Pick up date *</label>
+          <div>
+            <input id="opportunity_start_date" 
+                   name="opportunity_start_date" 
+                   type="text" 
+                   ng-model="opportunity.start_date" 
+                   class="form-control" 
+                   size="10" 
+                   ui-date="dateOptions" 
+                   ui-date-format 
+                   ng-required="!isForSpecialRegion()">
+            <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+          <div>
+            <input id="opportunity_start_time" 
+                   name="opportunity_start_time" 
+                   type="text" 
+                   class="form-control" 
+                   ng-model="opportunity.start_time" 
+                   ui-mask="99:99" 
+                   ng-required="!isForSpecialRegion()">
+            <span class="time glyphicon glyphicon-time"></span>
           </div>
         </div>
 
         <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_end_date.$invalid}">
-          <label for="opportunity_end_date" class="col-md-4 control-label">Drop off date *</label>
-          <div class="col-md-8">
-            <div class="row">
-              <div class="col-md-6 col-sm-6">
-              <input id="opportunity_end_date" 
-                     name="opportunity_end_date" 
-                     type="text" 
-                     ng-model="opportunity.end_date" 
-                     class="form-control" 
-                     size="10" 
-                     ui-date="dateOptions" 
-                     ui-date-format 
-                     ng-required="!isForSpecialRegion()">
-              <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
-              </div>
-              <div class="col-md-6 col-sm-6">
-              <input id="opportunity_end_time" 
-                     name="opportunity_end_time" 
-                     type="text" 
-                     class="form-control" 
-                     ng-model="opportunity.end_time" 
-                     ui-mask="99:99" 
-                     ng-required="!isForSpecialRegion()">
-              <span class="time glyphicon glyphicon-time"></span>
-              </div>
-            </div>
+          <label for="opportunity_end_date">Drop off date *</label>
+          <div>
+            <input id="opportunity_end_date" 
+                   name="opportunity_end_date" 
+                   type="text" 
+                   ng-model="opportunity.end_date" 
+                   class="form-control" 
+                   size="10" 
+                   ui-date="dateOptions" 
+                   ui-date-format 
+                   ng-required="!isForSpecialRegion()">
+            <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+          <div>
+            <input id="opportunity_end_time" 
+                   name="opportunity_end_time" 
+                   type="text" 
+                   class="form-control" 
+                   ng-model="opportunity.end_time" 
+                   ui-mask="99:99" 
+                   ng-required="!isForSpecialRegion()">
+            <span class="time glyphicon glyphicon-time"></span>
           </div>
         </div>
       </div>
 
       <div class="form-group" ng-class="{'has-error':newOpportunity.opportunity_bidding_ends.$invalid}">
-        <label for="opportunity_bidding_ends" class="col-md-4 control-label">Bidding Duration *</label>
-        <div class="col-md-8">
+        <label for="opportunity_bidding_ends">Bidding Duration *</label>
+        <div>
           <input id="opportunity_bidding_ends" name="opportunity_bidding_ends" type="text" class="form-control" ng-model="opportunity.bidding_duration_hrs" ui-mask="9?9" required>
           <span class="time">hours</span>
         </div>
@@ -205,10 +191,8 @@
 
       <div class="form-group">
         <label for="opportunity_ada_required" class="checkbox">
-          <div class="col-md-offset-4 col-md-8">
-            <input id="opportunity_ada_required" type="checkbox" ng-model="opportunity.ada_required" value="1">
-            ADA vehicle required?
-          </div>
+          <input id="opportunity_ada_required" type="checkbox" ng-model="opportunity.ada_required" value="1">
+          ADA vehicle required?
         </label>
 
         <!--<label for="opportunity_for_favorites_only" class="checkbox">-->
@@ -219,23 +203,19 @@
         <!--</label>-->
 
         <label for="opportunity_forward_auction" class="checkbox">
-          <div class="col-md-offset-4 col-md-8">
-            <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1" ng-disabled="opportunity.type == 'Vehicle Needed' || opportunity.type == 'Vehicle for Hire'">
-            Sell?
-          </div>
+          <input id="opportunity_forward_auction" type="checkbox" ng-model="opportunity.forward_auction" value="1" ng-disabled="opportunity.type == 'Vehicle Needed' || opportunity.type == 'Vehicle for Hire'">
+          Sell?
         </label>
 
         <label for="opportunity_quick_winnable" class="checkbox">
-          <div class="col-md-offset-4 col-md-8">
-            <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
-            Enable "Win it now?"
-          </div>
+          <input id="opportunity_quick_winnable" type="checkbox" ng-model="opportunity.quick_winnable" value="1">
+          Enable "Win it now?"
         </label>
       </div>
 
       <div class="form-group" ng-if="opportunity.quick_winnable"  ng-class="{'has-error':newOpportunity.win_it_now_price.$invalid}">
-        <label for="opportunity_win_it_now_price" class="col-md-4 control-label">Win it now price</label>
-        <div class="col-md-8">
+        <label for="opportunity_win_it_now_price">Win it now price</label>
+        <div>
           <input id="opportunity_win_it_now_price" type="text" name="win_it_now_price" ng-model="opportunity.win_it_now_price" ui-validate="{ win_it_now_price: 'validateOptionalNumber($value)' }" size="31" class="form-control">
           <p ng-show="newOpportunity.win_it_now_price.$invalid" class="help-block error">Enter only numeric characters.</p>
           <p class="help-block">eg: 1000</p>
@@ -243,8 +223,8 @@
       </div>
 
       <div class="form-group" ng-class="{'has-error':newOpportunity.reserve_amount.$invalid}">
-        <label for="opportunity_reserve_amount" class="col-md-4 control-label">Starting price</label>
-        <div class="col-md-8">
+        <label for="opportunity_reserve_amount">Starting price</label>
+        <div>
           <input id="opportunity_reserve_amount" type="text" name="reserve_amount" ng-model="opportunity.reserve_amount" ui-validate="{ reserve_amount: 'validateOptionalNumber($value)' }" size="30" class="form-control">
           <p ng-show="newOpportunity.reserve_amount.$invalid" class="help-block error">Enter only numeric characters.</p>
           <p class="help-block">eg: 1000</p>
@@ -252,11 +232,10 @@
       </div>
 
       <div class="form-group">
-        <div class="col-md-offset-4 col-md-8">
+          <button ui-turn-off="modal1" class="btn btn-default">Close</button>
           <button ng-click="save()" class="btn btn-primary" ng-disabled="newOpportunity.$invalid || inPosting">
             Save Opportunity
           </button>
-        </div>
       </div>
     </form>
   </div>

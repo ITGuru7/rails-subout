@@ -27,11 +27,12 @@ exports.config =
           'vendor/scripts/jquery/jquery.cookie.js'
           'vendor/scripts/jquery/lightbox.js'
           'vendor/scripts/jquery/jquery.maskedinput.js'
+          'vendor/scripts/classify.min.js'
           'vendor/scripts/bootstrap/bootstrap.min.js'
           'vendor/scripts/bootstrap/bootstrap-multiselect.js'
           'vendor/scripts/underscore/underscore-min.js'
-          'vendor/scripts/underscore/underscore.string.js'
           'vendor/scripts/lodash.min.js'
+          'vendor/scripts/underscore/underscore.string.js'
 
           'vendor/scripts/angular/angular.min.js'
           'vendor/scripts/angular-ui/angular-ui.js'
