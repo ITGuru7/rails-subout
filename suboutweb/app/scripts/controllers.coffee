@@ -1,5 +1,5 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
-  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) ->
+  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, $sce) ->
 
   $rootScope._ = _
   $rootScope.stars = [1,2,3,4,5]
@@ -17,8 +17,11 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.filterRegionsOnHome = $.cookie(salt("filterRegionsOnHome"))
   $rootScope.filterRegionsOnHome = [] if $rootScope.filterRegionsOnHome == null
 
-  $rootScope.application_message = Setting.get
+  Setting.get
     key: "application_message"
+  , (message)->
+    message.value = $sce.trustAsHtml(message.value)
+    $rootScope.application_message = message
 
   $rootScope.$watch "filterRegionsOnHome", (v1, v2)->
     if v1 != null
@@ -1443,10 +1446,13 @@ SettingCtrl = ($scope, $rootScope, $location, Token, Company, User, Product, Gat
     $scope.paymentMethodOptions = paymentMethodOptions()
 
 SignInCtrl = ($scope, $rootScope, $location,
-  Token, Company, User, AuthToken, Authorize, Setting) ->
+  Token, Company, User, AuthToken, Authorize, Setting, $sce) ->
   $.removeCookie(AuthToken)
-  $scope.marketing_message = Setting.get
+  Setting.get
     key: "marketing_message"
+  , (message)->
+    message.value = $sce.trustAsHtml(message.value)
+    $scope.marketing_message = message
 
   $scope.signIn = ->
     Token.save {email: $scope.email, password: $scope.password}, (token) ->

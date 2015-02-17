@@ -111,7 +111,7 @@
         </div>
       </div>
       <div id="application-message" ng-if="userSignedIn()">
-        <p class="inner" ng-bind-html-unsafe="application_message.value"></p>
+        <p class="inner" ng-bind-html="application_message.value"></p>
       </div>
       <div id="content" ng-view="content" class="ng-cloak"></div>
       <div id="modal" class="modal fade" role="modal">

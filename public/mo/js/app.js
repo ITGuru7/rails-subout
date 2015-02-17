@@ -174,8 +174,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   if ($rootScope.filterRegionsOnHome === null) {
     $rootScope.filterRegionsOnHome = [];
   }
-  $rootScope.application_message = Setting.get({
+  Setting.get({
     key: "application_message"
+  }, function(message) {
+    message.value = $sce.trustAsHtml(message.value);
+    return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
     if (v1 !== null) {
