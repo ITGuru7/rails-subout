@@ -81,8 +81,8 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
     templateUrl: suboutPartialPath("opportunities.html")
     controller: OpportunityCtrl
     resolve: resolveAuth
-  ).when("/available_opportunities",
-    templateUrl: suboutPartialPath("available_opportunities.html")
+  ).when("/available-opportunities",
+    templateUrl: suboutPartialPath("available-opportunities.html")
     controller: AvailableOpportunityCtrl
     resolve: resolveAuth
   ).when("/opportunities/:opportunity_reference_number",
@@ -114,7 +114,7 @@ subout.config(["$routeProvider", "$httpProvider", ($routeProvider, $httpProvider
    ).when("/add-favorite",
     templateUrl: suboutPartialPath("add-new-favorite.html")
     resolve: resolveAuth
-  ).otherwise redirectTo: "/available_opportunities"
+  ).otherwise redirectTo: "/available-opportunities"
 
 ])
 

@@ -96,8 +96,8 @@ subout.config([
       templateUrl: suboutPartialPath("opportunities.html"),
       controller: OpportunityCtrl,
       resolve: resolveAuth
-    }).when("/available_opportunities", {
-      templateUrl: suboutPartialPath("available_opportunities.html"),
+    }).when("/available-opportunities", {
+      templateUrl: suboutPartialPath("available-opportunities.html"),
       controller: AvailableOpportunityCtrl,
       resolve: resolveAuth
     }).when("/opportunities/:opportunity_reference_number", {
@@ -130,7 +130,7 @@ subout.config([
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
     }).otherwise({
-      redirectTo: "/available_opportunities"
+      redirectTo: "/available-opportunities"
     });
   }
 ]);
@@ -217,7 +217,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     if ($location.path() === '/dashboard') {
       return "Home";
     }
-    if ($location.path() === '/available_opportunities') {
+    if ($location.path() === '/available-opportunities') {
       return "Buy/Bid Now";
     }
     if ($location.path() === '/bids') {

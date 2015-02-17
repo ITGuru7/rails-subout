@@ -1,6 +1,6 @@
 class QuoteRequestSerializer < ActiveModel::Serializer
-  attributes :_id, :created_at, :name, :vehicle_count, :vehicle_type, :trip_type, :reference_number, :start_date, :end_date, :start_region, :end_region, :description,
-    :bidding_ends_at, :quotable
+  attributes :_id, :created_at, :name, :email, :vehicle_count, :vehicle_type, :trip_type, :reference_number, :start_date, :end_date, :start_region, :end_region, :description,
+    :bidding_ends_at, :quotable, :for_quote_only
 
   has_many :recent_quotes, array_seralizer: QuoteShortSerializer
 
@@ -14,5 +14,9 @@ class QuoteRequestSerializer < ActiveModel::Serializer
 
   def quotable
     object.quotable?
+  end
+
+  def for_quote_only
+    true
   end
 end
