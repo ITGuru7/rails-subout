@@ -1,5 +1,5 @@
 subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
-  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, SharedState) ->
+  Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, SharedState, $sce) ->
 
   $rootScope._ = _
   $rootScope.stars = [1,2,3,4,5]
