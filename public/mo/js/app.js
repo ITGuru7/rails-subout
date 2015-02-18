@@ -577,11 +577,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.displayTermsAndConditionsForm = function() {
     if (!$rootScope.company.tac_agreement) {
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
-      $rootScope.$broadcast('modalOpened');
-      return $('#modal').modal({
-        backdrop: 'static',
-        keyboard: false
-      });
+      SharedState.turnOn('modal1');
+      return $rootScope.$broadcast('modalOpened');
     }
   };
   $rootScope.displayNewBidForm = function(opportunity) {

@@ -284,8 +284,8 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   $rootScope.displayTermsAndConditionsForm = ()->
     if(!$rootScope.company.tac_agreement)
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'))
+      SharedState.turnOn('modal1')
       $rootScope.$broadcast('modalOpened')
-      $('#modal').modal({backdrop: 'static', keyboard: false})
 
   $rootScope.displayNewBidForm = (opportunity) ->
     unless $rootScope.company.dot_number
@@ -730,7 +730,6 @@ NewFavoriteCtrl = ($scope, $rootScope, $route, $location, Favorite, Company, Fav
         successUpdate()
 
 AvailableOpportunityCtrl = ($scope, $rootScope, $location, Opportunity, $filter, soPagination) ->
-
 
   $rootScope.displayTermsAndConditionsForm()
   $scope.filterDepatureDate = null
