@@ -141,15 +141,19 @@
                     </p>
                   </span>
                 </span>
-
-                  {{bid1.test()}}
               </td>
             </tr>
             <tr>
               <td>on <strong>{{bid.created_at | soShortDate}}</strong></td>
             </tr>
             <tr ng-if="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
-              <td>by <a href="" ui-turn-on="modal1" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a></td>
+              <td>
+                by <a href="" ui-turn-on="modal1" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+                <div ng-if="opportunity.isSuboutChoice(bid)">
+                  <i class="glyphicon glyphicon-tag"></i> - Subout choice -
+                  Note if they are higher of course you have to negotiate them down.
+                </div>
+              </td>
             </tr>
             <tr ng-if="opportunity.buyer._id == company._id">
               <td><span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span></td>

@@ -2464,6 +2464,24 @@ suboutSvcs.factory("Opportunity", function($resource) {
       return "Nationwide";
     }
   };
+  Opportunity.prototype.isSuboutChoice = function(bid) {
+    var amount, bid_amount, opportunity;
+    if (bid.bidder.recommend === false) {
+      return false;
+    }
+    opportunity = this;
+    if (opportunity.forward_auction && opportunity.highest_bid_amount) {
+      amount = parseInt(opportunity.highest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 0.9 < bid_amount;
+    }
+    if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
+      amount = parseInt(opportunity.lowest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 1.1 > bid_amount;
+    }
+    return false;
+  };
   return Opportunity;
 });
 

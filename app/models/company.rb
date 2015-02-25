@@ -109,6 +109,10 @@ class Company
 
   search_in :name, :email
 
+  def recent_won_bid_amount
+    self.bids.last_90_days.won.sum(&:amount)
+  end
+
   def has_subscription_benefit?
     self.mode == "ghost" or self.mode == "benefit" or self.subout_free_subscriber?
   end

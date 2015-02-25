@@ -51,6 +51,19 @@ suboutSvcs.factory "Opportunity", ($resource) ->
     else
       "Nationwide"
 
+  Opportunity::isSuboutChoice = (bid) ->
+    return false if bid.bidder.recommend == false
+    opportunity = this
+    if opportunity.forward_auction and opportunity.highest_bid_amount
+      amount = parseInt(opportunity.highest_bid_amount)
+      bid_amount = parseInt(bid.amount)
+      return amount * 0.9 < bid_amount
+    if !opportunity.forward_auction and opportunity.lowest_bid_amount
+      amount = parseInt(opportunity.lowest_bid_amount)
+      bid_amount = parseInt(bid.amount)
+      return amount * 1.1 > bid_amount
+    return false
+
   Opportunity
 
 suboutSvcs.factory "QuoteRequest", ($resource) ->

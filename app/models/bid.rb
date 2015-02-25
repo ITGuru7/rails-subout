@@ -48,6 +48,8 @@ class Bid
   scope :by_amount, -> { asc(:amount) }
   scope :today, -> { where(:created_at.gte => Date.today.beginning_of_day, :created_at.lte => Date.today.end_of_day) }
   scope :month, -> { where(:created_at.gte => Date.today.beginning_of_month, :created_at.lte => Date.today.end_of_month) }
+  scope :last_90_days, -> { where(:created_at.gte => 90.days.ago, :created_at.lte => Time.now) }
+  scope :won, -> { where(:state => 'won') }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
