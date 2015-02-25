@@ -78,7 +78,7 @@ class Opportunity
   belongs_to :buyer, class_name: "Company", inverse_of: :auctions, counter_cache: :auctions_count
 
   #has_one :event, as: :eventable
-  has_many :bids, dependent: :delete
+  has_many :bids, dependent: :destroy
   embeds_many :comments
   belongs_to :winning_bid, :class_name => "Bid"
 
@@ -93,7 +93,7 @@ class Opportunity
   validates_presence_of :start_location, if: '!is_for_special_region'
   #validates_presence_of :vehicle_type
   validate :validate_locations, if: '!is_for_special_region'
-  validate :validate_start_and_end_date, if: '!is_for_special_region'
+  validate :validate_start_and_end_date, if: '!is_for_special_region', on: :create
   validate :validate_win_it_now_price
   validate :validate_reseve_amount_and_win_it_now_price
   validate :validate_opportunity_post_limit
