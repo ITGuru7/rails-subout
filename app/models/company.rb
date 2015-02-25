@@ -86,7 +86,7 @@ class Company
   validates :name, presence: true
   validates :abbreviated_name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true, email: true
-  validates :notification_email, email: true
+  validates :notification_email, email: true, :allow_blank => true
   validates_confirmation_of :password
 
   #validates :address_line1, presence: true
