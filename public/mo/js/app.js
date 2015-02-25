@@ -177,7 +177,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   Setting.get({
     key: "application_message"
   }, function(message) {
-    message.value = $sce.trustAsHtml(message.value);
+    if (message.value) {
+      message.value = $sce.trustAsHtml(message.value);
+    }
     return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {

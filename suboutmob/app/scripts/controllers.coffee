@@ -20,7 +20,7 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
   Setting.get
     key: "application_message"
   , (message)->
-    message.value = $sce.trustAsHtml(message.value)
+    message.value = $sce.trustAsHtml(message.value) if message.value
     $rootScope.application_message = message
 
   $rootScope.$watch "filterRegionsOnHome", (v1, v2)->

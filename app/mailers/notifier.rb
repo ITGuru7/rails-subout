@@ -20,7 +20,7 @@ class Notifier < ActionMailer::Base
   end
 
   def send_mail_to_company(template_name, company)
-    send_mail_from_template(template_name, company.notifiable_email) if company.notifiable?
+    send_mail_from_template(template_name, company.notifiable_email) if company.notifiable? && !company.notifiable_email.blank?
   end
 
   def send_mail_from_template(template_name, to)

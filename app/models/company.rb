@@ -37,7 +37,7 @@ class Company
   field :regions, type: Array, default: []
 
   field :notification_type, default: 'Individual'
-  field :notification_email
+  field :notification_email, type: String
 
   field :total_sales, type: Integer, default: 0
   field :total_winnings, type: Integer, default: 0
@@ -86,7 +86,7 @@ class Company
   validates :name, presence: true
   validates :abbreviated_name, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true, email: true
-  validates :notifiable_email, email: true
+  validates :notification_email, email: true
   validates_confirmation_of :password
 
   #validates :address_line1, presence: true

@@ -60,7 +60,7 @@ namespace :subout do
 
   namespace :data do
     # event data update
-    task :destroy_old_data do
+    task :destroy_old_data=>:environment do
       Event.where(:created_at.lte=>1.year.ago).destroy
       Bid.where(:created_at.lte=>1.year.ago).destroy
       Opportunity.where(:created_at.lte=>1.year.ago).destroy
