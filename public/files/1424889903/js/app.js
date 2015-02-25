@@ -153,7 +153,7 @@ angular.element(document).ready(function() {
 var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, $sce) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
   $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
@@ -174,8 +174,13 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   if ($rootScope.filterRegionsOnHome === null) {
     $rootScope.filterRegionsOnHome = [];
   }
-  $rootScope.application_message = Setting.get({
+  Setting.get({
     key: "application_message"
+  }, function(message) {
+    if (message.value) {
+      message.value = $sce.trustAsHtml(message.value);
+    }
+    return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
     if (v1 !== null) {
@@ -1834,10 +1839,13 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
   };
 };
 
-SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken, Authorize, Setting) {
+SignInCtrl = function($scope, $rootScope, $location, Token, Company, User, AuthToken, Authorize, Setting, $sce) {
   $.removeCookie(AuthToken);
-  $scope.marketing_message = Setting.get({
+  Setting.get({
     key: "marketing_message"
+  }, function(message) {
+    message.value = $sce.trustAsHtml(message.value);
+    return $scope.marketing_message = message;
   });
   return $scope.signIn = function() {
     return Token.save({
@@ -2339,6 +2347,24 @@ suboutSvcs.factory("Opportunity", function($resource) {
       return opportunity.reserve_amount;
     }
     return null;
+  };
+  Opportunity.prototype.isSuboutChoice = function(bid) {
+    var amount, bid_amount, opportunity;
+    if (bid.bidder.recommend === false) {
+      return false;
+    }
+    opportunity = this;
+    if (opportunity.forward_auction && opportunity.highest_bid_amount) {
+      amount = parseInt(opportunity.highest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 0.9 < bid_amount;
+    }
+    if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
+      amount = parseInt(opportunity.lowest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 1.1 > bid_amount;
+    }
+    return false;
   };
   return Opportunity;
 });
