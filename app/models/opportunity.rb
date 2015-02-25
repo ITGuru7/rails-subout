@@ -159,7 +159,7 @@ class Opportunity
     ios_keys = []
 
     companies_to_notify.each do |company|
-      Notifier.delay_for(1.minutes).new_opportunity(self.id, company.id) if company.notification_items.include?("opportunity-new")
+      Notifier.delay_for(1.minutes).new_opportunity(self.id.to_s, company.id.to_s) if company.notification_items.include?("opportunity-new")
       Sms.new_opportunity(self, company) if company.cell_phone.present? && company.notification_items.include?("mobile-opportunity-new") # && self.emergency?
 
       user = company.users.first
