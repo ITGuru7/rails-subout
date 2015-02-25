@@ -25,6 +25,9 @@ class Bid
 
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
 
+  index bidder_id: 1
+  index opportunity_id: 1
+
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
   validates_presence_of :amount, on: :create, message: "can't be blank"

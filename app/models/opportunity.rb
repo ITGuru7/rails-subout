@@ -63,6 +63,8 @@ class Opportunity
   index start_region: 1
   index end_region: 1
 
+  index buyer_id: 1
+
   attr_accessor :viewer
 
   scope :active, -> { where(canceled: false, awarded: false) }
