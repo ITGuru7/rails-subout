@@ -60,11 +60,10 @@ namespace :subout do
 
   namespace :data do
     # event data update
-    task :fix_event_data_for_consumer_form do
-      Event.all.each do |event|
-        event.eventable_type = "Opportunity"
-        event.save
-      end
+    task :destroy_old_data do
+      Event.where(:created_at.lte=>1.year.ago).destroy
+      Bid.where(:created_at.lte=>1.year.ago).destroy
+      Opportunity.where(:created_at.lte=>1.year.ago).destroy
     end
   end
 
