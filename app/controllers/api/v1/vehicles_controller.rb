@@ -1,6 +1,6 @@
 class Api::V1::VehiclesController < Api::V1::BaseController
   def create
-    @vehicle = Vehicle.new(params[:vehicle])
+    @vehicle = Vehicle.new(vehicle_params)
     @vehicle.company = current_user.company
     @vehicle.save
     current_user.company.update_vehicle_count()
@@ -10,7 +10,7 @@ class Api::V1::VehiclesController < Api::V1::BaseController
 
   def update
     @vehicle = Vehicle.find(params[:id])
-    @vehicle.update_attributes(params[:vehicle])
+    @vehicle.update_attributes(vehicle_params)
 
     repond_with_namespace(@vehicle)
   end
@@ -22,4 +22,9 @@ class Api::V1::VehiclesController < Api::V1::BaseController
 
     render json: {}
   end
+
+  def vehicle_params
+    params.require(:vehicle).permit(:year, :make, :model, :vin, :rm_number)
+  end
+
 end
