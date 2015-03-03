@@ -120,6 +120,7 @@ Subout::Application.routes.draw do
         put "change_emails"
         put "change_mode"
         put "change_password"
+        get "auctions"
       end
       resources :vehicles, only: [:edit, :update]
     end

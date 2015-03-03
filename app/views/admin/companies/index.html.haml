@@ -48,6 +48,13 @@
           = link_to "# Bids v", admin_companies_path(sort_by: "bids_count", sort_direction: "asc")
       %th Total Award Count
       %th Total Award Amount
+      %th
+        - if @sort_by != "recent_winnings"
+          = link_to "Recent 90 Days' Awarded Amount", admin_companies_path(sort_by: "recent_winnings", sort_direction: "desc")
+        - elsif @sort_direction == "asc"
+          = link_to "Recent 90 Days' Awarded Amount ^", admin_companies_path(sort_by: "recent_winnings", sort_direction: "desc")
+        - else
+          = link_to "Recent 90 Days' Awarded Amount v", admin_companies_path(sort_by: "recent_winnings", sort_direction: "asc")
       %th Terms And Conditions
       %th Actions
   %tbody
@@ -66,7 +73,7 @@
           %br
           = "(#{company.contact_phone})" if company.contact_phone
         %td
-          %span.label{class: "#{company.mode == 'normal' ? 'label-important' : 'label-info'}"}
+          %span.label{class: "#{company.mode == 'normal' ? 'label-info' : 'label-danger'}"}
             = company.mode
         %td= time_ago_in_words(company.created_at) + " ago" if company.created_at
         %td= time_ago_in_words(company.last_sign_in_at) + " ago" if company.last_sign_in_at
@@ -78,15 +85,21 @@
         %td= company.total_won_bids_count
         %td= number_to_currency(company.total_winnings)
         %td
+          %span{class: "#{'alert-danger' if company.recent_won_bid_amount< 2000 }"}
+            = number_to_currency(company.recent_winnings)
+        %td
           - if company.tac_agreement
             %span.label.label-info Accepted
           - else
             %span.label Not Accepted
-          %br
           = company.created_at
         %td
           = link_to "Become user", "/#/dashboard", class: "btn btn-info become-user", data: { auth_token: company.auth_token_hash.to_json } unless company.access_locked?
-          = link_to "Edit", edit_admin_company_path(company), class: "btn"
+          %br
+          = link_to "Subout auctions", auctions_admin_company_path(company), class: "btn btn-info" 
+          %br
+          %br
+          = link_to "Edit", edit_admin_company_path(company), class: "btn btn-warning"
 .clearfix
   .pull-right
     = paginate @companies

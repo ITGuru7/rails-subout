@@ -42,6 +42,7 @@ class Company
   field :total_sales, type: Integer, default: 0
   field :total_winnings, type: Integer, default: 0
   field :total_won_bids_count, type: Integer, default: 0
+  field :recent_winnings, type: Integer, default: 0
 
   field :last_upgraded_at, type: Time
   field :has_ada_vehicles, type: Boolean, default: false
@@ -80,7 +81,6 @@ class Company
   has_many :bids, foreign_key: 'bidder_id'
   has_many :quotes, foreign_key: 'quoter_id'
 
-
   accepts_nested_attributes_for :users
 
   validates :name, presence: true
@@ -110,7 +110,15 @@ class Company
   search_in :name, :email
 
   def recent_won_bid_amount
-    self.bids.last_90_days.won.sum(&:amount)
+    self.bids.between(created_at: 90.days.ago..Time.now).won.sum(&:amount)
+  end
+
+  def last_years_won_bid_amount
+    self.bids.between(created_at: 1.year.ago.beginning_of_year..1.year.ago.end_of_year).won.sum(&:amount)
+  end
+
+  def this_years_won_bid_amount
+    self.bids.since(1.year.ago).won.sum(&:amount)
   end
 
   def has_subscription_benefit?

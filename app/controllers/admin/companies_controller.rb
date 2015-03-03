@@ -6,8 +6,8 @@ class Admin::CompaniesController < Admin::BaseController
     @sort_direction = params[:sort_direction] || "desc"
     @companies = Company.sort(@sort_by, @sort_direction).includes(:users)
     @companies = @companies.full_text_search(params[:search]) unless params[:search].blank?
-    @companies = @companies.page(params[:page]).per(20)
 
+    @companies = @companies.page(params[:page]).per(20)
     respond_to do |format|
       format.html
       format.csv { 
@@ -25,6 +25,10 @@ class Admin::CompaniesController < Admin::BaseController
         end
       }
     end
+  end
+
+  def auctions
+    @company = Company.find(params[:id])
   end
 
   def edit

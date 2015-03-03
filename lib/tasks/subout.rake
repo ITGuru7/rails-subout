@@ -66,4 +66,12 @@ namespace :subout do
     end
   end
 
+  namespace :company do
+    task :update_recent_winnings=>:environment do
+      Company.all.each do |company|
+        company.recent_winnings = company.recent_won_bid_amount
+        company.save
+      end
+    end
+  end
 end

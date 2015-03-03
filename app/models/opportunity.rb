@@ -249,8 +249,6 @@ class Opportunity
 
   def win!(bid_id)
     bid = self.bids.active.find(bid_id)
-    bidder = bid.bidder
-    buyer = self.buyer
 
     self.bidding_done = true
     self.awarded = true
@@ -262,9 +260,14 @@ class Opportunity
     bid.state = 'won'
     bid.save
 
+    # update buyer info
+    buyer = self.buyer
     buyer.total_sales += bid.amount.to_i
     buyer.save(validate: false)
 
+    # update bidder info
+    bidder = bid.bidder
+    bidder.recent_winnings = bidder.recent_won_bid_amount
     bidder.total_winnings += bid.amount.to_i
     bidder.total_won_bids_count += 1
     bidder.save(validate: false)
