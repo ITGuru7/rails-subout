@@ -32,8 +32,11 @@ class Bid
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
   validates_presence_of :amount, on: :create, message: "can't be blank"
   validates :amount, numericality: { greater_than: 0 }
-  validates :vehicle_count, numericality: { greater_than: 0}, unless: 'vehicle_count.blank?'
-  validates :vehicle_count_limit, numericality: { greater_than: 0}, unless: 'vehicle_count_limit.blank?'
+  validates :vehicle_count, numericality: { greater_than: 0}, allow_blank: true
+  validates :vehicle_count_limit, numericality: { greater_than: 0}, allow_blank: true
+  validates :offer_amount, numericality: { greater_than: 0}, allow_blank: true
+  validates :counter_amount, numericality: { greater_than: 0}, allow_blank: true
+
   validate :validate_opportunity_bidable, on: :create
   validate :validate_bidable_by_bidder, on: :create
   validate :validate_multiple_bids_on_the_same_opportunity, on: :create
