@@ -131,6 +131,10 @@
               <td>
                 <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
                   by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+                  <div ng-if="opportunity.isSuboutChoice(bid)">
+                    <i class="glyphicon glyphicon-tag"></i> - Subout choice -
+                    Note if they are higher of course you have to negotiate them down.
+                  </div>
                 </span>
               </td>
               <td ng-show="opportunity.buyer._id == company._id"><span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span></td>
