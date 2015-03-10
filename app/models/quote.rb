@@ -62,7 +62,7 @@ class Quote
     <td>#{self.comment}</td>
     <td>#{self.vehicles_html}</td>
     #{
-      (detail)? "<td><a href='http://#{DEFAULT_HOST_WITH_PORT}/consumers/quote_requests/#{self.quote_request.reference_number}/select_winner?quote_reference_number=#{self.reference_number}&retailer_id=#{self.quote_request.retailer.id}&consumer_email=#{self.quote_request.email}'>ACCEPT</a></td>" : ""
+      (detail)? "<td><a target='_blank' href='http://#{DEFAULT_HOST_WITH_PORT}/consumers/quote_requests/#{self.quote_request.reference_number}/select_winner?quote_reference_number=#{self.reference_number}&retailer_id=#{self.quote_request.retailer.id}&consumer_email=#{self.quote_request.email}'>ACCEPT</a></td>" : ""
     }
     </tr>
 EOS
