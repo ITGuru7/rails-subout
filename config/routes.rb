@@ -20,7 +20,14 @@ Subout::Application.routes.draw do
 
   namespace :consumers do
     resources :quote_requests do
-      get :select_winner, on: :member
+      post :select_winner, on: :member
+      resources :quote do
+        post :win, on: :member
+      end
+    end
+
+    resources :pages, only: [:terms_and_conditions] do
+      get :terms_and_conditions, on: :collection
     end
   end
 

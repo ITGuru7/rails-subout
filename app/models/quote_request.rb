@@ -112,7 +112,7 @@ class QuoteRequest
   end
 
   def quotes_html
-    self.quotes.map{|quote| quote.to_html(true)}.join('')
+    self.recent_quotes.map{|quote| quote.to_html(true)}.join('')
   end
 
   def to_html

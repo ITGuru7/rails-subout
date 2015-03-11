@@ -867,7 +867,7 @@ QuoteRequestDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout,
     $timeout updateFiveMinutesAgo, 5000
   updateFiveMinutesAgo()
 
-  loadQuoteRequest = ->
+  reloadQuoteRequest = ->
     $scope.quote_request = QuoteRequest.get
       api_token: $rootScope.token.api_token
       quoteRequestId: quote_request_id
@@ -878,7 +878,20 @@ QuoteRequestDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout,
       alert("Record not found")
       $location.path("/dashboard")
 
-  loadQuoteRequest()
+  refreshQuoteRequest = ()->
+    setTimeout ()->
+      reloadQuoteRequest()
+      refreshQuoteRequest()
+    , fiveMinutes
+  
+  refreshQuoteRequest()
+  reloadQuoteRequest()
+
+  $rootScope.channel.bind 'event_created', (event) ->
+    reloadQuoteRequest() if event.eventable._id is $scope.quote_request._id
+
+  $rootScope.$on 'reloadQuoteRequest', (e, _quote_request) ->
+    $scope.quote_request = _quote_request
 
 
 OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) ->

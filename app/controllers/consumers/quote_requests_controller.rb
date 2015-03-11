@@ -4,8 +4,8 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
   before_filter :check_retailer
   before_filter :check_retailer_host
 
-  before_filter :check_consumer_quote_request, only: [:select_winner]
-  skip_before_filter :check_retailer_host, only: [:select_winner]
+  before_filter :check_consumer_quote_request, only: [:select_winner, :show]
+  skip_before_filter :check_retailer_host, only: [:select_winner, :show]
 
 
   layout false
@@ -24,12 +24,16 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
     end
   end
 
+  def show
+    render layout: 'consumer'
+  end
+
   def select_winner
     if !@quote_request.awarded?
       @quote_request.win!(@quote.id)
-      render :winner
+      render :winner, layout: 'consumer'
     else
-      render :awarded
+      render :awarded, layout: 'consumer'
     end
   end
 

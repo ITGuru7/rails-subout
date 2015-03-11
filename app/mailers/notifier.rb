@@ -4,6 +4,13 @@ class Notifier < ActionMailer::Base
   include ActionView::Helpers::DateHelper
 
   default :from => "charterbusiness@suboutapp.com"
+  layout 'mailer_default'
+
+  before_filter :add_attachments
+
+  def add_attachments
+    attachments.inline['logo.png'] = File.read(Rails.root.join('app/assets/images/logo.png'))
+  end
 
   def send_known_favorite_invitation(buyer_id, supplier_id)
     @buyer = Company.find(buyer_id)
@@ -23,10 +30,11 @@ class Notifier < ActionMailer::Base
     send_mail_from_template(template_name, company.notifiable_email) if company.notifiable?
   end
 
-  def send_mail_from_template(template_name, to)
+  def send_mail_from_template(template_name, to, email_layout='mailer_default')
     email_template = EmailTemplate.by_name(template_name)
+
     mail(subject: eval('"' + email_template.subject + '"', binding), to: to) do |format|
-      format.html { render inline: eval('"' + email_template.body_with_signature + '"', binding) }
+      format.html { render layout: email_layout, inline: eval('"' + email_template.body + '"', binding) }
     end
   end
 
@@ -39,20 +47,6 @@ class Notifier < ActionMailer::Base
     @bidder = @bid.bidder
 
     send_mail_to_company(__method__.to_s, @poster) 
-  end
-
-  def new_quote(quote_id)
-    @quote = Quote.find(quote_id)
-    @quote_request = @quote.quote_request
-    @quoter = @quote.quoter
-
-    send_mail_from_template('new_quote', @quote_request.email)
-  end
-
-  def new_quote_request(quote_request_id, company_id)
-    @quote_request = QuoteRequest.find(quote_request_id)
-    @company = Company.find(company_id)
-    send_mail_to_company(__method__.to_s, @company)
   end
 
   def new_negotiation(bid_id)
@@ -95,22 +89,6 @@ class Notifier < ActionMailer::Base
     send_mail_to_company(__method__.to_s, @bidder)
   end
 
-  def won_quote_to_consumer(quote_request_id)
-    @quote_request = QuoteRequest.find(quote_request_id)
-    @quote = @quote_request.winning_quote
-    @quoter = @quote.quoter
-
-    send_mail_from_template(__method__.to_s, @quote_request.email)
-  end
-
-  def won_quote_to_quoter(quote_request_id)
-    @quote_request = QuoteRequest.find(quote_request_id)
-    @quote = @quote_request.winning_quote
-    @quoter = @quote.quoter
-
-    send_mail_to_company(__method__.to_s, @quoter)
-  end
-
   def finished_auction_to_bidder(opportunity_id, bidder_id)
     @opportunity = Opportunity.find(opportunity_id)
     @bidder = Company.find(bidder_id)
@@ -125,10 +103,7 @@ class Notifier < ActionMailer::Base
     send_mail_to_company(__method__.to_s, @poster)
   end
 
-  def expired_quote_request_notification(quote_request_id)
-    @quote_request = QuoteRequest.find(quote_request_id)
-    send_mail_from_template('expired_quote_request', @quote_request.email)
-  end
+  
 
   def completed_auction_notification_to_buyer(opportunity_id)
     @opportunity = Opportunity.find(opportunity_id)
@@ -221,4 +196,40 @@ class Notifier < ActionMailer::Base
 
     send_mail_to_company(__method__.to_s, @company)
   end
+
+  def new_quote(quote_id)
+    @quote = Quote.find(quote_id)
+    @quote_request = @quote.quote_request
+    @quoter = @quote.quoter
+
+    send_mail_from_template('new_quote', @quote_request.email, 'mailer_quote_request')
+  end
+
+  def new_quote_request(quote_request_id, company_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @company = Company.find(company_id)
+    send_mail_to_company(__method__.to_s, @company)
+  end
+
+    def won_quote_to_consumer(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @quote = @quote_request.winning_quote
+    @quoter = @quote.quoter
+
+    send_mail_from_template(__method__.to_s, @quote_request.email, 'mailer_quote_request')
+  end
+
+  def won_quote_to_quoter(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    @quote = @quote_request.winning_quote
+    @quoter = @quote.quoter
+
+    send_mail_to_company(__method__.to_s, @quoter)
+  end
+
+  def expired_quote_request_notification(quote_request_id)
+    @quote_request = QuoteRequest.find(quote_request_id)
+    send_mail_from_template('expired_quote_request', @quote_request.email, 'mailer_quote_request')
+  end
+
 end

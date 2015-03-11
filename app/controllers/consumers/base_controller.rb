@@ -1,3 +1,3 @@
 class Consumers::BaseController < ApplicationController
-  layout 'retailer'
+  layout 'consumer'
 end
