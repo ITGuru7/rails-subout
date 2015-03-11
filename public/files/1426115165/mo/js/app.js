@@ -177,7 +177,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   Setting.get({
     key: "application_message"
   }, function(message) {
-    message.value = $sce.trustAsHtml(message.value);
+    if (message.value) {
+      message.value = $sce.trustAsHtml(message.value);
+    }
     return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
@@ -577,11 +579,8 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.displayTermsAndConditionsForm = function() {
     if (!$rootScope.company.tac_agreement) {
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
-      $rootScope.$broadcast('modalOpened');
-      return $('#modal').modal({
-        backdrop: 'static',
-        keyboard: false
-      });
+      SharedState.turnOn('modal1');
+      return $rootScope.$broadcast('modalOpened');
     }
   };
   $rootScope.displayNewBidForm = function(opportunity) {
@@ -2466,6 +2465,24 @@ suboutSvcs.factory("Opportunity", function($resource) {
     } else {
       return "Nationwide";
     }
+  };
+  Opportunity.prototype.isSuboutChoice = function(bid) {
+    var amount, bid_amount, opportunity;
+    if (bid.bidder.recommend === false) {
+      return false;
+    }
+    opportunity = this;
+    if (opportunity.forward_auction && opportunity.highest_bid_amount) {
+      amount = parseInt(opportunity.highest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 0.9 < bid_amount;
+    }
+    if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
+      amount = parseInt(opportunity.lowest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 1.1 > bid_amount;
+    }
+    return false;
   };
   return Opportunity;
 });

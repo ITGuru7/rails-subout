@@ -127,6 +127,8 @@ subout.config([
     }).when("/add-favorite", {
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
+    }).when("/terms-and-conditions-consumer", {
+      templateUrl: suboutPartialPath("terms-and-conditions-consumer.html")
     }).otherwise({
       redirectTo: "/available_opportunities"
     });
@@ -177,7 +179,9 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   Setting.get({
     key: "application_message"
   }, function(message) {
-    message.value = $sce.trustAsHtml(message.value);
+    if (message.value) {
+      message.value = $sce.trustAsHtml(message.value);
+    }
     return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
@@ -1165,7 +1169,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
 };
 
 QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid, QuoteRequest) {
-  var fiveMinutes, loadQuoteRequest, quote_request_id, updateFiveMinutesAgo;
+  var fiveMinutes, quote_request_id, refreshQuoteRequest, reloadQuoteRequest, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
   quote_request_id = $routeParams.quote_request_reference_number;
   updateFiveMinutesAgo = function() {
@@ -1173,7 +1177,7 @@ QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $
     return $timeout(updateFiveMinutesAgo, 5000);
   };
   updateFiveMinutesAgo();
-  loadQuoteRequest = function() {
+  reloadQuoteRequest = function() {
     return $scope.quote_request = QuoteRequest.get({
       api_token: $rootScope.token.api_token,
       quoteRequestId: quote_request_id
@@ -1184,7 +1188,22 @@ QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $
       return $location.path("/dashboard");
     });
   };
-  return loadQuoteRequest();
+  refreshQuoteRequest = function() {
+    return setTimeout(function() {
+      reloadQuoteRequest();
+      return refreshQuoteRequest();
+    }, fiveMinutes);
+  };
+  refreshQuoteRequest();
+  reloadQuoteRequest();
+  $rootScope.channel.bind('event_created', function(event) {
+    if (event.eventable._id === $scope.quote_request._id) {
+      return reloadQuoteRequest();
+    }
+  });
+  return $rootScope.$on('reloadQuoteRequest', function(e, _quote_request) {
+    return $scope.quote_request = _quote_request;
+  });
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
@@ -2345,6 +2364,24 @@ suboutSvcs.factory("Opportunity", function($resource) {
       return opportunity.reserve_amount;
     }
     return null;
+  };
+  Opportunity.prototype.isSuboutChoice = function(bid) {
+    var amount, bid_amount, opportunity;
+    if (bid.bidder.recommend === false) {
+      return false;
+    }
+    opportunity = this;
+    if (opportunity.forward_auction && opportunity.highest_bid_amount) {
+      amount = parseInt(opportunity.highest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 0.9 < bid_amount;
+    }
+    if (!opportunity.forward_auction && opportunity.lowest_bid_amount) {
+      amount = parseInt(opportunity.lowest_bid_amount);
+      bid_amount = parseInt(bid.amount);
+      return amount * 1.1 > bid_amount;
+    }
+    return false;
   };
   return Opportunity;
 });
