@@ -4,22 +4,16 @@ class ApplicationController < ActionController::Base
   before_filter :prepare_mobile
   layout :layout_by_resource
 
-  def after_sign_in_path_for(resource)
-    # check for the class of the object to determine what type it is
-    case resource.class
-    when Retailer
-      edit_retailers_profile_path
-    end
-  end
-
-  def after_sign_out_path_for(resource)
-    case resource.class
-    when Retailer
-      edit_retailers_profile_path
-    end
-  end
-
   private
+
+  def after_sign_in_path_for(resource_or_scope)
+    edit_retailers_profile_path
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    new_retailer_session_path
+  end
+
   def layout_by_resource
     if devise_controller? && resource_name == :retailer
       "devise"

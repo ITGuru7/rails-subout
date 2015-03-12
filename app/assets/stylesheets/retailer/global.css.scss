@@ -1,6 +1,9 @@
 @import 'bootstrap-sprockets';
 @import "bootstrap-custom";
 
+.header{
+  margin-bottom: 5rem;
+}
 
 #buy-sell-connect{
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(40%, #93cb7a), to(#69b645));
@@ -19,4 +22,17 @@
   line-height: 1.5em;
   word-break: break-all;
   .inner{ padding: 60px 0px;}
+}
+
+
+.alert-notice{
+  @extend .alert-info;
+}
+
+.alert-error{
+  @extend .alert-danger;
+}
+
+.alert-alert{
+  @extend .alert-danger;
 }

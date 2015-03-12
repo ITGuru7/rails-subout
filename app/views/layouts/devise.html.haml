@@ -12,14 +12,7 @@
         %br
         = image_tag('logo.png')
 
-      - if flash[:error]
-        %p.alert.alert-error
-          = h flash[:error]
-          %a.close(href="#") x
-      - if flash[:notice]
-        %p.alert.alert-info
-          = h flash[:notice]
-          %a.close(href="#") x
+      = render 'shared/flashes'
 
       = yield
 

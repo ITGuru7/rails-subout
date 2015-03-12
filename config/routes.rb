@@ -5,7 +5,7 @@ Subout::Application.routes.draw do
   mount ApiDoc => "/api/doc"
 
   root :to => 'static#index'
-  get '/' => 'static#index'
+
   get '/index.html' => 'static#index'
   get '/embedded.html' => 'static#embedded'
 
