@@ -24,7 +24,7 @@
 
 %h4 HTML
 - @quote_request = QuoteRequest.new
-%textarea.form-control{:cols => "50", :onclick => "this.focus();this.select()", :readonly => "readonly", :rows => "50"}
+%textarea.form-control{:cols => "50", :onclick => "this.focus();this.select()", :readonly => "readonly", :rows => "20"}
   = raw CGI.escapeHTML(render 'consumers/quote_requests/form')
 
 %h3 Preview
