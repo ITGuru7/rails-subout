@@ -29,11 +29,11 @@
       e.preventDefault();
       $("#submit-quote-request").attr("disabled", true);
 
-      var posting = jQuery.post( form.attr('action'), form.serialize());
-      posting.done(function(data){
+      var posting = jQuery.post( form.attr('action'), form.serialize(), function(data){
         form.html(data);
         $("#submit-quote-request").attr("disabled", false);
-      });
+      }, "json");
+    
       posting.fail(function(data){
         form.addClass('error');
         $("#submit-quote-request").attr("disabled", false);
