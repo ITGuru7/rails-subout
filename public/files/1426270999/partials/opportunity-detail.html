@@ -84,8 +84,8 @@
           </div>
           <div class="actions" ng-show="company.canCancelOrEdit(opportunity)">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-show="opportunity.bids.length == 0" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
-            <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
-            <a class='btn btn-danger' ng-click="endOpportunity()">End this Opportunity</a>
+            <button class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</button>
+            <button class='btn btn-danger' ng-click="endOpportunity()">End this Opportunity</button>
           </div>
           <div class="actions" ng-show="opportunity.buyer_id == company._id">
             <a href="#modal" class="btn btn-primary" data-toggle="modal" ng-click="cloneOpportunity(opportunity); displayNewOpportunityForm()">Duplicate</a>
@@ -93,7 +93,7 @@
           <div ng-show="company.canBid(opportunity)">
             <a href="#modal" class="btn btn-success btn-small" data-toggle="modal" ng-click="displayNewBidForm(opportunity)">Bid</a>
             <span ng-show="opportunity.quick_winnable" class="win-it-now-button-wrapper">
-              &nbsp;<a class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</a>
+              &nbsp;<button class="btn btn-success btn-small" ng-click="winOpportunityNow(opportunity)">Win Now</button>
             </span>
           </div>
         </div>
@@ -131,6 +131,10 @@
               <td>
                 <span ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
                   by <a data-toggle="modal" href="#modal" ng-click="displayCompanyProfile(bid.bidder._id)">{{bid.bidder.name}}</a>
+                  <div ng-if="opportunity.isSuboutChoice(bid)">
+                    <i class="glyphicon glyphicon-tag"></i> - Subout choice -
+                    Note if they are higher of course you have to negotiate them down.
+                  </div>
                 </span>
               </td>
               <td ng-show="opportunity.buyer._id == company._id"><span class="glyphicon glyphicon-phone">{{bid.bidder.contact_phone}}</span></td>
@@ -139,7 +143,7 @@
               </td>
               <td>{{bid.comment}}</td>
               <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
-                <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
+                <button class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</button>
               </td>
               <td>
                   <span class="text-info" ng-show="opportunity.buyer._id == company._id || bid.bidder._id == company._id">
@@ -158,21 +162,21 @@
                   <span ng-show="opportunity.buyer._id == company._id">
                     <span ng-hide="bid.state=='negotiating'">
                       <a href="#modal" data-toggle="modal" class='btn btn-warning btn-mini' ng-click="displayNegotiationForm(opportunity, bid)"><i class='glyphicon glyphicon-usd'></i> Negotiate</a>
-                      <a class='btn btn-primary btn-mini' ng-click="selectWinner(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept</a>
+                      <button class='btn btn-primary btn-mini' ng-click="selectWinner(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept</button>
                     </span>
                     <span ng-show="bid.state=='negotiating' && bid.amount == bid.counter_amount">
-                      <a class='btn btn-primary btn-mini' ng-click="selectWinner(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept Counter Offer</a>
-                      <a class='btn btn-danger btn-mini' ng-click="declineCounterOffer(opportunity, bid)"><i class='glyphicon glyphicon-ok-sign'></i> Not Accept</a>
+                      <button class='btn btn-primary btn-mini' ng-click="selectWinner(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept Counter Offer</button>
+                      <button class='btn btn-danger btn-mini' ng-click="declineCounterOffer(opportunity, bid)"><i class='glyphicon glyphicon-ok-sign'></i> Not Accept</button>
                     </span>
                   </span>
 
                   <span ng-show="bid.bidder._id == company._id">
                     <span ng-hide="bid.amount == bid.counter_amount">
-                      <a class='btn btn-primary btn-mini' ng-show="bid.state=='negotiating'" ng-click="acceptNegotiation(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept Offer</a>
+                      <button class='btn btn-primary btn-mini' ng-show="bid.state=='negotiating'" ng-click="acceptNegotiation(bid)"><i class='glyphicon glyphicon-ok-sign'></i> Accept Offer</button>
                       <a href="#modal" data-toggle="modal" class='btn btn-warning btn-mini' ng-show="bid.state=='negotiating'" ng-click="displayNegotiationCounterForm(opportunity, bid)"><i class='glyphicon glyphicon-edit'></i> Counter Offer</a>
                     </span>
                     <span ng-show="bid.state=='negotiating' && bid.amount != bid.counter_amount">
-                      <a class='btn btn-danger btn-mini' ng-click="declineOffer(bid)"><i class='glyphicon glyphicon-remove-sign'></i> Not accept</a>
+                      <button class='btn btn-danger btn-mini' ng-click="declineOffer(bid)"><i class='glyphicon glyphicon-remove-sign'></i> Not accept</button>
                     </span>
                   </span>
                 </span>
