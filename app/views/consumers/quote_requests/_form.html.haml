@@ -39,8 +39,16 @@
         $("#submit-quote-request").attr("disabled", false);
 
         var errors_html = jQuery('.errors', form).html('');
-        var errors = data.responseJSON.payload.errors;
-        var error_messages = data.responseJSON.payload.error_messages;
+        var payload = null;
+
+        if (data.responseJSON){
+          payload = data.responseJSON.payload;
+        }else{
+          payload = jQuery.parseJSON(data.responseText).payload;
+        }
+
+        var errors = payload.errors;  
+        var error_messages = payload.error_messages;
 
         for(i=0;i<error_messages.length;i++){
           errors_html.append("<p class='error'>"+error_messages[i]+"</p>");
