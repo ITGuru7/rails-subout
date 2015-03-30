@@ -31,13 +31,26 @@ class Notifier < ActionMailer::Base
   end
 
   def send_mail_from_template(template_name, to, email_layout='mailer_default')
-    if !Rails.env.production?
-      mail(subject: template_name, to: to)
-    else
+    begin
       email_template = EmailTemplate.by_name(template_name)
-
       mail(subject: eval('"' + email_template.subject + '"', binding), to: to) do |format|
         format.html { render layout: email_layout, inline: eval('"' + email_template.body + '"', binding) }
+      end
+    rescue
+      if !Rails.env.production?
+        @bid = Bid.last
+        @bidder = @bid.bidder
+        @opportunity = @bid.opportunity
+        @poster = @opportunity.buyer
+        @subscription = GatewaySubscription.last
+        @company = Company.last
+        @vehicle = Vehicle.last
+        @old_vehicle = Vehicle.first
+        @card_update_link = @company.chargify_service_url
+        @quote = Quote.last
+        @quoter = @quote.quoter
+        @quote_request = @quote.quote_request
+        mail(subject: template_name, to: to)
       end
     end
   end
@@ -231,7 +244,7 @@ class Notifier < ActionMailer::Base
     send_mail_to_company(__method__.to_s, @quoter)
   end
 
-  def expired_quote_request_notification(quote_request_id)
+  def expired_quote_request(quote_request_id)
     @quote_request = QuoteRequest.find(quote_request_id)
     send_mail_from_template('expired_quote_request', @quote_request.email, 'mailer_consumer')
   end

@@ -21,7 +21,7 @@ class MailPreview < MailView
 
   def expired_quote_request
     quote_request = QuoteRequest.last
-    Notifier.expired_quote_request_notification(quote_request.id)
+    Notifier.expired_quote_request(quote_request.id)
   end
 
   def new_negotiation 

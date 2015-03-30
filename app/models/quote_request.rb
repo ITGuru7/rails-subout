@@ -223,7 +223,7 @@ class QuoteRequest
 
   def self.send_expired_notification
     where(:created_at.lte => 2.days.ago, expired_notification_sent: false).each do |quote_request|
-      Notifier.delay.expired_quote_request_notification(quote_request.id)
+      Notifier.delay.expired_quote_request(quote_request.id)
       quote_request.set(:expired_notification_sent, true)
     end
   end
