@@ -1,10 +1,8 @@
-var app_prefix, subout, suboutDeployTimestamp, suboutPartialPath;
+var subout, suboutDeployTimestamp, suboutPartialPath;
 
 $.cookie.json = true;
 
 $.cookie.defaults.expires = 7;
-
-app_prefix = '/mo';
 
 suboutDeployTimestamp = function() {
   var ts;
@@ -17,13 +15,13 @@ suboutDeployTimestamp = function() {
 
 suboutPartialPath = function(file) {
   var deploy, path;
-  path = app_prefix + '/partials/' + file;
+  path = '/partials/' + file;
   deploy = suboutDeployTimestamp();
   path = '/files/' + deploy + path;
   return path;
 };
 
-subout = angular.module("subout", ["ui.utils", "ui.date", "suboutFilters", "suboutServices", "ngCookies", "ngRoute", "mobile-angular-ui", 'angularjs-dropdown-multiselect', 'ui.bootstrap']);
+subout = angular.module("subout", ["ui.utils", "ui.date", "suboutFilters", "suboutServices", "ngCookies", "ngRoute"]);
 
 subout.run([
   '$rootScope', '$appVersioning', '$location', '$analytics', function($rootScope, $versioning, $location, $analytics) {
@@ -96,8 +94,8 @@ subout.config([
       templateUrl: suboutPartialPath("opportunities.html"),
       controller: OpportunityCtrl,
       resolve: resolveAuth
-    }).when("/available-opportunities", {
-      templateUrl: suboutPartialPath("available-opportunities.html"),
+    }).when("/available_opportunities", {
+      templateUrl: suboutPartialPath("available_opportunities.html"),
       controller: AvailableOpportunityCtrl,
       resolve: resolveAuth
     }).when("/opportunities/:opportunity_reference_number", {
@@ -129,8 +127,10 @@ subout.config([
     }).when("/add-favorite", {
       templateUrl: suboutPartialPath("add-new-favorite.html"),
       resolve: resolveAuth
+    }).when("/terms-and-conditions-consumer", {
+      templateUrl: suboutPartialPath("terms-and-conditions-consumer.html")
     }).otherwise({
-      redirectTo: "/available-opportunities"
+      redirectTo: "/available_opportunities"
     });
   }
 ]);
@@ -149,11 +149,13 @@ $.cloudinary.config({
   "cloud_name": "subout"
 });
 
-
-var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, WelcomePrelaunchCtrl,
+angular.element(document).ready(function() {
+  return angular.bootstrap(document, ['subout']);
+});
+var AvailableOpportunityCtrl, BidNewCtrl, CompanyDetailCtrl, CompanyProfileCtrl, DashboardCtrl, FavoritesCtrl, HelpCtrl, MyBidCtrl, NegotiationCounterOfferCtrl, NegotiationNewCtrl, NewFavoriteCtrl, NewPasswordCtrl, OpportunityCtrl, OpportunityDetailCtrl, OpportunityFormCtrl, QuoteNewCtrl, QuoteRequestDetailCtrl, SettingCtrl, SignInCtrl, SignUpCtrl, TermsAndConditionsCtrl, VendorFormCtrl, WelcomePrelaunchCtrl,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, SharedState, $sce) {
+subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeout, Opportunity, Company, Favorite, User, FileUploaderSignature, AuthToken, Region, Bid, Setting, $sce) {
   var REGION_NAMES, d, p, salt, _i, _ref, _results;
   $rootScope._ = _;
   $rootScope.stars = [1, 2, 3, 4, 5];
@@ -177,12 +179,30 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   Setting.get({
     key: "application_message"
   }, function(message) {
-    message.value = $sce.trustAsHtml(message.value);
+    if (message.value) {
+      message.value = $sce.trustAsHtml(message.value);
+    }
     return $rootScope.application_message = message;
   });
   $rootScope.$watch("filterRegionsOnHome", function(v1, v2) {
     if (v1 !== null) {
       return $.cookie(salt("filterRegionsOnHome"), $rootScope.filterRegionsOnHome);
+    }
+  });
+  $('#modal').on('hidden', function() {
+    var $scope, modalElement, modalScope;
+    $scope = angular.element(document).scope();
+    $scope.modal = '';
+    $rootScope.opportunity = null;
+    modalElement = $('#modal-stage');
+    modalScope = angular.element(modalElement.find('.ng-scope')).scope();
+    if (modalScope) {
+      modalScope.$destroy();
+    }
+    modalElement.html('');
+    $('.loading-animation').removeClass('loading');
+    if (!$scope.$$phase) {
+      return $scope.$apply();
     }
   });
   if ($appBrowser.isReallyOld()) {
@@ -237,9 +257,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     return $rootScope.modal = url;
   };
   $rootScope.closeModal = function() {
-    SharedState.turnOff('modal1');
-    $rootScope.modal = '';
-    return $rootScope.opportunity = null;
+    return $('#modal').modal("hide");
   };
   $rootScope.signOut = function() {
     $.removeCookie(AuthToken);
@@ -341,162 +359,6 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     "Wisconsin": "WI",
     "Wyoming": "WY"
   };
-  $rootScope.ALL_REGION_OBJECTS = [
-    {
-      id: "AL",
-      label: "Alabama"
-    }, {
-      id: "AK",
-      label: "Alaska"
-    }, {
-      id: "AZ",
-      label: "Arizona"
-    }, {
-      id: "AR",
-      label: "Arkansas"
-    }, {
-      id: "CA",
-      label: "California"
-    }, {
-      id: "CO",
-      label: "Colorado"
-    }, {
-      id: "CT",
-      label: "Connecticut"
-    }, {
-      id: "DE",
-      label: "Delaware"
-    }, {
-      id: "DC",
-      label: "District of Columbia"
-    }, {
-      id: "FL",
-      label: "Florida"
-    }, {
-      id: "GA",
-      label: "Georgia"
-    }, {
-      id: "HI",
-      label: "Hawaii"
-    }, {
-      id: "ID",
-      label: "Idaho"
-    }, {
-      id: "IL",
-      label: "Illinois"
-    }, {
-      id: "IN",
-      label: "Indiana"
-    }, {
-      id: "IA",
-      label: "Iowa"
-    }, {
-      id: "KS",
-      label: "Kansas"
-    }, {
-      id: "KY",
-      label: "Kentucky"
-    }, {
-      id: "LA",
-      label: "Louisiana"
-    }, {
-      id: "ME",
-      label: "Maine"
-    }, {
-      id: "MD",
-      label: "Maryland"
-    }, {
-      id: "MA",
-      label: "Massachusetts"
-    }, {
-      id: "MI",
-      label: "Michigan"
-    }, {
-      id: "MN",
-      label: "Minnesota"
-    }, {
-      id: "MO",
-      label: "Missouri"
-    }, {
-      id: "MS",
-      label: "Mississippi"
-    }, {
-      id: "MT",
-      label: "Montana"
-    }, {
-      id: "NE",
-      label: "Nebraska"
-    }, {
-      id: "NV",
-      label: "Nevada"
-    }, {
-      id: "NH",
-      label: "New Hampshire"
-    }, {
-      id: "NJ",
-      label: "New Jersey"
-    }, {
-      id: "NM",
-      label: "New Mexico"
-    }, {
-      id: "NY",
-      label: "New York"
-    }, {
-      id: "NC",
-      label: "North Carolina"
-    }, {
-      id: "ND",
-      label: "North Dakota"
-    }, {
-      id: "OH",
-      label: "Ohio"
-    }, {
-      id: "OK",
-      label: "Oklahoma"
-    }, {
-      id: "OR",
-      label: "Oregon"
-    }, {
-      id: "PA",
-      label: "Pennsylvania"
-    }, {
-      id: "RI",
-      label: "Rhode Island"
-    }, {
-      id: "SC",
-      label: "South Carolina"
-    }, {
-      id: "SD",
-      label: "South Dakota"
-    }, {
-      id: "TN",
-      label: "Tennessee"
-    }, {
-      id: "TX",
-      label: "Texas"
-    }, {
-      id: "UT",
-      label: "Utah"
-    }, {
-      id: "VT",
-      label: "Vermont"
-    }, {
-      id: "VA",
-      label: "Virginia"
-    }, {
-      id: "WA",
-      label: "Washington"
-    }, {
-      id: "WV",
-      label: "West Virginia"
-    }, {
-      id: "WI",
-      label: "Wisconsin"
-    }, {
-      id: "WY",
-      label: "Wyoming"
-    }
-  ];
   REGION_NAMES = (function() {
     var _results1;
     _results1 = [];
@@ -577,8 +439,11 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
   $rootScope.displayTermsAndConditionsForm = function() {
     if (!$rootScope.company.tac_agreement) {
       $rootScope.setModal(suboutPartialPath('terms-and-conditions.html'));
-      SharedState.turnOn('modal1');
-      return $rootScope.$broadcast('modalOpened');
+      $rootScope.$broadcast('modalOpened');
+      return $('#modal').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
     }
   };
   $rootScope.displayNewBidForm = function(opportunity) {
@@ -615,9 +480,13 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     $rootScope.setModal(suboutPartialPath('quote-new.html'));
     return $rootScope.$broadcast('modalOpened');
   };
+  $rootScope.displayNewVendorForm = function(opportunity) {
+    $rootScope.setOpportunity(opportunity);
+    $rootScope.setModal(suboutPartialPath('vendor-form.html'));
+    return $rootScope.$broadcast('modalOpened');
+  };
   $rootScope.displayNewOpportunityForm = function() {
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'));
-    console.log(suboutPartialPath('opportunity-form.html'));
     return $rootScope.setupFileUploader();
   };
   $rootScope.displayNewFavoriteForm = function() {
@@ -712,9 +581,6 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
     }
     return $alertError;
   };
-  $rootScope.showErrors = function(errors) {
-    return alert($rootScope.errorMessages(errors).join('\n'));
-  };
   $rootScope.alertInfo = function(messages) {
     var $alertInfo, close, info, _j, _len;
     $alertInfo = $("<div class='alert alert-info'></div>");
@@ -745,7 +611,7 @@ subout.run(function($rootScope, $location, $appBrowser, $numberFormatter, $timeo
       api_token: $rootScope.token.api_token,
       opportunityId: opportunity._id
     }, function() {
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return alert("An error occured on your bid!\n" + $rootScope.errorMessages(content.data.errors).join("\n"));
     });
@@ -765,11 +631,11 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
   }
   $scope.types = ["Vehicle Needed", "Vehicle for Hire", "Special", "Emergency", "Buy or Sell Parts and Vehicles"];
   successUpdate = function() {
-    $rootScope.closeModal();
+    jQuery("#modal").modal("hide");
     return $rootScope.inPosting = false;
   };
   $scope.save = function() {
-    var opportunity;
+    var opportunity, showErrors;
     $rootScope.inPosting = true;
     opportunity = $scope.opportunity;
     opportunity.bidding_ends = $('#opportunity_ends').val();
@@ -781,6 +647,17 @@ OpportunityFormCtrl = function($scope, $rootScope, $location, Auction) {
     if (opportunity.quick_winnable === false) {
       opportunity.win_it_now_price = null;
     }
+    showErrors = function(errors) {
+      var $alertError;
+      if ($rootScope.isMobile) {
+        return alert($rootScope.errorMessages(errors).join('\n'));
+      } else {
+        $alertError = $rootScope.alertError(errors);
+        $("#modal form .alert-error").remove();
+        $("#modal form").append($alertError);
+        return $("#modal .modal-body").scrollTop($("#modal form").height());
+      }
+    };
     if (opportunity._id) {
       return Auction.update({
         opportunityId: opportunity._id,
@@ -833,10 +710,11 @@ NegotiationCounterOfferCtrl = function($scope, $rootScope, Bid, Opportunity, MyB
   return $scope.save = function() {
     return MyBid.counter_negotiation({
       bidId: $scope.bid.id,
-      bid: $scope.bid
+      bid: $scope.bid,
+      api_token: $rootScope.token.api_token
     }, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -853,10 +731,11 @@ NegotiationNewCtrl = function($scope, $rootScope, Bid, Opportunity, MyBid, Aucti
   return $scope.save = function() {
     return Auction.start_negotiation({
       bid: $scope.bid,
-      opportunityId: $rootScope.opportunity._id
+      opportunityId: $rootScope.opportunity._id,
+      api_token: $rootScope.token.api_token
     }, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -891,7 +770,6 @@ QuoteNewCtrl = function($scope, $rootScope, Bid, QuoteRequest, Quote) {
     return value <= $scope.quote_request.vehicle_count;
   };
   return $scope.save = function() {
-    console.log(123123);
     return Quote.save({
       quote: $scope.quote,
       api_token: $rootScope.token.api_token,
@@ -899,7 +777,7 @@ QuoteNewCtrl = function($scope, $rootScope, Bid, QuoteRequest, Quote) {
     }, function(data) {
       $rootScope.company.today_bids_count += 1;
       $rootScope.company.month_bids_count += 1;
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -986,6 +864,17 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     value = parseFloat(value);
     return value <= $scope.bid.vehicle_count;
   };
+  $scope.showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("#modal form .alert-error").remove();
+      $("#modal form").append($alertError);
+      return $("#modal .modal-body").scrollTop($("#modal form").height());
+    }
+  };
   return $scope.save = function() {
     return Bid.save({
       bid: $scope.bid,
@@ -994,7 +883,7 @@ BidNewCtrl = function($scope, $rootScope, Bid, Opportunity) {
     }, function(data) {
       $rootScope.company.today_bids_count += 1;
       $rootScope.company.month_bids_count += 1;
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $scope.showErrors(content.data.errors);
     });
@@ -1285,7 +1174,7 @@ OpportunityCtrl = function($scope, $rootScope, $location, Auction, soPagination)
 };
 
 QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid, QuoteRequest) {
-  var fiveMinutes, loadQuoteRequest, quote_request_id, updateFiveMinutesAgo;
+  var fiveMinutes, quote_request_id, refreshQuoteRequest, reloadQuoteRequest, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
   quote_request_id = $routeParams.quote_request_reference_number;
   updateFiveMinutesAgo = function() {
@@ -1293,7 +1182,7 @@ QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $
     return $timeout(updateFiveMinutesAgo, 5000);
   };
   updateFiveMinutesAgo();
-  loadQuoteRequest = function() {
+  reloadQuoteRequest = function() {
     return $scope.quote_request = QuoteRequest.get({
       api_token: $rootScope.token.api_token,
       quoteRequestId: quote_request_id
@@ -1304,7 +1193,22 @@ QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $
       return $location.path("/dashboard");
     });
   };
-  return loadQuoteRequest();
+  refreshQuoteRequest = function() {
+    return setTimeout(function() {
+      reloadQuoteRequest();
+      return refreshQuoteRequest();
+    }, fiveMinutes);
+  };
+  refreshQuoteRequest();
+  reloadQuoteRequest();
+  $rootScope.channel.bind('event_created', function(event) {
+    if (event.eventable._id === $scope.quote_request._id) {
+      return reloadQuoteRequest();
+    }
+  });
+  return $rootScope.$on('reloadQuoteRequest', function(e, _quote_request) {
+    return $scope.quote_request = _quote_request;
+  });
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
@@ -1355,7 +1259,7 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
       bidId: bid._id
     }, {}, function(opportunity) {
       _.extend($rootScope.opportunity, opportunity);
-      return $rootScope.closeModal();
+      return jQuery("#modal").modal("hide");
     }, function(content) {
       return $scope.errors = $rootScope.errorMessages(content.data.errors);
     });
@@ -1434,9 +1338,9 @@ OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $t
   $scope.addComment = function() {
     $scope.hideAlert();
     return Comment.save({
+      comment: $scope.comment,
       api_token: $rootScope.token.api_token,
-      opportunityId: $scope.opportunity._id,
-      comment: $scope.comment
+      opportunityId: $scope.opportunity._id
     }, function(content) {
       $scope.hideAlert();
       $scope.opportunity.comments.push(content);
@@ -1795,19 +1699,15 @@ SettingCtrl = function($scope, $rootScope, $location, Token, Company, User, Prod
       $scope.subout_bus_price = data.product.components[0].component.unit_price;
       return updateAdditionalPrice();
     });
-    if ($rootScope.company.subscription_id) {
-      return GatewaySubscription.get({
-        subscriptionId: $rootScope.company.subscription_id,
-        api_token: $rootScope.token.api_token
-      }, function(subscription) {
-        $rootScope.subscription = subscription;
-        return $scope.subscription = subscription;
-      }, function(error) {
-        return $rootScope.subscription = null;
-      });
-    } else {
+    return GatewaySubscription.get({
+      subscriptionId: $rootScope.company.subscription_id,
+      api_token: $rootScope.token.api_token
+    }, function(subscription) {
+      $rootScope.subscription = subscription;
+      return $scope.subscription = subscription;
+    }, function(error) {
       return $rootScope.subscription = null;
-    }
+    });
   };
   loadProductInfo();
   $rootScope.setupFileUploader();
@@ -2015,6 +1915,7 @@ NewPasswordCtrl = function($scope, $rootScope, $location, $timeout, Password, Au
 };
 
 SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Company, FavoriteInvitation, GatewaySubscription, AuthToken, Authorize) {
+  var showErrors;
   $.removeCookie(AuthToken);
   $scope.company = {};
   $scope.user = {};
@@ -2048,6 +1949,16 @@ SignUpCtrl = function($scope, $rootScope, $routeParams, $location, Token, Compan
   }
   $scope.hideAlert = function() {
     return $scope.errors = null;
+  };
+  showErrors = function(errors) {
+    var $alertError;
+    if ($rootScope.isMobile) {
+      return alert($rootScope.errorMessages(errors).join('\n'));
+    } else {
+      $alertError = $rootScope.alertError(errors);
+      $("form .alert-error").remove();
+      return $("form").append($alertError);
+    }
   };
   return $scope.signUp = function() {
     $scope.company.users_attributes = {
@@ -2133,6 +2044,34 @@ CompanyProfileCtrl = function($rootScope, $location, $routeParams, $scope, $time
 
 HelpCtrl = function() {
   return true;
+};
+
+VendorFormCtrl = function($scope, $rootScope, Bid, Opportunity) {
+  $scope.vendor = {
+    vehicle_type: $scope.opportunity.vehicle_type
+  };
+  $scope.bid = {
+    amount: $scope.opportunity.reserve_amount
+  };
+  $scope.hideAlert = function() {
+    return $scope.errors = null;
+  };
+  $scope.$on('modalOpened', function() {
+    return $scope.hideAlert();
+  });
+  return $scope.save = function() {
+    console.log($scope.bid);
+    return Bid.save({
+      bid: $scope.bid,
+      vendor: $scope.bid.vendor,
+      api_token: $rootScope.token.api_token,
+      opportunityId: $rootScope.opportunity._id
+    }, function(data) {
+      return jQuery("#modal").modal("hide");
+    }, function(content) {
+      return $scope.errors = $scope.showErrors(content.data.errors);
+    });
+  };
 };
 
 (function() {
@@ -2457,12 +2396,7 @@ suboutSvcs.factory("Opportunity", function($resource) {
     if (opportunity.reserve_amount) {
       return opportunity.reserve_amount;
     }
-    null;
-    if (this.state_by_state_subscriber) {
-      return this.regions.join(', ');
-    } else {
-      return "Nationwide";
-    }
+    return null;
   };
   Opportunity.prototype.isSuboutChoice = function(bid) {
     var amount, bid_amount, opportunity;
@@ -2540,8 +2474,7 @@ suboutSvcs.factory("Product", function($resource) {
 });
 
 suboutSvcs.factory("Bid", function($resource) {
-  var Bid;
-  return Bid = $resource("" + api_path + "/opportunities/:opportunityId/bids", {
+  return $resource("" + api_path + "/opportunities/:opportunityId/bids", {
     opportunityId: "@opportunityId"
   }, {});
 });
@@ -2553,11 +2486,9 @@ suboutSvcs.factory("Quote", function($resource) {
 });
 
 suboutSvcs.factory("Comment", function($resource) {
-  var Comment;
-  Comment = $resource("" + api_path + "/opportunities/:opportunityId/comments", {
+  return $resource("" + api_path + "/opportunities/:opportunityId/comments", {
     opportunityId: "@opportunityId"
   }, {});
-  return Comment;
 });
 
 suboutSvcs.factory("Event", function($resource, RequestFactory) {
@@ -2662,21 +2593,6 @@ suboutSvcs.factory("Company", function($resource, $rootScope) {
     if (opportunity.buyer_id !== this._id && opportunity.status === 'In progress') {
       return true;
     }
-  };
-  Company.prototype.isMyOpportunity = function(opportunity) {
-    if (!opportunity.buyer) {
-      return false;
-    }
-    return opportunity.buyer_id === this._id;
-  };
-  Company.prototype.isMyBid = function(bid) {
-    if (!bid.bidder) {
-      return false;
-    }
-    return bid.bidder_id === this._id;
-  };
-  Company.prototype.isRelated = function(opportunity, bid) {
-    return this.isMyOpportunity(opportunity) || this.isMyBid(bid);
   };
   Company.prototype.canCancelOrEdit = function(opportunity) {
     if (opportunity.type !== 'Emergency') {
