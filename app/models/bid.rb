@@ -1,8 +1,11 @@
 class Bid
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Token
 
   STATES = %w(active canceled negotiating won declined)
+
+  token field_name: :reference_number, retry_count: 7, length: 7, contains: :upper_alphanumeric
 
   field :amount, type: Money
   field :offer_amount, type: Money
@@ -14,6 +17,7 @@ class Bid
   field :vehicle_count, type: Integer, default: 1
   field :vehicle_count_limit, type: Integer
   field :state, type: String, default: "active"
+  field :token, type: String
 
   paginates_per 30
 
@@ -22,11 +26,14 @@ class Bid
   belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company", counter_cache: :bids_count
   belongs_to :quote
+  belongs_to :vendor
 
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
 
   index bidder_id: 1
   index opportunity_id: 1
+  index vendor_id: 1
+  index reference_number: 1
 
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
@@ -56,9 +63,11 @@ class Bid
   scope :month, -> { where(:created_at.gte => Date.today.beginning_of_month, :created_at.lte => Date.today.end_of_month) }
   scope :last_90_days, -> { where(:created_at.gte => 90.days.ago, :created_at.lte => Time.now) }
   scope :won, -> { where(:state => 'won') }
+  scope :invited, -> { where(:state => 'invited') }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
+
 
   STATES.each do |value|
     define_method :"is_#{value}?" do 
@@ -73,6 +82,11 @@ class Bid
     bid.bidder = quote.quoter
     bid.quote = quote
     bid.save(:validate => false)
+  end
+
+  def set_onetime_token!
+    self.token = SecureRandom.base64(32)
+    self.save
   end
 
   def status
@@ -139,6 +153,16 @@ class Bid
     Notifier.delay.counter_negotiation(self.id) 
   end
 
+  def invite_vendor!(vendor)
+    self.vendor = vendor
+    self.state = 'invited'
+    self.save
+  end
+
+  def invited?
+    !self.vendor.blank?
+  end
+
   private
 
   def win_quick_winable_opportunity
@@ -166,11 +190,11 @@ class Bid
   def validate_bidable_by_bidder
     return unless opportunity
 
-    unless opportunity.buyer_id != bidder_id
+    if self.vendor.blank? and opportunity.buyer_id == bidder_id
       errors.add :bidder_id, "cannot bid on your own opportunity"
     end
 
-    unless bidder.is_a_favorite_of?(opportunity.buyer)
+    if !bidder.is_a_favorite_of?(opportunity.buyer)
       if opportunity.for_favorites_only?
         errors.add :bidder_id, "cannot bid on an opportunity that is for favorites only"
       end

@@ -20,7 +20,7 @@ Subout::Application.routes.draw do
 
   namespace :consumers do
     resources :quote_requests do
-      post :select_winner, on: :member
+      get :select_winner, on: :member
       resources :quote do
         post :win, on: :member
       end
@@ -34,6 +34,10 @@ Subout::Application.routes.draw do
   namespace :retailers do
     resource :profile
     root to: 'profiles#edit'
+  end
+
+  namespace :vendors do
+    resources :opportunities
   end
 
   namespace :api, defaults: {format: 'json'}  do
@@ -137,5 +141,6 @@ Subout::Application.routes.draw do
     resources :revenues, only: [:index]
     resources :settings, only: [:index, :update, :edit]
     resources :email_templates, only: [:index, :update, :edit]
+    resources :vendors
   end
 end

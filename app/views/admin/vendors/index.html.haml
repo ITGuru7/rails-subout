@@ -1,0 +1,23 @@
+%h3 Vendors
+.row-fluid
+  %table.table.table-striped.table-bordered
+    %thead
+      %th Vendor Name
+      %th Email
+      %th Total invited amount
+      %th Total invitation count
+      %th Total won amount
+      %th Last invited date
+
+    - @vendors.each do |vendor|
+      %tr
+        %td= vendor.name
+        %td= vendor.email
+        %td= number_to_currency(vendor.total_invited_amount)
+        %td= vendor.bids.count
+        %td= number_to_currency(vendor.total_won_amount)
+        %td
+          = time_ago_in_words vendor.bids.recent.first.created_at
+          ago
+          %br
+          = vendor.bids.recent.first.created_at.to_s(:db)

@@ -270,6 +270,11 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('quote-new.html'))
     $rootScope.$broadcast('modalOpened')
 
+  $rootScope.displayNewVendorForm = (opportunity) ->
+    $rootScope.setOpportunity(opportunity)
+    $rootScope.setModal(suboutPartialPath('vendor-form.html'))
+    $rootScope.$broadcast('modalOpened')
+
 
   $rootScope.displayNewOpportunityForm = ->
     $rootScope.setModal(suboutPartialPath('opportunity-form.html'))
@@ -1613,3 +1618,28 @@ CompanyProfileCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fa
 
 HelpCtrl = ()->
   return true
+
+VendorFormCtrl = ($scope, $rootScope, Bid, Opportunity) ->
+  $scope.vendor =
+    vehicle_type: $scope.opportunity.vehicle_type,
+  $scope.bid =
+    amount: $scope.opportunity.reserve_amount
+
+  $scope.hideAlert = ->
+    $scope.errors = null
+
+  $scope.$on 'modalOpened', ->
+    $scope.hideAlert()
+
+  $scope.save = ->
+    console.log($scope.bid)
+    Bid.save
+      bid: $scope.bid
+      vendor: $scope.bid.vendor
+      api_token: $rootScope.token.api_token
+      opportunityId: $rootScope.opportunity._id
+    , (data) ->
+      jQuery("#modal").modal "hide"
+
+    , (content) ->
+      $scope.errors = $scope.showErrors(content.data.errors)
