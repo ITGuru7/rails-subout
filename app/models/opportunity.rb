@@ -126,7 +126,7 @@ class Opportunity
 
     opportunity.canceled = false
     opportunity.awarded = false
-    opportunity.bidding_duration_hrs = 2
+    opportunity.bidding_duration_hrs = 48
     opportunity.winning_bid_id = nil
     opportunity.for_quote_only = true
     

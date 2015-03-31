@@ -256,11 +256,15 @@ class Company
     sort_direction ||= "asc"
     vehicle_types = nil if vehicle_types == "null" or vehicle_types.blank?
     trip_type = nil if trip_type == "null" or trip_type.blank?
-    regions = nil if regions == "null" or regions.blank?
+    regions = nil if regions == "null"
 
     vehicle_types = vehicle_types.split(',') unless vehicle_types.nil?
-    regions = regions.split(',') unless regions.nil?
-    regions = self.regions if regions.blank?
+
+    if regions.nil?
+      regions = self.regions
+    else
+      regions = regions.split(',')
+    end
 
     options = []
     unless regions.blank?
