@@ -55,6 +55,7 @@ class Event
       self.eventable_company_id = eventable.buyer_id
       self.eventable_reference_number = eventable.reference_number
     else
+      self.cached_eventable_type = "Vehicle Needed"
       self.regions = eventable.regions
       self.eventable_reference_number = eventable.reference_number
     end
