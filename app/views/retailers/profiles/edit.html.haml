@@ -13,8 +13,9 @@
 %br
 %br
 
-%h3 Embedded HTML
 %hr
+%h3 Embedded HTML
+
 %h4 Javascript
 %p.alert.alert-info
   Consumer form requires the jQuery, please add jQuery plugin on your website if its not included.
@@ -25,7 +26,14 @@
 %h4 HTML
 - @quote_request = QuoteRequest.new
 %textarea.form-control{:cols => "50", :onclick => "this.focus();this.select()", :readonly => "readonly", :rows => "20"}
-  = raw CGI.escapeHTML(render 'consumers/quote_requests/form')
+  = raw CGI.escapeHTML(render 'consumers/quote_requests/form_html', form_layout: 'vertical')
 
+%br
+%br
+%hr
+%h3 Embedded IFRAME
+
+%textarea.form-control{:cols => "50", :onclick => "this.focus();this.select()", :readonly => "readonly", :rows => "1"}
+  %iframe{src:"#{new_consumers_quote_request_url(retailer_id: @retailer.id)}", style: "width: 100%; height: 900px;"}
 %h3 Preview
-%iframe{src:"#{new_consumers_quote_request_path(retailer_id: @retailer.id)}", style: "width: 100%; height: 400px;"}
+%iframe{src:"#{new_consumers_quote_request_path(retailer_id: @retailer.id)}", style: "width: 100%; height: 900px;"}

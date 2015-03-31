@@ -2,38 +2,46 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
   skip_before_filter :verify_authenticity_token, only: [:create]
   
   before_filter :check_retailer
-  before_filter :check_retailer_host
-
+  before_filter :check_retailer_host, only: [:new]
   before_filter :check_consumer_quote_request, only: [:select_winner, :show]
-  skip_before_filter :check_retailer_host, only: [:select_winner, :show]
 
 
-  layout false
+  layout 'consumer'
 
   def new
     @quote_request = QuoteRequest.new
+    render :new, layout: 'consumer_embedded_html'
   end
 
   def create
     @quote_request = @retailer.quote_requests.new(quote_request_params)
-    @quote_request.retailer_host = @retailer_host
-    if @quote_request.save
-      render :thankyou
+    # @quote_request.retailer_host = @retailer_host
+
+    if request.xhr?
+      if @quote_request.save
+        render :thankyou, layout: false
+      else
+        render :json=>{ errors: @quote_request.errors, error_messages: @quote_request.errors.full_messages }, status: 422
+      end
     else
-      render :json=>{ errors: @quote_request.errors, error_messages: @quote_request.errors.full_messages }, status: 422
+      if verify_recaptcha(:model => @quote_request, :message => "Oh! It's error with reCAPTCHA!") && @quote_request.save
+        render :thankyou, layout: 'consumer_embedded_html'
+      else
+        @quote_request.valid?
+        render :new, layout: 'consumer_embedded_html'
+      end
     end
   end
 
   def show
-    render layout: 'consumer'
   end
 
   def select_winner
     if !@quote_request.awarded?
       @quote_request.win!(@quote.id)
-      render :winner, layout: 'consumer'
+      render :winner
     else
-      render :awarded, layout: 'consumer'
+      render :awarded
     end
   end
 

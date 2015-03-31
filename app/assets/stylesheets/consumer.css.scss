@@ -9,6 +9,9 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require jquery-ui/datepicker
+ *= require pickadate/lib/themes/classic
+ *= require pickadate/lib/themes/classic.date
+ *= require pickadate/lib/themes/classic.time
 */
 
 @import 'consumer/global';

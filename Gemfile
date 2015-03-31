@@ -45,6 +45,8 @@ gem 'bootstrap_form'
 gem 'date_validator'
 gem 'rails_12factor'
 gem 'unicorn'
+gem "bower-rails", "~> 0.9.2"
+gem "recaptcha", :require => "recaptcha/rails"
 
 group :production do
   gem "airbrake"

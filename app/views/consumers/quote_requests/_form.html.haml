@@ -1,6 +1,5 @@
-= bootstrap_form_for @quote_request, url: consumers_quote_requests_url(@quote_request, retailer_id: @retailer.id), authenticity_token: false, layout: :vertical do |f|
-  %p
-    Please add as much details as possible to this form so bus companies can quote you.
+- form_layout = params[:layout] || "horizontal"
+= bootstrap_form_for @quote_request, url: consumers_quote_requests_url(@quote_request, retailer_id: @retailer.id), authenticity_token: false, layout: form_layout.to_sym do |f|
   = f.text_field :first_name
   = f.text_field :last_name
   = f.text_field :email
@@ -10,66 +9,21 @@
   = f.text_field :vehicle_count
   = f.text_field :passengers
   = f.text_field :start_location, label: 'Pick up address'
-  = f.text_field :start_date, label: 'Pick up date', placeholder: "mm/dd/yyyy"
-  = f.text_field :start_time, label: 'Pick up time', placeholder: "hh:mm"
+  = f.text_field :start_date, label: 'Pick up date', placeholder: "mm/dd/yyyy", class: 'datepicker'
+  = f.text_field :start_time, label: 'Pick up time', placeholder: "hh:mm", class: 'timepicker'
   
   = f.text_field :end_location, label: 'Drop off address'
-  .help
-    %small Depart time from destination
-  = f.text_field :end_date, label: 'Drop off date', placeholder: "mm/dd/yyyy"
-  = f.text_field :end_time, label: 'Drop off time', placeholder: "hh:mm"
+  = f.form_group do
+    .help
+      %small Depart time from destination
+  = f.text_field :end_date, label: 'Drop off date', placeholder: "mm/dd/yyyy", class: 'datepicker'
+  = f.text_field :end_time, label: 'Drop off time', placeholder: "hh:mm", class: 'timepicker'
 
   = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
   = f.text_area :description
 
-  = f.submit "Request Quote", class: "btn btn-danger", id: "submit-quote-request"
+  = f.form_group do
+    = recaptcha_tags
 
-  .errors
-
-:javascript
-  var init_subout_quote_request_form = function(){
-
-    var form = jQuery("#new_quote_request");
-    jQuery(form).submit(function(e){
-      e.preventDefault();
-      $("#submit-quote-request").attr("disabled", true);
-
-      var posting = jQuery.post(form.attr('action'), form.serialize());
-      posting.done(function (data) {
-          form.html(data);
-          $("#submit-quote-request").attr("disabled", false);
-      });
-      
-      posting.fail(function(data){
-        form.addClass('error');
-        $("#submit-quote-request").attr("disabled", false);
-
-        var errors_html = jQuery('.errors', form).html('');
-        var payload = null;
-
-        if (data.responseJSON){
-          payload = data.responseJSON.payload;
-        }else{
-          payload = jQuery.parseJSON(data.responseText).payload;
-        }
-
-        var errors = payload.errors;  
-        var error_messages = payload.error_messages;
-
-        for(i=0;i<error_messages.length;i++){
-          errors_html.append("<p class='error'>"+error_messages[i]+"</p>");
-        }
-
-        for(field in errors){
-          jQuery('#quote_request_' + field).addClass('error');
-        }
-
-      });
-    });
-  }
-
-  if(typeof jQuery=='undefined') {
-    alert("jQuery is required");
-  }else{
-    init_subout_quote_request_form();
-  }
+  = f.form_group do
+    = f.submit "Request Quote", class: "btn btn-primary", id: "submit-quote-request"
