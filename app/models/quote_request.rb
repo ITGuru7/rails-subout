@@ -58,7 +58,7 @@ class QuoteRequest
   def fulltext
     [reference_number, name, description].join(' ')
   end
-  validates :email, presence: true, email: true
+  validates :email, presence: true, email: true, confirmation: true
   validates_presence_of :first_name, :last_name, :phone, :start_location, :end_location, :description
 
   validates :vehicle_count, numericality: { greater_than: 0 }, unless: 'vehicle_count.blank?'
