@@ -5,7 +5,6 @@ class BidShortSerializer < ActiveModel::Serializer
 
   has_many :vehicles
   has_one :bidder, serializer: ActorSerializer
-  has_one :vendor
 
   def formatted_amount
     number_to_currency(object.amount, :unit=>'')
