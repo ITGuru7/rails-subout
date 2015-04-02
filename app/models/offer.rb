@@ -20,6 +20,7 @@ class Offer
   index vendor_id: 1
   index opportunity_id: 1
   index reference_number: 1
+  index created_at: 1
 
   validates_presence_of :opportunity_id, on: :create, message: "can't be blank"
   validates_presence_of :amount, on: :create, message: "can't be blank"
@@ -53,18 +54,44 @@ class Offer
     self.set_onetime_token!
     Notifier.delay.accepted_offer_to_buyer(self.id)
     Notifier.delay.accepted_offer_confirmation_to_vendor(self.id)
+
+    # TODO - need to update athana
   end
 
   def cancel!
     self.state = 'canceled'
     self.save
+    self.set_onetime_token!
   end
 
   def decline!
     self.state = 'declined'
     self.save
     self.set_onetime_token!
-    Notifier.delay.declined_offer_to_buyer(self.id)
+    new_opportunity = self.opportunity.repost!
+    Notifier.delay.declined_offer_to_buyer(self.id, new_opportunity.id)
+  end
+
+  def expire!
+    self.state = 'expired'
+    self.save
+    self.set_onetime_token!
+
+    new_opportunity = self.opportunity.repost!
+    Notifier.delay.expired_offer_to_buyer(self.id, new_opportunity.id)
+    Notifier.delay.expired_offer_to_vendor(self.id)
+
+    self
+  end
+
+  def live?
+    (self.created_at > 3.days.ago) && (self.state == 'active')
+  end
+
+  def self.send_expired_offer_notification
+    Offer.where(:state => 'active', :created_at.lte => 3.days.ago).each do |offer|
+      offer.expire!
+    end
   end
 
   private

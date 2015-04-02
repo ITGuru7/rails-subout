@@ -319,6 +319,11 @@ class Opportunity
     bidder_ids.uniq
   end
 
+  def repost!
+    new_opportunity_attrs = self.attributes.except("_id", "reference_number", "created_at", "updated_at", "bidding_won_at", "value", "winning_bid_id", "bidding_done", "favorites_notified", "bidding_ends_at", "notified_regions", "awarded")
+    new_opportunity = Opportunity.create(new_opportunity_attrs)
+  end
+
   def update!(options)
     if bids.active.any?
       errors.add(:base, "Opportunity cannot be updated if it already has a bid")
@@ -439,6 +444,19 @@ class Opportunity
   def unlock_rating(rater_id, ratee_id)
     rating = Rating.find_or_create_by(rater_id: rater_id, ratee_id: ratee_id)
     rating.unlock!
+  end
+
+  def to_html
+<<-EOS
+    <p><strong>Title:</strong> #{self.name}</p>
+    <p><strong>Pick up time:</strong> #{self.start_date} #{self.start_time}</p>
+    <p><strong>Pick up location:</strong> #{self.start_location}</p>
+    <p><strong>Drop off time:</strong> #{self.end_date} #{self.end_time}</p>
+    <p><strong>Drop off location:</strong> #{self.end_location}</p>
+    <p><strong>Vehicle Type:</strong> #{self.vehicle_type}</p>
+    <p><strong>SO#:</strong> #{self.reference_number}</p>
+    <p><strong>Description:</strong> #{self.description}</p>
+EOS
   end
 
   private

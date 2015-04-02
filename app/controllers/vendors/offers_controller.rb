@@ -23,6 +23,7 @@ class Vendors::OffersController < Vendors::BaseController
   end
 
   def show
+    flash.now[:danger] = "Sorry, this offer is expired." if !@offer.live?
   end
 
   private

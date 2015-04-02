@@ -43,4 +43,8 @@ namespace :subout do
     GatewaySubscription.send_remind_notification
     Company.send_daily_remind_notification
   end
+
+  task :send_expired_offer_notification => :environment do 
+    Offer.send_expired_offer_notification
+  end
 end

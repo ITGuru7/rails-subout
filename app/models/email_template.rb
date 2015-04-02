@@ -56,6 +56,8 @@ class EmailTemplate
     @quote_request = @quote.quote_request
     @vendor = Vendor.last
     @offer = Offer.last
+    @supplier = @offer.opportunity.buyer
+    @new_opportunity = @offer.opportunity
   end
 
   def exchange_double_quote

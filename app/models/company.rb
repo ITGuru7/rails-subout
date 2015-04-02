@@ -439,6 +439,15 @@ class Company
     MyChargify.self_service_url(self.created_from_subscription.try(:subscription_id))
   end
 
+  def to_html
+<<-EOS
+    <p><strong>Name:</strong> #{self.name}</p>
+    <p><strong>Email:</strong> #{self.email}</p>
+    <p><strong>Contact phone:</strong> #{self.contact_phone}</p>
+    <p><strong>Website:</strong> #{self.website}</p>
+EOS
+  end
+
   private
 
   def set_notification_items

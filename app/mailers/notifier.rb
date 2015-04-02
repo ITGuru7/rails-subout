@@ -30,8 +30,8 @@ class Notifier < ActionMailer::Base
     mail(subject: "[SubOut] New Favorite Guest Supplier Invitation from #{@buyer.name}", to: invitation.supplier_email)
   end
 
-  def send_mail_to_company(template_name, company)
-    send_mail_from_template(template_name, company.notifiable_email) if company.notifiable?
+  def send_mail_to_company(template_name, company, email_layout='mailer_default')
+    send_mail_from_template(template_name, company.notifiable_email, email_layout) if company.notifiable?
   end
 
   def send_mail_from_template(template_name, to, email_layout='mailer_default')
@@ -252,7 +252,7 @@ class Notifier < ActionMailer::Base
   def offered_auction_to_vendor(offer_id)
     @offer = Offer.find(offer_id)
     @opportunity = @offer.opportunity
-    @buyer = @offer.opportunity.buyer
+    @supplier = @offer.opportunity.buyer
     @vendor = @offer.vendor
 
     send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
@@ -261,25 +261,45 @@ class Notifier < ActionMailer::Base
   def accepted_offer_to_buyer(offer_id)
     @offer = Offer.find(offer_id)
     @opportunity = @offer.opportunity
-    @buyer = @offer.opportunity.buyer
+    @supplier = @offer.opportunity.buyer
     @vendor = @offer.vendor
 
-    send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
+    send_mail_to_company(__method__.to_s, @supplier, 'mailer_vendor')
   end
 
   def accepted_offer_confirmation_to_vendor(offer_id)
     @offer = Offer.find(offer_id)
     @opportunity = @offer.opportunity
-    @buyer = @offer.opportunity.buyer
+    @supplier = @offer.opportunity.buyer
     @vendor = @offer.vendor
 
     send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
   end
 
-  def declined_offer_to_buyer(offer_id)
+  def declined_offer_to_buyer(offer_id, new_opportunity_id)
     @offer = Offer.find(offer_id)
     @opportunity = @offer.opportunity
-    @buyer = @offer.opportunity.buyer
+    @supplier = @offer.opportunity.buyer
+    @vendor = @offer.vendor
+    @new_opportunity = Opportunity.find(new_opportunity_id)
+
+    send_mail_to_company(__method__.to_s, @supplier, 'mailer_vendor')
+  end
+
+  def expired_offer_to_buyer(offer_id, new_opportunity_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @supplier = @offer.opportunity.buyer
+    @vendor = @offer.vendor
+    @new_opportunity = Opportunity.find(new_opportunity_id)
+
+    send_mail_to_company(__method__.to_s, @supplier, 'mailer_vendor')
+  end
+
+  def expired_offer_to_vendor(offer_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @supplier = @offer.opportunity.buyer
     @vendor = @offer.vendor
 
     send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')

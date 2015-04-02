@@ -130,4 +130,36 @@ class MailPreview < MailView
     company = Company.last
     Notifier.daily_reminder(company.id)
   end
+
+  def offered_auction_to_vendor
+    offer = Offer.last
+    Notifier.offered_auction_to_vendor(offer.id)
+  end
+
+  def accepted_offer_to_buyer
+    offer = Offer.last
+    Notifier.offered_auction_to_vendor(offer.id)
+  end
+
+  def accepted_offer_confirmation_to_vendor
+    offer = Offer.last
+    Notifier.accepted_offer_confirmation_to_vendor(offer.id)
+  end
+
+  def declined_offer_to_buyer
+    offer = Offer.last
+    new_opportunity = offer.opportunity
+    Notifier.declined_offer_to_buyer(offer.id, new_opportunity.id)
+  end
+
+  def expired_offer_to_buyer
+    offer = Offer.last
+    new_opportunity = offer.opportunity
+    Notifier.expired_offer_to_buyer(offer.id, new_opportunity.id)
+  end
+
+  def expired_offer_to_vendor
+    offer = Offer.last
+    Notifier.expired_offer_to_buyer(offer.id)
+  end
 end

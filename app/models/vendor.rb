@@ -26,4 +26,12 @@ class Vendor
   def total_won_amount
     self.offers.accepted.sum(&:amount)
   end
+
+  def to_html
+<<-EOS
+    <p><strong>Name:</strong> #{self.name}</p>
+    <p><strong>Email:</strong> #{self.email}</p>
+    <p><strong>Address:</strong> #{self.address}</p>
+EOS
+  end
 end
