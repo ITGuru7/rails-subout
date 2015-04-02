@@ -3,7 +3,7 @@ class Notifier < ActionMailer::Base
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::DateHelper
 
-  default :from => "\"Chater Business\" <charterbusiness@suboutapp.com>"
+  default :from => "\"Charter Business\" <charterbusiness@suboutapp.com>"
   layout 'mailer_default'
 
   before_filter :add_attachments
