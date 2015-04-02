@@ -13,15 +13,8 @@ class Api::V1::BidsController < Api::V1::BaseController
 
   def create
     bid = opportunity.bids.build(bid_params)
-    bid.vendor = vendor
     bid.bidder = current_company
     bid.save
-
-    if !bid.vendor.blank?
-      bid.opportunity.win!(bid.id)
-      bid.invite_vendor!(vendor)
-    end
-
     respond_with_namespace(bid.opportunity, bid)
   end
 
@@ -71,13 +64,5 @@ class Api::V1::BidsController < Api::V1::BaseController
 
   def bid_params
     params.require(:bid).permit(:amount, :auto_bidding_limit, :comment, :vehicle_count, :vehicle_count_limit, :vehicles=>[:year, :type, :passenger_count, :gratuity_included])
-  end
-  
-  def vendor_params
-    params.require(:vendor).permit(:id, :name, :email, :crm_id)
-  end
-
-  def vendor
-    Vendor.find_by_email(vendor_params[:email]) || Vendor.create(vendor_params) if !params[:vendor].blank?
   end
 end

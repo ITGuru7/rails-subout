@@ -4,10 +4,12 @@ class EmailTemplate
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::DateHelper
 
+  CATEGORIES = %w(normal consumer vendor)
   field :name
   field :subject
   field :body
   field :description
+  field :category
 
   validates_presence_of :name, :subject, :body
 
@@ -52,6 +54,8 @@ class EmailTemplate
     @quote = Quote.last
     @quoter = @quote.quoter
     @quote_request = @quote.quote_request
+    @vendor = Vendor.last
+    @offer = Offer.last
   end
 
   def exchange_double_quote

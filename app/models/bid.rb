@@ -26,13 +26,11 @@ class Bid
   belongs_to :opportunity, :inverse_of => :bids
   belongs_to :bidder, class_name: "Company", counter_cache: :bids_count
   belongs_to :quote
-  belongs_to :vendor
 
   has_one :won_opportunity, :class_name => "Opportunity", :foreign_key => "winning_bid_id", :inverse_of => :winning_bid
 
   index bidder_id: 1
   index opportunity_id: 1
-  index vendor_id: 1
   index reference_number: 1
 
   validates_presence_of :bidder_id, on: :create, message: "can't be blank"
@@ -63,7 +61,6 @@ class Bid
   scope :month, -> { where(:created_at.gte => Date.today.beginning_of_month, :created_at.lte => Date.today.end_of_month) }
   scope :last_90_days, -> { where(:created_at.gte => 90.days.ago, :created_at.lte => Time.now) }
   scope :won, -> { where(:state => 'won') }
-  scope :invited, -> { where(:state => 'invited') }
 
   after_create :win_quick_winable_opportunity
   after_create :run_automatic_bidding
@@ -153,16 +150,6 @@ class Bid
     Notifier.delay.counter_negotiation(self.id) 
   end
 
-  def invite_vendor!(vendor)
-    self.vendor = vendor
-    self.state = 'invited'
-    self.save
-  end
-
-  def invited?
-    !self.vendor.blank?
-  end
-
   private
 
   def win_quick_winable_opportunity
@@ -189,10 +176,6 @@ class Bid
 
   def validate_bidable_by_bidder
     return unless opportunity
-
-    if self.vendor.blank? and opportunity.buyer_id == bidder_id
-      errors.add :bidder_id, "cannot bid on your own opportunity"
-    end
 
     if !bidder.is_a_favorite_of?(opportunity.buyer)
       if opportunity.for_favorites_only?

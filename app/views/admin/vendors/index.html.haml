@@ -14,10 +14,11 @@
         %td= vendor.name
         %td= vendor.email
         %td= number_to_currency(vendor.total_invited_amount)
-        %td= vendor.bids.count
+        %td= vendor.offers.count
         %td= number_to_currency(vendor.total_won_amount)
         %td
-          = time_ago_in_words vendor.bids.recent.first.created_at
-          ago
-          %br
-          = vendor.bids.recent.first.created_at.to_s(:db)
+          - if vendor.offers.count > 0
+            = time_ago_in_words vendor.offers.recent.first.created_at
+            ago
+            %br
+            = vendor.offers.recent.first.created_at.to_s(:db)

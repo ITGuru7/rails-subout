@@ -6,6 +6,8 @@ class OpportunityShortSerializer < ActiveModel::Serializer
     :special_region, :is_for_special_region, :for_quote_only
 
   has_one :buyer, serializer: ActorSerializer
+  has_one :offer, serializer: OfferShortSerializer
+  
   def icon
     "icon-#{object.type.parameterize}" if !object.for_quote_only
   end

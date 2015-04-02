@@ -1,4 +1,4 @@
-<div id="vendor-new" ng-controller="FormCtrl">
+<div id="offer-new" ng-controller="OfferFormCtrl">
   <div class="modal-header">
     <button data-dismiss="modal" class="close" type="button">
       x
@@ -6,7 +6,7 @@
     <h3>Choose a vendor</h3>
   </div>
   <div class="modal-body">
-    <form name="newBid" class="form-horizontal">
+    <form name="newOffer" class="form-horizontal">
 
       <div class="alert alert-danger" ng-show="errors">
         <a class="close" ng-click="hideAlert()">&times;</a>
@@ -23,65 +23,64 @@
       </div>
 
       <legend>Vendor</legend>
-      <div class="form-group vendor_email" ng-class="{'has-error':newBid.vendor_email.$invalid}">
+      <div class="form-group vendor_email" ng-class="{'has-error':newOffer.vendor_email.$invalid}">
         <label for="vendor_name" class="col-md-4 control-label">Email *</label>
         <div class="col-md-8">
           <input type="text"
                  id="vendor_email"
                  name="vendor_email"
                  required
-                 ng-model="bid.vendor.email"
+                 ng-model="vendor.email"
                  size="10"
                  maxlength="50"
                  class="form-control">
         </div>
       </div>
       
-      <div class="form-group vendor_name" ng-class="{'has-error':newBid.vendor_name.$invalid}">
+      <div class="form-group vendor_name" ng-class="{'has-error':newOffer.vendor_name.$invalid}">
         <label for="vendor_name" class="col-md-4 control-label">Name *</label>
         <div class="col-md-8">
           <input type="text"
                  id="vendor_name"
                  name="vendor_name"
                  required
-                 ng-model="bid.vendor.name"
+                 ng-model="vendor.name"
                  size="10"
                  maxlength="10"
                  class="form-control">
         </div>
       </div>
 
+      <legend>Offer</legend>
       <div class="form-group">
-        <label for="vendor_vehicle_type" class="col-md-4 control-label">Vehicle Type</label>
+        <label for="offer_vehicle_type" class="col-md-4 control-label">Vehicle Type</label>
         <div class="col-md-8">
-          <select id="vendor_vehicle_type" class="form-control" name="vendor_vehicle_type" ng-model="bid.vendor.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
+          <select id="offer_vehicle_type" class="form-control" name="offer_vehicle_type" ng-model="offer.vehicle_type" ng-options="t for t in VEHICLE_TYPES">
             <option value=""></option>
           </select>
         </div>
       </div>
-
-      <legend>Cost</legend>
-      <div class="form-group bid_amount" ng-class="{'has-error':newBid.bid_amount.$invalid}">
-        <label for="bid_amount" class="col-md-4 control-label">Amount ($) *</label>
+      <div class="form-group offer_amount" ng-class="{'has-error':newOffer.offer_amount.$invalid}">
+        <label for="offer_amount" class="col-md-4 control-label">Amount ($) *</label>
         <div class="col-md-8">
           <input type="text"
-                 id="bid_amount"
-                 name="bid_amount"
+                 id="offer_amount"
+                 name="offer_amount"
                  required
-                 ng-model="bid.amount"
+                 ng-model="offer.amount"
                  ui-validate="{ only_numbers: 'validateNumber($value)' }"
                  size="10"
                  maxlength="10"
                  class="form-control">
 
-          <p ng-show="newBid.bid_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
+          <p ng-show="newOffer.offer_amount.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-md-offset-4 col-md-8">
           <div>
-            <button ng-click="save()" class="btn btn-success" ng-disabled="newBid.$invalid">
+            <button ng-click="save()" class="btn btn-success" ng-disabled="newOffer.$invalid">
               Select Now
             </button>
           </div>

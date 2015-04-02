@@ -79,6 +79,8 @@ class Opportunity
 
   #has_one :event, as: :eventable
   has_many :bids, dependent: :destroy
+  has_one :offer, dependent: :destroy
+
   embeds_many :comments
   belongs_to :winning_bid, :class_name => "Bid"
 
@@ -272,11 +274,7 @@ class Opportunity
     bidder.total_won_bids_count += 1
     bidder.save(validate: false)
 
-    if bid.invited?
-      Notifier.delay.invited_auction_to_vendor(bid.id)
-      return self # ignore below
-    end
-
+    
     Notifier.delay.won_auction_to_buyer(self.id) if self.buyer.notification_items.include?("opportunity-win")
     Notifier.delay.won_auction_to_supplier(self.id) if bid.bidder.notification_items.include?("opportunity-win")
     

@@ -82,47 +82,47 @@
         <label class="col-sm-3">Is graduity included?</label>
       </div>
       <div ng-repeat="vehicle in quote.vehicles">
-      <ng-form name="vform" class="row" style="margin: 0;">
-        <div class="col-sm-3">
-          <input type="text"
-                 ng-model="vehicle.year"
-                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
-                 size="10"
-                 maxlength="10"
-                 required
-                 class="form-control">
-        </div>
-        <div class="col-sm-3">
-          <p>
-            <select id="quote_vehicle_type" class="form-control" name="quote_vehicle_type" ng-model="vehicle.type" ng-options="t for t in VEHICLE_TYPES">
-              <option value="">Other</option>
-            </select>
-          </p>
-          <p ng-if="!vehicle.type">
+        <ng-form name="vform" class="row" style="margin: 0;">
+          <div class="col-sm-3">
             <input type="text"
-                   id="quote_vehicle_type_other"
-                   name="quote_vehicle_type_other"
-                   ng-model="vehicle.type_other"
+                   ng-model="vehicle.year"
+                   ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
                    size="10"
                    maxlength="10"
+                   required
                    class="form-control">
-          </p>
-        </div>
-        <div class="col-sm-3">
-          <input type="text"
-                 ng-model="vehicle.passenger_count"
-                 ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
-                 size="10"
-                 maxlength="10"
-                 required
-                 class="form-control">
-        </div>
-        <div class="col-sm-3">
-          <label for="quote_vehicle_gratuity_included" class="checkbox">
-              <input id="quote_vehicle_gratuity_included" type="checkbox" ng-model="vehicle.gratuity_included" value="1">
-          </label>
-        </div>
-      </ng-form>
+          </div>
+          <div class="col-sm-3">
+            <p>
+              <select id="quote_vehicle_type" class="form-control" name="quote_vehicle_type" ng-model="vehicle.type" ng-options="t for t in VEHICLE_TYPES">
+                <option value="">Other</option>
+              </select>
+            </p>
+            <p ng-if="!vehicle.type">
+              <input type="text"
+                     id="quote_vehicle_type_other"
+                     name="quote_vehicle_type_other"
+                     ng-model="vehicle.type_other"
+                     size="10"
+                     maxlength="10"
+                     class="form-control">
+            </p>
+          </div>
+          <div class="col-sm-3">
+            <input type="text"
+                   ng-model="vehicle.passenger_count"
+                   ui-validate="{ only_numbers: 'validateOptionalNumber($value)' }"
+                   size="10"
+                   maxlength="10"
+                   required
+                   class="form-control">
+          </div>
+          <div class="col-sm-3">
+            <label for="quote_vehicle_gratuity_included" class="checkbox">
+                <input id="quote_vehicle_gratuity_included" type="checkbox" ng-model="vehicle.gratuity_included" value="1">
+            </label>
+          </div>
+        </ng-form>
       </div>
 
 

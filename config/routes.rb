@@ -37,7 +37,10 @@ Subout::Application.routes.draw do
   end
 
   namespace :vendors do
-    resources :opportunities
+    resources :offers do
+      put "accept", on: :member
+      put "decline", on: :member
+    end
   end
 
   namespace :api, defaults: {format: 'json'}  do
@@ -107,6 +110,7 @@ Subout::Application.routes.draw do
       resources :tags
       resources :opportunities do
         resources :bids
+        resources :offers
         resources :comments
       end
 

@@ -270,9 +270,9 @@ subout.run(($rootScope, $location, $appBrowser, $numberFormatter, $timeout,
     $rootScope.setModal(suboutPartialPath('quote-new.html'))
     $rootScope.$broadcast('modalOpened')
 
-  $rootScope.displayNewVendorForm = (opportunity) ->
+  $rootScope.displayNewOfferForm = (opportunity) ->
     $rootScope.setOpportunity(opportunity)
-    $rootScope.setModal(suboutPartialPath('vendor-form.html'))
+    $rootScope.setModal(suboutPartialPath('offer-form.html'))
     $rootScope.$broadcast('modalOpened')
 
 
@@ -1619,11 +1619,11 @@ CompanyProfileCtrl = ($rootScope, $location, $routeParams, $scope, $timeout,  Fa
 HelpCtrl = ()->
   return true
 
-VendorFormCtrl = ($scope, $rootScope, Bid, Opportunity) ->
-  $scope.vendor =
-    vehicle_type: $scope.opportunity.vehicle_type,
-  $scope.bid =
+OfferFormCtrl = ($scope, $rootScope, Offer, Opportunity) ->
+  $scope.vendor = {}
+  $scope.offer =
     amount: $scope.opportunity.reserve_amount
+    vehicle_type: $scope.opportunity.vehicle_type
 
   $scope.hideAlert = ->
     $scope.errors = null
@@ -1632,10 +1632,12 @@ VendorFormCtrl = ($scope, $rootScope, Bid, Opportunity) ->
     $scope.hideAlert()
 
   $scope.save = ->
-    console.log($scope.bid)
-    Bid.save
-      bid: $scope.bid
-      vendor: $scope.bid.vendor
+    console.log($scope.offer)
+    console.log($scope.vendor)
+
+    Offer.save
+      offer: $scope.offer
+      vendor: $scope.vendor
       api_token: $rootScope.token.api_token
       opportunityId: $rootScope.opportunity._id
     , (data) ->

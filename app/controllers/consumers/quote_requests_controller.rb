@@ -45,7 +45,6 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
     end
   end
 
-
   private
   def quote_request_params
     params.require(:quote_request).permit(:first_name, :last_name, :email, :email_confirmation, :phone, :vehicle_type, :vehicle_count, :passengers,

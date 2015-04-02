@@ -10,6 +10,7 @@ class OpportunitySerializer < ActiveModel::Serializer
   has_many :recent_bids, serializer: BidShortSerializer, :key=>"bids"
   has_many :comments, serializer: CommentSerializer
   has_one :quote_request
+  has_one :offer, serializer: OfferShortSerializer
 
   def icon
     "icon-#{object.type.parameterize}" if object.type

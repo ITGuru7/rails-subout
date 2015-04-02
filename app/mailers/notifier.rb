@@ -37,21 +37,7 @@ class Notifier < ActionMailer::Base
         format.html { render layout: email_layout, inline: eval('"' + email_template.body + '"', binding) }
       end
     rescue
-      if !Rails.env.production?
-        @bid = Bid.last
-        @bidder = @bid.bidder
-        @opportunity = @bid.opportunity
-        @poster = @opportunity.buyer
-        @subscription = GatewaySubscription.last
-        @company = Company.last
-        @vehicle = Vehicle.last
-        @old_vehicle = Vehicle.first
-        @card_update_link = @company.chargify_service_url
-        @quote = Quote.last
-        @quoter = @quote.quoter
-        @quote_request = @quote.quote_request
-        mail(subject: template_name, to: to)
-      end
+      puts "Not Found: Email Template"
     end
   end
 
@@ -249,11 +235,38 @@ class Notifier < ActionMailer::Base
     send_mail_from_template('expired_quote_request', @quote_request.email, 'mailer_consumer')
   end
 
-  def invited_auction_to_vendor(bid_id)
-    @bid = Bid.find(bid_id)
-    @buyer = @opportunity.buyer
-    @vendor = bid.vendor
-    @opportunity = @bid.opportunity
+  def offered_auction_to_vendor(offer_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @buyer = @offer.opportunity.buyer
+    @vendor = @offer.vendor
+
+    send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
+  end
+
+  def accepted_offer_to_buyer(offer_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @buyer = @offer.opportunity.buyer
+    @vendor = @offer.vendor
+
+    send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
+  end
+
+  def accepted_offer_confirmation_to_vendor(offer_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @buyer = @offer.opportunity.buyer
+    @vendor = @offer.vendor
+
+    send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
+  end
+
+  def declined_offer_to_buyer(offer_id)
+    @offer = Offer.find(offer_id)
+    @opportunity = @offer.opportunity
+    @buyer = @offer.opportunity.buyer
+    @vendor = @offer.vendor
 
     send_mail_from_template(__method__.to_s, @vendor.email, 'mailer_vendor')
   end

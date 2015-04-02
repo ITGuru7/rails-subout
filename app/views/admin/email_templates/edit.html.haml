@@ -2,6 +2,7 @@
   %h3= @email_template.to_s
   = bootstrap_form_for @email_template, url: admin_email_template_path(@email_template.id), html: { class: "form-horizontal" } do |f|
     = f.hidden_field :id
+    = f.collection_select :category, EmailTemplate::CATEGORIES, :to_s, :to_s
     = f.text_area :description, rows: 8
     = f.text_field :subject
     = f.text_area :body, rows: 10
