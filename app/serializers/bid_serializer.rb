@@ -5,7 +5,6 @@ class BidSerializer < ActiveModel::Serializer
 
   has_many :vehicles
   has_one :bidder, serializer: ActorSerializer
-  has_one :vendor
   has_one :opportunity, serializer: OpportunityShortSerializer
 
   def formatted_amount
