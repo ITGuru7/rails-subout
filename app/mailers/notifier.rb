@@ -8,6 +8,10 @@ class Notifier < ActionMailer::Base
 
   before_filter :add_attachments
 
+  def named_email(name, email)
+    "\"#{name}\" <#{email}>"
+  end
+
   def add_attachments
     attachments.inline['logo.png'] = File.read(Rails.root.join('app/assets/images/logo.png'))
   end
@@ -31,10 +35,20 @@ class Notifier < ActionMailer::Base
   end
 
   def send_mail_from_template(template_name, to, email_layout='mailer_default')
+    sender = named_email("Bus Quote", "charterbusiness@suboutapp.com") if !@quote_request.blank?
     begin
       email_template = EmailTemplate.by_name(template_name)
-      mail(subject: eval('"' + email_template.subject + '"', binding), to: to) do |format|
-        format.html { render layout: email_layout, inline: eval('"' + email_template.body + '"', binding) }
+      email_subject = eval('"' + email_template.subject + '"', binding)
+      email_body = eval('"' + email_template.body + '"', binding)
+
+      if sender.blank?
+        mail(subject: email_subject, to: to) do |format|
+          format.html { render layout: email_layout, inline: email_body }
+        end
+      else
+        mail(subject: email_subject, to: to, from: sender) do |format|
+          format.html { render layout: email_layout, inline: email_body }
+        end
       end
     rescue
       puts "Not Found: Email Template"
