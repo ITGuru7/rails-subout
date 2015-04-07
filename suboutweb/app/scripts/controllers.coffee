@@ -1632,9 +1632,6 @@ OfferFormCtrl = ($scope, $rootScope, Offer, Opportunity) ->
     $scope.hideAlert()
 
   $scope.save = ->
-    console.log($scope.offer)
-    console.log($scope.vendor)
-
     Offer.save
       offer: $scope.offer
       vendor: $scope.vendor

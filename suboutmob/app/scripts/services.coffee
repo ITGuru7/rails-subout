@@ -97,6 +97,11 @@ suboutSvcs.factory "Quote", ($resource) ->
     {quoteRequestId: "@quoteRequestId"},
     {}
 
+suboutSvcs.factory "Offer", ($resource) ->
+  $resource "#{api_path}/opportunities/:opportunityId/offers",
+    {opportunityId: "@opportunityId"},
+    {}
+    
 suboutSvcs.factory "Comment", ($resource) ->
   Comment = $resource "#{api_path}/opportunities/:opportunityId/comments",
     {opportunityId: "@opportunityId"},
