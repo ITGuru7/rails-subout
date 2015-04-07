@@ -80,23 +80,26 @@ class QuoteRequest
   validate :validate_dates
   validate :validate_locations
 
-  VEHICLE_TYPES = ["Sedan",
-    "Limo",
-    "Party Bus",
-    "Limo Bus",
-    "Mini Bus",
-    "Motorcoach",
-    "Double Decker Motorcoach",
-    "Executive Coach",
-    "Sleeper Bus",
-    "School Bus"]
+  VEHICLE_TYPES = {
+    :"Sedan (up to 4 passengers)"=>"Sedan",
+    :"Limo (up to 18 passengers)"=>"Limo",
+    :"Party Bus (up to 24 passengers)"=>"Party Bus",
+    :"Limo Bus (up to 30 passengers)"=>"Limo Bus",
+    :"Mini Bus (up to 32 passenger)"=>"Mini Bus",
+    :"Motorcoach (47 to 56 passengers)"=>"Motorcoach",
+    :"Double Decker Motorcoach (up to 70 passenger)"=>"Double Decker Motorcoach",
+    :"Executive Coach (up to 20 passengers)"=>"Executive Coach",
+    :"Sleeper Bus (Sleep up to 12 passenger)"=>"Sleeper Bus",
+    :"School Bus (up to 40 adults or 60 kids)"=>"School Bus"
+  }
 
   TRIP_TYPES = [
-    "Church Trip",
-    "Private Group",
-    "Athletic Group",
-    "Coroprate Group",
-    "Weddings"
+    :"Church Trip"=>"Church Trip",
+    :"Private Group"=>"Private Group",
+    :"Athletic Group"=>"Athletic Group",
+    :"Coroprate Group"=>"Coroprate Group",
+    :"Weddings"=>"Weddings",
+    :"Other"=>"Other"
   ]
 
   def recent_quotes

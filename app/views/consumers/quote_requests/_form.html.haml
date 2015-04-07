@@ -5,7 +5,7 @@
   = f.text_field :email
   = f.text_field :email_confirmation
   = f.text_field :phone, placeholder: "(xxx)-xxx-xxxx"
-  = f.select :vehicle_type, [""] + QuoteRequest::VEHICLE_TYPES
+  = f.select :vehicle_type, [''] + QuoteRequest::VEHICLE_TYPES.to_a
   = f.text_field :vehicle_count
   = f.text_field :passengers
   = f.text_field :start_location, label: 'Pick up address'
@@ -17,9 +17,12 @@
     .help
       %small Depart time from destination
   = f.text_field :end_date, label: 'Drop off date', placeholder: "mm/dd/yyyy", class: 'datepicker'
-  = f.text_field :end_time, label: 'Drop off time', placeholder: "hh:mm", class: 'timepicker'
 
   = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
+  = f.form_group do
+    .help
+      %small 
+        For the most accurate quote please provide as much details about your trip as possible. Number of stops, passenger count, itinerary, special needs, etc
   = f.text_area :description
 
   = f.form_group do
