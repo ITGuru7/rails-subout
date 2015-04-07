@@ -127,7 +127,7 @@
                     <tr>
                       <td>
                         <i class="glyphicon {{opportunity.icon}}" ng-if="event.eventable.for_quote_only==false"></i>
-                        <i class="glyphicon icon-quote-request {{opportunity.icon}}" ng-if="event.eventable.for_quote_only!=false"></i>
+                        <i class="glyphicon icon-quote-request glyphicon-hand-up" ng-if="event.eventable.for_quote_only!=false"></i>
                         <span class='created-at timeago' ng-cloak relative-time title="{{event.created_at}}">{{event.created_at|date}}</span>
                       </td>
                       <td>
