@@ -3,5 +3,5 @@
 //= require pickadate/lib/picker.time
 //= require pickadate/lib/legacy
 
-$('.timepicker').pickatime({format: 'HH:i'});
+$('.timepicker').pickatime({format: 'h:i A'});
 $('.datepicker').pickadate({format: 'mm/dd/yyyy'});

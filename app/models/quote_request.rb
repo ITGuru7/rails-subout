@@ -64,21 +64,27 @@ class QuoteRequest
   validates :vehicle_count, numericality: { greater_than: 0 }, unless: 'vehicle_count.blank?'
   validates :passengers, numericality: { greater_than: 0 }, unless: 'passengers.blank?'
 
-  TIMEFORMAT = %r(\d{2}\:\d{2})
   validates_presence_of :start_date
   validates :start_date, date: { message: "is invalid date format (mm/dd/yyyy)" }, :if=>"!start_date.blank?"
 
   validates_presence_of :start_time
-  validates_format_of :start_time, message: "is invalid time format (hh:mm)", :with =>TIMEFORMAT, :if=>"!start_time.blank?"
-
+  validate :validate_start_time, :if=>"!start_time.blank?"
   validates_presence_of :end_date
   validates :end_date, date: { message: "is invalid date format (mm/dd/yyyy)" }, :if=>"!end_date.blank?"
+  validate :validate_end_time, :if=>"!end_time.blank?"
 
   validates_presence_of :end_time
-  validates_format_of :end_time, message: "is invalid time format (hh:mm)", :with =>TIMEFORMAT, :if=>"!end_time.blank?"
 
   validate :validate_dates
   validate :validate_locations
+
+  def validate_start_time
+    errors.add(:start_time, "is invalid time format") if !valid_time?(self.start_time)
+  end
+
+  def validate_end_time
+    errors.add(:end_time, "is invalid time format") if !valid_time?(self.end_time)
+  end
 
   VEHICLE_TYPES = {
     :"Sedan (up to 4 passengers)"=>"Sedan",
