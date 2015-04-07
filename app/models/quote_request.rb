@@ -115,22 +115,24 @@ class QuoteRequest
     self.recent_quotes.map{|quote| quote.to_html(true)}.join('')
   end
 
-  def to_html
-    [
-      "<strong>Vehicle type:</strong> #{vehicle_type}",
-      "<strong>Vehicle count:</strong> #{vehicle_count}",
-      "<strong>Passengers:</strong> #{passengers}",
-      "<strong>Pick up address:</strong> #{start_location}",
-      "<strong>Pick up date:</strong> #{starts_at.to_s(:long)}",
-      "<strong>Drop off address:</strong> #{end_location}",
-      "<strong>Drop off date:</strong> #{ends_at.to_s(:long)}",
-      "<strong>Trip type:</strong> #{trip_type}",
-      "<strong>Description:</strong> #{description}",
-    ].join("<br>")
+  def status
+    if self.winning_quote_id
+      "Bidding won"
+    elsif self.awarded?
+      "Awarded"
+    elsif self.bidding_ended?
+      "Bidding ended"
+    else
+      "In progress"
+    end
+  end
+
+  def bidding_ended?
+    self.created_at < 2.days.ago
   end
 
   def quotable?
-    self.created_at + 2.days > Time.now && self.awarded == false
+    self.bidding_ended? && self.awarded?
   end
 
   def validate_dates
@@ -200,6 +202,7 @@ class QuoteRequest
     quoter = quote.quoter
 
     self.awarded = true
+    self.state = 'won'
     self.winning_quote_id = quote.id
     self.bidding_won_at = Time.now
     self.save(validate: false) # when poster select winner, the start date validation may be failed
@@ -224,8 +227,23 @@ class QuoteRequest
   def self.send_expired_notification
     where(:created_at.lte => 2.days.ago, expired_notification_sent: false).each do |quote_request|
       Notifier.delay.expired_quote_request(quote_request.id)
+      quote_request.set(:state, 'expired')
       quote_request.set(:expired_notification_sent, true)
     end
+  end
+
+  def to_html
+    [
+      "<strong>Vehicle type:</strong> #{vehicle_type}",
+      "<strong>Vehicle count:</strong> #{vehicle_count}",
+      "<strong>Passengers:</strong> #{passengers}",
+      "<strong>Pick up address:</strong> #{start_location}",
+      "<strong>Pick up date:</strong> #{starts_at.to_s(:long)}",
+      "<strong>Drop off address:</strong> #{end_location}",
+      "<strong>Drop off date:</strong> #{ends_at.to_s(:long)}",
+      "<strong>Trip type:</strong> #{trip_type}",
+      "<strong>Description:</strong> #{description}",
+    ].join("<br>")
   end
 
 end

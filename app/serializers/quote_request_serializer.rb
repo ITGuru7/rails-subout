@@ -1,6 +1,6 @@
 class QuoteRequestSerializer < ActiveModel::Serializer
   attributes :_id, :created_at, :name, :email, :vehicle_count, :vehicle_type, :trip_type, :reference_number, :start_date, :end_date, :start_region, :end_region, :description,
-    :bidding_ends_at, :quotable, :for_quote_only
+    :bidding_ends_at, :quotable, :for_quote_only, :status
 
   has_many :recent_quotes, array_seralizer: QuoteShortSerializer
 
