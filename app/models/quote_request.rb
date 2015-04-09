@@ -73,8 +73,6 @@ class QuoteRequest
   validates :end_date, date: { message: "is invalid date format (mm/dd/yyyy)" }, :if=>"!end_date.blank?"
   validate :validate_end_time, :if=>"!end_time.blank?"
 
-  validates_presence_of :end_time
-
   validate :validate_dates
   validate :validate_locations
 
