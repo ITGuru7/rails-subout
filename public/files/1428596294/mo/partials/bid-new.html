@@ -58,6 +58,9 @@
                  class="form-control">
         </div>
         <div>
+          <p ng-if="!opportunity.forward_auction" class="help-block">
+            Add the lowest price you are willing bid here. The system will bid for you if another vendor bids lower then you.
+          </p>
           <p ng-show="newBid.bid_auto_bidding_limit.$error.only_numbers" class="help-block">Enter only numeric characters.</p>
           <p ng-show="newBid.bid_auto_bidding_limit.$error.bid_amount" class="help-block">
             <span ng-show="opportunity.forward_auction">Maximum amount cannot be lower than bid amount.</span>
