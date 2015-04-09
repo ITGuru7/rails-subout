@@ -35,8 +35,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  private
-
   def prepare_mobile
     session[:mobile] = params[:mobile] if !params[:mobile].nil?
   end
@@ -47,6 +45,10 @@ class ApplicationController < ActionController::Base
     else
       request.user_agent =~ /Mobile|webOS/
     end
+  end
+  
+  def allow_iframe
+    response.headers.except! 'X-Frame-Options'
   end
 
   helper_method :mobile_device?

@@ -1,12 +1,12 @@
 class Consumers::QuoteRequestsController < Consumers::BaseController
   skip_before_filter :verify_authenticity_token, only: [:create]
   
+  layout 'consumer'
+
   before_filter :check_retailer
   before_filter :check_retailer_host, only: [:new]
   before_filter :check_consumer_quote_request, only: [:select_winner, :show]
-
-
-  layout 'consumer'
+  after_action :allow_iframe, only: :new
 
   def new
     @quote_request = QuoteRequest.new
