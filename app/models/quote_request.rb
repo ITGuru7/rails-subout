@@ -99,14 +99,14 @@ class QuoteRequest
     :"School Bus (up to 40 adults or 60 kids)"=>"School Bus"
   }
 
-  TRIP_TYPES = [
+  TRIP_TYPES = {
     :"Church Trip"=>"Church Trip",
     :"Private Group"=>"Private Group",
     :"Athletic Group"=>"Athletic Group",
     :"Coroprate Group"=>"Coroprate Group",
     :"Weddings"=>"Weddings",
     :"Other"=>"Other"
-  ]
+  }
 
   def recent_quotes
     result = self.quotes.active.recent.map do |quote|

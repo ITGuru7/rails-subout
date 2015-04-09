@@ -18,7 +18,7 @@
       %small Depart time from destination
   = f.text_field :end_date, label: 'Drop off date', placeholder: "mm/dd/yyyy", class: 'datepicker'
 
-  = f.select :trip_type, [""] + QuoteRequest::TRIP_TYPES
+  = f.select :trip_type, [''] + QuoteRequest::TRIP_TYPES.to_a
   = f.form_group do
     .help
       %small 

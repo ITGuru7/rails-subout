@@ -17,11 +17,16 @@
 %h3 Embedded HTML
 
 %h4 Javascript
-%p.alert.alert-info
+%p.alert.alert-warning
   Consumer form requires the jQuery, please add jQuery plugin on your website if its not included.
-
 %textarea.form-control{:cols => "50", :onclick => "this.focus();this.select()", :readonly => "readonly", :rows => "1"}
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+%br
+%p.alert.alert-warning
+  Also we recommend pickadate.js library for the date picker and time picker. 
+  Please see
+  %a{href: "http://amsul.ca/pickadate.js/"}
+    http://amsul.ca/pickadate.js/
 
 %h4 HTML
 - @quote_request = QuoteRequest.new
