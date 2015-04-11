@@ -7,6 +7,28 @@ class QuoteRequest
 
   token field_name: :reference_number, retry_count: 7, length: 7, contains: :upper_alphanumeric
 
+  VEHICLE_TYPES = {
+    :"Sedan (up to 4 passengers)"=>"Sedan",
+    :"Limo (up to 18 passengers)"=>"Limo",
+    :"Party Bus (up to 24 passengers)"=>"Party Bus",
+    :"Limo Bus (up to 30 passengers)"=>"Limo Bus",
+    :"Mini Bus (up to 32 passenger)"=>"Mini Bus",
+    :"Motorcoach (47 to 56 passengers)"=>"Motorcoach",
+    :"Double Decker Motorcoach (up to 70 passenger)"=>"Double Decker Motorcoach",
+    :"Executive Coach (up to 20 passengers)"=>"Executive Coach",
+    :"Sleeper Bus (Sleep up to 12 passenger)"=>"Sleeper Bus",
+    :"School Bus (up to 40 adults or 60 kids)"=>"School Bus"
+  }
+
+  TRIP_TYPES = {
+    :"Church Trip"=>"Church Trip",
+    :"Private Group"=>"Private Group",
+    :"Athletic Group"=>"Athletic Group",
+    :"Coroprate Group"=>"Coroprate Group",
+    :"Weddings"=>"Weddings",
+    :"Other"=>"Other"
+  }
+
   field :first_name, type: String
   field :last_name, type: String
   field :email, type: String
@@ -21,8 +43,6 @@ class QuoteRequest
   field :start_region, type: String
 
   field :end_location, type: String
-  field :end_date, type: Date
-  field :end_time, type: String
   field :end_region, type: String
 
   field :trip_type, type: String
@@ -69,42 +89,12 @@ class QuoteRequest
 
   validates_presence_of :start_time
   validate :validate_start_time, :if=>"!start_time.blank?"
-  validates_presence_of :end_date
-  validates :end_date, date: { message: "is invalid date format (mm/dd/yyyy)" }, :if=>"!end_date.blank?"
-  validate :validate_end_time, :if=>"!end_time.blank?"
-
   validate :validate_dates
   validate :validate_locations
 
   def validate_start_time
     errors.add(:start_time, "is invalid time format") if !valid_time?(self.start_time)
   end
-
-  def validate_end_time
-    errors.add(:end_time, "is invalid time format") if !valid_time?(self.end_time)
-  end
-
-  VEHICLE_TYPES = {
-    :"Sedan (up to 4 passengers)"=>"Sedan",
-    :"Limo (up to 18 passengers)"=>"Limo",
-    :"Party Bus (up to 24 passengers)"=>"Party Bus",
-    :"Limo Bus (up to 30 passengers)"=>"Limo Bus",
-    :"Mini Bus (up to 32 passenger)"=>"Mini Bus",
-    :"Motorcoach (47 to 56 passengers)"=>"Motorcoach",
-    :"Double Decker Motorcoach (up to 70 passenger)"=>"Double Decker Motorcoach",
-    :"Executive Coach (up to 20 passengers)"=>"Executive Coach",
-    :"Sleeper Bus (Sleep up to 12 passenger)"=>"Sleeper Bus",
-    :"School Bus (up to 40 adults or 60 kids)"=>"School Bus"
-  }
-
-  TRIP_TYPES = {
-    :"Church Trip"=>"Church Trip",
-    :"Private Group"=>"Private Group",
-    :"Athletic Group"=>"Athletic Group",
-    :"Coroprate Group"=>"Coroprate Group",
-    :"Weddings"=>"Weddings",
-    :"Other"=>"Other"
-  }
 
   def recent_quotes
     result = self.quotes.active.recent.map do |quote|
@@ -146,21 +136,11 @@ class QuoteRequest
     unless valid_time?(start_time)
       return
     end
-
-    unless valid_time?(end_time)
-      return
-    end
-
     errors.add(:start_date, "cannot be before now") if starts_at <= Time.now
-    errors.add(:end_date, "cannot be before the pick up date") if ends_at < starts_at
   end
 
   def starts_at
     Time.parse("#{self.start_date.to_date} #{self.start_time}")
-  end
-
-  def ends_at
-    Time.parse("#{self.end_date.to_date} #{self.end_time}")
   end
 
   def regions
@@ -247,7 +227,6 @@ class QuoteRequest
       "<strong>Pick up address:</strong> #{start_location}",
       "<strong>Pick up date:</strong> #{starts_at.to_s(:long)}",
       "<strong>Drop off address:</strong> #{end_location}",
-      "<strong>Drop off date:</strong> #{ends_at.to_s(:long)}",
       "<strong>Trip type:</strong> #{trip_type}",
       "<strong>Description:</strong> #{description}",
     ].join("<br>")
