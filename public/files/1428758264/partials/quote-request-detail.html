@@ -12,7 +12,7 @@
           <li>
             <div><img src="/img/consumer.png" style="max-width: 100px;"></div>
           </li>
-          <li>{{quote_request.name}}</li>
+          <li>{{quote_request.name}} <i>({{quote_request.status}})</i></li>
         </ul>
       </div>
     </div>
@@ -24,7 +24,6 @@
             <ul>
               <li><span class="label-field">Pick up time: </span>{{quote_request.start_date | soShortDate}} {{quote_request.start_time}}</li>
               <li><span class="label-field">Pick up location: </span>{{quote_request.start_location}}</li>
-              <li><span class="label-field">Drop off time: </span>{{quote_request.end_date | soShortDate}} {{quote_request.end_time}}</li>
               <li><span class="label-field">Drop off location: </span>{{quote_request.end_location}}</li>
             </ul>
           </div>

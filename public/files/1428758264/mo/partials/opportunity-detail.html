@@ -93,6 +93,7 @@
         <div class="actions" ng-if="company.canCancelOrEdit(opportunity)">
           <br/>
           <a href="" ui-turn-on="modal1" class="btn btn-primary" ng-if="opportunity.bids.length == 0" ng-click="setOpportunity(opportunity); displayNewOpportunityForm()">Edit</a>
+          <a href="" ui-turn-on="modal1" class="btn btn-primary btn-warning" ng-click="displayNewOfferForm(opportunity)">Select a vendor</a>
           <a class='btn btn-danger' ng-click="cancelOpportunity()">Cancel this Opportunity</a>
           <a class='btn btn-danger' ng-click="endOpportunity()">End this Opportunity</a>
         </div>
@@ -124,6 +125,15 @@
         
         <div class="bid-history" ng-repeat="bid in opportunity.bids">
           <table class="table">
+            <tr ng-if="opportunity.offer">
+              <td><strong>{{opportunity.offer.amount | soCurrency}}</strong></td>
+              <td>
+                <div ng-if="opportunity.buyer.id==company.id">
+                  <strong>Offered to:</strong> {{opportunity.offer.vendor.name}} ({{opportunity.offer.vendor.email}})
+                </div>
+              </td>
+            </tr>
+
             <tr id="bid_{{bid._id}}" ng-class="{true:'alert-success'}[opportunity.reserve_amount && bid.amount <= opportunity.reserve_amount]">
               <td><strong>{{bid.amount | soCurrency}}</strong></td>
             </tr>
