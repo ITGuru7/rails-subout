@@ -121,8 +121,6 @@ class Opportunity
     opportunity.start_time = quote_request.start_time
     opportunity.start_region = quote_request.start_region
     opportunity.end_location = quote_request.end_location
-    opportunity.end_date = quote_request.end_date
-    opportunity.end_time = quote_request.end_time
     opportunity.end_region = quote_request.end_region
     opportunity.description = quote_request.description
 

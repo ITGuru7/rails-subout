@@ -29,6 +29,7 @@ class QuoteRequest
     :"Other"=>"Other"
   }
 
+  field :organization, type: String
   field :first_name, type: String
   field :last_name, type: String
   field :email, type: String
@@ -105,7 +106,11 @@ class QuoteRequest
   end
 
   def name
-    "#{first_name}, #{last_name}"
+    if !self.organization.blank?
+      return "#{first_name}, #{last_name} of #{organization}"
+    else
+      return "#{first_name}, #{last_name}"
+    end
   end
 
   def quotes_html
