@@ -151,7 +151,7 @@
                  <img src="/img/tpa-logo.png" ng-show="bid.bidder.tpa">
               </td>
               <td>{{bid.comment}}</td>
-              <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo">
+              <td ng-hide="opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < halfDayAgo">
                 <button class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</button>
               </td>
               <td>

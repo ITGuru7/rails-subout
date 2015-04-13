@@ -176,7 +176,7 @@
             <tr ng-if="bid.comment">
               <td>{{bid.comment}}</td>
             </tr>
-            <tr ng-if="!(opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < fiveMinutesAgo)">
+            <tr ng-if="!(opportunity.bidding_done || bid.bidder._id != company._id || (bid.created_at | timestamp) < halfDayAgo)">
               <td>
                 <a class='btn btn-danger btn-mini pull-right' ng-click="cancelBid(bid)">Cancel</a>
               </td>

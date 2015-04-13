@@ -119,8 +119,8 @@ class Bid
   end
 
   def cancel
-    if created_at < 5.minutes.ago
-      errors.add(:base, "You cannot cancel a bid after 5 minutes")
+    if created_at < 12.hours.ago
+      errors.add(:base, "You cannot cancel a bid after 12 hours")
       false
     else
       self.state = 'canceled'

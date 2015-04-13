@@ -901,11 +901,13 @@ QuoteRequestDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout,
 
 OpportunityDetailCtrl = ($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) ->
   fiveMinutes = 5 * 60 * 1000
+  cancelDuration = 12 * 60 * 60 * 1000
   opportunity_id = $routeParams.opportunity_reference_number
   $scope.comment = {}
 
   updateFiveMinutesAgo = ->
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes
+    $scope.halfDayAgo = new Date().getTime() - halfDay
     $timeout updateFiveMinutesAgo, 5000
   updateFiveMinutesAgo()
 
