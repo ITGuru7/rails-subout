@@ -1330,12 +1330,14 @@ QuoteRequestDetailCtrl = function($rootScope, $scope, $routeParams, $location, $
 };
 
 OpportunityDetailCtrl = function($rootScope, $scope, $routeParams, $location, $timeout, Bid, Auction, Opportunity, Comment, MyBid) {
-  var fiveMinutes, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
+  var fiveMinutes, halfDay, opportunity_id, refreshOpportunity, reloadOpportunity, updateFiveMinutesAgo;
   fiveMinutes = 5 * 60 * 1000;
+  halfDay = 12 * 60 * 60 * 1000;
   opportunity_id = $routeParams.opportunity_reference_number;
   $scope.comment = {};
   updateFiveMinutesAgo = function() {
     $scope.fiveMinutesAgo = new Date().getTime() - fiveMinutes;
+    $scope.halfDayAgo = new Date().getTime() - halfDay;
     return $timeout(updateFiveMinutesAgo, 5000);
   };
   updateFiveMinutesAgo();
