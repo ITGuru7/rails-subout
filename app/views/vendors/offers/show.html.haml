@@ -4,13 +4,13 @@
 
 #opportunity-show
   .alert.alert-info
-    Hi, You got invitation on a chater from #{opportunity.buyer.name}.  You have limited access to this page. This page will be expired soon.
+    Hi, You got invitation on a charter from #{opportunity.buyer.name}.  You have limited access to this page. This page will be expired soon.
   .row
     .col-sm-3
       %h3 Open chaters in #{opportunity.start_location}
       %h4
         = Opportunity.active.where(start_location: opportunity.start_location).count
-        Chaters
+        Charters
 
       %br
       %strong
