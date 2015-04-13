@@ -70,5 +70,13 @@
   if(typeof jQuery=='undefined') {
     alert("jQuery is required");
   }else{
-    init_subout_quote_request_form();
+    jQuery(function(){
+      init_subout_quote_request_form();
+      if($('.timepicker').pickatime != undefined && $('.datepicker').pickadate != undefined) {
+        $('.timepicker').pickatime({format: 'h:i A'});
+        $('.datepicker').pickadate({format: 'mm/dd/yyyy'});
+      } else {
+        alert('We recommend pickadate.js library for the date picker and time picker. Please see http://amsul.ca/pickadate.js/');
+      }
+    });
   }
