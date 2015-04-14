@@ -6,7 +6,7 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
   before_filter :check_retailer
   before_filter :check_retailer_host, only: [:new]
   before_filter :check_consumer_quote_request, only: [:select_winner, :show]
-  after_action :allow_iframe, only: :new
+  after_action :allow_iframe, only: [:new, :create]
 
   def new
     @quote_request = QuoteRequest.new
