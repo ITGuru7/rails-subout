@@ -1,4 +1,4 @@
-- form_layout ||= params[:layout] || "horizontal"
+- form_layout ||= params[:layout] || "vertical"
 
 = bootstrap_form_for @quote_request, url: consumers_quote_requests_url(@quote_request, retailer_id: @retailer.id), authenticity_token: false, layout: form_layout.to_sym do |f|
   = f.text_field :organization
