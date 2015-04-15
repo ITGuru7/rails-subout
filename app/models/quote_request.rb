@@ -101,10 +101,19 @@ class QuoteRequest
     [reference_number, name, description].join(' ')
   end
   validates :email, presence: true, email: true, confirmation: true
-  validates_presence_of :first_name, :last_name, :phone, :start_location, :end_location, :description
-
+  validates_presence_of :first_name
+  validates_presence_of :last_name
+  validates_presence_of :phone
+  validates_presence_of :trip_type
+  validates_presence_of :vehicle_type
+  validates_presence_of :vehicle_count
   validates :vehicle_count, numericality: { greater_than: 0 }, unless: 'vehicle_count.blank?'
+
+  validates_presence_of :passengers
   validates :passengers, numericality: { greater_than: 0 }, unless: 'passengers.blank?'
+
+  validates_presence_of :start_location
+  validate :validate_locations
 
   validates_presence_of :start_date
   validates :start_date, date: { message: "is invalid date format (mm/dd/yyyy)" }, :if=>"!start_date.blank?"
@@ -112,7 +121,9 @@ class QuoteRequest
   validates_presence_of :start_time
   validate :validate_start_time, :if=>"!start_time.blank?"
   validate :validate_dates
-  validate :validate_locations
+
+  validates_presence_of :end_location
+  validates_presence_of :description
 
   def validate_start_time
     errors.add(:start_time, "is invalid time format") if !valid_time?(self.start_time)
