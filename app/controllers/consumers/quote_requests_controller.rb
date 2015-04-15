@@ -58,6 +58,7 @@ class Consumers::QuoteRequestsController < Consumers::BaseController
 
   def check_retailer_host
     return if @retailer.blank?
+    return if request.referer.blank?
     @retailer_host = URI.parse(request.referrer).host
     head :unauthorized if !@retailer.valid_domain?(@retailer_host)
   end
