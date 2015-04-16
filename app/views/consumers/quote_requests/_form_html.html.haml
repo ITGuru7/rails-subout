@@ -19,7 +19,8 @@
       %small 
         For the most accurate quote please provide as much details about your trip as possible. Number of stops, passenger count, itinerary, special needs, etc
   = f.text_area :description, label: 'Description *'
-
+  = f.form_group do
+    = f.check_box :agreement,  label: 'I agree to receive email messages'
   = f.submit "Request Quote", class: "btn btn-danger", id: "submit-quote-request"
 
   .errors

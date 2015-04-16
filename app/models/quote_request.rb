@@ -79,6 +79,8 @@ class QuoteRequest
   field :awarded, type: Boolean, default: false
   field :bidding_won_at, type: Time
 
+  field :agreement, type: Boolean, default: false
+
   attr_accessor :viewer
   
   index created_at: 1
@@ -124,6 +126,7 @@ class QuoteRequest
 
   validates_presence_of :end_location
   validates_presence_of :description
+  validates_presence_of :agreement
 
   def validate_start_time
     errors.add(:start_time, "is invalid time format") if !valid_time?(self.start_time)
