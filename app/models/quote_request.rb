@@ -10,14 +10,14 @@ class QuoteRequest
   VEHICLE_TYPES = {
     :"Motorcoach (47 to 56 passengers)"=>"Motorcoach",
     :"Mini Bus (up to 32 passenger)"=>"Mini Bus",
-    :"School Bus (up to 40 adults or 60 kids)"=>"School Bus"
+    :"School Bus (up to 40 adults or 60 kids)"=>"School Bus",
     :"Party Bus (up to 24 passengers)"=>"Party Bus",
     :"Sedan (up to 4 passengers)"=>"Sedan",
     :"Limo (up to 18 passengers)"=>"Limo",
     :"Limo Bus (up to 30 passengers)"=>"Limo Bus",
     :"Double Decker Motorcoach (up to 70 passenger)"=>"Double Decker Motorcoach",
     :"Executive Coach (up to 20 passengers)"=>"Executive Coach",
-    :"Sleeper Bus (Sleep up to 12 passenger)"=>"Sleeper Bus",
+    :"Sleeper Bus (Sleep up to 12 passenger)"=>"Sleeper Bus"
   }
 
   TRIP_TYPES = {
