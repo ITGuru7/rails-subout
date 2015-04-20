@@ -98,6 +98,10 @@ class GatewaySubscription
     subscription_id.blank? ? "" : "https://#{CHARGIFY_URI}/subscriptions/#{subscription_id}"
   end
 
+  def subscription_payment_profiles_url
+    subscription_id.blank? ? "" : "https://#{CHARGIFY_URI}/subscriptions/#{subscription_id}/payment_profiles"
+  end
+
   def customer_url
     customer_id.blank? ? "" : "https://#{CHARGIFY_URI}/customers/#{customer_id}"
   end

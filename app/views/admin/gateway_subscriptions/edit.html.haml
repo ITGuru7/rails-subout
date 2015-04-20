@@ -3,21 +3,25 @@
   = "Organization: #{@subscription.organization}"
   %br
   = "Chargify ID: #{@subscription.subscription_id}"
+  %br
+  = "Status: #{@subscription.state}"
 
 - if @subscription.exists_on_chargify?
-  = form_for @subscription, url: admin_gateway_subscription_path(@subscription), html: { class: "form-horizontal edit_gateway_subscription" } do |f|
-    .control-group
-      = f.label :email, class: "control-label"
-      .controls
-        = f.text_field :email
-    .control-group
-      = f.label :product_handle, class: "control-label"
-      .controls
-        = f.select :product_handle, ["free", "subout-basic-service", "subout-pro-service"], include_blank: false
-
-    .control-group
+  = form_for @subscription, url: admin_gateway_subscription_path(@subscription), html: { class: "form-vertical edit_gateway_subscription" } do |f|
+    .form-group
+      = f.label :email
+      = f.text_field :email, class: "form-control"
+    .form-group
+      = f.label :product_handle
+      = f.select :product_handle, ["free", "subout-basic-service", "subout-pro-service"], {}, class: 'form-control', include_blank: false
+    .form-group
       = f.button :submit, class: "btn btn-danger"
-      = link_to "Cancel", admin_gateway_subscriptions_path, class: "btn"
+      = link_to "Cancel", admin_gateway_subscriptions_path, class: "btn btn-default"
+
+    %p.help-block
+      Edit on chargify:
+      = link_to @subscription.subscription_url, @subscription.subscription_url
+
   - unless @subscription.created_company.present?
     %p.alert.alert-danger
       This subscription is not connected to any company.

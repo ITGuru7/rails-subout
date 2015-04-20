@@ -49,7 +49,7 @@ class Admin::CompaniesController < Admin::BaseController
   end
 
   def update
-    @company.update_attributes(params[:company])
+    @company.update_attributes(company_params)
 
     redirect_to edit_admin_company_path(@company), notice: 'Company is updated.'
   end
@@ -169,5 +169,9 @@ class Admin::CompaniesController < Admin::BaseController
 
   def load_company
     @company = Company.find(params[:id])
+  end
+
+  def company_params
+    params.require(:company).permit(:name)
   end
 end

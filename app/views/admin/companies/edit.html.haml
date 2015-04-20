@@ -1,8 +1,11 @@
 %h2 Company #{@company.name} #{"(Locked)" if @company.access_locked?}
-= form_for [:admin, @company], html: {class: 'form-horizontal'} do |f|
-  Company Name:
-  = f.text_field :name
+= form_for [:admin, @company], html: {class: 'form-inline'} do |f|
+  .form-group
+    Company Name:
+    = f.text_field :name, class: 'form-control'
   = f.submit :submit, class: 'btn btn-danger', value: 'Submit'
+
+%br
 - if @subscription && @subscription.exists_on_chargify?
   %ul
     %li Subscription: #{@company.subscription_plan}
@@ -19,12 +22,26 @@
     = link_to "Cancel and lock this account", lock_account_admin_company_path(@company), class: "btn btn-danger", method: "put", confirm: "Are you sure to lock this account?"
   - else
     = link_to "Unlock this account", unlock_account_admin_company_path(@company), class: "btn btn-success", method: "put", confirm: "Are you sure to unlock this account"
-- else
-  = form_tag connect_subscription_admin_company_path(@company), method: "put", class: "form-horizontal" do
-    Subscription ID on chargify: 
-    = text_field_tag :subscription_id, params[:subscription_id]
-    = submit_tag "Connect", class: "btn btn-primary"
 
+  - if @subscription.chargify_subscription.state == 'canceled'
+    %p.alert.alert-danger
+      = link_to @subscription.subscription_payment_profiles_url, @subscription.subscription_payment_profiles_url
+
+  %p.help-block
+    Edit on chargify:
+    = link_to @subscription.subscription_url, @subscription.subscription_url
+
+  %p.text-danger
+    %strong Notice:
+    Please make sure that you deleted payment detail of this company on chargify before doing reactivate or cancel the subscription.
+    = link_to @subscription.subscription_payment_profiles_url, @subscription.subscription_payment_profiles_url
+
+- else
+  = form_tag connect_subscription_admin_company_path(@company), method: "put", class: "form-inline" do
+    .form-group
+      Chargify ID: 
+      = text_field_tag :subscription_id, params[:subscription_id], class: 'form-control'
+    = submit_tag "Connect", class: "btn btn-primary"
 .row
 %h3 Vehicles
 - if @company.subscription_plan == 'subout-pro-service'
@@ -57,51 +74,51 @@
 %ul
   - @company.favoriting_buyers.each do |company|
     %li= company.name
-= form_tag add_as_a_favorite_admin_company_path(@company), method: "put", class: "form-horizontal" do
-  = select_tag "company_id", options_from_collection_for_select(Company.not_in(_id: @company.favoriting_buyer_ids), "id", "name")
+= form_tag add_as_a_favorite_admin_company_path(@company), method: "put", class: "form-inline" do
+  .form-group
+    = select_tag "company_id", options_from_collection_for_select(Company.not_in(_id: @company.favoriting_buyer_ids), "id", "name"), class: 'form-control'
   = submit_tag "Add", class: "btn btn-primary"
 
 .row
 %h4 TPA number
-= form_for @company, url: admin_company_path(@company), html: { class: "form-horizontal edit_gateway_subscription" } do |f|
-  .control-group
-    = f.text_field :tpa
-    = f.submit "Submit", class: "btn btn-primary"
+= form_for @company, url: admin_company_path(@company), html: { class: "form-inline edit_gateway_subscription" } do |f|
+  .form-group
+    = f.text_field :tpa, class: 'form-control'
+  = f.submit "Submit", class: "btn btn-primary"
 
 .row
 %h4 Email
-= form_tag change_emails_admin_company_path(@company), method: "put", class: "form-horizontal" do
-  = text_field_tag "email", @company.email
+= form_tag change_emails_admin_company_path(@company), method: "put", class: "form-inline" do
+  = text_field_tag "email", @company.email, class: 'form-control'
   = submit_tag "Submit", class: "btn btn-primary"
-%p
+%p.help-block
   %strong Notice:
   This email will be applied to company, subscription and user.
 
 .row
 %h4 Mode
-= form_tag change_mode_admin_company_path(@company), method: "put", class: "form-horizontal" do
-  = select_tag "mode", options_for_select(Company::MODES, @company.mode)
+= form_tag change_mode_admin_company_path(@company), method: "put", class: "form-inline" do
+  = select_tag "mode", options_for_select(Company::MODES, @company.mode), class: 'form-control'
   = submit_tag "Submit", class: "btn btn-primary"
-%p
+%p.help-block
   %strong Notice:
   Ghost user can only browse site - can not bid and can not post new opportunity. 
 
 .row
 %h4 Reset password
 - @company.users.each do |user|
-  = form_for user, url: change_password_admin_company_path(@company, user_id: user.id), html: { method: "put", class: "form-horizontal" } do |f|
+  = form_for user, url: change_password_admin_company_path(@company, user_id: user.id), html: { method: "put", class: "form-vertical" } do |f|
     %legend=user.email
-    .control-group
-      = f.label :password, "New password", class: "control-label"
-      .controls
-        = f.password_field :password
-    .control-group
-      = f.label :password_confirmation, "Password confirmation", class: "control-label"
-      .controls
-        = f.password_field :password_confirmation
-        = f.submit "Submit", class: "btn btn-primary"
+    .form-group
+      = f.label :password, "New password"
+      = f.password_field :password, class: 'form-control'
+    .form-group
+      = f.label :password_confirmation, "Password confirmation"
+      = f.password_field :password_confirmation, class: 'form-control'
+    = f.submit "Submit", class: "btn btn-primary"
 %hr
 .clearfix
   = link_to "Back", admin_companies_path(anchor: "company-#{@company.id}"), class: 'btn'
   = link_to "DELETE THIS COMPANY", admin_company_path(@company), class: 'btn btn-danger', method: :delete, data:{ confirm: "Are you sure to delete this company?" }
 
+%br

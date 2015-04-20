@@ -1,8 +1,9 @@
 %h2 Companies
 .clearfix
   .pull-left
-    %form{url: admin_companies_path, method: :get}
-      %input{type: 'text', name: 'search', placeholder: 'Please type search keyword'}
+    %form.form-inline{url: admin_companies_path, method: :get}
+      .form-group
+        %input.form-control{type: 'text', name: 'search', placeholder: 'Please type search keyword'}
       %input.btn.btn-primary{type: 'submit', value: 'Search'}
   .pull-right
     = link_to "Create Free Company", "https://#{CHARGIFY_URI}/h/#{CHARGIFY_FREE_PRODUCT_ID}/subscriptions/new", target: "_blank", class: "btn btn-primary"
